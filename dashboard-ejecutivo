@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard ejecutivo - Modelo de Precios Agentes IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c323f 0%, #0d95e5 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        /* Header del Dashboard */
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .header-text h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-text p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .kpi-cards {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 120px;
+            border-left: 4px solid;
+        }
+        
+        .kpi-card:nth-child(1) { border-left-color: #10b981; }
+        .kpi-card:nth-child(2) { border-left-color: #0d95e5; }
+        .kpi-card:nth-child(3) { border-left-color: #f59e0b; }
+        
+        .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0c323f;
+        }
+        
+        .kpi-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* Navegación por pestañas */
+        .tabs-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-button {
+            background: transparent;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 149, 229, 0.3);
+        }
+        
+        .tab-button:hover:not(.active) {
+            border-color: #0d95e5;
+            transform: translateY(-1px);
+        }
+        
+        /* Contenido de pestañas */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Layout principal */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+        
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 1rem;
+        }
+        
+        .sidebar h3 {
+            color: #0c323f;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Calculadora */
+        .calculator {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .calc-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+        
+        .calc-input:focus {
+            border-color: #0d95e5;
+            outline: none;
+        }
+        
+        .calc-result {
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .action-btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+        
+        /* Contenido específico de cada pestaña */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pricing-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border-left: 4px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card:nth-child(1) { border-left-color: #10b981; }
+        .pricing-card:nth-child(2) { border-left-color: #0d95e5; }
+        .pricing-card:nth-child(3) { border-left-color: #f59e0b; }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0c323f;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                order: -1;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .kpi-cards {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 0.5rem;
+            }
+            
+            .dashboard-header {
+                padding: 1.5rem;
+            }
+            
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tabs-nav {
+                flex-direction: column;
+            }
+            
+            .pricing-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Elementos específicos por sección */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid #0d95e5;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .feature-description {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        
+        .metric-highlight {
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            color: #065f46;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header del Dashboard -->
+        <div class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">AI</div>
+                    <div class="header-text">
+                        <h1>Dashboard Ejecutivo</h1>
+                        <p>Modelo de Precios - Agentes IA netelip</p>
+                    </div>
+                </div>
+                
+                <div class="kpi-cards">
+                    <div class="kpi-card">
+                        <div class="kpi-value">150€*</div>
+                        <div class="kpi-label">Setup base</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">49€*</div>
+                        <div class="kpi-label">Mantenimiento</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0,15€*</div>
+                        <div class="kpi-label">Por minuto</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navegación por pestañas -->
+        <div class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-button active" data-tab="overview">
+                    📊 Resumen ejecutivo
+                </button>
+                <button class="tab-button" data-tab="base-pricing">
+                    💰 Estructura base
+                </button>
+                <button class="tab-button" data-tab="customizations">
+                    🔧 Personalizaciones
+                </button>
+                <button class="tab-button" data-tab="quotation">
+                    📋 Proceso cotización
+                </button>
+                <button class="tab-button" data-tab="additional">
+                    ⭐ Servicios adicionales
+                </button>
+                <button class="tab-button" data-tab="scalability">
+                    📈 Escalabilidad
+                </button>
+            </div>
+            
+            <div class="main-layout">
+                <div class="content-area">
+                    <!-- Tab: Resumen Ejecutivo -->
+                    <div class="tab-content active" id="overview">
+                        <div class="section-title">
+                            🎯 Resumen ejecutivo del modelo
+                        </div>
+                        
+                        <div class="pricing-overview">
+                            <div class="pricing-card">
+                                <div class="card-title">Configuración inicial</div>
+                                <div class="card-price">150€*</div>
+                                <div class="card-description">Pago único por setup completo</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Mantenimiento mensual</div>
+                                <div class="card-price">49€*</div>
+                                <div class="card-description">Soporte y actualizaciones</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Coste por uso</div>
+                                <div class="card-price">0,15€*</div>
+                                <div class="card-description">Por minuto de conversación</div>
+                            </div>
+                        </div>
+                        
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">🚀 Modelo escalable</div>
+                                <div class="feature-description">Descuentos progresivos hasta 80% para grandes volúmenes</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🔧 Personalizable</div>
+                                <div class="feature-description">4 niveles de personalización desde 60€*/hora</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">📈 Transparente</div>
+                                <div class="feature-description">Proceso de cotización claro en 3 pasos</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">⭐ Servicios Premium</div>
+                                <div class="feature-description">Consultoría, soporte premium y formación</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-highlight">
+                            <div class="metric-value">80%</div>
+                            <div class="metric-label">Descuento máximo por volumen (+1M min/mes)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab: Estructura Base -->
+                    <div class="tab-content" id="base-pricing">
+                        <div class="section-title">
+                            💰 Estructura base de precios
+                        </div>
+                        
+                        <div class="pricing-overview">
+                            <div class="pricing-card">
+                                <div class="card-title">1. Setup inicial</div>
+                                <div class="card-price">150€*</div>
+                                <div class="card-description">Configuración completa del agente IA</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">2. Mantenimiento</div>
+                                <div class="card-price">49€*/mes</div>
+                                <div class="card-description">Soporte técnico y actualizaciones</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">3. Uso variable</div>
+                                <div class="card-price">0,15€*/min</div>
+                                <div class="card-description">Facturación según consumo real</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 2rem 0 1rem 0; color: #0c323f;">Ejemplos de facturación:</h4>
+                        
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">🏢 Empresa pequeña (200 min/mes)</div>
+                                <div class="feature-description">
+                                    Mes 1: 229€* | Siguientes: 79€*/mes
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🏬 Empresa mediana (800 min/mes)</div>
+                                <div class="feature-description">
+                                    Mes 1: 319€* | Siguientes: 169€*/mes
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🏭 Empresa grande (2000 min/mes)</div>
+                                <div class="feature-description">
+                                    Mes 1: 499€* | Siguientes: 349€*/mes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab: Personalizaciones -->
+                    <div class="tab-content" id="customizations">
+                        <div class="section-title">
+                            🔧 Modelo de personalizaciones
+                        </div>
+                        
+                        <div class="metric-highlight">
+                            <div class="metric-value">60€*/hora</div>
+                            <div class="metric-label">Tarifa base por desarrollo personalizado</div>
+                        </div>
+                        
+                        <div class="pricing-overview">
+                            <div class="pricing-card">
+                                <div class="card-title">Nivel 1: Básico</div>
+                                <div class="card-price">60€* - 240€*</div>
+                                <div class="card-description">1-4 horas de desarrollo</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Nivel 2: Intermedio</div>
+                                <div class="card-price">240€* - 720€*</div>
+                                <div class="card-description">4-12 horas de desarrollo</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Nivel 3: Avanzado</div>
+                                <div class="card-price">720€* - 2.400€*</div>
+                                <div class="card-description">12-40 horas de desarrollo</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Nivel 4: Enterprise</div>
+                                <div class="card-price">A cotizar</div>
+                                <div class="card-description">+40 horas de desarrollo</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 2rem 0 1rem 0; color: #0c323f;">Variables de precios:</h4>
+                        
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">🔧 Complejidad técnica</div>
+                                <div class="feature-description">Factores de 1.0 a 2.0 según complejidad</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">⚡ Urgencia</div>
+                                <div class="feature-description">+25% prioritario, +50% urgente</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🔄 Iteraciones</div>
+                                <div class="feature-description">Primera incluida, adicionales 60€*/hora</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab: Proceso de Cotización -->
+                    <div class="tab-content" id="quotation">
+                        <div class="section-title">
+                            📋 Proceso de cotización
+                        </div>
+                        
+                        <div class="pricing-overview">
+                            <div class="pricing-card">
+                                <div class="card-title">1. Análisis inicial</div>
+                                <div class="card-price">GRATUITO</div>
+                                <div class="card-description">1-2 días de duración</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">2. Presupuesto detallado</div>
+                                <div class="card-price">Incluido</div>
+                                <div class="card-description">2-3 días de elaboración</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">3. Desarrollo</div>
+                                <div class="card-price">50% / 50%</div>
+                                <div class="card-description">1-6 semanas según proyecto</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 2rem 0 1rem 0; color: #0c323f;">Ventajas del proceso:</h4>
+                        
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">🆓 Análisis gratuito</div>
+                                <div class="feature-description">Sin coste inicial para el cliente</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">📊 Transparencia total</div>
+                                <div class="feature-description">Costes y tiempos claros desde el inicio</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🔒 Pagos seguros</div>
+                                <div class="feature-description">Fraccionados para mayor seguridad</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">⏱️ Seguimiento</div>
+                                <div class="feature-description">Tracking en tiempo real del progreso</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab: Servicios Adicionales -->
+                    <div class="tab-content" id="additional">
+                        <div class="section-title">
+                            ⭐ Servicios Adicionales
+                        </div>
+                        
+                        <div class="pricing-overview">
+                            <div class="pricing-card">
+                                <div class="card-title">Consultoría estratégica</div>
+                                <div class="card-price">80€*/hora</div>
+                                <div class="card-description">Optimización y análisis especializado</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Soporte Premium</div>
+                                <div class="card-price">+30€*/mes</div>
+                                <div class="card-description">Soporte prioritario y optimizaciones</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">Formación</div>
+                                <div class="card-price">120€*/hora</div>
+                                <div class="card-description">Capacitación virtual (mín. 2h)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-highlight">
+                            <div class="metric-value">ROI</div>
+                            <div class="metric-label">Máximo rendimiento combinando soporte premium + consultoría</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab: Escalabilidad -->
+                    <div class="tab-content" id="scalability">
+                        <div class="section-title">
+                            📈 Escalabilidad y descuentos
+                        </div>
+                        
+                        <div class="pricing-overview">
+                            <div class="pricing-card">
+                                <div class="card-title">0-1.000 min/mes</div>
+                                <div class="card-price">0,15€*</div>
+                                <div class="card-description">Precio base</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">1.001-5.000 min/mes</div>
+                                <div class="card-price">0,13€*</div>
+                                <div class="card-description">-13% descuento</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">5.001-15.000 min/mes</div>
+                                <div class="card-price">0,11€*</div>
+                                <div class="card-description">-27% descuento</div>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="card-title">+15.000 min/mes</div>
+                                <div class="card-price">0,09€*</div>
+                                <div class="card-description">-40% descuento</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 2rem 0 1rem 0; color: #0c323f;">Paquetes empresariales:</h4>
+                        
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">🚀 Startup</div>
+                                <div class="feature-description">297€* | Setup + 3 meses mantenimiento</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">💼 Business</div>
+                                <div class="feature-description">534€* | Setup + 6 meses + 1 personalización</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🏢 Enterprise</div>
+                                <div class="feature-description">1.236€* | Setup + 12 meses + personalizaciones</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-highlight">
+                            <div class="metric-value">240.000€*/mes</div>
+                            <div class="metric-label">Ahorro potencial para operadores de 2M+ minutos/mes</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar con calculadora -->
+                <div class="sidebar">
+                    <h3>🧮 Calculadora rápida</h3>
+                    
+                    <div class="calculator">
+                        <input type="number" class="calc-input" id="minutes" placeholder="Minutos/mes" value="500">
+                        <input type="number" class="calc-input" id="months" placeholder="Meses" value="12">
+                        
+                        <div class="calc-result">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Coste Total:</div>
+                            <div id="total-cost">Calculando...</div>
+                        </div>
+                    </div>
+                    
+                    <h3>⚡ Acciones rápidas</h3>
+                    
+                    <div class="quick-actions">
+                        <button class="action-btn" onclick="exportToPDF()">
+                            📄 Exportar PDF
+                        </button>
+                        <button class="action-btn secondary" onclick="showComparison()">
+                            📊 Comparar planes
+                        </button>
+                        <button class="action-btn" onclick="calculateROI()">
+                            💹 Calcular ROI
+                        </button>
+                        <button class="action-btn secondary" onclick="contactSales()">
+                            📞 Contactar con ventas
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border: 1px solid #bfdbfe;">
+                        <h4 style="color: #0c323f; margin-bottom: 0.5rem; font-size: 0.9rem;">💡 Dato clave</h4>
+                        <p style="font-size: 0.8rem; color: #374151; line-height: 1.4;">
+                            El 85% de nuestros clientes ven ROI positivo en los primeros 3 meses de implementación.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; padding: 1rem; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0;">
+                        <h4 style="color: #065f46; margin-bottom: 0.5rem; font-size: 0.9rem;">🎯 Objetivo</h4>
+                        <p style="font-size: 0.8rem; color: #047857; line-height: 1.4;">
+                            Modelo escalable que crece con el cliente, desde startups hasta multinacionales.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer con resumen ejecutivo -->
+        <div class="dashboard-header" style="margin-top: 2rem;">
+            <div style="text-align: center;">
+                <h3 style="color: #0c323f; margin-bottom: 1rem;">📊 Resumen ejecutivo del modelo</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                    <div style="background: linear-gradient(135deg, #ecfdf5, #f0fdf4); padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <div style="font-weight: 700; color: #065f46;">Competitivo</div>
+                        <div style="font-size: 0.9rem; color: #047857;">Precios 30% por debajo del mercado</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 1rem; border-radius: 8px; border-left: 4px solid #0d95e5;">
+                        <div style="font-weight: 700; color: #0c323f;">Escalable</div>
+                        <div style="font-size: 0.9rem; color: #374151;">Descuentos hasta 80% por volumen</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #fefce8, #fef3c7); padding: 1rem; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <div style="font-weight: 700; color: #92400e;">Transparente</div>
+                        <div style="font-size: 0.9rem; color: #9a3412;">Sin costes ocultos ni sorpresas</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #fdf2f8, #fcf1f8); padding: 1rem; border-radius: 8px; border-left: 4px solid #ec4899;">
+                        <div style="font-weight: 700; color: #831843;">Flexible</div>
+                        <div style="font-size: 0.9rem; color: #be185d;">Personalizaciones según necesidades</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 12px; border: 2px solid #0d95e5;">
+                    <h4 style="color: #0c323f; margin-bottom: 1rem;">🚀 Propuesta de valor clave</h4>
+                    <p style="color: #374151; line-height: 1.6;">
+                        Modelo de precios diseñado para maximizar la adopción inicial con costes bajos, 
+                        escalando de manera rentable según el crecimiento del cliente. Estructura 
+                        transparente que facilita la toma de decisiones y garantiza previsibilidad 
+                        financiera a largo plazo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Funcionalidad de pestañas
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover clase active de todos los botones y contenidos
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Agregar clase active al botón clickeado
+                this.classList.add('active');
+                
+                // Mostrar el contenido correspondiente
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Calculadora en tiempo real
+        function calculatePrice() {
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+            const months = parseInt(document.getElementById('months').value) || 1;
+            
+            // Precio por minuto según volumen
+            let pricePerMinute = 0.15;
+            if (minutes > 15000) pricePerMinute = 0.09;
+            else if (minutes > 5000) pricePerMinute = 0.11;
+            else if (minutes > 1000) pricePerMinute = 0.13;
+            
+            // Cálculos
+            const setup = 150;
+            const maintenance = 49 * months;
+            const usage = minutes * pricePerMinute * months;
+            const total = setup + maintenance + usage;
+            
+            // Mostrar resultado
+            document.getElementById('total-cost').innerHTML = `
+                <div style="font-size: 1.2rem; font-weight: 800;">${total.toFixed(0)}€*</div>
+                <div style="font-size: 0.7rem; margin-top: 0.3rem; opacity: 0.8;">
+                    Setup: ${setup}€* | Mant: ${maintenance}€* | Uso: ${usage.toFixed(0)}€*
+                </div>
+            `;
+        }
+        
+        // Actualizar calculadora en tiempo real
+        document.getElementById('minutes').addEventListener('input', calculatePrice);
+        document.getElementById('months').addEventListener('input', calculatePrice);
+        
+        // Calcular al cargar la página
+        calculatePrice();
+        
+        // Funciones de acciones rápidas
+        function exportToPDF() {
+            alert('📄 Funcionalidad de exportación a PDF en desarrollo.\n\nPermitirá exportar secciones específicas del dashboard para presentaciones ejecutivas.');
+        }
+        
+        function showComparison() {
+            alert('📊 Comparador de planes:\n\n• Plan Startup: 297€*\n• Plan Business: 534€*\n• Plan Enterprise: 1.236€*\n\nIncluye calculadora interactiva de ROI por plan.');
+        }
+        
+        function calculateROI() {
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+            const months = parseInt(document.getElementById('months').value) || 1;
+            
+            // Estimación de ROI basada en ahorro de costes operativos
+            const monthlySavings = minutes * 0.05; // Estimación conservadora
+            const totalSavings = monthlySavings * months;
+            const investment = 150 + (49 * months) + (minutes * 0.15 * months);
+            const roi = ((totalSavings - investment) / investment * 100).toFixed(1);
+            
+            alert(`💹 Análisis ROI Estimado:\n\n• Inversión: ${investment.toFixed(0)}€*\n• Ahorro estimado: ${totalSavings.toFixed(0)}€*\n• ROI proyectado: ${roi}%\n\n*Basado en reducción de costes operativos`);
+        }
+        
+        function contactSales() {
+            alert('📞 Contacto directo con Mili Pérez (CMO de netelip):\n\n• Email: mili.perez@netelip.com\n• Teléfono: +34 647 621 857\n• Análisis inicial: GRATUITO\n• Tiempo de respuesta: <24h');
+        }
+        
+        // Efectos visuales mejorados
+        document.querySelectorAll('.pricing-card, .feature-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+                this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+        
+        // Animación de números en KPIs
+        function animateKPIs() {
+            const kpiValues = document.querySelectorAll('.kpi-value');
+            kpiValues.forEach(kpi => {
+                kpi.style.animation = 'pulse 2s infinite';
+            });
+        }
+        
+        // Agregar estilos de animación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Inicializar animaciones después de 1 segundo
+        setTimeout(animateKPIs, 1000);
+    </script>
+</body>
+</html>
