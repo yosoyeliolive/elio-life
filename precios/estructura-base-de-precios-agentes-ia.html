@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura Base de Precios - Agentes IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c323f 0%, #0d95e5 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .pricing-structure {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .pricing-block {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .pricing-block:hover {
+            transform: translateY(-5px);
+        }
+        
+        .block-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .block-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .price-highlight {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0d95e5;
+            display: block;
+        }
+        
+        .price-period {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .features-list {
+            list-style: none;
+        }
+        
+        .features-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .checkmark {
+            color: #0d95e5;
+            margin-right: 0.8rem;
+            font-weight: bold;
+            margin-top: 0.1rem;
+        }
+        
+        .calculation-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .calculation-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .calculation-formula {
+            background: #f8fafc;
+            border: 2px dashed #0d95e5;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .formula-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0c323f;
+            margin-bottom: 1rem;
+        }
+        
+        .formula-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .formula-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .formula-item-title {
+            font-weight: 600;
+            color: #0c323f;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .formula-item-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0d95e5;
+        }
+        
+        .examples-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .examples-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .example-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #0d95e5;
+        }
+        
+        .example-title {
+            font-weight: 600;
+            color: #0c323f;
+            margin-bottom: 1rem;
+        }
+        
+        .example-calculation {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .example-total {
+            font-weight: 700;
+            color: #0d95e5;
+            font-size: 1.1rem;
+        }
+        
+        .note {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .note-text {
+            color: #9a3412;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .pricing-structure {
+                grid-template-columns: 1fr;
+            }
+            
+            .formula-breakdown {
+                grid-template-columns: 1fr;
+            }
+            
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Estructura base de precios</h1>
+            <p>Agentes de Voz con Inteligencia Artificial</p>
+        </div>
+        
+        <div class="pricing-structure">
+            <!-- Bloque 1: Configuración Inicial -->
+            <div class="pricing-block">
+                <div class="block-number">1</div>
+                <div class="block-title">Configuración Inicial</div>
+                <div class="price-highlight">
+                    <span class="price-amount">150€*</span>
+                    <div class="price-period">Pago único</div>
+                </div>
+                <ul class="features-list">
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Setup base del agente de IA</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Configuración básica del agente</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Prompt inicial personalizado</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Funcionalidades predeterminadas</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Configuración de voz y respuestas</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Bloque 2: Mantenimiento Mensual -->
+            <div class="pricing-block">
+                <div class="block-number">2</div>
+                <div class="block-title">Mantenimiento</div>
+                <div class="price-highlight">
+                    <span class="price-amount">49€*</span>
+                    <div class="price-period">Por mes</div>
+                </div>
+                <ul class="features-list">
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Soporte técnico especializado</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Actualizaciones menores</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Monitorización del sistema</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Backup y seguridad</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Métricas y reportes básicos</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Bloque 3: Coste por Uso -->
+            <div class="pricing-block">
+                <div class="block-number">3</div>
+                <div class="block-title">Coste por uso</div>
+                <div class="price-highlight">
+                    <span class="price-amount">0,15€*</span>
+                    <div class="price-period">Por minuto</div>
+                </div>
+                <ul class="features-list">
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Facturación según consumo real</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Cobro mensual automático</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Sin límites de llamadas</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Descuentos por volumen disponibles</span>
+                    </li>
+                    <li>
+                        <span class="checkmark">✓</span>
+                        <span>Medición precisa al segundo</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Sección de Cálculo -->
+        <div class="calculation-section">
+            <div class="calculation-title">Cálculo total mensual</div>
+            <div class="calculation-formula">
+                <div class="formula-text">Coste total = Setup (una vez) + Mantenimiento + (Minutos × 0,15€*)</div>
+                <div class="formula-breakdown">
+                    <div class="formula-item">
+                        <div class="formula-item-title">Setup base</div>
+                        <div class="formula-item-value">150€* × 1</div>
+                    </div>
+                    <div class="formula-item">
+                        <div class="formula-item-title">Mantenimiento</div>
+                        <div class="formula-item-value">49€* × mes</div>
+                    </div>
+                    <div class="formula-item">
+                        <div class="formula-item-title">Uso variable</div>
+                        <div class="formula-item-value">0,15€* × min</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ejemplos Prácticos -->
+        <div class="examples-section">
+            <div class="examples-title">Ejemplos prácticos de facturación</div>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-title">📱 Empresa pequeña (200 min/mes)</div>
+                    <div class="example-calculation">
+Setup inicial: 150€*
+Mantenimiento: 49€*
+Uso: 200 × 0,15€* = 30€*
+─────────────────────
+Mes 1: 150€* + 49€* + 30€* = 229€*
+Meses siguientes: 49€* + 30€* = 79€*
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">🏢 Empresa mediana (800 min/mes)</div>
+                    <div class="example-calculation">
+Setup inicial: 150€*
+Mantenimiento: 49€*
+Uso: 800 × 0,15€* = 120€*
+─────────────────────
+Mes 1: 150€* + 49€* + 120€* = 319€*
+Meses siguientes: 49€* + 120€* = 169€*
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">🏭 Empresa grande (2000 min/mes)</div>
+                    <div class="example-calculation">
+Setup inicial: 150€*
+Mantenimiento: 49€*
+Uso: 2000 × 0,15€* = 300€*
+─────────────────────
+Mes 1: 150€* + 49€* + 300€* = 499€*
+Meses siguientes: 49€* + 300€* = 349€*
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <div class="note-text">
+                    💡 <strong>Nota:</strong> El setup de 150€* se paga solo una vez. A partir del segundo mes, solo se factura mantenimiento + uso.
+                    Los precios no incluyen IVA y se pueden aplicar descuentos por volumen a partir de 1 millón de minutos/mes.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
