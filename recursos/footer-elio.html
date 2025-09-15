@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footers Minimalistas Elio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .demo-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .footer-demo {
+            margin-bottom: 60px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* =============================================================================
+           FOOTER 1: ULTRA MINIMALISTA
+        ============================================================================= */
+        .footer-1 {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            padding: 50px 40px 30px;
+            text-align: center;
+        }
+        
+        .footer-1-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-1-brand {
+            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+            color: white;
+        }
+        
+        .footer-1-waves {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .footer-1-wave {
+            width: 2px;
+            background: white;
+            border-radius: 1px;
+            animation: wave1 1.8s ease-in-out infinite alternate;
+        }
+        
+        .f1w1 { height: 8px; animation-delay: 0s; }
+        .f1w2 { height: 14px; animation-delay: 0.3s; }
+        .f1w3 { height: 10px; animation-delay: 0.6s; }
+        .f1w4 { height: 16px; animation-delay: 0.9s; }
+        .f1w5 { height: 12px; animation-delay: 1.2s; }
+        
+        .footer-1-copyright {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* =============================================================================
+           FOOTER 2: CON TAGLINE
+        ============================================================================= */
+        .footer-2 {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 60px 40px 40px;
+            text-align: center;
+        }
+        
+        .footer-2-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-2-brand {
+            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+            color: white;
+        }
+        
+        .footer-2-waves {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .footer-2-wave {
+            width: 2px;
+            background: white;
+            border-radius: 1px;
+            animation: wave2 1.8s ease-in-out infinite alternate;
+        }
+        
+        .f2w1 { height: 8px; animation-delay: 0s; }
+        .f2w2 { height: 14px; animation-delay: 0.3s; }
+        .f2w3 { height: 10px; animation-delay: 0.6s; }
+        .f2w4 { height: 16px; animation-delay: 0.9s; }
+        .f2w5 { height: 12px; animation-delay: 1.2s; }
+        
+        .footer-2-tagline {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .footer-2-copyright {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* =============================================================================
+           FOOTER 3: CON SEPARADOR
+        ============================================================================= */
+        .footer-3 {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 60px 40px 40px;
+            text-align: center;
+        }
+        
+        .footer-3-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-3-brand {
+            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+            color: white;
+        }
+        
+        .footer-3-waves {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .footer-3-wave {
+            width: 2px;
+            background: white;
+            border-radius: 1px;
+            animation: wave3 1.8s ease-in-out infinite alternate;
+        }
+        
+        .f3w1 { height: 8px; animation-delay: 0s; }
+        .f3w2 { height: 14px; animation-delay: 0.3s; }
+        .f3w3 { height: 10px; animation-delay: 0.6s; }
+        .f3w4 { height: 16px; animation-delay: 0.9s; }
+        .f3w5 { height: 12px; animation-delay: 1.2s; }
+        
+        .footer-3-tagline {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .footer-3-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 0 0 30px;
+        }
+        
+        .footer-3-copyright {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .copyright-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copyright-dot {
+            width: 3px;
+            height: 3px;
+            background: #666;
+            border-radius: 50%;
+        }
+
+        .powered-by {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* =============================================================================
+           FOOTER 4: COMPLETO MINIMALISTA
+        ============================================================================= */
+        .footer-4 {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 60px 40px 40px;
+        }
+        
+        .footer-4-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-4-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-4-brand {
+            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+            color: white;
+        }
+        
+        .footer-4-waves {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .footer-4-wave {
+            width: 2px;
+            background: white;
+            border-radius: 1px;
+            animation: wave4 1.8s ease-in-out infinite alternate;
+        }
+        
+        .f4w1 { height: 8px; animation-delay: 0s; }
+        .f4w2 { height: 14px; animation-delay: 0.3s; }
+        .f4w3 { height: 10px; animation-delay: 0.6s; }
+        .f4w4 { height: 16px; animation-delay: 0.9s; }
+        .f4w5 { height: 12px; animation-delay: 1.2s; }
+        
+        .footer-4-tagline {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .footer-4-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 0 0 30px;
+        }
+        
+        .footer-4-copyright {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .footer-4 .copyright-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-4 .powered-by {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .powered-logo {
+            font-weight: 500;
+            color: #888;
+        }
+
+        .elio-brand {
+            color: white;
+            font-weight: 400;
+        }
+
+        /* =============================================================================
+           ANIMATIONS
+        ============================================================================= */
+        @keyframes wave1 {
+            0% { transform: scaleY(0.6); opacity: 0.8; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        @keyframes wave2 {
+            0% { transform: scaleY(0.6); opacity: 0.8; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        @keyframes wave3 {
+            0% { transform: scaleY(0.6); opacity: 0.8; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        @keyframes wave4 {
+            0% { transform: scaleY(0.6); opacity: 0.8; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+
+        /* =============================================================================
+           RESPONSIVE
+        ============================================================================= */
+        @media (max-width: 768px) {
+            .footer-1, .footer-2, .footer-3, .footer-4 {
+                padding: 40px 20px 30px;
+            }
+            
+            .footer-1-brand, .footer-2-brand, .footer-3-brand, .footer-4-brand {
+                font-size: 1.5rem;
+            }
+            
+            .footer-2-tagline, .footer-3-tagline, .footer-4-tagline {
+                font-size: 0.9rem;
+            }
+            
+            .footer-3-copyright, .footer-4-copyright {
+                font-size: 0.8rem;
+            }
+            
+            .copyright-main {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .copyright-dot {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- FOOTER 1: ULTRA MINIMALISTA -->
+    <div class="footer-demo">
+        <h3 class="demo-title">1. Ultra minimalista</h3>
+        <footer class="footer-1">
+            <div class="footer-1-logo">
+                <span class="footer-1-brand">elio</span>
+                <div class="footer-1-waves">
+                    <div class="footer-1-wave f1w1"></div>
+                    <div class="footer-1-wave f1w2"></div>
+                    <div class="footer-1-wave f1w3"></div>
+                    <div class="footer-1-wave f1w4"></div>
+                    <div class="footer-1-wave f1w5"></div>
+                </div>
+            </div>
+            <div class="footer-1-copyright">© 2025 Mili Pérez</div>
+        </footer>
+    </div>
+
+    <!-- FOOTER 2: CON TAGLINE -->
+    <div class="footer-demo">
+        <h3 class="demo-title">2. Con tagline</h3>
+        <footer class="footer-2">
+            <div class="footer-2-logo">
+                <span class="footer-2-brand">elio</span>
+                <div class="footer-2-waves">
+                    <div class="footer-2-wave f2w1"></div>
+                    <div class="footer-2-wave f2w2"></div>
+                    <div class="footer-2-wave f2w3"></div>
+                    <div class="footer-2-wave f2w4"></div>
+                    <div class="footer-2-wave f2w5"></div>
+                </div>
+            </div>
+            <p class="footer-2-tagline">Tu copiloto de aventuras en la era digital</p>
+            <div class="footer-2-copyright">© 2025 Mili Pérez. Todos los derechos reservados.</div>
+        </footer>
+    </div>
+
+    <!-- FOOTER 3: CON SEPARADOR -->
+    <div class="footer-demo">
+        <h3 class="demo-title">3. Con separador</h3>
+        <footer class="footer-3">
+            <div class="footer-3-logo">
+                <span class="footer-3-brand">elio</span>
+                <div class="footer-3-waves">
+                    <div class="footer-3-wave f3w1"></div>
+                    <div class="footer-3-wave f3w2"></div>
+                    <div class="footer-3-wave f3w3"></div>
+                    <div class="footer-3-wave f3w4"></div>
+                    <div class="footer-3-wave f3w5"></div>
+                </div>
+            </div>
+            <p class="footer-3-tagline">Tu copiloto de aventuras en la era digital</p>
+            <div class="footer-3-divider"></div>
+            <div class="footer-3-copyright">
+                <div class="copyright-main">
+                    <span>© 2025 Mili Pérez</span>
+                    <div class="copyright-dot"></div>
+                    <span>Todos los derechos reservados</span>
+                </div>
+                <div class="powered-by">Powered by Elio IA</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- FOOTER 4: COMPLETO MINIMALISTA -->
+    <div class="footer-demo">
+        <h3 class="demo-title">4. Completo minimalista</h3>
+        <footer class="footer-4">
+            <div class="footer-4-content">
+                <div class="footer-4-logo">
+                    <span class="footer-4-brand">elio</span>
+                    <div class="footer-4-waves">
+                        <div class="footer-4-wave f4w1"></div>
+                        <div class="footer-4-wave f4w2"></div>
+                        <div class="footer-4-wave f4w3"></div>
+                        <div class="footer-4-wave f4w4"></div>
+                        <div class="footer-4-wave f4w5"></div>
+                    </div>
+                </div>
+                
+                <p class="footer-4-tagline">Tu copiloto de aventuras en la era digital</p>
+                
+                <div class="footer-4-divider"></div>
+                
+                <div class="footer-4-copyright">
+                    <div class="copyright-main">
+                        <span>© 2025 Todos los derechos reservados</span>
+                        <div class="copyright-dot"></div>
+                        <span>Mili Pérez</span>
+                    </div>
+                    <div class="powered-by">
+                        <span class="powered-logo">Powered by</span>
+                        <span class="elio-brand">Elio IA</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
