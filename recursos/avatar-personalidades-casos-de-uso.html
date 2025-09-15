@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELIO - Versiones de color, con sus personalidades y casos de uso</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #FFFFFF 0%, #f8f9fa 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .main-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #888888;
+            font-weight: 400;
+        }
+
+        .versions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .version-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .version-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        .version-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color);
+        }
+
+        /* VERSION VERDE - NATURE */
+        .version-green {
+            --accent-color: #2D5D31;
+            --eye-color: #2D5D31;
+            --tech-color: #00FF88;
+            --shadow-color: rgba(45, 93, 49, 0.2);
+        }
+
+        /* VERSION AZUL - MAR */
+        .version-blue {
+            --accent-color: #0066CC;
+            --eye-color: #0066CC;
+            --tech-color: #00AAFF;
+            --shadow-color: rgba(0, 102, 204, 0.2);
+        }
+
+        /* VERSION NEGRO - PROFESIONAL */
+        .version-black {
+            --accent-color: #1A1A1A;
+            --eye-color: #1A1A1A;
+            --tech-color: #888888;
+            --shadow-color: rgba(26, 26, 26, 0.2);
+        }
+
+        .avatar-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(145deg, #f0f0f0, #e6e6e6);
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 15px 35px var(--shadow-color);
+        }
+
+        .face {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(145deg, #ffeaa7, #fab1a0);
+            border-radius: 50%;
+        }
+
+        .hair {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 80px;
+            background: #000000;
+            border-radius: 60px 60px 30px 30px;
+            z-index: 2;
+        }
+
+        .eyes {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 20px;
+            z-index: 3;
+        }
+
+        .eye {
+            width: 18px;
+            height: 18px;
+            background: var(--eye-color);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 10px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            width: 6px;
+            height: 6px;
+            background: #FFFFFF;
+            border-radius: 50%;
+        }
+
+        .eyebrows {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 28px;
+            z-index: 3;
+        }
+
+        .eyebrow {
+            width: 15px;
+            height: 3px;
+            background: #000000;
+            border-radius: 2px;
+            transform: rotate(-15deg);
+        }
+
+        .eyebrow.right {
+            transform: rotate(15deg);
+        }
+
+        .nose {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .mouth {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 15px;
+            border: 2px solid #000000;
+            border-top: none;
+            border-radius: 0 0 30px 30px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .shirt {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 60px;
+            background: #000000;
+            border-radius: 15px 15px 0 0;
+            z-index: 1;
+        }
+
+        .watch {
+            position: absolute;
+            bottom: 15px;
+            right: -15px;
+            width: 18px;
+            height: 18px;
+            background: #000000;
+            border-radius: 4px;
+            border: 1px solid #888888;
+        }
+
+        .watch::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: var(--tech-color);
+            border-radius: 50%;
+        }
+
+        .tech-elements {
+            position: absolute;
+            top: 20%;
+            right: -20px;
+            width: 10px;
+            height: 10px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .version-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .version-tagline {
+            font-size: 16px;
+            color: #888888;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .use-cases {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .use-cases h4 {
+            font-size: 14px;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .use-case {
+            font-size: 13px;
+            color: #666666;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .use-case::before {
+            content: '•';
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .personality-box {
+            background: linear-gradient(135deg, var(--accent-color), rgba(0,0,0,0.1));
+            color: #FFFFFF;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .personality-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .personality-desc {
+            font-size: 12px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .cta-button {
+            background: var(--accent-color);
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @media (max-width: 768px) {
+            .versions-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .main-title {
+                font-size: 36px;
+            }
+            .subtitle {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="main-title">Elio</h1>
+        <p class="subtitle">Tres personalidades visuales para cada momento empresarial</p>
+    </div>
+
+    <div class="versions-container">
+        <!-- VERSION VERDE - NATURE -->
+        <div class="version-card version-green">
+            <div class="avatar-container floating-animation">
+                <div class="avatar">
+                    <div class="face">
+                        <div class="hair"></div>
+                        <div class="eyebrows">
+                            <div class="eyebrow"></div>
+                            <div class="eyebrow right"></div>
+                        </div>
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="nose"></div>
+                        <div class="mouth"></div>
+                    </div>
+                    <div class="shirt"></div>
+                    <div class="watch pulse"></div>
+                    <div class="tech-elements"></div>
+                </div>
+            </div>
+
+            <h2 class="version-name">ELIO NATURE</h2>
+            <p class="version-tagline">Tech Meets Nature</p>
+            
+            <div class="personality-box">
+                <div class="personality-title">Equilibrio & Innovación</div>
+                <div class="personality-desc">La versión principal que combina eficiencia tecnológica con equilibrio natural</div>
+            </div>
+
+            <div class="use-cases">
+                <h4>Casos de uso:</h4>
+                <div class="use-case">Landing pages principales</div>
+                <div class="use-case">Contenido de marca general</div>
+                <div class="use-case">Redes sociales inspiracionales</div>
+                <div class="use-case">Marketing de sostenibilidad</div>
+                <div class="use-case">Startups tech conscientes</div>
+            </div>
+
+            <button class="cta-button">🌿 Usar versión nature</button>
+        </div>
+
+        <!-- VERSION AZUL - MAR -->
+        <div class="version-card version-blue">
+            <div class="avatar-container floating-animation">
+                <div class="avatar">
+                    <div class="face">
+                        <div class="hair"></div>
+                        <div class="eyebrows">
+                            <div class="eyebrow"></div>
+                            <div class="eyebrow right"></div>
+                        </div>
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="nose"></div>
+                        <div class="mouth"></div>
+                    </div>
+                    <div class="shirt"></div>
+                    <div class="watch pulse"></div>
+                    <div class="tech-elements"></div>
+                </div>
+            </div>
+
+            <h2 class="version-name">ELIO OCEAN</h2>
+            <p class="version-tagline">Serenidad & Confianza</p>
+            
+            <div class="personality-box">
+                <div class="personality-title">Profundidad & Calma</div>
+                <div class="personality-desc">Transmite serenidad profesional y confianza sólida como el océano</div>
+            </div>
+
+            <div class="use-cases">
+                <h4>Casos de uso:</h4>
+                <div class="use-case">Sector financiero y banca</div>
+                <div class="use-case">Consultoría estratégica</div>
+                <div class="use-case">Contenido educativo</div>
+                <div class="use-case">Comunicación institucional</div>
+                <div class="use-case">Servicios de confianza</div>
+            </div>
+
+            <button class="cta-button">🌊 Usar versión ocean</button>
+        </div>
+
+        <!-- VERSION NEGRO - PROFESIONAL -->
+        <div class="version-card version-black">
+            <div class="avatar-container floating-animation">
+                <div class="avatar">
+                    <div class="face">
+                        <div class="hair"></div>
+                        <div class="eyebrows">
+                            <div class="eyebrow"></div>
+                            <div class="eyebrow right"></div>
+                        </div>
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="nose"></div>
+                        <div class="mouth"></div>
+                    </div>
+                    <div class="shirt"></div>
+                    <div class="watch pulse"></div>
+                    <div class="tech-elements"></div>
+                </div>
+            </div>
+
+            <h2 class="version-name">ELIO ELITE</h2>
+            <p class="version-tagline">Poder & Precisión</p>
+            
+            <div class="personality-box">
+                <div class="personality-title">Elegancia & Control</div>
+                <div class="personality-desc">Máximo profesionalismo para entornos corporativos de alto nivel</div>
+            </div>
+
+            <div class="use-cases">
+                <h4>Casos de uso:</h4>
+                <div class="use-case">Presentaciones ejecutivas</div>
+                <div class="use-case">Grandes corporaciones</div>
+                <div class="use-case">Entornos legales</div>
+                <div class="use-case">Luxury business</div>
+                <div class="use-case">C-Level communications</div>
+            </div>
+
+            <button class="cta-button">⚫ Usar versión elite</button>
+        </div>
+    </div>
+
+    <script>
+        // Añadir interactividad a todos los avatares
+        const avatars = document.querySelectorAll('.avatar');
+        
+        avatars.forEach(avatar => {
+            const eyes = avatar.querySelectorAll('.eye');
+            
+            avatar.addEventListener('mouseover', function() {
+                eyes.forEach(eye => {
+                    eye.style.transform = 'scale(1.1)';
+                    eye.style.boxShadow = '0 0 20px rgba(45, 93, 49, 0.6)';
+                });
+            });
+            
+            avatar.addEventListener('mouseout', function() {
+                eyes.forEach(eye => {
+                    eye.style.transform = 'scale(1)';
+                    eye.style.boxShadow = '0 0 10px rgba(45, 93, 49, 0.3)';
+                });
+            });
+
+            // Efecto de parpadeo
+            setInterval(() => {
+                eyes.forEach(eye => {
+                    eye.style.height = '2px';
+                    setTimeout(() => {
+                        eye.style.height = '18px';
+                    }, 150);
+                });
+            }, 5000);
+        });
+
+        // Click en botones
+        const buttons = document.querySelectorAll('.cta-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
