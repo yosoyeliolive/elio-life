@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de Cotización - Agentes IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c323f 0%, #0d95e5 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .process-container {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+        
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+        }
+        
+        /* Línea conectora vertical */
+        .process-flow::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #10b981, #0d95e5, #f59e0b);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .process-step {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            margin: 0 auto;
+            max-width: 800px;
+            transition: transform 0.3s ease;
+        }
+        
+        .process-step:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            z-index: 10;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .process-step:nth-child(1) .step-number {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+        
+        .process-step:nth-child(2) .step-number {
+            background: linear-gradient(45deg, #0d95e5, #0c323f);
+        }
+        
+        .process-step:nth-child(3) .step-number {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            margin-left: 40px;
+        }
+        
+        .step-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
+        
+        .process-step:nth-child(1) .step-title {
+            color: #065f46;
+        }
+        
+        .process-step:nth-child(2) .step-title {
+            color: #0c323f;
+        }
+        
+        .process-step:nth-child(3) .step-title {
+            color: #92400e;
+        }
+        
+        .step-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .step-content {
+            margin-left: 40px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .feature-item {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1rem;
+            border-left: 4px solid;
+            transition: transform 0.2s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .process-step:nth-child(1) .feature-item {
+            border-left-color: #10b981;
+        }
+        
+        .process-step:nth-child(2) .feature-item {
+            border-left-color: #0d95e5;
+        }
+        
+        .process-step:nth-child(3) .feature-item {
+            border-left-color: #f59e0b;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .feature-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        
+        .duration-info {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .duration-title {
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 0.5rem;
+        }
+        
+        .duration-text {
+            color: #047857;
+        }
+        
+        .payment-structure {
+            background: #fff7ed;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 2px solid #f59e0b;
+        }
+        
+        .payment-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .payment-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .payment-step {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid #fed7aa;
+            position: relative;
+        }
+        
+        .payment-percentage {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .payment-label {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .payment-description {
+            font-size: 0.9rem;
+            color: #9a3412;
+        }
+        
+        .timeline-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #10b981, #0d95e5, #f59e0b);
+            border-radius: 2px;
+            z-index: 1;
+        }
+        
+        .timeline-item {
+            background: white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(1) {
+            border-color: #10b981;
+            color: #065f46;
+        }
+        
+        .timeline-item:nth-child(2) {
+            border-color: #0d95e5;
+            color: #0c323f;
+        }
+        
+        .timeline-item:nth-child(3) {
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .timeline-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .timeline-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .benefits-section {
+            background: #f0f9ff;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 2px solid #0d95e5;
+        }
+        
+        .benefits-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
+        }
+        
+        .benefit-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .benefit-text {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        @media (max-width: 768px) {
+            .process-flow::before {
+                left: 25px;
+            }
+            
+            .step-number {
+                left: 0;
+                position: relative;
+                margin-bottom: 1rem;
+            }
+            
+            .step-header,
+            .step-content {
+                margin-left: 0;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .timeline::before {
+                width: 4px;
+                height: 100%;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Proceso de cotización</h1>
+            <p>Metodología transparente para el desarrollo de agentes IA personalizados</p>
+        </div>
+        
+        <div class="process-container">
+            <div class="process-flow">
+                <!-- Paso 1: Análisis Inicial -->
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-header">
+                        <div class="step-title">Análisis inicial</div>
+                        <div class="step-badge">GRATUITO</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">🗣️ Reunión de descubrimiento</div>
+                                <div class="feature-description">Sesión de máximo 1 hora para entender tus necesidades específicas</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">📋 Definición de requisitos</div>
+                                <div class="feature-description">Identificamos los requisitos básicos y funcionalidades necesarias</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🔗 Identificación de integraciones</div>
+                                <div class="feature-description">Analizamos qué sistemas necesitan conectarse con el agente IA</div>
+                            </div>
+                        </div>
+                        <div class="duration-info">
+                            <div class="duration-title">⏱️ Duración estimada</div>
+                            <div class="duration-text">1 hora de reunión + análisis interno (sin coste para el cliente)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paso 2: Presupuesto Detallado -->
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-header">
+                        <div class="step-title">Presupuesto detallado</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">⏰ Desglose por horas</div>
+                                <div class="feature-description">Estimación detallada de horas necesarias para cada fase del proyecto</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">⚠️ Identificación de riesgos</div>
+                                <div class="feature-description">Análisis de posibles riesgos técnicos y planes de contingencia</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">📅 Cronograma de entrega</div>
+                                <div class="feature-description">Planificación temporal con hitos y fechas de entrega</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">💰 Términos de pago</div>
+                                <div class="feature-description">Condiciones claras de facturación y métodos de pago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paso 3: Aprobación y Desarrollo -->
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-header">
+                        <div class="step-title">Aprobación y desarrollo</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-title">📝 Firma del contrato</div>
+                                <div class="feature-description">Aprobación formal del presupuesto y términos acordados</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">🚀 Inicio del desarrollo</div>
+                                <div class="feature-description">Comienzo inmediato tras recibir el primer pago del 50%</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">📊 Seguimiento en tiempo real</div>
+                                <div class="feature-description">Tracking transparente de horas invertidas y progreso del proyecto</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title">✅ Entrega y finalización</div>
+                                <div class="feature-description">Entrega final, pruebas y cobro del 50% restante</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estructura de Pagos -->
+        <div class="payment-structure">
+            <div class="payment-title">💳 Estructura de pagos</div>
+            <div class="payment-steps">
+                <div class="payment-step">
+                    <div class="payment-percentage">50%</div>
+                    <div class="payment-label">Al inicio del proyecto</div>
+                    <div class="payment-description">Tras la aprobación del presupuesto y firma del contrato</div>
+                </div>
+                <div class="payment-step">
+                    <div class="payment-percentage">50%</div>
+                    <div class="payment-label">Al completar la entrega</div>
+                    <div class="payment-description">Una vez finalizado el desarrollo y pruebas satisfactorias</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline Visual -->
+        <div class="timeline-section">
+            <div class="timeline-title">🕐 Línea temporal del proceso</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-number">1-2</div>
+                    <div class="timeline-label">DÍAS</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-number">2-3</div>
+                    <div class="timeline-label">DÍAS</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-number">1-6</div>
+                    <div class="timeline-label">SEMANAS</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Beneficios -->
+        <div class="benefits-section">
+            <div class="benefits-title">🎯 Ventajas de nuestro proceso</div>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🆓</div>
+                    <div class="benefit-text">Análisis inicial completamente gratuito</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-text">Transparencia total en costes y tiempos</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔒</div>
+                    <div class="benefit-text">Pagos fraccionados para mayor seguridad</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⏱️</div>
+                    <div class="benefit-text">Seguimiento en tiempo real del progreso</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <div class="benefit-text">Enfoque personalizado para cada proyecto</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <div class="benefit-text">Identificación proactiva de riesgos técnicos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
