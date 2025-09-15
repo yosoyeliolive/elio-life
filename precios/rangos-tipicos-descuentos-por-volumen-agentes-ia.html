@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descuentos por volumen - Agentes IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c323f 0%, #0d95e5 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .usage-ranges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .usage-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #0d95e5;
+        }
+        
+        .usage-title {
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .usage-range {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0d95e5;
+            margin-bottom: 0.8rem;
+        }
+        
+        .usage-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .discount-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .discount-table th {
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .discount-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+        }
+        
+        .discount-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .price-cell {
+            font-weight: 700;
+            color: #0c323f;
+        }
+        
+        .discount-cell {
+            font-weight: 600;
+            color: #0d95e5;
+        }
+        
+        .savings-cell {
+            font-weight: 600;
+            color: #059669;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .example-card {
+            background: #f0f9ff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid #0d95e5;
+        }
+        
+        .example-title {
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .example-calculation {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .highlight-box {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .highlight-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight-text {
+            color: #047857;
+            font-size: 1rem;
+        }
+        
+        .recommendation {
+            background: #fff7ed;
+            border: 2px solid #f97316;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .recommendation-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #9a3412;
+            margin-bottom: 1rem;
+        }
+        
+        .recommendation-list {
+            list-style: none;
+        }
+        
+        .recommendation-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .recommendation-list li::before {
+            content: "💡";
+            margin-right: 0.8rem;
+            margin-top: 0.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .usage-ranges {
+                grid-template-columns: 1fr;
+            }
+            
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .discount-table {
+                font-size: 0.8rem;
+            }
+            
+            .discount-table th,
+            .discount-table td {
+                padding: 0.8rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Descuentos por volumen</h1>
+            <p>Estructura de precios escalable para grandes empresas</p>
+        </div>
+        
+        <!-- Rangos de Uso Empresarial -->
+        <div class="section">
+            <div class="section-title">Rangos típicos de uso por "Tipo de Empresa"</div>
+            <div class="usage-ranges">
+                <div class="usage-card">
+                    <div class="usage-title">🏢 Pequeña empresa</div>
+                    <div class="usage-range">100 - 1.000 min/mes</div>
+                    <div class="usage-description">
+                        Startups, oficinas pequeñas, servicios básicos de atención al cliente.
+                        Ejemplo: 1-2 líneas de soporte, consultas básicas.
+                    </div>
+                </div>
+                
+                <div class="usage-card">
+                    <div class="usage-title">🏬 Empresa mediana</div>
+                    <div class="usage-range">1.000 - 15.000 min/mes</div>
+                    <div class="usage-description">
+                        Empresas en crecimiento, departamentos de ventas, soporte técnico especializado.
+                        Ejemplo: 5-10 agentes, múltiples departamentos.
+                    </div>
+                </div>
+                
+                <div class="usage-card">
+                    <div class="usage-title">🏭 Empresa grande</div>
+                    <div class="usage-range">15.000 - 100.000 min/mes</div>
+                    <div class="usage-description">
+                        Corporaciones, call centers medianos, múltiples sucursales.
+                        Ejemplo: 20-50 agentes, operación multi-región.
+                    </div>
+                </div>
+                
+                <div class="usage-card">
+                    <div class="usage-title">🌐 Corporación/Enterprise</div>
+                    <div class="usage-range">100.000 - 1.000.000+ min/mes</div>
+                    <div class="usage-description">
+                        Multinacionales, call centers masivos, operadores de telecomunicaciones.
+                        Ejemplo: 100+ agentes, operación 24/7 global.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabla de Descuentos -->
+        <div class="section">
+            <div class="section-title">Estructura de descuentos por volumen</div>
+            <table class="discount-table">
+                <thead>
+                    <tr>
+                        <th>Volumen de minutos/Mes</th>
+                        <th>Precio por minuto</th>
+                        <th>Descuento</th>
+                        <th>Ahorro mensual*</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0 - 1.000 minutos</td>
+                        <td class="price-cell">0,15€*</td>
+                        <td>Precio base</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>1.001 - 15.000 minutos</td>
+                        <td class="price-cell">0,13€*</td>
+                        <td class="discount-cell">13% descuento</td>
+                        <td class="savings-cell">Hasta 300€*/mes</td>
+                    </tr>
+                    <tr>
+                        <td>15.001 - 50.000 minutos</td>
+                        <td class="price-cell">0,11€*</td>
+                        <td class="discount-cell">27% descuento</td>
+                        <td class="savings-cell">Hasta 2.000€*/mes</td>
+                    </tr>
+                    <tr>
+                        <td>50.001 - 100.000 minutos</td>
+                        <td class="price-cell">0,09€*</td>
+                        <td class="discount-cell">40% descuento</td>
+                        <td class="savings-cell">Hasta 6.000€*/mes</td>
+                    </tr>
+                    <tr>
+                        <td>100.001 - 500.000 minutos</td>
+                        <td class="price-cell">0,07€*</td>
+                        <td class="discount-cell">53% descuento</td>
+                        <td class="savings-cell">Hasta 40.000€*/mes</td>
+                    </tr>
+                    <tr style="background: #f0f9ff;">
+                        <td><strong>500.001 - 1.000.000 minutos</strong></td>
+                        <td class="price-cell"><strong>0,05€*</strong></td>
+                        <td class="discount-cell"><strong>67% descuento</strong></td>
+                        <td class="savings-cell"><strong>Hasta 100.000€*/mes</strong></td>
+                    </tr>
+                    <tr style="background: #ecfdf5;">
+                        <td><strong>+1.000.000 minutos</strong></td>
+                        <td class="price-cell"><strong>0,03€*</strong></td>
+                        <td class="discount-cell"><strong>80% descuento</strong></td>
+                        <td class="savings-cell"><strong>+120.000€*/mes</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Ejemplos Prácticos -->
+        <div class="section">
+            <div class="section-title">Ejemplos de grandes volúmenes</div>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-title">🏢 Call Center mediano (200.000 min/mes)</div>
+                    <div class="example-calculation">
+Setup: 150€* (una vez)
+Mantenimiento: 49€*/mes
+Uso: 200.000 × 0,07€* = 14.000€*
+─────────────────────────────────
+Total mes 1: 150€* + 49€* + 14.000€* = 14.199€*
+Meses siguientes: 49€* + 14.000€* = 14.049€*
+
+Ahorro vs precio base:
+200.000 × (0,15€* - 0,07€*) = 16.000€*/mes
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">🌐 Multinacional (800.000 min/mes)</div>
+                    <div class="example-calculation">
+Setup: 150€* (una vez)
+Mantenimiento: 49€*/mes
+Uso: 800.000 × 0,05€* = 40.000€*
+─────────────────────────────────
+Total mes 1: 150€* + 49€* + 40.000€* = 40.199€*
+Meses siguientes: 49€* + 40.000€* = 40.049€*
+
+Ahorro vs precio base:
+800.000 × (0,15€* - 0,05€*) = 80.000€*/mes
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">🚀 Operador masivo (2.000.000 min/mes)</div>
+                    <div class="example-calculation">
+Setup: 150€* (una vez)
+Mantenimiento: 49€*/mes
+Uso: 2.000.000 × 0,03€* = 60.000€*
+─────────────────────────────────
+Total mes 1: 150€* + 49€* + 60.000€* = 60.199€*
+Meses siguientes: 49€* + 60.000€* = 60.049€*
+
+Ahorro vs precio base:
+2.000.000 × (0,15€* - 0,03€*) = 240.000€*/mes
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight-box">
+            <div class="highlight-title">💰 Descuento máximo del 80%</div>
+            <div class="highlight-text">
+                A partir de 1 millón de minutos/mes, el precio se reduce de 0,15€* a solo 0,03€* por minuto,
+                generando ahorros de más de 120.000€*/mes para grandes operadores.
+            </div>
+        </div>
+        
+        <div class="recommendation">
+            <div class="recommendation-title">📋 Recomendaciones estratégicas</div>
+            <ul class="recommendation-list">
+                <li>Los descuentos significativos empiezan a partir de 15.000 min/mes (27% descuento)</li>
+                <li>El "sweet spot" para grandes empresas está entre 100.000 - 500.000 min/mes</li>
+                <li>El descuento de 1M+ minutos es ideal para operadores y multinacionales</li>
+                <li>Considera contratos anuales con descuentos adicionales del 5-10%</li>
+                <li>Ofrece descuentos por compromiso de volumen mínimo mensual</li>
+                <li>Implementa revisiones trimestrales para ajustar volúmenes</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
