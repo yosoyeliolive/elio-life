@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo de personalizaciones - Agentes IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c323f 0%, #0d95e5 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .base-pricing {
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .base-pricing h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .base-pricing .rate {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+        
+        .base-pricing .details {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .level-card {
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .level-card.level-1 {
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+            border-color: #10b981;
+        }
+        
+        .level-card.level-2 {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-color: #0d95e5;
+        }
+        
+        .level-card.level-3 {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+            border-color: #f59e0b;
+        }
+        
+        .level-card.level-4 {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fcf1f8 100%);
+            border-color: #ec4899;
+        }
+        
+        .level-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .level-1 .level-number { background: #10b981; }
+        .level-2 .level-number { background: #0d95e5; }
+        .level-3 .level-number { background: #f59e0b; }
+        .level-4 .level-number { background: #ec4899; }
+        
+        .level-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .level-1 .level-title { color: #065f46; }
+        .level-2 .level-title { color: #0c323f; }
+        .level-3 .level-title { color: #92400e; }
+        .level-4 .level-title { color: #831843; }
+        
+        .level-duration {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        .level-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .level-1 .level-price { color: #059669; }
+        .level-2 .level-price { color: #0d95e5; }
+        .level-3 .level-price { color: #d97706; }
+        .level-4 .level-price { color: #be185d; }
+        
+        .features-list {
+            list-style: none;
+        }
+        
+        .features-list li {
+            padding: 0.4rem 0;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .features-list li::before {
+            content: "✓";
+            margin-right: 0.8rem;
+            font-weight: bold;
+            margin-top: 0.1rem;
+            color: inherit;
+        }
+        
+        .example-box {
+            background: #f8fafc;
+            border: 2px dashed #0d95e5;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+        
+        .variables-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .variable-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #0d95e5;
+        }
+        
+        .variable-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1rem;
+        }
+        
+        .variable-item {
+            margin-bottom: 0.8rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .variable-label {
+            font-weight: 600;
+            color: #0c323f;
+        }
+        
+        .variable-value {
+            color: #0d95e5;
+            font-weight: 500;
+        }
+        
+        .calculator-section {
+            background: #f0f9ff;
+            border: 2px solid #0d95e5;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .calculator-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .calculator-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+        
+        .calc-example {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 320px;
+        }
+        
+        .calc-title {
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .calc-formula {
+            font-family: 'Courier New', monospace;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+        
+        .calc-result {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0d95e5;
+            text-align: center;
+            padding: 0.5rem;
+            background: #eff6ff;
+            border-radius: 6px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+        
+        .note {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .note-text {
+            color: #9a3412;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .levels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .variables-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Modelo de personalizaciones</h1>
+            <p>Desarrollo y configuración de agentes IA personalizados</p>
+        </div>
+        
+        <!-- Tarifa Base -->
+        <div class="section">
+            <div class="base-pricing">
+                <h3>Tarifa por Desarrollo/Configuración</h3>
+                <div class="rate">60€*/hora</div>
+                <div class="details">
+                    Pago único por proyecto • Estimación previa obligatoria<br>
+                    Incluye análisis, desarrollo, pruebas y documentación
+                </div>
+            </div>
+        </div>
+        
+        <!-- Niveles de Personalización -->
+        <div class="section">
+            <div class="section-title">Categorías de personalizaciones</div>
+            <div class="levels-grid">
+                <!-- Nivel 1 -->
+                <div class="level-card level-1">
+                    <div class="level-number">1</div>
+                    <div class="level-title">Configuraciones básicas</div>
+                    <div class="level-duration">1-4 horas de desarrollo</div>
+                    <div class="level-price">60€* - 240€*</div>
+                    <ul class="features-list">
+                        <li>Ajustes menores en prompts</li>
+                        <li>Configuración de respuestas predefinidas</li>
+                        <li>Cambios en flujos de conversación simples</li>
+                        <li>Integración con herramientas estándar</li>
+                        <li>Configuración Calendly, formularios básicos</li>
+                    </ul>
+                </div>
+                
+                <!-- Nivel 2 -->
+                <div class="level-card level-2">
+                    <div class="level-number">2</div>
+                    <div class="level-title">Integraciones intermedias</div>
+                    <div class="level-duration">4-12 horas de desarrollo</div>
+                    <div class="level-price">240€* - 720€*</div>
+                    <ul class="features-list">
+                        <li>Integración con CRM específicos</li>
+                        <li>Análisis de APIs externas</li>
+                        <li>Configuración de webhooks personalizados</li>
+                        <li>Flujos de conversación complejos</li>
+                        <li>Integración con sistemas de ticketing</li>
+                    </ul>
+                    <div class="example-box">
+                        📝 Ejemplo: Integración calendario CRM "pepito"<br>
+                        8 horas × 60€* = 480€*
+                    </div>
+                </div>
+                
+                <!-- Nivel 3 -->
+                <div class="level-card level-3">
+                    <div class="level-number">3</div>
+                    <div class="level-title">Desarrollos avanzados</div>
+                    <div class="level-duration">12-40 horas de desarrollo</div>
+                    <div class="level-price">720€* - 2.400€*</div>
+                    <ul class="features-list">
+                        <li>Integración con múltiples sistemas</li>
+                        <li>Funcionalidades específicas del negocio</li>
+                        <li>Modelos de IA personalizados</li>
+                        <li>Análisis profundo del negocio del cliente</li>
+                        <li>Configuraciones complejas multi-departamento</li>
+                    </ul>
+                </div>
+                
+                <!-- Nivel 4 -->
+                <div class="level-card level-4">
+                    <div class="level-number">4</div>
+                    <div class="level-title">Proyectos complejos</div>
+                    <div class="level-duration">+40 horas de desarrollo</div>
+                    <div class="level-price">A cotizar según alcance</div>
+                    <ul class="features-list">
+                        <li>Arquitectura específica requerida</li>
+                        <li>Integraciones con sistemas legacy</li>
+                        <li>Múltiples iteraciones y validaciones</li>
+                        <li>Proyectos enterprise complejos</li>
+                        <li>Desarrollo de módulos específicos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Variables del Modelo -->
+        <div class="section">
+            <div class="section-title">Variables del modelo de precios</div>
+            <div class="variables-section">
+                <div class="variable-card">
+                    <div class="variable-title">🔧 Complejidad técnica</div>
+                    <div class="variable-item">
+                        <span class="variable-label">Factor 1.0:</span>
+                        <span class="variable-value">Configuraciones estándar</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Factor 1.2:</span>
+                        <span class="variable-value">Requiere análisis de API externa</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Factor 1.5:</span>
+                        <span class="variable-value">Implica desarrollo personalizado</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Factor 2.0:</span>
+                        <span class="variable-value">Requiere arquitectura específica</span>
+                    </div>
+                </div>
+                
+                <div class="variable-card">
+                    <div class="variable-title">⚡ Urgencia del proyecto</div>
+                    <div class="variable-item">
+                        <span class="variable-label">Estándar (2-3 semanas):</span>
+                        <span class="variable-value">Tarifa base</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Prioritario (1 semana):</span>
+                        <span class="variable-value">+25% sobre tarifa base</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Urgente (48-72h):</span>
+                        <span class="variable-value">+50% sobre tarifa base</span>
+                    </div>
+                </div>
+                
+                <div class="variable-card">
+                    <div class="variable-title">🔄 Iteraciones y validaciones</div>
+                    <div class="variable-item">
+                        <span class="variable-label">Primera iteración:</span>
+                        <span class="variable-value">Incluida en presupuesto inicial</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Iteraciones adicionales:</span>
+                        <span class="variable-value">60€*/hora según tiempo invertido</span>
+                    </div>
+                    <div class="variable-item">
+                        <span class="variable-label">Validaciones subjetivas:</span>
+                        <span class="variable-value">Se contabiliza tiempo dedicado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calculadora de Ejemplos -->
+        <div class="calculator-section">
+            <div class="calculator-title">📊 Ejemplos de cálculo con variables</div>
+            <div class="calculator-examples">
+                <div class="calc-example">
+                    <div class="calc-title">Integración CRM básica (urgente)</div>
+                    <div class="calc-formula">
+Horas estimadas: 6h
+Complejidad: Factor 1.2 (API externa)
+Urgencia: +50% (48-72h)
+
+Cálculo:
+6h × 60€* = 360€*
+× Factor 1.2 = 432€*
+× Urgencia +50% = 648€*
+                    </div>
+                    <div class="calc-result">Total: 648€*</div>
+                </div>
+                
+                <div class="calc-example">
+                    <div class="calc-title">Desarrollo personalizado (estándar)</div>
+                    <div class="calc-formula">
+Horas estimadas: 20h
+Complejidad: Factor 1.5 (desarrollo custom)
+Urgencia: Estándar (tarifa base)
+
+Cálculo:
+20h × 60€* = 1.200€*
+× Factor 1.5 = 1.800€*
+× Urgencia estándar = 1.800€*
+                    </div>
+                    <div class="calc-result">Total: 1.800€*</div>
+                </div>
+                
+                <div class="calc-example">
+                    <div class="calc-title">Proyecto complejo con iteraciones</div>
+                    <div class="calc-formula">
+Horas estimadas: 30h
+Complejidad: Factor 2.0 (arquitectura específica)
+Urgencia: Prioritario (+25%)
+Iteraciones adicionales: 5h
+
+Cálculo:
+30h × 60€* = 1.800€*
+× Factor 2.0 = 3.600€*
+× Urgencia +25% = 4.500€*
++ Iteraciones: 5h × 60€* = 300€*
+                    </div>
+                    <div class="calc-result">Total: 4.800€*</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <div class="note-text">
+                💡 <strong>Nota importante:</strong> Todos los presupuestos incluyen estimación previa gratuita. 
+                Los precios no incluyen IVA. La primera iteración está incluida en el presupuesto inicial.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
