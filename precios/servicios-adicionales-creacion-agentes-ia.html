@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios adicionales - Agentes IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c323f 0%, #0d95e5 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+        
+        .service-card:nth-child(1) {
+            border-top-color: #10b981;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        
+        .service-card:nth-child(2) {
+            border-top-color: #0d95e5;
+            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+        }
+        
+        .service-card:nth-child(3) {
+            border-top-color: #f59e0b;
+            background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 2rem auto;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        
+        .service-card:nth-child(1) .service-icon {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .service-card:nth-child(2) .service-icon {
+            background: linear-gradient(45deg, #0d95e5, #0c323f);
+            color: white;
+        }
+        
+        .service-card:nth-child(3) .service-icon {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .service-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .service-card:nth-child(1) .service-title {
+            color: #065f46;
+        }
+        
+        .service-card:nth-child(2) .service-title {
+            color: #0c323f;
+        }
+        
+        .service-card:nth-child(3) .service-title {
+            color: #92400e;
+        }
+        
+        .service-pricing {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .service-card:nth-child(1) .price-amount {
+            color: #059669;
+        }
+        
+        .service-card:nth-child(2) .price-amount {
+            color: #0d95e5;
+        }
+        
+        .service-card:nth-child(3) .price-amount {
+            color: #d97706;
+        }
+        
+        .price-period {
+            font-size: 1.1rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .price-details {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        
+        .service-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        .service-features li {
+            padding: 0.8rem 0;
+            display: flex;
+            align-items: flex-start;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            min-height: 3rem;
+        }
+        
+        .service-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+        
+        .service-card:nth-child(1) .feature-icon {
+            color: #10b981;
+        }
+        
+        .service-card:nth-child(2) .feature-icon {
+            color: #0d95e5;
+        }
+        
+        .service-card:nth-child(3) .feature-icon {
+            color: #f59e0b;
+        }
+        
+        .cta-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+        
+        .service-card:nth-child(1) .cta-button {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .service-card:nth-child(2) .cta-button {
+            background: linear-gradient(45deg, #0d95e5, #0c323f);
+            color: white;
+        }
+        
+        .service-card:nth-child(3) .cta-button {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .comparison-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 3rem;
+        }
+        
+        .comparison-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(45deg, #0c323f, #0d95e5);
+            color: white;
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 1.2rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f9fafb;
+        }
+        
+        .service-name {
+            font-weight: 700;
+            color: #374151;
+        }
+        
+        .service-rate {
+            font-weight: 600;
+            color: #0d95e5;
+            font-size: 1.1rem;
+        }
+        
+        .service-description {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .highlight-box {
+            background: #f0f9ff;
+            border: 2px solid #0d95e5;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .highlight-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0c323f;
+            margin-bottom: 1rem;
+        }
+        
+        .highlight-text {
+            color: #374151;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .note {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .note-text {
+            color: #9a3412;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.8rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Servicios adicionales</h1>
+            <p>Optimiza y potencia tu agente IA con nuestros servicios especializados</p>
+        </div>
+        
+        <div class="services-grid">
+            <!-- Consultoría Estratégica -->
+            <div class="service-card">
+                <div class="service-icon">🎯</div>
+                <div class="service-title">Consultoría</div>
+                <div class="service-pricing">
+                    <div class="price-amount">80€*</div>
+                    <div class="price-period">por hora</div>
+                    <div class="price-details">Facturación por horas reales invertidas</div>
+                </div>
+                <ul class="service-features">
+                    <li>
+                        <span class="feature-icon">🔧</span>
+                        <span>Optimización avanzada de prompts para mejor rendimiento</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📊</span>
+                        <span>Análisis detallado de conversaciones y métricas</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">⚡</span>
+                        <span>Identificación de mejoras de performance</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📈</span>
+                        <span>Estrategias de optimización personalizada</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">🎨</span>
+                        <span>Refinamiento de la experiencia conversacional</span>
+                    </li>
+                </ul>
+                <button class="cta-button">Solicitar consultoría</button>
+            </div>
+            
+            <!-- Soporte Premium -->
+            <div class="service-card">
+                <div class="service-icon">👑</div>
+                <div class="service-title">Soporte premium</div>
+                <div class="service-pricing">
+                    <div class="price-amount">+30€*</div>
+                    <div class="price-period">por mes</div>
+                    <div class="price-details">Adicional al plan de mantenimiento base</div>
+                </div>
+                <ul class="service-features">
+                    <li>
+                        <span class="feature-icon">⚡</span>
+                        <span>Soporte prioritario con respuesta en menos de 4 horas</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📅</span>
+                        <span>Revisiones mensuales programadas del rendimiento</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">🔄</span>
+                        <span>Optimizaciones proactivas basadas en uso real</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📞</span>
+                        <span>Línea directa de soporte técnico especializado</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📊</span>
+                        <span>Reportes mensuales detallados de performance</span>
+                    </li>
+                </ul>
+                <button class="cta-button">Activar premium</button>
+            </div>
+            
+            <!-- Formación y Capacitación -->
+            <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <div class="service-title">Formación</div>
+                <div class="service-pricing">
+                    <div class="price-amount">120€*</div>
+                    <div class="price-period">por hora</div>
+                    <div class="price-details">Mínimo 2 horas • Modalidad virtual</div>
+                </div>
+                <ul class="service-features">
+                    <li>
+                        <span class="feature-icon">💻</span>
+                        <span>Sesiones virtuales personalizadas para tu equipo</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📚</span>
+                        <span>Formación en gestión y optimización del agente IA</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">🛠️</span>
+                        <span>Entrenamiento en herramientas de administración</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">📖</span>
+                        <span>Material de referencia y documentación incluida</span>
+                    </li>
+                    <li>
+                        <span class="feature-icon">🎯</span>
+                        <span>Certificado de capacitación al finalizar</span>
+                    </li>
+                </ul>
+                <button class="cta-button">Reservar formación</button>
+            </div>
+        </div>
+        
+        <!-- Tabla Comparativa -->
+        <div class="comparison-section">
+            <div class="comparison-title">📋 Resumen de servicios adicionales</div>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Tarifa</th>
+                        <th>Modalidad</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="service-name">Consultoría</td>
+                        <td class="service-rate">80€*/hora</td>
+                        <td>Por proyecto</td>
+                        <td class="service-description">Optimización de prompts, análisis de conversaciones y mejoras de performance</td>
+                    </tr>
+                    <tr>
+                        <td class="service-name">Soporte premium</td>
+                        <td class="service-rate">+30€*/mes</td>
+                        <td>Suscripción mensual</td>
+                        <td class="service-description">Soporte prioritario, revisiones mensuales y optimizaciones proactivas</td>
+                    </tr>
+                    <tr>
+                        <td class="service-name">Formación</td>
+                        <td class="service-rate">120€*/hora</td>
+                        <td>Virtual (mín. 2h)</td>
+                        <td class="service-description">Capacitación personalizada del equipo en gestión del agente IA</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-box">
+                <div class="highlight-title">💡 Recomendación</div>
+                <div class="highlight-text">
+                    Para obtener el máximo rendimiento de tu agente IA, recomendamos combinar el soporte premium 
+                    con una sesión inicial de consultoría estratégica. Esto asegura una optimización continua 
+                    y el mejor ROI de tu inversión.
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <div class="note-text">
+                📝 <strong>Nota:</strong> Todos los servicios adicionales se facturan independientemente del plan base. 
+                Los precios no incluyen IVA. La consultoría estratégica se factura según horas reales invertidas.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Añadir interactividad a los botones
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const serviceTitle = this.closest('.service-card').querySelector('.service-title').textContent;
+                alert(`Contactar para ${serviceTitle}`);
+            });
+        });
+        
+        // Efecto hover mejorado para las tarjetas
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
