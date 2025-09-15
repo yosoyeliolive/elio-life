@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Elio ya está aquí - ¡El futuro ha llegado!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background: #f8f9fa;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(0,141,203,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(0,255,136,0.1) 0%, transparent 50%);
+            animation: headerPulse 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes headerPulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .logo {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-text {
+            font-size: 3.5rem;
+            font-weight: 200;
+            letter-spacing: -2px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,141,203,0.3);
+        }
+        
+        .logo-waves {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+        }
+        
+        .wave {
+            width: 2px;
+            background: #ffffff;
+            border-radius: 1px;
+            animation: waveAnimation 1.5s ease-in-out infinite alternate;
+        }
+        
+        .w1 { height: 8px; animation-delay: 0s; }
+        .w2 { height: 16px; animation-delay: 0.2s; }
+        .w3 { height: 12px; animation-delay: 0.4s; }
+        .w4 { height: 20px; animation-delay: 0.6s; }
+        .w5 { height: 14px; animation-delay: 0.8s; }
+        .w6 { height: 10px; animation-delay: 1s; }
+        
+        @keyframes waveAnimation {
+            0% { transform: scaleY(0.6); opacity: 0.7; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        .header-title {
+            position: relative;
+            z-index: 2;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            position: relative;
+            z-index: 2;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .announcement {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .announcement-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #008dcb, #00ff88);
+            color: #000000;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        .announcement-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .announcement-text {
+            font-size: 1.1rem;
+            color: #666666;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            margin: 40px 0;
+        }
+        
+        .features-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #008dcb;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+        
+        .feature-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+        
+        .feature-content p {
+            color: #666666;
+            font-size: 0.95rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+        }
+        
+        .cta-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+        
+        .cta-text {
+            color: #666666;
+            margin-bottom: 25px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #008dcb, #00ff88);
+            color: #000000;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .early-access {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .early-access h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+        
+        .early-access p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+        }
+        
+        .early-access-code {
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ff88;
+            letter-spacing: 2px;
+        }
+        
+        .social-proof {
+            text-align: center;
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .social-proof-text {
+            font-style: italic;
+            color: #666666;
+            margin-bottom: 15px;
+        }
+        
+        .social-proof-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #008dcb;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .footer {
+            background: #1a1a1a;
+            color: rgba(255,255,255,0.7);
+            padding: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links {
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #008dcb;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        
+        .footer-links a:hover {
+            color: #00ff88;
+        }
+        
+        .unsubscribe {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 15px;
+        }
+        
+        .unsubscribe a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .logo-text {
+                font-size: 2.5rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .announcement-title {
+                font-size: 1.8rem;
+            }
+            
+            .social-proof-stats {
+                gap: 20px;
+            }
+            
+            .footer {
+                padding: 25px 20px;
+            }
+            
+            .footer-links a {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">
+                <span class="logo-text">elio</span>
+                <div class="logo-waves">
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                    <div class="wave w3"></div>
+                    <div class="wave w4"></div>
+                    <div class="wave w5"></div>
+                    <div class="wave w6"></div>
+                </div>
+            </div>
+            <h1 class="header-title">¡El futuro ha llegado!</h1>
+            <p class="header-subtitle">Tu copiloto digital está listo para revolucionar tu empresa</p>
+        </div>
+        
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- ANNOUNCEMENT -->
+            <div class="announcement">
+                <span class="announcement-badge">🚀 Ya disponible</span>
+                <h2 class="announcement-title">Elio está oficialmente en línea</h2>
+                <p class="announcement-text">
+                    Después de meses de desarrollo e innovación, estamos emocionados de anunciarte que Elio, 
+                    el agente de voz con IA más avanzado, está listo para transformar la manera en que tu empresa se comunica.
+                </p>
+            </div>
+            
+            <!-- FEATURES -->
+            <div class="features">
+                <h3 class="features-title">¿Qué hace a Elio especial?</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">🧠</div>
+                        <div class="feature-content">
+                            <h4>Inteligencia artificial avanzada</h4>
+                            <p>Conversaciones naturales y contextuales que se adaptan a tu negocio en tiempo real.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-content">
+                            <h4>Respuestas instantáneas</h4>
+                            <p>Velocidad de procesamiento ultrarrápida para experiencias fluidas y sin esperas.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-content">
+                            <h4>Personalización total</h4>
+                            <p>Se adapta a tu sector, tono de voz y objetivos específicos de negocio.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-content">
+                            <h4>Escalabilidad empresarial</h4>
+                            <p>Crece con tu empresa, desde startups hasta corporaciones multinacionales.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- EARLY ACCESS -->
+            <div class="early-access">
+                <h3>🎉 Acceso exclusivo de lanzamiento</h3>
+                <p>Como early adopter, tienes acceso prioritario a Elio con condiciones especiales por tiempo limitado.</p>
+                <div class="early-access-code">ELIO2025</div>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Usa este código para obtener tu descuento exclusivo</p>
+            </div>
+            
+            <!-- SOCIAL PROOF -->
+            <div class="social-proof">
+                <p class="social-proof-text">
+                    "Elio ha transformado completamente nuestra atención al cliente. 
+                    La diferencia es notable desde el primer día."
+                </p>
+                <div class="social-proof-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Satisfacción</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3x</span>
+                        <span class="stat-label">Más eficiencia</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Disponibilidad</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="cta-section">
+                <h3 class="cta-title">¿Listo para revolucionar tu comunicación empresarial?</h3>
+                <p class="cta-text">
+                    No esperes más. Únete a las empresas que ya están usando Elio para transformar su futuro.
+                </p>
+                <a href="https://elio.live" class="cta-button">Comenzar ahora</a>
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+         <!-- FOOTER -->
+        <div class="footer">
+            <p>&copy; 2025 ELIO.LIVE - Todos los derechos reservados - Revolucionando la comunicación empresarial.</p>
+            <p class="unsubscribe">
+                Si no deseas recibir más correos, puedes <a href="#">darte de baja aquí</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
