@@ -278,7 +278,7 @@
             border-radius: 16px;
             padding: 48px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.8s ease;
+            /*animation: fadeInUp 0.8s ease;*/ /*Comentamos para que no haga el efecto de reseteo*/
         }
         
         /* Steps */
@@ -661,7 +661,7 @@
         }
         
         .animate-fade-in {
-            animation: fadeInUp 0.8s ease;
+            /*animation: fadeInUp 0.8s ease;*/ /*Comentamos para que no haga el efecto de reseteo*/
         }
         
         .netelip-button {
@@ -1790,24 +1790,10 @@
                             </button>
                             <div style="display: flex; gap: 16px;">
                                 <button
-                                    onclick="generatePDF()"
-                                    class="netelip-button"
-                                    style="background: #1f2937;"
-                                >
-                                    📄 Descargar PDF
-                                </button>
-                                <button
-                                    onclick="saveReport()"
-                                    class="btn-save"
-                                    style="padding: 14px 28px;"
-                                >
-                                    💾 Guardar Datos
-                                </button>
-                                <button
                                     onclick="newEvaluation()"
                                     class="netelip-button"
                                 >
-                                    🔄 Nueva Evaluación
+                                    🔄 Enviar Evaluación
                                 </button>
                             </div>
                         </div>
