@@ -83,12 +83,13 @@
             content: 'by netelip';
             position: absolute;
             bottom: -8px;
-            right: -10px;
+            right: 17px;
             font-size: 12px;
             font-weight: 400;
             color: var(--white);
             letter-spacing: 1px;
             opacity: 0.8;
+            white-space: nowrap;
         }
         
         .header h1 {
@@ -585,7 +586,11 @@
             .logo {
                 font-size: 36px;
             }
-            
+
+            .logo::after {
+                font-size: 8px;
+            }
+
             .buttons {
                 flex-direction: column;
             }
@@ -1452,18 +1457,6 @@
                     </div>
                 </div>
                 
-                <div class="summary-section">
-                    <h3 class="summary-title">💰 Presupuesto estimado</h3>
-                    <div class="summary-item">
-                        <span class="summary-label">Configuración inicial:</span>
-                        <span class="summary-value" id="summary_setup">Calculando...</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Coste mensual estimado:</span>
-                        <span class="summary-value" id="summary_monthly">Calculando...</span>
-                    </div>
-                </div>
-                
                 <div class="form-group">
                     <label>Comentarios adicionales</label>
                     <textarea id="finalComments" placeholder="¿Hay algo más que debamos saber sobre tu proyecto?"></textarea>
@@ -1484,7 +1477,6 @@
                 
                 <div class="buttons">
                     <button class="btn-prev" onclick="prevStep()">← Anterior</button>
-                    <button class="btn-save" onclick="saveProgress()">💾 Guardar borrador</button>
                     <button class="btn-submit" onclick="generateQuote()">Enviar correo al Sales Hacker →</button>
                 </div>
             </div>
