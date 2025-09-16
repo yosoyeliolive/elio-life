@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Bienvenido a la lista de espera de ELIO!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* =============================================================================
+           HEADER SECTION
+        ============================================================================= */
+        .header {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%);
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .brand-name {
+            font-size: 2.5rem;
+            font-weight: 200;
+            letter-spacing: -2px;
+            color: white;
+        }
+        
+        .waves {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+        
+        .wave {
+            width: 3px;
+            background: white;
+            border-radius: 2px;
+            animation: waveAnimation 1.8s ease-in-out infinite alternate;
+        }
+        
+        .w1 { height: 12px; animation-delay: 0s; }
+        .w2 { height: 20px; animation-delay: 0.3s; }
+        .w3 { height: 16px; animation-delay: 0.6s; }
+        .w4 { height: 24px; animation-delay: 0.9s; }
+        .w5 { height: 18px; animation-delay: 1.2s; }
+        
+        .welcome-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        /* =============================================================================
+           MAIN CONTENT
+        ============================================================================= */
+        .content {
+            padding: 50px 40px;
+        }
+        
+        .greeting {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #000;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .message-block {
+            margin-bottom: 35px;
+        }
+        
+        .message-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 25px;
+        }
+        
+        .highlight {
+            font-weight: 500;
+            color: #000;
+            background: linear-gradient(120deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .quote-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #000;
+            padding: 25px 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .quote-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #000;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        
+        .quote-author {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        /* =============================================================================
+           BENEFITS SECTION
+        ============================================================================= */
+        .benefits {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 35px;
+            margin: 40px 0;
+        }
+        
+        .benefits-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .benefit-icon {
+            width: 24px;
+            height: 24px;
+            background: #000;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .benefit-text {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        
+        /* =============================================================================
+           COUNTDOWN SECTION
+        ============================================================================= */
+        .countdown-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .countdown-title {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .countdown-display {
+            font-size: 2.5rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+        
+        .countdown-subtitle {
+            font-size: 1rem;
+            opacity: 0.7;
+            font-weight: 300;
+        }
+        
+        /* =============================================================================
+           WHAT'S NEXT SECTION
+        ============================================================================= */
+        .next-steps {
+            margin: 40px 0;
+        }
+        
+        .next-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 25px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: #000;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* =============================================================================
+           SIGNATURE SECTION
+        ============================================================================= */
+        .signature-section {
+            border-top: 1px solid #e9ecef;
+            padding-top: 40px;
+            margin-top: 50px;
+        }
+        
+        .signature-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #000 0%, #333 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 300;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .signature-text {
+            flex: 1;
+        }
+        
+        .signature-message {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .signature-name {
+            font-weight: 600;
+            color: #000;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .signature-title {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .signature-company {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .company-logo {
+            font-weight: 200;
+            color: #000;
+        }
+        
+        /* =============================================================================
+           FOOTER
+        ============================================================================= */
+        .footer {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-brand {
+            font-size: 1.8rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+        }
+        
+        .footer-waves {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .footer-wave {
+            width: 2px;
+            background: white;
+            border-radius: 1px;
+            animation: waveAnimation 1.8s ease-in-out infinite alternate;
+        }
+        
+        .fw1 { height: 8px; animation-delay: 0s; }
+        .fw2 { height: 14px; animation-delay: 0.3s; }
+        .fw3 { height: 10px; animation-delay: 0.6s; }
+        .fw4 { height: 16px; animation-delay: 0.9s; }
+        .fw5 { height: 12px; animation-delay: 1.2s; }
+        
+        .footer-tagline {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            opacity: 1;
+            color: white;
+        }
+        
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        /* =============================================================================
+           ANIMATIONS
+        ============================================================================= */
+        @keyframes waveAnimation {
+            0% { transform: scaleY(0.6); opacity: 0.8; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        /* =============================================================================
+           RESPONSIVE
+        ============================================================================= */
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 40px 25px;
+            }
+            
+            .brand-name {
+                font-size: 2rem;
+            }
+            
+            .header-title {
+                font-size: 1.6rem;
+            }
+            
+            .content {
+                padding: 40px 25px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .signature-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .footer {
+                padding: 30px 25px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="brand-name">elio</span>
+                    <div class="waves">
+                        <div class="wave w1"></div>
+                        <div class="wave w2"></div>
+                        <div class="wave w3"></div>
+                        <div class="wave w4"></div>
+                        <div class="wave w5"></div>
+                    </div>
+                </div>
+                
+                <div class="welcome-badge">✨ Lista de espera activada</div>
+                <h1 class="header-title">La revolución ya empezó</h1>
+                <p class="header-subtitle">Tu lugar está reservado para experimentar Elio</p>
+            </div>
+        </div>
+        
+        <!-- MAIN CONTENT -->
+        <div class="content">
+            <div class="greeting">
+                ¡Hola! Acabas de dar el primer paso hacia el futuro de la comunicación empresarial.
+            </div>
+            
+            <div class="message-block">
+                <p class="message-text">
+                    <span class="highlight">Elio no es otro chatbot más.</span> Es tu copiloto digital que piensa estratégicamente, 
+                    actúa eficientemente y evoluciona constantemente. Mientras perfecciona su voz, 
+                    quería compartir contigo exactamente qué significa estar en esta lista de espera.
+                </p>
+            </div>
+            
+            <div class="quote-box">
+                <div class="quote-text">
+                    "Se va a llamar Elio. No fue estrategia. Fue pura intuición."
+                </div>
+                <div class="quote-author">— 5:00 AM, Sierra Nevada, Granada, 15 de diciembre de 2023</div>
+            </div>
+            
+            <div class="message-block">
+                <p class="message-text">
+                    Desde esa madrugada en las montañas, Elio ha estado entrenando para convertirse en 
+                    <span class="highlight">el agente de IA más empático y estratégico del mercado.</span> 
+                    Su misión es simple: liberarte de todo lo que te impide hacer tu mejor trabajo.
+                </p>
+            </div>
+            
+            <!-- BENEFITS -->
+            <div class="benefits">
+                <h3 class="benefits-title">Lo que significa estar en la lista de espera:</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-text">
+                            <strong>Acceso anticipado</strong><br>
+                            Serás de los primeros en hablar con Elio
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-text">
+                            <strong>Configuración personalizada</strong><br>
+                            Elio se adaptará específicamente a tu empresa
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a3 3 0 0 0-3 3c0 1.5.5 2.5 1.5 3.5L12 10l1.5-1.5c1-1 1.5-2 1.5-3.5a3 3 0 0 0-3-3Z"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-text">
+                            <strong>Primera llamada gratuita</strong><br>
+                            Experimenta la diferencia sin compromiso
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-text">
+                            <strong>Soporte prioritario</strong><br>
+                            Línea directa con el equipo de desarrollo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- COUNTDOWN -->
+            <div class="countdown-section">
+                <h3 class="countdown-title">Lanzamiento oficial:</h3>
+                <div class="countdown-display">Próximamente</div>
+                <p class="countdown-subtitle">La espera valdrá la pena...</p>
+            </div>
+            
+            <!-- WHAT'S NEXT -->
+            <div class="next-steps">
+                <h3 class="next-title">¿Qué viene ahora?</h3>
+                
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Entrenamiento intensivo</div>
+                        <div class="step-description">
+                            Elio está perfeccionando su capacidad de entender los matices de cada negocio. 
+                            Cada día se vuelve más inteligente.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Actualizaciones exclusivas</div>
+                        <div class="step-description">
+                            Te mantendremos informado sobre el progreso de Elio con updates que solo 
+                            reciben las personas en la lista de espera.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Tu primera llamada</div>
+                        <div class="step-description">
+                            Cuando Elio esté listo, serás de los primeros en experimentar una conversación 
+                            que cambiará tu perspectiva sobre la IA empresarial.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SIGNATURE -->
+            <div class="signature-section">
+                <div class="signature-content">
+                    <div class="avatar">M</div>
+                    <div class="signature-text">
+                        <div class="signature-message">
+                            "Gracias por confiar en esta visión. Elio va a revolucionar cómo las empresas 
+                            se comunican con sus clientes. Y tú vas a estar ahí desde el principio."
+                        </div>
+                        <div class="signature-name">Mili Pérez</div>
+                        <div class="signature-title">Chief Operating & AI Officer | netelip</div>
+                        <div class="signature-company">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-logo">
+                <span class="footer-brand">elio</span>
+                <div class="footer-waves">
+                    <div class="footer-wave fw1"></div>
+                    <div class="footer-wave fw2"></div>
+                    <div class="footer-wave fw3"></div>
+                    <div class="footer-wave fw4"></div>
+                    <div class="footer-wave fw5"></div>
+                </div>
+            </div>
+            
+            <p class="footer-tagline">Tu copiloto de aventuras en la era digital</p>
+            
+            <div class="footer-copyright">
+                © 2025 netelip. Powered by Elio IA.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
