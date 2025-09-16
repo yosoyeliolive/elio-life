@@ -132,12 +132,13 @@
             content: 'by netelip';
             position: absolute;
             bottom: -8px;
-            right: -10px;
+            right: 17px;
             font-size: 12px;
             font-weight: 400;
             color: var(--white);
             letter-spacing: 1px;
             opacity: 0.8;
+            white-space: nowrap;
         }
         
         .header h1 {
@@ -640,6 +641,9 @@
             
             .logo {
                 font-size: 36px;
+            }
+            .logo::after {
+                font-size: 8px;
             }
             
             .buttons {
