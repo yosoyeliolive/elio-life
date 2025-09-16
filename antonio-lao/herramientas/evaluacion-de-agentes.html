@@ -772,7 +772,9 @@
                     transcription: null,
                     recording: null,
                     transcriptionText: ''
-                }
+                },
+                linkPrivacity: false,
+                linkConditions: false,
             }
         };
 
@@ -1111,7 +1113,7 @@
                 <div class="netelip-container animate-fade-in">
                     ${renderStepIndicator()}
                     
-                    <div class="netelip-card">
+                    <div class="netelip-card" id="divNetelipCard">
                         <div class="step-header">
                             <h2 class="step-title">Información Básica de Evaluación</h2>
                             <p class="step-subtitle">Comencemos con los datos básicos para identificar la evaluación</p>
@@ -1201,7 +1203,7 @@
                 <div class="netelip-container animate-fade-in">
                     ${renderStepIndicator()}
                     
-                    <div class="netelip-card">
+                    <div class="netelip-card" id="divNetelipCard">
                         <div class="step-header">
                             <h2 class="step-title">Configurar Escenario de Testing</h2>
                             <p class="step-subtitle">Escoge el tipo de cliente que simularás y las características específicas</p>
@@ -1314,7 +1316,7 @@
                 <div class="netelip-container animate-fade-in">
                     ${renderStepIndicator()}
                     
-                    <div class="netelip-card">
+                    <div class="netelip-card" id="divNetelipCard">
                         <div class="step-header">
                             <h2 class="step-title">Evaluación en Tiempo Real</h2>
                             <p class="step-subtitle">Evalúa cada métrica según el rendimiento del agente</p>
@@ -1441,7 +1443,7 @@
                 <div class="netelip-container animate-fade-in">
                     ${renderStepIndicator()}
                     
-                    <div class="netelip-card">
+                    <div class="netelip-card" id="divNetelipCard">
                         <div class="step-header">
                             <h2 class="step-title">Registro de Mejoras</h2>
                             <p class="step-subtitle">Documenta las mejoras ya implementadas y las que están pendientes</p>
@@ -1619,7 +1621,7 @@
                 <div class="netelip-container animate-fade-in">
                     ${renderStepIndicator()}
                     
-                    <div class="netelip-card">
+                    <div class="netelip-card" id="divNetelipCard">
                         <div class="step-header">
                             <h2 class="step-title">Resultados de la Evaluación</h2>
                             <p class="step-subtitle">Resumen completo del rendimiento del agente</p>
@@ -1784,8 +1786,38 @@
                                 </div>
                             ` : ''}
                         </div>
+                        <div class="summary-section characteristic-card ${appState.evaluationData.linkPrivacity ? 'selected' : ''}" onclick="toggleLinkPrivacity()" id="divlinkPrivacity">
+                            <div style="display: flex; align-items: start; gap: 12px;">
+                                <div style="width: 24px; height: 24px; border: 2px solid ${appState.evaluationData.linkPrivacity ? 'var(--secondary-blue)' : 'rgba(255, 255, 255, 0.2)'}; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: ${appState.evaluationData.linkPrivacity ? 'var(--secondary-blue)' : 'transparent'}; margin-top: 2px; flex-shrink: 0;">
+                                    ${appState.evaluationData.linkPrivacity ? `
+                                        <span style="color: white; font-size: 12px; font-weight: 700;">✔</span>
+                                    ` : ''}
+                                </div>
+                                <div style="flex: 1;">
+                                    <h4 style="font-weight: 700; color: var(--white); margin-bottom: 4px; font-size: 16px;">
+                                        Acepto la totalidad de condiciones del <a href="https://www.netelip.com/aviso-legal" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Aviso Legal</a> y <a href="https://www.netelip.com/politica-de-privacidad" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Política de privacidad</a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="buttons" style="margin-top: 48px;">
+
+                        <div class="summary-section characteristic-card ${appState.evaluationData.linkConditions ? 'selected' : ''}" onclick="toggleLinkConditions()" id="divlinkConditions">
+                            <div style="display: flex; align-items: start; gap: 12px;">
+                                <div style="width: 24px; height: 24px; border: 2px solid ${appState.evaluationData.linkConditions ? 'var(--secondary-blue)' : 'rgba(255, 255, 255, 0.2)'}; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: ${appState.evaluationData.linkConditions ? 'var(--secondary-blue)' : 'transparent'}; margin-top: 2px; flex-shrink: 0;">
+                                    ${appState.evaluationData.linkConditions ? `
+                                        <span style="color: white; font-size: 12px; font-weight: 700;">✔</span>
+                                    ` : ''}
+                                </div>
+                                <div style="flex: 1;">
+                                    <h4 style="font-weight: 700; color: var(--white); margin-bottom: 4px; font-size: 16px;">
+                                        He leído y acepto las <a href="https://static.netelip.com/downloads/info/CondicionesgeneralesdeusodeNetelip.pdf" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Condiciones generales de uso</a>.
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="buttons" style="margin-top: 48px;" id="divButtonsModSend">
                             <button
                                 onclick="goToStep(3)"
                                 class="btn-prev"
@@ -1794,7 +1826,7 @@
                             </button>
                             <div style="display: flex; gap: 16px;">
                                 <button
-                                    onclick="newEvaluation()"
+                                    onclick="sendEvaluation()"
                                     class="netelip-button"
                                 >
                                     🔄 Enviar Evaluación
@@ -2037,7 +2069,9 @@
                         transcription: null,
                         recording: null,
                         transcriptionText: ''
-                    }
+                    },
+                    linkPrivacity: false,
+                    linkConditions: false,
                 };
                 render();
                 showNotification('🔄 Nueva evaluación iniciada', 'success');
@@ -2068,6 +2102,68 @@
                         updateSliderBackground(key, score);
                     });
                 }, 100);
+            }
+        }
+
+        function toggleLinkPrivacity(){
+            if (appState.evaluationData.linkPrivacity==false){
+                appState.evaluationData.linkPrivacity=true;
+            }else{
+                appState.evaluationData.linkPrivacity=false;
+            }
+            render();
+        }
+        function toggleLinkConditions(){
+            if (appState.evaluationData.linkConditions==false){
+                appState.evaluationData.linkConditions=true;
+            }else{
+                appState.evaluationData.linkConditions=false;
+            }
+            render();
+        }
+
+        function sendEvaluation(){
+            if (appState.evaluationData.linkPrivacity==true && appState.evaluationData.linkConditions==true){
+                localStorage.setItem('netelip-evaluation-' + Date.now(), JSON.stringify(appState.evaluationData));
+                document.getElementById("divButtonsModSend").style.display="none";
+                document.getElementById("divlinkPrivacity").style.display="none";
+                document.getElementById("divlinkConditions").style.display="none";
+                htmlNetelipCard=document.getElementById("divNetelipCard").innerHTML;
+                document.getElementById("divButtonsModSend").style.display="flex";
+                document.getElementById("divlinkPrivacity").style.display="flex";
+                document.getElementById("divlinkConditions").style.display="flex";
+                sendEmail(htmlNetelipCard);
+            }else{
+                showNotification('Debes aceptar las condiciones', 'info');
+            }
+        }
+
+        async function sendEmail(htmlNetelipCard){
+            // Enviar datos con fetch
+            const url = "https://apps.netelip.com/evalua_agent_elio/send.php";
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        content: htmlNetelipCard,
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const result = await response.text();
+                if (result=="true"){
+                    showNotification('Datos enviados satisfactoriamente', 'success');
+                }else{
+                    showNotification('Datos no enviados', 'info'); 
+                }
+            } catch (error) {
+                console.error(error.message);
+                showNotification(error.message, 'info'); 
             }
         }
 
