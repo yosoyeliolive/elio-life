@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elio - Sistema de Cualificación para Agentes de Voz IA | Netelip</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colores oficiales Netelip de la web */
+            --primary-blue: #0b293d;
+            --secondary-blue: #008dcb;
+            --netelip-orange: #e9a332;
+            --light-blue: #e6f3ff;
+            --dark-gray: #1f2937;
+            --light-gray: #f8fafc;
+            --white: #ffffff;
+            --text-gray: #6b7280;
+            --border-gray: #e5e7eb;
+            --success-green: #059669;
+            --error-red: #dc2626;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0b293d 0%, #1a3a52 100%);
+            min-height: 100vh;
+            color: var(--white);
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        /* Contenedor principal */
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header estilo Netelip */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo-section {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            letter-spacing: -2px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: 'by netelip';
+            position: absolute;
+            bottom: -8px;
+            right: -10px;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: var(--light-blue);
+            font-weight: 400;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .progress-steps::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .progress-steps::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .progress-steps::-webkit-scrollbar-thumb {
+            background: var(--secondary-blue);
+            border-radius: 2px;
+        }
+        
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-item.active .step-number {
+            background: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 20px rgba(0, 141, 203, 0.4);
+        }
+        
+        .step-item.completed .step-number {
+            background: var(--success-green);
+            border-color: var(--success-green);
+        }
+        
+        .step-item.completed .step-number::after {
+            content: '✓';
+            position: absolute;
+            font-size: 18px;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            font-weight: 400;
+        }
+        
+        .step-item.active .step-label,
+        .step-item.completed .step-label {
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        .progress-bar-wrapper {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-blue) 0%, var(--netelip-orange) 100%);
+            width: 10%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Steps */
+        .step {
+            display: none;
+        }
+        
+        .step.active {
+            display: block;
+            animation: stepIn 0.4s ease;
+        }
+        
+        @keyframes stepIn {
+            from {
+                opacity: 0;
+                transform: translateX(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .step-header {
+            margin-bottom: 30px;
+        }
+        
+        .step-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+        
+        .step-subtitle {
+            font-size: 16px;
+            color: var(--light-blue);
+            font-weight: 400;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        
+        .required {
+            color: var(--netelip-orange);
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 141, 203, 0.1);
+        }
+        
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Checkboxes and Radios */
+        .checkbox-group,
+        .radio-group {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .checkbox-item,
+        .radio-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .checkbox-item:hover,
+        .radio-item:hover {
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.08);
+            transform: translateX(3px);
+        }
+        
+        .checkbox-item.selected,
+        .radio-item.selected {
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.12);
+        }
+        
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: var(--secondary-blue);
+        }
+        
+        .checkbox-item label,
+        .radio-item label {
+            cursor: pointer;
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .checkbox-item label strong,
+        .radio-item label strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            background: rgba(0, 141, 203, 0.1);
+            border-left: 4px solid var(--secondary-blue);
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .warning-box {
+            background: rgba(233, 163, 50, 0.1);
+            border-left: 4px solid var(--netelip-orange);
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            justify-content: space-between;
+        }
+        
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-prev {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-prev:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--secondary-blue);
+        }
+        
+        .btn-next,
+        .btn-submit {
+            background: var(--white);
+            color: var(--primary-blue);
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .btn-next:hover,
+        .btn-submit:hover {
+            background: var(--secondary-blue);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 141, 203, 0.3);
+        }
+        
+        .btn-save {
+            background: var(--success-green);
+            color: var(--white);
+        }
+        
+        .btn-save:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+        
+        /* Summary Section */
+        .summary-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary-blue);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .summary-value {
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(0, 141, 203, 0.2);
+            border: 1px solid var(--secondary-blue);
+            border-radius: 12px;
+            font-size: 11px;
+            margin: 2px;
+        }
+        
+        .tag.primary {
+            background: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+        }
+        
+        /* Accordion */
+        .accordion {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .accordion-header {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .accordion.open .accordion-content {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion.open .accordion-arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .logo {
+                font-size: 36px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn-next,
+            .btn-submit {
+                max-width: 100%;
+            }
+            
+            .progress-steps {
+                gap: 10px;
+            }
+            
+            .step-item {
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo">ELIO</div>
+            </div>
+            <h1>Sistema de Cualificación para Agentes de Voz IA</h1>
+            <p>Configura tu asistente virtual y obtén un presupuesto personalizado al instante</p>
+        </header>
+        
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <div class="progress-steps">
+                <div class="step-item active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span class="step-label">Empresa</span>
+                </div>
+                <div class="step-item" data-step="2">
+                    <div class="step-number">2</div>
+                    <span class="step-label">Funciones</span>
+                </div>
+                <div class="step-item" data-step="3">
+                    <div class="step-number">3</div>
+                    <span class="step-label">Personalidad</span>
+                </div>
+                <div class="step-item" data-step="4">
+                    <div class="step-number">4</div>
+                    <span class="step-label">Voz</span>
+                </div>
+                <div class="step-item" data-step="5">
+                    <div class="step-number">5</div>
+                    <span class="step-label">Respuestas</span>
+                </div>
+                <div class="step-item" data-step="6">
+                    <div class="step-number">6</div>
+                    <span class="step-label">Integraciones</span>
+                </div>
+                <div class="step-item" data-step="7">
+                    <div class="step-number">7</div>
+                    <span class="step-label">Volumen</span>
+                </div>
+                <div class="step-item" data-step="8">
+                    <div class="step-number">8</div>
+                    <span class="step-label">Técnico</span>
+                </div>
+                <div class="step-item" data-step="9">
+                    <div class="step-number">9</div>
+                    <span class="step-label">Soporte</span>
+                </div>
+                <div class="step-item" data-step="10">
+                    <div class="step-number">10</div>
+                    <span class="step-label">Resumen</span>
+                </div>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <!-- Form Container -->
+        <div class="form-container">
+            <!-- Step 1: Información de la empresa -->
+            <div class="step active" data-step="1">
+                <div class="step-header">
+                    <h2 class="step-title">Información de tu empresa</h2>
+                    <p class="step-subtitle">Comencemos con los datos básicos para personalizar tu solución</p>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre de la empresa <span class="required">*</span></label>
+                        <input type="text" id="companyName" placeholder="Ej: Mi Empresa S.L." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sector de actividad <span class="required">*</span></label>
+                        <select id="sector" required>
+                            <option value="">Selecciona tu sector</option>
+                            <option value="ecommerce">E-commerce / Retail</option>
+                            <option value="servicios">Servicios profesionales</option>
+                            <option value="salud">Salud y bienestar</option>
+                            <option value="educacion">Educación</option>
+                            <option value="inmobiliaria">Inmobiliaria</option>
+                            <option value="turismo">Turismo y viajes</option>
+                            <option value="logistica">Logística y transporte</option>
+                            <option value="tecnologia">Tecnología / SaaS</option>
+                            <option value="finanzas">Finanzas / Seguros</option>
+                            <option value="legal">Legal / Consultoría</option>
+                            <option value="hosteleria">Hostelería / Restauración</option>
+                            <option value="industrial">Industrial / Manufactura</option>
+                            <option value="otro">Otro sector</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Persona de contacto <span class="required">*</span></label>
+                        <input type="text" id="contactName" placeholder="Nombre y apellidos" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email corporativo <span class="required">*</span></label>
+                        <input type="email" id="email" placeholder="contacto@empresa.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Teléfono de contacto <span class="required">*</span></label>
+                        <input type="tel" id="phone" placeholder="+34 600 000 000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tamaño de la empresa <span class="required">*</span></label>
+                        <select id="companySize" required>
+                            <option value="">Número de empleados</option>
+                            <option value="1-10">1-10 empleados</option>
+                            <option value="11-50">11-50 empleados</option>
+                            <option value="51-200">51-200 empleados</option>
+                            <option value="201-500">201-500 empleados</option>
+                            <option value="500+">Más de 500 empleados</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Cuántos empleados atienden llamadas actualmente?</label>
+                    <input type="number" id="callAgents" placeholder="Ej: 5" min="0" max="10000">
+                    <span class="help-text">Esto nos ayuda a calcular el ROI y el ahorro potencial</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Sitio web corporativo</label>
+                    <input type="url" id="website" placeholder="https://www.tuempresa.com">
+                    <span class="help-text">Para personalizar mejor el tono y estilo de tu agente</span>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Funcionalidades -->
+            <div class="step" data-step="2">
+                <div class="step-header">
+                    <h2 class="step-title">Funcionalidades del asistente</h2>
+                    <p class="step-subtitle">¿Qué tareas debe realizar Elio en las llamadas?</p>
+                </div>
+                
+                <div class="info-box">
+                    💡 Selecciona todas las funciones que necesitas. Esto determinará la complejidad del modelo predictivo más adecuado para tu negocio.
+                </div>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_faq" name="defaultFunctions" value="faq">
+                        <label for="func_faq">
+                            <strong>Responder preguntas frecuentes</strong>
+                            <span class="help-text">Horarios, ubicación, servicios básicos, información general</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_qualify" name="defaultFunctions" value="qualify">
+                        <label for="func_qualify">
+                            <strong>Cualificar leads comerciales</strong>
+                            <span class="help-text">Identificar necesidades, presupuesto, timeline, decisor (BANT)</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_appointment" name="defaultFunctions" value="appointment">
+                        <label for="func_appointment">
+                            <strong>Agendar citas y reuniones</strong>
+                            <span class="help-text">Gestionar calendario, proponer horarios, confirmar citas</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_orders" name="defaultFunctions" value="orders">
+                        <label for="func_orders">
+                            <strong>Consultar estado de pedidos</strong>
+                            <span class="help-text">Tracking, fechas de entrega, información de envíos</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_support" name="defaultFunctions" value="support">
+                        <label for="func_support">
+                            <strong>Soporte técnico nivel 1</strong>
+                            <span class="help-text">Troubleshooting básico, reseteo de contraseñas, guías</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_transfer" name="defaultFunctions" value="transfer">
+                        <label for="func_transfer">
+                            <strong>Transferir llamadas inteligentemente</strong>
+                            <span class="help-text">Derivar al departamento correcto según la consulta</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_collect" name="defaultFunctions" value="collect">
+                        <label for="func_collect">
+                            <strong>Recopilar información antes de transferir</strong>
+                            <span class="help-text">Datos del cliente, motivo de consulta, prioridad</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_survey" name="defaultFunctions" value="survey">
+                        <label for="func_survey">
+                            <strong>Realizar encuestas de satisfacción</strong>
+                            <span class="help-text">NPS, feedback post-servicio, evaluación de calidad</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func_outbound" name="defaultFunctions" value="outbound">
+                        <label for="func_outbound">
+                            <strong>Llamadas salientes (outbound)</strong>
+                            <span class="help-text">Recordatorios, confirmaciones, seguimiento comercial</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Hay alguna función específica no listada que necesites?</label>
+                    <textarea id="customFunctions" name="customFunctions" placeholder="Describe cualquier funcionalidad adicional que requieras..."></textarea>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Los demás pasos (3-10) continúan aquí... -->
+            
+            <!-- Step 3: Personalidad y tono -->
+            <div class="step" data-step="3">
+                <div class="step-header">
+                    <h2 class="step-title">Personalidad y tono de comunicación</h2>
+                    <p class="step-subtitle">Define cómo quieres que suene tu agente</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nombre del agente <span class="required">*</span></label>
+                    <input type="text" id="agentName" placeholder="Ej: Elio, Ana, Carlos..." required>
+                    <span class="help-text">El nombre con el que se presentará el agente</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tono de comunicación <span class="required">*</span></label>
+                    <select id="communicationTone" required>
+                        <option value="">Selecciona el tono</option>
+                        <option value="profesional">Profesional y formal</option>
+                        <option value="amigable">Amigable y cercano</option>
+                        <option value="neutral">Neutral y eficiente</option>
+                        <option value="entusiasta">Entusiasta y energético</option>
+                        <option value="empatico">Empático y comprensivo</option>
+                        <option value="tecnico">Técnico y preciso</option>
+                        <option value="casual">Casual y relajado</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nivel de formalidad <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="formal_muy" name="formality" value="muy_formal">
+                            <label for="formal_muy">
+                                <strong>Muy formal (Usted)</strong>
+                                <span class="help-text">Protocolo empresarial estricto</span>
+                            </label>
+                        </div>
+                        <div class="radio-item selected">
+                            <input type="radio" id="formal_medio" name="formality" value="formal" checked>
+                            <label for="formal_medio">
+                                <strong>Formal (Usted, pero cercano)</strong>
+                                <span class="help-text">Profesional pero accesible</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="formal_informal" name="formality" value="informal">
+                            <label for="formal_informal">
+                                <strong>Informal (Tú)</strong>
+                                <span class="help-text">Lenguaje directo y moderno</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Velocidad de habla preferida <span class="required">*</span></label>
+                    <select id="speechSpeed" required>
+                        <option value="muy_lenta">Muy lenta (personas mayores)</option>
+                        <option value="lenta">Lenta</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="rapida">Rápida</option>
+                        <option value="muy_rapida">Muy rápida (usuarios tech)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción de personalidad específica</label>
+                    <textarea id="personalityDetails" placeholder="Ej: Debe sonar como un asesor experto pero accesible, con conocimiento profundo del sector pero sin tecnicismos innecesarios..."></textarea>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Configuración de voz -->
+            <div class="step" data-step="4">
+                <div class="step-header">
+                    <h2 class="step-title">Configuración de voz</h2>
+                    <p class="step-subtitle">Elige la voz perfecta para tu marca</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Género de la voz <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="voice_male" name="voiceGender" value="masculina">
+                            <label for="voice_male">Masculina</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="voice_female" name="voiceGender" value="femenina">
+                            <label for="voice_female">Femenina</label>
+                        </div>
+                        <div class="radio-item selected">
+                            <input type="radio" id="voice_neutral" name="voiceGender" value="neutral" checked>
+                            <label for="voice_neutral">Neutral / Sin preferencia</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Edad aparente de la voz <span class="required">*</span></label>
+                    <select id="voiceAge" required>
+                        <option value="">Selecciona</option>
+                        <option value="joven">Joven (20-30 años)</option>
+                        <option value="adulto">Adulto (30-45 años)</option>
+                        <option value="maduro">Maduro (45-60 años)</option>
+                        <option value="senior">Senior (60+ años)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Acento preferido <span class="required">*</span></label>
+                    <select id="accent" required>
+                        <option value="españa">Español de España (neutro)</option>
+                        <option value="españa_andaluz">Español de España (andaluz)</option>
+                        <option value="españa_catalan">Español de España (catalán)</option>
+                        <option value="latam_neutro">Latinoamericano neutro</option>
+                        <option value="mexico">Mexicano</option>
+                        <option value="argentina">Argentino</option>
+                        <option value="colombia">Colombiano</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Calidad de voz preferida</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="quality_standard" name="voiceQuality" value="standard">
+                            <label for="quality_standard">
+                                <strong>Estándar</strong>
+                                <span class="help-text">Buena calidad, menor coste</span>
+                            </label>
+                        </div>
+                        <div class="radio-item selected">
+                            <input type="radio" id="quality_neural" name="voiceQuality" value="neural" checked>
+                            <label for="quality_neural">
+                                <strong>Neural (Recomendado)</strong>
+                                <span class="help-text">Muy natural, ideal para conversaciones largas</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="quality_studio" name="voiceQuality" value="studio">
+                            <label for="quality_studio">
+                                <strong>Studio</strong>
+                                <span class="help-text">Calidad premium, indistinguible de humano</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    ⚠️ Podrás escuchar muestras de voz antes de la implementación final
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Base de conocimiento y respuestas -->
+            <div class="step" data-step="5">
+                <div class="step-header">
+                    <h2 class="step-title">Base de conocimiento y respuestas</h2>
+                    <p class="step-subtitle">¿Cómo gestionará Elio la información?</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de respuestas <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item selected">
+                            <input type="radio" id="resp_predefined" name="responseType" value="predefinidas" checked>
+                            <label for="resp_predefined">
+                                <strong>Respuestas predefinidas</strong>
+                                <span class="help-text">Guiones específicos para cada situación</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="resp_dynamic" name="responseType" value="dinamicas">
+                            <label for="resp_dynamic">
+                                <strong>Base de conocimiento dinámica</strong>
+                                <span class="help-text">El agente genera respuestas basadas en documentación</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="resp_hybrid" name="responseType" value="hibrido">
+                            <label for="resp_hybrid">
+                                <strong>Híbrido</strong>
+                                <span class="help-text">Combina respuestas predefinidas con generación dinámica</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Cuántas preguntas frecuentes diferentes estimas? <span class="required">*</span></label>
+                    <select id="faqCount" required>
+                        <option value="">Selecciona</option>
+                        <option value="1-10">1-10 preguntas</option>
+                        <option value="11-25">11-25 preguntas</option>
+                        <option value="26-50">26-50 preguntas</option>
+                        <option value="51-100">51-100 preguntas</option>
+                        <option value="100+">Más de 100 preguntas</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Tienes documentación preparada? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="doc_faq" name="docPrep" value="faq_doc">
+                            <label for="doc_faq">FAQ / Preguntas frecuentes documentadas</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="doc_scripts" name="docPrep" value="scripts">
+                            <label for="doc_scripts">Scripts de atención actuales</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="doc_productos" name="docPrep" value="catalogo">
+                            <label for="doc_productos">Catálogo de productos/servicios</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="doc_procedimientos" name="docPrep" value="procedimientos">
+                            <label for="doc_procedimientos">Procedimientos internos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="doc_none" name="docPrep" value="none">
+                            <label for="doc_none">No tengo documentación preparada</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Idiomas que debe manejar el asistente <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lang_es" name="language" value="español" checked>
+                            <label for="lang_es">Español</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lang_en" name="language" value="ingles">
+                            <label for="lang_en">Inglés</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lang_ca" name="language" value="catalan">
+                            <label for="lang_ca">Catalán</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lang_fr" name="language" value="frances">
+                            <label for="lang_fr">Francés</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lang_de" name="language" value="aleman">
+                            <label for="lang_de">Alemán</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lang_pt" name="language" value="portugues">
+                            <label for="lang_pt">Portugués</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 6: Integraciones -->
+            <div class="step" data-step="6">
+                <div class="step-header">
+                    <h2 class="step-title">Integraciones con sistemas externos</h2>
+                    <p class="step-subtitle">Conecta Elio con tus herramientas actuales</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>CRM / Gestión de clientes <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crm_hubspot" name="crm_s" value="hubspot">
+                            <label for="crm_hubspot">HubSpot</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crm_salesforce" name="crm_s" value="salesforce">
+                            <label for="crm_salesforce">Salesforce</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crm_pipedrive" name="crm_s" value="pipedrive">
+                            <label for="crm_pipedrive">Pipedrive</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crm_clientify" name="crm_s" value="clientify">
+                            <label for="crm_clientify">Clientify</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crm_zoho" name="crm_s" value="zoho">
+                            <label for="crm_zoho">Zoho CRM</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crm_none" name="crm_s" value="none">
+                            <label for="crm_none">No tengo CRM / No necesito integración</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>E-commerce / Tienda online <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ecom_shopify" name="ecommerce_s" value="shopify">
+                            <label for="ecom_shopify">Shopify</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ecom_woo" name="ecommerce_s" value="woocommerce">
+                            <label for="ecom_woo">WooCommerce</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ecom_prestashop" name="ecommerce_s" value="prestashop">
+                            <label for="ecom_prestashop">PrestaShop</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ecom_none" name="ecommerce_s" value="none">
+                            <label for="ecom_none">No tengo tienda online</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Necesitas integración con calendario para citas? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="calendar_google" name="calendar" value="google">
+                            <label for="calendar_google">Google Calendar</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="calendar_outlook" name="calendar" value="outlook">
+                            <label for="calendar_outlook">Outlook Calendar</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="calendar_calendly" name="calendar" value="calendly">
+                            <label for="calendar_calendly">Calendly</label>
+                        </div>
+                        <div class="radio-item selected">
+                            <input type="radio" id="calendar_none" name="calendar" value="none" checked>
+                            <label for="calendar_none">No necesito integración de calendario</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 7: Volumen y uso -->
+            <div class="step" data-step="7">
+                <div class="step-header">
+                    <h2 class="step-title">Volumen y patrones de uso</h2>
+                    <p class="step-subtitle">Ayúdanos a dimensionar correctamente tu solución</p>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Llamadas mensuales estimadas <span class="required">*</span></label>
+                        <select id="monthlyVolume" required>
+                            <option value="">Selecciona</option>
+                            <option value="0-500">Menos de 500</option>
+                            <option value="500-1000">500 - 1,000</option>
+                            <option value="1000-2500">1,000 - 2,500</option>
+                            <option value="2500-5000">2,500 - 5,000</option>
+                            <option value="5000-10000">5,000 - 10,000</option>
+                            <option value="10000+">Más de 10,000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Duración media por llamada <span class="required">*</span></label>
+                        <select id="avgDuration" required>
+                            <option value="1-2">1-2 minutos</option>
+                            <option value="3-5" selected>3-5 minutos</option>
+                            <option value="6-10">6-10 minutos</option>
+                            <option value="11-15">11-15 minutos</option>
+                            <option value="15+">Más de 15 minutos</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Horario de atención <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="schedule_business" name="schedule" value="horario_comercial">
+                            <label for="schedule_business">Horario comercial (9:00 - 18:00)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="schedule_extended" name="schedule" value="horario_extendido">
+                            <label for="schedule_extended">Horario extendido (8:00 - 20:00)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="schedule_247" name="schedule" value="24_7">
+                            <label for="schedule_247">24/7 (siempre disponible)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Tienes picos estacionales?</label>
+                    <div class="radio-group">
+                        <div class="radio-item selected">
+                            <input type="radio" id="seasonal_no" name="seasonal" value="no" checked>
+                            <label for="seasonal_no">No, volumen constante todo el año</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="seasonal_yes" name="seasonal" value="si">
+                            <label for="seasonal_yes">Sí, tenemos temporadas altas</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 8: Configuración técnica -->
+            <div class="step" data-step="8">
+                <div class="step-header">
+                    <h2 class="step-title">Configuración técnica y desarrollo</h2>
+                    <p class="step-subtitle">Define el nivel de personalización necesario</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Quién configurará el asistente? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item selected">
+                            <input type="radio" id="config_self" name="configuration" value="autonomo" checked>
+                            <label for="config_self">
+                                <strong>Mi equipo (autónomo)</strong>
+                                <span class="help-text">Tenemos equipo técnico, solo necesitamos acceso</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="config_assisted" name="configuration" value="asistido">
+                            <label for="config_assisted">
+                                <strong>Con vuestra ayuda (asistido)</strong>
+                                <span class="help-text">Configuración inicial + formación</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="config_full" name="configuration" value="completo">
+                            <label for="config_full">
+                                <strong>Vosotros completamente (llave en mano)</strong>
+                                <span class="help-text">Os encargáis de todo</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Modelo predictivo preferido <span class="required">*</span></label>
+                    <select id="predictiveModel" required>
+                        <option value="necesito_asesoramiento">Necesito asesoramiento</option>
+                        <option value="atencion_basica">Atención básica (FAQ)</option>
+                        <option value="ventas_inbound">Ventas Inbound</option>
+                        <option value="ventas_outbound">Ventas Outbound</option>
+                        <option value="soporte_tecnico">Soporte técnico</option>
+                        <option value="reservas_citas">Reservas y citas</option>
+                        <option value="cobros_pagos">Cobros y pagos</option>
+                        <option value="encuestas">Encuestas y feedback</option>
+                        <option value="emergencias">Gestión de emergencias</option>
+                        <option value="inmobiliaria">Inmobiliaria especializado</option>
+                        <option value="personalizado">Modelo personalizado</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Ya tienes sistema de telefonía? <span class="required">*</span></label>
+                    <select id="currentTelephony" required>
+                        <option value="">Selecciona</option>
+                        <option value="netelip">Ya soy cliente de Netelip</option>
+                        <option value="otro_voip">Otro proveedor VoIP</option>
+                        <option value="tradicional">Telefonía tradicional</option>
+                        <option value="sin_telefonia">No tengo sistema de telefonía</option>
+                    </select>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 9: Soporte y mantenimiento -->
+            <div class="step" data-step="9">
+                <div class="step-header">
+                    <h2 class="step-title">Soporte y mantenimiento</h2>
+                    <p class="step-subtitle">Define el nivel de soporte que necesitas</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nivel de soporte deseado <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item selected">
+                            <input type="radio" id="support_none" name="supportLevel" value="ninguno" checked>
+                            <label for="support_none">
+                                <strong>Sin soporte</strong>
+                                <span class="help-text">Gestionamos todo internamente</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support_basic" name="supportLevel" value="basico">
+                            <label for="support_basic">
+                                <strong>Soporte básico</strong>
+                                <span class="help-text">2 horas/mes para ajustes menores</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support_standard" name="supportLevel" value="estandar">
+                            <label for="support_standard">
+                                <strong>Soporte estándar</strong>
+                                <span class="help-text">5 horas/mes + respuesta en 24h</span>
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support_premium" name="supportLevel" value="premium">
+                            <label for="support_premium">
+                                <strong>Soporte premium</strong>
+                                <span class="help-text">10 horas/mes + respuesta prioritaria + account manager</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Necesitas formación para tu equipo? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="training_initial" name="training" value="formacion_inicial">
+                            <label for="training_initial">Formación inicial del equipo</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="training_ongoing" name="training" value="formacion_continua">
+                            <label for="training_ongoing">Formación continua/actualizaciones</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="training_docs" name="training" value="documentacion">
+                            <label for="training_docs">Documentación técnica personalizada</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="training_none" name="training" value="sin_formacion">
+                            <label for="training_none">No necesitamos formación</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-next" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </div>
+            
+            <!-- Step 10: Resumen y confirmación -->
+            <div class="step" data-step="10">
+                <div class="step-header">
+                    <h2 class="step-title">Resumen de tu configuración</h2>
+                    <p class="step-subtitle">Revisa todos los detalles antes de generar el presupuesto</p>
+                </div>
+                
+                <div class="summary-section">
+                    <h3 class="summary-title">📊 Información de la empresa</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Empresa:</span>
+                        <span class="summary-value" id="summary_company">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Sector:</span>
+                        <span class="summary-value" id="summary_sector">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Contacto:</span>
+                        <span class="summary-value" id="summary_contact">-</span>
+                    </div>
+                </div>
+                
+                <div class="summary-section">
+                    <h3 class="summary-title">🤖 Configuración del agente</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Funcionalidades:</span>
+                        <span class="summary-value" id="summary_functions">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Voz:</span>
+                        <span class="summary-value" id="summary_voice">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Idiomas:</span>
+                        <span class="summary-value" id="summary_languages">-</span>
+                    </div>
+                </div>
+                
+                <div class="summary-section">
+                    <h3 class="summary-title">💰 Presupuesto estimado</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Configuración inicial:</span>
+                        <span class="summary-value" id="summary_setup">Calculando...</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Coste mensual estimado:</span>
+                        <span class="summary-value" id="summary_monthly">Calculando...</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Comentarios adicionales</label>
+                    <textarea id="finalComments" placeholder="¿Hay algo más que debamos saber sobre tu proyecto?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Cuándo te gustaría tener el sistema operativo? <span class="required">*</span></label>
+                    <select id="timeline" required>
+                        <option value="">Selecciona</option>
+                        <option value="urgente">Lo antes posible (urgente)</option>
+                        <option value="1mes">En 1 mes</option>
+                        <option value="2meses">En 2 meses</option>
+                        <option value="3meses">En 3 meses</option>
+                        <option value="6meses">En 6 meses</option>
+                        <option value="explorando">Solo estoy explorando opciones</option>
+                    </select>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-prev" onclick="prevStep()">← Anterior</button>
+                    <button class="btn-save" onclick="saveProgress()">💾 Guardar borrador</button>
+                    <button class="btn-submit" onclick="generateQuote()">Enviar correo al Sales Hacker →</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        const totalSteps = 10;
+        let formData = {};
+        
+        function nextStep() {
+            if (validateCurrentStep()) {
+                saveStepData();
+                
+                // Marcar paso actual como completado
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('active');
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.add('completed');
+                
+                // Ocultar paso actual
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+                
+                // Avanzar al siguiente paso
+                currentStep++;
+                
+                // Mostrar nuevo paso
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.add('active');
+                
+                // Actualizar barra de progreso
+                updateProgress();
+                
+                // Scroll al top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                if (totalSteps-1==currentStep){
+                    document.getElementById("summary_company").innerHTML=capitalizeFirstLetter(formData[1]["companyName"]);
+                    document.getElementById("summary_sector").innerHTML=capitalizeFirstLetter(formData[1]["sector"]);
+                    document.getElementById("summary_contact").innerHTML=formData[1]["email"];
+                    //document.getElementById("summary_voice").innerHTML=formData[1]["email"];
+                    summaryLang=showSummaryLanguage();
+                    summaryFunctions=showSummaryFunctions();
+                    summaryVoices=showSummaryVoices();
+                    document.getElementById("summary_languages").innerHTML=summaryLang;
+                    document.getElementById("summary_functions").innerHTML=summaryFunctions+"<br>"+formData[2]["customFunctions"];
+                    document.getElementById("summary_voice").innerHTML=summaryVoices;
+                }
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) {
+                saveStepData();
+                
+                // Ocultar paso actual
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('active');
+                
+                // Retroceder
+                currentStep--;
+                
+                // Mostrar paso anterior
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.add('active');
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('completed');
+                
+                // Actualizar barra de progreso
+                updateProgress();
+                
+                // Scroll al top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function validateCurrentStep() {
+            // Aquí añadirías validación específica por paso
+            error=false;
+            elements = document.querySelectorAll('div[data-step="'+currentStep+'"] input[required], div[data-step="'+currentStep+'"] select[required]');
+            for (x=0;x<elements.length; x=x+1){
+                el=elements[x];
+                if (el.value.trim()==""){
+                    alert("Debes rellenar los campos obligatorios");
+                    error=true;
+                    break;
+                }    
+            }
+            switch(currentStep){
+                case 2:
+                    valueCustomFunctions=document.getElementById("customFunctions").value;
+                    selectedDefaultFunctions=atLeastOneCheckSelected("defaultFunctions");
+                    if (selectedDefaultFunctions==false && valueCustomFunctions.trim()==""){
+                        alert("Selecciona al menos una función o escribe la función no listada");
+                        error=true;
+                    }
+                break;
+                case 5:
+                    selectedDefaultDocPrep=atLeastOneCheckSelected("docPrep");
+                    selectedDefaultLanguage=atLeastOneCheckSelected("language");
+                    if (selectedDefaultLanguage==false || selectedDefaultDocPrep==false){
+                        alert("Debes rellenar los campos obligatorios");
+                        error=true;
+                    }
+                break;
+                case 6:
+                    selectedDefaultCrm=atLeastOneCheckSelected("crm_s");
+                    selectedDefaultEcommerce=atLeastOneCheckSelected("ecommerce_s");
+                    if (selectedDefaultCrm==false || selectedDefaultEcommerce==false){
+                        alert("Debes rellenar los campos obligatorios");
+                        error=true;
+                    }
+                break;
+                case 7:
+                    selectedDefaultSchedule=atLeastOneCheckSelected("schedule");
+                    if (selectedDefaultSchedule==false){
+                        alert("Debes rellenar los campos obligatorios");
+                        error=true;
+                    }
+                break;
+                case 9:
+                    selectedDefaultTraining=atLeastOneCheckSelected("training");
+                    if (selectedDefaultTraining==false){
+                        alert("Debes rellenar los campos obligatorios");
+                        error=true;
+                    }
+                break;
+            }
+            if (error==false){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        
+        function saveStepData(step="") {
+            // Guardar datos del paso actual
+            if (step==""){
+                currentStepElement = document.querySelector(`.step[data-step="${currentStep}"]`);
+            }else{
+                currentStepElement = document.querySelector(`.step[data-step="${step}"]`);
+            }
+            
+            // Guardar todos los inputs del paso
+            currentStepElement.querySelectorAll('input, select, textarea').forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (!formData[currentStep]) formData[currentStep] = {};
+                    formData[currentStep][input.id] = input.checked;
+                } else {
+                    if (!formData[currentStep]) formData[currentStep] = {};
+                    formData[currentStep][input.id] = input.value;
+                }
+            });
+            console.log('Datos guardados:', formData);
+        }
+        
+        // Event listeners para checkboxes y radios
+        document.addEventListener('DOMContentLoaded', function() {
+            // Selección visual de checkboxes
+            document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        this.closest('.checkbox-item').classList.add('selected');
+                    } else {
+                        this.closest('.checkbox-item').classList.remove('selected');
+                    }
+                });
+            });
+            
+            // Selección visual de radios
+            document.querySelectorAll('.radio-item input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Quitar selected de todos los radios del mismo grupo
+                    document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+                        r.closest('.radio-item').classList.remove('selected');
+                    });
+                    // Añadir selected al actual
+                    if (this.checked) {
+                        this.closest('.radio-item').classList.add('selected');
+                    }
+                });
+            });
+            
+            // Click en step indicators para navegar
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetStep = parseInt(this.dataset.step);
+                    // Solo permitir navegar a pasos completados o el actual
+                    if (targetStep < currentStep || this.classList.contains('completed')) {
+                        // Ocultar paso actual
+                        document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+                        document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('active');
+                        
+                        // Ir al paso clickeado
+                        currentStep = targetStep;
+                        document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+                        document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.add('active');
+                        
+                        updateProgress();
+                    }
+                });
+            });
+        });
+        
+        // Función para acordeones
+        function toggleAccordion(element) {
+            element.closest('.accordion').classList.toggle('open');
+        }
+        function atLeastOneCheckSelected(val){
+            checkbox=document.getElementsByName(val);
+            for(i=0;i<checkbox.length;i=i+1){
+                if (checkbox.item(i).checked==true){
+                    selectedcheckbox=true;
+                    break;
+                }else{
+                    selectedcheckbox=false;
+                }
+            }
+        return selectedcheckbox;
+        }
+        function saveProgress(){
+            saveStepData(totalSteps);
+            localStorage.setItem('elio-qualification-' + Date.now(), JSON.stringify(formData));
+            showNotification('💾 Datos guardados localmente', 'success');
+            console.log('Datos guardados localmente:', formData);
+        }
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? '#059669' : '#0d95e4'};
+                color: white;
+                border-radius: 8px;
+                font-weight: 500;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        function showSummaryLanguage(){
+            summary="";
+            Object.entries(formData[5]).forEach(([key, value]) => {
+                trozo4car=key.substring(0,5);
+                if (trozo4car=="lang_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            return summary;
+        }
+        function showSummaryFunctions(){
+            summary="";
+            Object.entries(formData[2]).forEach(([key, value]) => {
+                trozo4car=key.substring(0,5);
+                if (trozo4car=="func_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            return summary;
+        }
+        function showSummaryVoices(){
+            summary="";
+            Object.entries(formData[4]).forEach(([key, value]) => {
+                trozo8car=key.substring(0,8);
+                trozo6car=key.substring(0,6);
+                if (key=="voiceAge"){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo8car=="quality_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo6car=="voice_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            return summary;
+        }
+        function capitalizeFirstLetter(val) {
+            return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+        }
+    </script>
+</body>
+</html>
