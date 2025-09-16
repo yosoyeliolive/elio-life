@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elio - Evaluación de Agentes de Voz IA | netelip</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colores oficiales netelip de la web */
+            --primary-blue: #0b293d;
+            --secondary-blue: #008dcb;
+            --netelip-orange: #e9a332;
+            --light-blue: #e6f3ff;
+            --dark-gray: #1f2937;
+            --light-gray: #f8fafc;
+            --white: #ffffff;
+            --text-gray: #6b7280;
+            --border-gray: #e5e7eb;
+            --success-green: #059669;
+            --error-red: #dc2626;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0b293d 0%, #1a3a52 100%);
+            min-height: 100vh;
+            color: var(--white);
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        /* Contenedor principal */
+        .netelip-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header estilo Netelip */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes stepIn {
+            from {
+                opacity: 0;
+                transform: translateX(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        .logo-section {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            letter-spacing: -2px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: 'by netelip';
+            position: absolute;
+            bottom: -8px;
+            right: -10px;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: var(--light-blue);
+            font-weight: 400;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .progress-steps::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .progress-steps::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .progress-steps::-webkit-scrollbar-thumb {
+            background: var(--secondary-blue);
+            border-radius: 2px;
+        }
+        
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-item.active .step-number,
+        .step-active {
+            background: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 20px rgba(0, 141, 203, 0.4);
+        }
+        
+        .step-item.completed .step-number,
+        .step-completed {
+            background: var(--success-green);
+            border-color: var(--success-green);
+        }
+        
+        .step-item.completed .step-number::after {
+            content: '✔';
+            position: absolute;
+            font-size: 18px;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            font-weight: 400;
+        }
+        
+        .step-item.active .step-label,
+        .step-item.completed .step-label {
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        .step-pending {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-bar-wrapper {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-blue) 0%, var(--netelip-orange) 100%);
+            width: 10%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        /* Form Container */
+        .netelip-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        /* Steps */
+        .step {
+            display: none;
+        }
+        
+        .step.active {
+            display: block;
+            animation: stepIn 0.4s ease;
+        }
+        
+        .step-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .step-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+        
+        .step-subtitle {
+            font-size: 16px;
+            color: var(--light-blue);
+            font-weight: 400;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        
+        .required {
+            color: var(--netelip-orange);
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 141, 203, 0.1);
+        }
+        
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            background: rgba(0, 141, 203, 0.1);
+            border-left: 4px solid var(--secondary-blue);
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .warning-box {
+            background: rgba(233, 163, 50, 0.1);
+            border-left: 4px solid var(--netelip-orange);
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            justify-content: space-between;
+        }
+        
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .btn-prev {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-prev:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--secondary-blue);
+        }
+        
+        .btn-next,
+        .btn-submit {
+            background: var(--white);
+            color: var(--primary-blue);
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .btn-next:hover,
+        .btn-submit:hover {
+            background: var(--secondary-blue);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 141, 203, 0.3);
+        }
+        
+        .btn-next:disabled,
+        .btn-submit:disabled {
+            background: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-save {
+            background: var(--success-green);
+            color: var(--white);
+        }
+        
+        .btn-save:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+        
+        /* Metric Cards */
+        .metric-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            border-color: var(--secondary-blue);
+            transform: translateY(-2px);
+            background: rgba(0, 141, 203, 0.08);
+        }
+        
+        /* Score Badges */
+        .score-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .score-excellent { background: rgba(220, 252, 231, 0.3); color: #dcfce7; border: 1px solid #059669; }
+        .score-good { background: rgba(219, 234, 254, 0.3); color: #dbeafe; border: 1px solid #0284c7; }
+        .score-regular { background: rgba(254, 243, 199, 0.3); color: #fef3c7; border: 1px solid #f59e0b; }
+        .score-poor { background: rgba(254, 226, 226, 0.3); color: #fee2e2; border: 1px solid #dc2626; }
+        
+        /* Difficulty Cards */
+        .difficulty-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+        
+        .difficulty-card:hover {
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .difficulty-card.selected {
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.12);
+        }
+        
+        /* Characteristic Cards */
+        .characteristic-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .characteristic-card:hover {
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.08);
+            transform: translateY(-1px);
+        }
+        
+        .characteristic-card.selected {
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.12);
+        }
+        
+        /* Slider */
+        .netelip-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .netelip-slider:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .netelip-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--secondary-blue);
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .netelip-slider::-webkit-slider-thumb:hover {
+            background: var(--netelip-orange);
+            transform: scale(1.1);
+        }
+        
+        .netelip-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--secondary-blue);
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .netelip-slider::-moz-range-thumb:hover {
+            background: var(--netelip-orange);
+            transform: scale(1.1);
+        }
+        
+        /* Summary Section */
+        .summary-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary-blue);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .summary-value {
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(0, 141, 203, 0.2);
+            border: 1px solid var(--secondary-blue);
+            border-radius: 12px;
+            font-size: 11px;
+            margin: 2px;
+        }
+        
+        .tag.primary {
+            background: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .logo {
+                font-size: 36px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn-next,
+            .btn-submit {
+                max-width: 100%;
+            }
+            
+            .progress-steps {
+                gap: 10px;
+            }
+            
+            .step-item {
+                min-width: 60px;
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .netelip-button {
+            background: var(--white);
+            color: var(--primary-blue);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Open Sans', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .netelip-button:hover:not(:disabled) {
+            background: var(--secondary-blue);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 141, 203, 0.3);
+        }
+        
+        .netelip-button:disabled {
+            background: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .netelip-button-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .netelip-button-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--secondary-blue);
+        }
+        
+        .netelip-button-secondary.active {
+            background: var(--secondary-blue);
+            color: var(--white);
+            border-color: var(--secondary-blue);
+        }
+        
+        .netelip-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .netelip-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            background: rgba(0, 141, 203, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 141, 203, 0.1);
+        }
+        
+        .decorative-circle {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            background: var(--secondary-blue);
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // Variables globales para almacenar datos
+        let appState = {
+            currentStep: 0,
+            evaluationData: {
+                agentName: '',
+                evaluatorName: '',
+                callType: '',
+                evaluationDate: new Date().toISOString().split('T')[0],
+                difficulty: '',
+                characteristics: [],
+                metrics: {},
+                comments: '',
+                totalScore: 0,
+                implementedImprovements: [],
+                pendingImprovements: [],
+                priority: 'media',
+                attachments: {
+                    transcription: null,
+                    recording: null,
+                    transcriptionText: ''
+                }
+            }
+        };
+
+        // Configuración de métricas REAL basada en el Excel original
+        const metricsConfig = {
+            'objetivo': {
+                name: 'Logro del Objetivo',
+                description: '¿El agente cumplió su objetivo principal?',
+                weight: 20,
+                category: 'Funcionalidad',
+                color: '#0d95e4'
+            },
+            'comprension': {
+                name: 'Comprensión',
+                description: '¿El agente interpretó correctamente lo que dijo el usuario?',
+                weight: 12,
+                category: 'Comprensión',
+                color: '#7c3aed'
+            },
+            'integraciones': {
+                name: 'Uso de Integraciones',
+                description: '¿Se ejecutan correctamente las integraciones diseñadas?',
+                weight: 12,
+                category: 'Funcionalidad',
+                color: '#0d95e4'
+            },
+            'vocalizacion': {
+                name: 'Vocalización',
+                description: '¿El agente pronunció las palabras con claridad, naturalidad y buena dicción?',
+                weight: 8,
+                category: 'Vocalización',
+                color: '#059669'
+            },
+            'latencia': {
+                name: 'Latencia',
+                description: '¿El agente respondió con suficiente rapidez para mantener una conversación natural?',
+                weight: 8,
+                category: 'Funcionalidad',
+                color: '#0d95e4'
+            },
+            'naturalidad': {
+                name: 'Naturalidad de la Voz',
+                description: '¿La voz del agente suena fluida, expresiva y cercana, evitando tonos robóticos?',
+                weight: 8,
+                category: 'Vocalización',
+                color: '#059669'
+            },
+            'adecuacion': {
+                name: 'Adecuación',
+                description: '¿Las respuestas fueron pertinentes y útiles en relación a las solicitudes?',
+                weight: 8,
+                category: 'Comprensión',
+                color: '#7c3aed'
+            },
+            'seguridad': {
+                name: 'Seguridad y Foco',
+                description: '¿El agente resiste intentos de hackeo y se mantiene en temas autorizados?',
+                weight: 8,
+                category: 'Seguridad',
+                color: '#dc2626'
+            },
+            'experiencia': {
+                name: 'Experiencia de Usuario',
+                description: '¿Estaría satisfecho un usuario real con esta interacción?',
+                weight: 8,
+                category: 'Experiencia',
+                color: '#f97316'
+            },
+            'buzon': {
+                name: 'Detección de Buzón',
+                description: '¿El agente identifica correctamente un buzón de voz y termina adecuadamente?',
+                weight: 4,
+                category: 'Funcionalidad',
+                color: '#0d95e4'
+            },
+            'escalado': {
+                name: 'Escalado a Humano',
+                description: '¿El agente reconoce cuándo debe transferir la llamada a un humano?',
+                weight: 4,
+                category: 'Funcionalidad',
+                color: '#0d95e4'
+            }
+        };
+
+        // Configuración de características de clientes REAL basada en el Excel
+        const clientCharacteristics = {
+            'easy': {
+                name: 'Cliente Fácil',
+                description: 'Comportamiento cooperativo y directo',
+                color: '#059669',
+                characteristics: [
+                    {
+                        id: 'info_concreta',
+                        name: 'Pregunta información concreta',
+                        description: 'Solicita datos específicos del producto/servicio'
+                    },
+                    {
+                        id: 'agenda_cita',
+                        name: 'Agenda cita directamente',
+                        description: 'Acepta programar una cita sin objeciones'
+                    },
+                    {
+                        id: 'datos_contacto',
+                        name: 'Pregunta sobre datos de contacto',
+                        description: 'Solicita información de contacto o ubicación'
+                    },
+                    {
+                        id: 'horarios',
+                        name: 'Consulta horarios',
+                        description: 'Pregunta sobre disponibilidad y horarios de atención'
+                    },
+                    {
+                        id: 'precios_basicos',
+                        name: 'Pregunta precios básicos',
+                        description: 'Consulta precios sin negociar o comparar'
+                    }
+                ]
+            },
+            'medium': {
+                name: 'Cliente Medio',
+                description: 'Comportamiento con algunas dudas y cambios',
+                color: '#f97316',
+                characteristics: [
+                    {
+                        id: 'anula_cita',
+                        name: 'Anula cita programada',
+                        description: 'Cancela una cita que había confirmado previamente'
+                    },
+                    {
+                        id: 'reprograma',
+                        name: 'Vuelve a programar',
+                        description: 'Cambia la fecha/hora de una cita existente'
+                    },
+                    {
+                        id: 'dos_preguntas',
+                        name: 'Hace hasta 2 preguntas seguidas',
+                        description: 'Formula múltiples consultas en secuencia'
+                    },
+                    {
+                        id: 'fuera_entrenamiento',
+                        name: 'Pide algo fuera del entrenamiento',
+                        description: 'Solicita información no cubierta en el scope del agente'
+                    },
+                    {
+                        id: 'compara_precios',
+                        name: 'Compara precios',
+                        description: 'Menciona ofertas de la competencia'
+                    },
+                    {
+                        id: 'cambio_idioma',
+                        name: 'Cambia de idioma',
+                        description: 'Alterna entre español e inglés durante la conversación'
+                    }
+                ]
+            },
+            'hard': {
+                name: 'Cliente Difícil',
+                description: 'Comportamiento desafiante y complejo',
+                color: '#dc2626',
+                characteristics: [
+                    {
+                        id: 'duda_constante',
+                        name: 'Duda constantemente',
+                        description: 'Cuestiona repetidamente la información proporcionada'
+                    },
+                    {
+                        id: 'hostil',
+                        name: 'Actitud hostil',
+                        description: 'Muestra irritación o agresividad verbal'
+                    },
+                    {
+                        id: 'multiple_objeciones',
+                        name: 'Múltiples objeciones',
+                        description: 'Presenta varias objeciones consecutivas'
+                    },
+                    {
+                        id: 'solicitud_imposible',
+                        name: 'Solicitud imposible',
+                        description: 'Pide algo que el agente no puede proporcionar'
+                    },
+                    {
+                        id: 'informacion_falsa',
+                        name: 'Proporciona información falsa',
+                        description: 'Da datos incorrectos intencionalmente'
+                    },
+                    {
+                        id: 'interrumpe_constantemente',
+                        name: 'Interrumpe constantemente',
+                        description: 'No deja que el agente complete sus respuestas'
+                    },
+                    {
+                        id: 'intenta_hackear',
+                        name: 'Intenta hackear/manipular',
+                        description: 'Trata de hacer que el agente salga de su rol'
+                    }
+                ]
+            }
+        };
+
+        const steps = [
+            { title: 'Información', number: '01' },
+            { title: 'Escenario', number: '02' },
+            { title: 'Métricas', number: '03' },
+            { title: 'Mejoras', number: '04' },
+            { title: 'Resultados', number: '05' }
+        ];
+
+        // Funciones de utilidad
+        function getFilteredMetrics() {
+            return Object.entries(metricsConfig).filter(([key, metric]) => {
+                if (appState.evaluationData.callType === 'inbound' && key === 'buzon') {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        function getScoreColor(score) {
+            if (score >= 90) return 'score-excellent';
+            if (score >= 75) return 'score-good';
+            if (score >= 50) return 'score-regular';
+            return 'score-poor';
+        }
+
+        function getScoreLabel(score) {
+            if (score >= 90) return 'Excelente';
+            if (score >= 75) return 'Bueno';
+            if (score >= 50) return 'Regular';
+            return 'Insuficiente';
+        }
+
+        function calculateWeightedScore() {
+            let totalWeighted = 0;
+            let totalWeight = 0;
+            
+            const filteredMetrics = getFilteredMetrics();
+            filteredMetrics.forEach(([key, metric]) => {
+                const score = appState.evaluationData.metrics[key] || 0;
+                totalWeighted += score * (metric.weight / 100);
+                totalWeight += (metric.weight / 100);
+            });
+            
+            return totalWeight > 0 ? (totalWeighted / totalWeight).toFixed(1) : 0;
+        }
+
+        function updateScore(metricId, score) {
+            appState.evaluationData.metrics[metricId] = parseInt(score);
+            updateSliderBackground(metricId, score);
+            updateTotalScore();
+            render();
+        }
+
+        function updateSliderBackground(metricId, value) {
+            const slider = document.querySelector(`[data-metric="${metricId}"]`);
+            if (slider) {
+                const percentage = (value / 100) * 100;
+                const color = value >= 90 ? '#059669' : value >= 75 ? '#008dcb' : value >= 50 ? '#e9a332' : '#dc2626';
+                slider.style.background = `linear-gradient(90deg, ${color} ${percentage}%, rgba(255, 255, 255, 0.2) ${percentage}%)`;
+            }
+        }
+
+        function updateTotalScore() {
+            const score = calculateWeightedScore();
+            appState.evaluationData.totalScore = score;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? '#059669' : '#008dcb'};
+                color: white;
+                border-radius: 8px;
+                font-weight: 500;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Funciones de renderizado
+        function renderHeader() {
+            return `
+                <header class="header">
+                    <div class="logo-section">
+                        <div class="logo">ELIO</div>
+                    </div>
+                    <h1>Evaluación de Agentes de Voz IA</h1>
+                    <p>Sistema profesional para evaluar el rendimiento de agentes conversacionales</p>
+                </header>
+            `;
+        }
+
+        function renderStepIndicator() {
+            const progressWidth = ((appState.currentStep + 1) / steps.length) * 100;
+            
+            return `
+                <div class="progress-section">
+                    <div class="progress-steps">
+                        ${steps.map((step, index) => `
+                            <div class="step-item ${
+                                index === appState.currentStep ? 'active' : 
+                                index < appState.currentStep ? 'completed' : ''
+                            }">
+                                <div class="step-number ${
+                                    index === appState.currentStep ? 'step-active' : 
+                                    index < appState.currentStep ? 'step-completed' : 'step-pending'
+                                }">${index < appState.currentStep ? '✔' : step.number}</div>
+                                <span class="step-label">${step.title}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar" style="width: ${progressWidth}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStep0() {
+            return `
+                ${renderHeader()}
+                <div class="netelip-container animate-fade-in">
+                    ${renderStepIndicator()}
+                    
+                    <div class="netelip-card">
+                        <div class="step-header">
+                            <h2 class="step-title">Información Básica de Evaluación</h2>
+                            <p class="step-subtitle">Comencemos con los datos básicos para identificar la evaluación</p>
+                        </div>
+
+                        <div class="info-box">
+                            💡 La mejor herramienta de evaluación de agentes IA del mundo
+                        </div>
+
+                        <div style="display: grid; gap: 30px;">
+                            <div>
+                                <label>Nombre del Agente <span class="required">*</span></label>
+                                <input
+                                    type="text"
+                                    id="agentName"
+                                    value="${appState.evaluationData.agentName}"
+                                    class="netelip-input"
+                                    placeholder="Ej: Daniela, Sofia, Carlos..."
+                                    oninput="updateFormField('agentName', this.value)"
+                                />
+                            </div>
+
+                            <div>
+                                <label>Tu Nombre (Evaluador) <span class="required">*</span></label>
+                                <input
+                                    type="text"
+                                    id="evaluatorName"
+                                    value="${appState.evaluationData.evaluatorName}"
+                                    class="netelip-input"
+                                    placeholder="Tu nombre completo"
+                                    oninput="updateFormField('evaluatorName', this.value)"
+                                />
+                            </div>
+
+                            <div>
+                                <label>Tipo de Llamada <span class="required">*</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <button
+                                        onclick="setCallType('inbound')"
+                                        class="netelip-button ${appState.evaluationData.callType === 'inbound' ? '' : 'netelip-button-secondary'}"
+                                        style="padding: 20px; justify-content: center;"
+                                    >
+                                        <span class="decorative-circle" ${appState.evaluationData.callType === 'inbound' ? '' : 'style="background: rgba(255, 255, 255, 0.3);"'}></span>
+                                        Inbound
+                                    </button>
+                                    <button
+                                        onclick="setCallType('outbound')"
+                                        class="netelip-button ${appState.evaluationData.callType === 'outbound' ? '' : 'netelip-button-secondary'}"
+                                        style="padding: 20px; justify-content: center;"
+                                    >
+                                        <span class="decorative-circle" ${appState.evaluationData.callType === 'outbound' ? '' : 'style="background: rgba(255, 255, 255, 0.3);"'}></span>
+                                        Outbound
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label>Fecha de Evaluación</label>
+                                <input
+                                    type="date"
+                                    id="evaluationDate"
+                                    value="${appState.evaluationData.evaluationDate}"
+                                    class="netelip-input"
+                                    onchange="updateFormField('evaluationDate', this.value)"
+                                />
+                            </div>
+
+                            <div class="buttons">
+                                <button
+                                    onclick="goToStep(1)"
+                                    class="btn-next"
+                                    style="margin-left: auto;"
+                                    ${!canProceedFromStep0() ? 'disabled' : ''}
+                                >
+                                    Continuar →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStep1() {
+            return `
+                ${renderHeader()}
+                <div class="netelip-container animate-fade-in">
+                    ${renderStepIndicator()}
+                    
+                    <div class="netelip-card">
+                        <div class="step-header">
+                            <h2 class="step-title">Configurar Escenario de Testing</h2>
+                            <p class="step-subtitle">Escoge el tipo de cliente que simularás y las características específicas</p>
+                        </div>
+
+                        <div class="info-box">
+                            <span class="decorative-circle"></span>
+                            Selecciona el perfil del cliente y las características a evaluar en la llamada
+                        </div>
+
+                        <div style="margin-bottom: 48px;">
+                            <h3 style="color: var(--white); margin-bottom: 24px; font-weight: 600;">
+                                Tipo de Cliente
+                            </h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                                ${Object.entries(clientCharacteristics).map(([level, config]) => `
+                                    <div
+                                        onclick="selectDifficulty('${config.name}')"
+                                        class="difficulty-card ${appState.evaluationData.difficulty === config.name ? 'selected' : ''}"
+                                    >
+                                        <div style="width: 24px; height: 24px; border-radius: 50%; background: ${config.color}; margin: 0 auto 16px; opacity: 0.8;"></div>
+                                        <h4 style="font-weight: 700; color: var(--white); margin-bottom: 8px;">${config.name}</h4>
+                                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin: 0;">${config.description}</p>
+                                        ${appState.evaluationData.difficulty === config.name ? `
+                                            <div style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; background: var(--secondary-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">✔</div>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        ${appState.evaluationData.difficulty ? `
+                            <div style="margin-bottom: 48px;">
+                                <h3 style="color: var(--white); margin-bottom: 24px; font-weight: 600;">
+                                    Características a Evaluar
+                                </h3>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                                    ${Object.entries(clientCharacteristics).map(([level, config]) => {
+                                        if (appState.evaluationData.difficulty !== config.name) return '';
+                                        
+                                        return config.characteristics.map((char) => `
+                                            <div
+                                                onclick="toggleCharacteristic('${char.name}')"
+                                                class="characteristic-card ${appState.evaluationData.characteristics.includes(char.name) ? 'selected' : ''}"
+                                            >
+                                                <div style="display: flex; align-items: start; gap: 12px;">
+                                                    <div style="width: 24px; height: 24px; border: 2px solid ${appState.evaluationData.characteristics.includes(char.name) ? 'var(--secondary-blue)' : 'rgba(255, 255, 255, 0.2)'}; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: ${appState.evaluationData.characteristics.includes(char.name) ? 'var(--secondary-blue)' : 'transparent'}; margin-top: 2px; flex-shrink: 0;">
+                                                        ${appState.evaluationData.characteristics.includes(char.name) ? `
+                                                            <span style="color: white; font-size: 12px; font-weight: 700;">✔</span>
+                                                        ` : ''}
+                                                    </div>
+                                                    <div style="flex: 1;">
+                                                        <h4 style="font-weight: 700; color: var(--white); margin-bottom: 4px; font-size: 16px;">
+                                                            ${char.name}
+                                                        </h4>
+                                                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin: 0; line-height: 20px;">
+                                                            ${char.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('');
+                                    }).join('')}
+                                </div>
+                                
+                                ${appState.evaluationData.characteristics.length > 0 ? `
+                                    <div class="summary-section" style="margin-top: 30px;">
+                                        <h4 style="font-weight: 700; color: var(--white); margin-bottom: 16px;">
+                                            <span class="decorative-circle" style="background: var(--success-green);"></span>
+                                            Características Seleccionadas (${appState.evaluationData.characteristics.length})
+                                        </h4>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                            ${appState.evaluationData.characteristics.map(char => `
+                                                <span class="tag primary">
+                                                    ${char}
+                                                </span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+
+                        <div class="buttons">
+                            <button
+                                onclick="goToStep(0)"
+                                class="btn-prev"
+                            >
+                                ← Atrás
+                            </button>
+                            <button
+                                onclick="goToStep(2)"
+                                class="btn-next"
+                                ${!canProceedFromStep1() ? 'disabled' : ''}
+                            >
+                                Comenzar Evaluación →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStep2() {
+            const filteredMetrics = getFilteredMetrics();
+            
+            return `
+                ${renderHeader()}
+                <div class="netelip-container animate-fade-in">
+                    ${renderStepIndicator()}
+                    
+                    <div class="netelip-card">
+                        <div class="step-header">
+                            <h2 class="step-title">Evaluación en Tiempo Real</h2>
+                            <p class="step-subtitle">Evalúa cada métrica según el rendimiento del agente</p>
+                        </div>
+                        
+                        <div class="summary-section">
+                            <div style="text-align: center;">
+                                <div style="font-weight: 700; color: var(--white); margin-bottom: 8px;">
+                                    ${appState.evaluationData.difficulty} • ${appState.evaluationData.callType === 'inbound' ? 'Inbound' : 'Outbound'}
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+                                    ${appState.evaluationData.characteristics.map(char => `
+                                        <span class="tag">
+                                            ${char}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));">
+                            ${filteredMetrics.map(([key, metric]) => `
+                                <div class="metric-card">
+                                    <div style="margin-bottom: 24px;">
+                                        <h3 style="font-weight: 700; color: var(--white); margin-bottom: 8px; font-size: 20px;">
+                                            ${metric.name}
+                                        </h3>
+                                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 12px; line-height: 1.5;">
+                                            ${metric.description}
+                                        </p>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span class="tag">
+                                                Peso: ${metric.weight}%
+                                            </span>
+                                            <span style="background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 500;">
+                                                ${metric.category}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: grid; gap: 16px;">
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: rgba(255, 255, 255, 0.5); font-weight: 600;">
+                                            <span>0 - Insuficiente</span>
+                                            <span>100 - Excelente</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="100"
+                                            step="5"
+                                            value="${appState.evaluationData.metrics[key] || 0}"
+                                            onchange="updateScore('${key}', this.value)"
+                                            data-metric="${key}"
+                                            class="netelip-slider"
+                                        />
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                max="100"
+                                                value="${appState.evaluationData.metrics[key] || 0}"
+                                                onchange="updateScore('${key}', this.value)"
+                                                style="width: 80px; padding: 8px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 7px; text-align: center; font-weight: 700; color: var(--white);"
+                                            />
+                                            <span class="score-badge ${getScoreColor(appState.evaluationData.metrics[key] || 0)}">
+                                                ${getScoreLabel(appState.evaluationData.metrics[key] || 0)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Puntuación Total -->
+                        <div style="background: linear-gradient(135deg, rgba(0, 141, 203, 0.2), rgba(233, 163, 50, 0.2)); border: 2px solid var(--secondary-blue); border-radius: 12px; padding: 2rem; margin-top: 3rem; text-align: center;">
+                            <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 1rem;">
+                                Puntuación Total
+                            </h3>
+                            <div style="font-size: 3rem; font-weight: 800; color: var(--secondary-blue); margin-bottom: 1rem;" id="total-score">
+                                ${calculateWeightedScore()}
+                            </div>
+                            <div style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--white);" id="score-label">
+                                ${getScoreLabel(parseFloat(calculateWeightedScore()))}
+                            </div>
+                            <div style="background: rgba(255, 255, 255, 0.1); height: 12px; border-radius: 6px; overflow: hidden; margin: 0 auto; max-width: 300px;">
+                                <div id="score-bar" style="background: linear-gradient(90deg, var(--secondary-blue), var(--netelip-orange)); height: 100%; width: ${calculateWeightedScore()}%; transition: all 0.5s ease; border-radius: 6px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Comentarios -->
+                        <div style="margin-top: 2rem;">
+                            <label>Comentarios y Observaciones</label>
+                            <textarea
+                                id="evaluation-comments"
+                                placeholder="Escribe aquí tus observaciones sobre la llamada, aspectos a mejorar, puntos destacables, etc..."
+                                class="netelip-input"
+                                style="min-height: 120px;"
+                                oninput="updateFormField('comments', this.value)"
+                            >${appState.evaluationData.comments}</textarea>
+                        </div>
+
+                        <div class="buttons">
+                            <button
+                                onclick="goToStep(1)"
+                                class="btn-prev"
+                            >
+                                ← Atrás
+                            </button>
+                            <button
+                                onclick="goToStep(3)"
+                                class="btn-next"
+                            >
+                                Registrar Mejoras →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStep3() {
+            return `
+                ${renderHeader()}
+                <div class="netelip-container animate-fade-in">
+                    ${renderStepIndicator()}
+                    
+                    <div class="netelip-card">
+                        <div class="step-header">
+                            <h2 class="step-title">Registro de Mejoras</h2>
+                            <p class="step-subtitle">Documenta las mejoras ya implementadas y las que están pendientes</p>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px;">
+                            <div>
+                                <div class="summary-section" style="background: rgba(5, 150, 105, 0.1); border-color: rgba(5, 150, 105, 0.3);">
+                                    <h3 style="font-weight: 700; color: var(--white); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px;">
+                                        <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--success-green); color: white; border-radius: 50%; font-size: 16px;">✔</span>
+                                        Mejoras Ya Implementadas
+                                    </h3>
+                                    
+                                    <div style="display: grid; gap: 16px;">
+                                        <div style="display: flex; gap: 8px;">
+                                            <input
+                                                type="text"
+                                                id="implemented-input"
+                                                placeholder="Describe una mejora ya implementada..."
+                                                class="netelip-input"
+                                                style="flex: 1;"
+                                                onkeypress="if(event.key==='Enter') addImplementedImprovement()"
+                                            />
+                                            <button
+                                                onclick="addImplementedImprovement()"
+                                                class="netelip-button"
+                                                style="padding: 12px 24px;"
+                                            >
+                                                Añadir
+                                            </button>
+                                        </div>
+                                        
+                                        <div id="implemented-list" style="display: grid; gap: 8px; max-height: 300px; overflow-y: auto;">
+                                            ${appState.evaluationData.implementedImprovements.length === 0 ? `
+                                                <div style="text-align: center; padding: 32px; color: rgba(255, 255, 255, 0.5);">
+                                                    <p style="margin: 0; font-size: 14px;">No hay mejoras implementadas registradas</p>
+                                                </div>
+                                            ` : appState.evaluationData.implementedImprovements.map((improvement, index) => `
+                                                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 7px;">
+                                                    <span style="color: var(--white); flex: 1; font-size: 14px;">${improvement}</span>
+                                                    <button
+                                                        onclick="removeImplementedImprovement(${index})"
+                                                        style="color: var(--error-red); background: none; border: none; cursor: pointer; padding: 4px; font-weight: 700; font-size: 16px;"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="summary-section" style="background: rgba(233, 163, 50, 0.1); border-color: rgba(233, 163, 50, 0.3);">
+                                    <h3 style="font-weight: 700; color: var(--white); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px;">
+                                        <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--netelip-orange); color: white; border-radius: 50%; font-size: 16px;">→</span>
+                                        Mejoras a Implementar
+                                    </h3>
+                                    
+                                    <div style="display: grid; gap: 16px;">
+                                        <div style="display: flex; gap: 8px;">
+                                            <input
+                                                type="text"
+                                                id="pending-input"
+                                                placeholder="Describe una mejora pendiente..."
+                                                class="netelip-input"
+                                                style="flex: 1;"
+                                                onkeypress="if(event.key==='Enter') addPendingImprovement()"
+                                            />
+                                            <button
+                                                onclick="addPendingImprovement()"
+                                                class="netelip-button"
+                                                style="padding: 12px 24px;"
+                                            >
+                                                Añadir
+                                            </button>
+                                        </div>
+                                        
+                                        <div id="pending-list" style="display: grid; gap: 8px; max-height: 300px; overflow-y: auto;">
+                                            ${appState.evaluationData.pendingImprovements.length === 0 ? `
+                                                <div style="text-align: center; padding: 32px; color: rgba(255, 255, 255, 0.5);">
+                                                    <p style="margin: 0; font-size: 14px;">No hay mejoras pendientes registradas</p>
+                                                </div>
+                                            ` : appState.evaluationData.pendingImprovements.map((improvement, index) => `
+                                                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(233, 163, 50, 0.3); border-radius: 7px;">
+                                                    <span style="color: var(--white); flex: 1; font-size: 14px;">${improvement}</span>
+                                                    <div style="display: flex; gap: 4px;">
+                                                        <button
+                                                            onclick="moveToImplemented(${index})"
+                                                            style="color: var(--success-green); background: none; border: none; cursor: pointer; padding: 4px; font-weight: 700; font-size: 14px;"
+                                                            title="Marcar como implementada"
+                                                        >
+                                                            ✔
+                                                        </button>
+                                                        <button
+                                                            onclick="removePendingImprovement(${index})"
+                                                            style="color: var(--error-red); background: none; border: none; cursor: pointer; padding: 4px; font-weight: 700; font-size: 16px;"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sugerencias Inteligentes -->
+                        <div class="info-box" style="margin-top: 48px;">
+                            <h3 style="font-weight: 700; color: var(--white); margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                                💡 Sugerencias Inteligentes
+                            </h3>
+                            
+                            <div id="smart-suggestions">
+                                ${generateSmartSuggestions().map(suggestion => `
+                                    <div style="display: flex; align-items: start; gap: 16px; padding: 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 141, 203, 0.2); border-radius: 8px; margin-bottom: 12px;">
+                                        <span style="font-size: 1.25rem;">${suggestion.icon}</span>
+                                        <div style="flex: 1;">
+                                            <p style="margin: 0; color: var(--white); font-weight: 500; line-height: 1.4;">
+                                                ${suggestion.text}
+                                            </p>
+                                        </div>
+                                        <button 
+                                            onclick="addSuggestionToPending('${suggestion.text.replace(/'/g, "\\\'")}')"
+                                            class="netelip-button"
+                                            style="padding: 6px 12px; font-size: 12px;"
+                                        >
+                                            + Añadir
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button
+                                onclick="goToStep(2)"
+                                class="btn-prev"
+                            >
+                                ← Atrás
+                            </button>
+                            <button
+                                onclick="goToStep(4)"
+                                class="btn-next"
+                            >
+                                Ver Resultados →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStep4() {
+            const weightedScore = calculateWeightedScore();
+            const filteredMetrics = getFilteredMetrics();
+            const scoresByCategory = {};
+            
+            filteredMetrics.forEach(([key, metric]) => {
+                if (!scoresByCategory[metric.category]) {
+                    scoresByCategory[metric.category] = [];
+                }
+                scoresByCategory[metric.category].push({
+                    ...metric,
+                    key: key,
+                    score: appState.evaluationData.metrics[key] || 0
+                });
+            });
+
+            return `
+                ${renderHeader()}
+                <div class="netelip-container animate-fade-in">
+                    ${renderStepIndicator()}
+                    
+                    <div class="netelip-card">
+                        <div class="step-header">
+                            <h2 class="step-title">Resultados de la Evaluación</h2>
+                            <p class="step-subtitle">Resumen completo del rendimiento del agente</p>
+                            
+                            <div style="display: inline-block; padding: 32px; border-radius: 7px; ${
+                                parseFloat(weightedScore) >= 90 ? 'background: rgba(5, 150, 105, 0.1); border: 3px solid var(--success-green);' :
+                                parseFloat(weightedScore) >= 75 ? 'background: rgba(0, 141, 203, 0.1); border: 3px solid var(--secondary-blue);' :
+                                parseFloat(weightedScore) >= 50 ? 'background: rgba(233, 163, 50, 0.1); border: 3px solid var(--netelip-orange);' :
+                                'background: rgba(220, 38, 38, 0.1); border: 3px solid var(--error-red);'
+                            } margin: 24px auto; display: block; text-align: center;">
+                                <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px; ${
+                                    parseFloat(weightedScore) >= 90 ? 'color: var(--success-green);' :
+                                    parseFloat(weightedScore) >= 75 ? 'color: var(--secondary-blue);' :
+                                    parseFloat(weightedScore) >= 50 ? 'color: var(--netelip-orange);' :
+                                    'color: var(--error-red);'
+                                }">
+                                    ${weightedScore}/100
+                                </div>
+                                <div style="font-size: 20px; font-weight: 700; text-transform: uppercase; ${
+                                    parseFloat(weightedScore) >= 90 ? 'color: var(--success-green);' :
+                                    parseFloat(weightedScore) >= 75 ? 'color: var(--secondary-blue);' :
+                                    parseFloat(weightedScore) >= 50 ? 'color: var(--netelip-orange);' :
+                                    'color: var(--error-red);'
+                                }">
+                                    ${getScoreLabel(parseFloat(weightedScore))}
+                                </div>
+                                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin: 8px 0 0 0;">
+                                    Puntuación ponderada basada en métricas clave
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; gap: 32px;">
+                            <!-- Información General -->
+                            <div class="summary-section">
+                                <h3 class="summary-title">
+                                    📊 Información General
+                                </h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                                    <div class="summary-item">
+                                        <span class="summary-label">Agente:</span>
+                                        <span class="summary-value">${appState.evaluationData.agentName}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Evaluador:</span>
+                                        <span class="summary-value">${appState.evaluationData.evaluatorName}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Fecha:</span>
+                                        <span class="summary-value">${appState.evaluationData.evaluationDate}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Tipo:</span>
+                                        <span class="summary-value">${appState.evaluationData.callType === 'inbound' ? 'Inbound' : 'Outbound'}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Escenario:</span>
+                                        <span class="summary-value">${appState.evaluationData.difficulty}</span>
+                                    </div>
+                                </div>
+                                
+                                ${appState.evaluationData.characteristics.length > 0 ? `
+                                    <div style="margin-top: 24px;">
+                                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px; font-weight: 600; margin-bottom: 12px;">Características Evaluadas:</div>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                            ${appState.evaluationData.characteristics.map(char => `
+                                                <span class="tag primary">
+                                                    ${char}
+                                                </span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <!-- Métricas por Categoría -->
+                            ${Object.entries(scoresByCategory).map(([category, categoryMetrics]) => `
+                                <div class="summary-section">
+                                    <h3 class="summary-title">
+                                        ${category}
+                                    </h3>
+                                    <div style="display: grid; gap: 16px;">
+                                        ${categoryMetrics.map(metric => `
+                                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: rgba(255, 255, 255, 0.05); border-radius: 7px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                                <div style="flex: 1;">
+                                                    <div style="font-weight: 700; color: var(--white); margin-bottom: 4px;">${metric.name}</div>
+                                                    <div style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 4px;">${metric.description}</div>
+                                                    <div style="color: var(--secondary-blue); font-size: 12px; font-weight: 600;">Peso: ${metric.weight}%</div>
+                                                </div>
+                                                <div style="text-align: right; margin-left: 16px;">
+                                                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 4px; ${
+                                                        metric.score >= 90 ? 'color: var(--success-green);' :
+                                                        metric.score >= 75 ? 'color: var(--secondary-blue);' :
+                                                        metric.score >= 50 ? 'color: var(--netelip-orange);' :
+                                                        'color: var(--error-red);'
+                                                    }">
+                                                        ${metric.score}/100
+                                                    </div>
+                                                    <div class="score-badge ${getScoreColor(metric.score)}">
+                                                        ${getScoreLabel(metric.score)}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+
+                            <!-- Plan de Mejoras -->
+                            ${(appState.evaluationData.implementedImprovements.length > 0 || appState.evaluationData.pendingImprovements.length > 0) ? `
+                                <div class="summary-section">
+                                    <h3 class="summary-title">
+                                        📋 Plan de Mejoras
+                                    </h3>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                                        ${appState.evaluationData.implementedImprovements.length > 0 ? `
+                                            <div>
+                                                <h4 style="font-weight: 700; color: var(--success-green); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                                    <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--success-green); color: white; border-radius: 50%; font-size: 12px;">✔</span>
+                                                    Ya Implementadas
+                                                </h4>
+                                                <div style="display: grid; gap: 8px;">
+                                                    ${appState.evaluationData.implementedImprovements.map(improvement => `
+                                                        <div style="padding: 8px; background: rgba(5, 150, 105, 0.1); border-radius: 7px; border-left: 3px solid var(--success-green); font-size: 14px; color: var(--white);">
+                                                            ${improvement}
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        ${appState.evaluationData.pendingImprovements.length > 0 ? `
+                                            <div>
+                                                <h4 style="font-weight: 700; color: var(--netelip-orange); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                                    <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--netelip-orange); color: white; border-radius: 50%; font-size: 12px;">→</span>
+                                                    Pendientes
+                                                </h4>
+                                                <div style="display: grid; gap: 8px;">
+                                                    ${appState.evaluationData.pendingImprovements.map(improvement => `
+                                                        <div style="padding: 8px; background: rgba(233, 163, 50, 0.1); border-radius: 7px; border-left: 3px solid var(--netelip-orange); font-size: 14px; color: var(--white);">
+                                                            ${improvement}
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            <!-- Comentarios del Evaluador -->
+                            ${appState.evaluationData.comments ? `
+                                <div class="summary-section">
+                                    <h3 class="summary-title">
+                                        💭 Comentarios del Evaluador
+                                    </h3>
+                                    <div style="background: rgba(0, 141, 203, 0.1); border-left: 4px solid var(--secondary-blue); padding: 24px; border-radius: 0 8px 8px 0;">
+                                        <p style="color: var(--white); line-height: 1.6; margin: 0; font-style: italic;">
+                                            "${appState.evaluationData.comments}"
+                                        </p>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="buttons" style="margin-top: 48px;">
+                            <button
+                                onclick="goToStep(3)"
+                                class="btn-prev"
+                            >
+                                ← Modificar
+                            </button>
+                            <div style="display: flex; gap: 16px;">
+                                <button
+                                    onclick="generatePDF()"
+                                    class="netelip-button"
+                                    style="background: #1f2937;"
+                                >
+                                    📄 Descargar PDF
+                                </button>
+                                <button
+                                    onclick="saveReport()"
+                                    class="btn-save"
+                                    style="padding: 14px 28px;"
+                                >
+                                    💾 Guardar Datos
+                                </button>
+                                <button
+                                    onclick="newEvaluation()"
+                                    class="netelip-button"
+                                >
+                                    🔄 Nueva Evaluación
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Funciones de validación
+        function canProceedFromStep0() {
+            return appState.evaluationData.agentName && 
+                   appState.evaluationData.evaluatorName && 
+                   appState.evaluationData.callType;
+        }
+
+        function canProceedFromStep1() {
+            return appState.evaluationData.difficulty && 
+                   appState.evaluationData.characteristics.length > 0;
+        }
+
+        // Event handlers
+        function goToStep(step) {
+            appState.currentStep = step;
+            render();
+            
+            // Configurar sliders después del render para el paso 2
+            if (step === 2) {
+                setTimeout(() => {
+                    const filteredMetrics = getFilteredMetrics();
+                    filteredMetrics.forEach(([key, metric]) => {
+                        const score = appState.evaluationData.metrics[key] || 0;
+                        updateSliderBackground(key, score);
+                    });
+                }, 100);
+            }
+        }
+
+        function updateFormField(field, value) {
+            if (field === 'priority') {
+                appState.evaluationData.priority = value;
+            } else {
+                appState.evaluationData[field] = value;
+            }
+        }
+
+        function setCallType(type) {
+            appState.evaluationData.callType = type;
+            render();
+        }
+
+        function selectDifficulty(difficulty) {
+            appState.evaluationData.difficulty = difficulty;
+            appState.evaluationData.characteristics = [];
+            render();
+        }
+
+        function toggleCharacteristic(charName) {
+            const index = appState.evaluationData.characteristics.indexOf(charName);
+            if (index > -1) {
+                appState.evaluationData.characteristics.splice(index, 1);
+            } else {
+                appState.evaluationData.characteristics.push(charName);
+            }
+            render();
+        }
+
+        function addImplementedImprovement() {
+            const input = document.getElementById('implemented-input');
+            const text = input ? input.value.trim() : '';
+            
+            if (text) {
+                appState.evaluationData.implementedImprovements.push(text);
+                input.value = '';
+                render();
+                showNotification('Mejora implementada añadida ✅', 'success');
+            }
+        }
+
+        function addPendingImprovement() {
+            const input = document.getElementById('pending-input');
+            const text = input ? input.value.trim() : '';
+            
+            if (text) {
+                appState.evaluationData.pendingImprovements.push(text);
+                input.value = '';
+                render();
+                showNotification('Mejora pendiente añadida ✅', 'success');
+            }
+        }
+
+        function removeImplementedImprovement(index) {
+            appState.evaluationData.implementedImprovements.splice(index, 1);
+            render();
+            showNotification('Mejora eliminada', 'info');
+        }
+
+        function removePendingImprovement(index) {
+            appState.evaluationData.pendingImprovements.splice(index, 1);
+            render();
+            showNotification('Mejora eliminada', 'info');
+        }
+
+        function moveToImplemented(index) {
+            const improvement = appState.evaluationData.pendingImprovements[index];
+            appState.evaluationData.implementedImprovements.push(improvement);
+            appState.evaluationData.pendingImprovements.splice(index, 1);
+            render();
+            showNotification('Mejora marcada como implementada ✅', 'success');
+        }
+
+        function addSuggestionToPending(text) {
+            if (!appState.evaluationData.pendingImprovements.includes(text)) {
+                appState.evaluationData.pendingImprovements.push(text);
+                render();
+                showNotification('Sugerencia añadida a mejoras pendientes ✨', 'success');
+            } else {
+                showNotification('Esta sugerencia ya está en tu lista 📋', 'info');
+            }
+        }
+
+        function handleFileUpload(type, input) {
+            const file = input.files[0];
+            if (file) {
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('El archivo es demasiado grande. Máximo 50MB permitido.');
+                    input.value = '';
+                    return;
+                }
+                
+                appState.evaluationData.attachments[type] = {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    lastModified: file.lastModified
+                };
+                render();
+                showNotification('Archivo adjuntado correctamente ✅', 'success');
+            }
+        }
+
+        function handleTranscriptionText(text) {
+            appState.evaluationData.attachments.transcriptionText = text;
+        }
+
+        function removeFile(type) {
+            appState.evaluationData.attachments[type] = null;
+            render();
+            showNotification('Archivo eliminado', 'info');
+        }
+
+        function generateSmartSuggestions() {
+            const suggestions = [];
+            
+            // Sugerencias basadas en métricas bajas
+            Object.entries(appState.evaluationData.metrics).forEach(([key, score]) => {
+                if (score < 70) {
+                    switch(key) {
+                        case 'objetivo':
+                            suggestions.push({
+                                text: "Revisar y optimizar los flujos conversacionales para el cumplimiento de objetivos",
+                                priority: "alta",
+                                icon: "🎯"
+                            });
+                            break;
+                        case 'comprension':
+                            suggestions.push({
+                                text: "Mejorar el entrenamiento en reconocimiento de intenciones del usuario",
+                                priority: "alta",
+                                icon: "🧠"
+                            });
+                            break;
+                        case 'integraciones':
+                            suggestions.push({
+                                text: "Revisar y testear todas las integraciones configuradas",
+                                priority: "alta",
+                                icon: "🔗"
+                            });
+                            break;
+                        case 'vocalizacion':
+                            suggestions.push({
+                                text: "Ajustar configuración de síntesis de voz para mayor claridad",
+                                priority: "media",
+                                icon: "🗣️"
+                            });
+                            break;
+                        case 'latencia':
+                            suggestions.push({
+                                text: "Optimizar tiempos de respuesta del modelo y conexiones",
+                                priority: "alta",
+                                icon: "⚡"
+                            });
+                            break;
+                    }
+                }
+            });
+            
+            const totalScore = parseFloat(calculateWeightedScore());
+            
+            if (totalScore < 60) {
+                suggestions.push({
+                    text: "Considerar un reentrenamiento integral del agente con todas las métricas",
+                    priority: "alta",
+                    icon: "📚"
+                });
+            }
+            
+            return suggestions.slice(0, 5);
+        }
+
+        function generatePDF() {
+            showNotification('📄 Generando PDF...', 'info');
+            window.print();
+        }
+
+        function saveReport() {
+            localStorage.setItem('netelip-evaluation-' + Date.now(), JSON.stringify(appState.evaluationData));
+            showNotification('💾 Datos guardados localmente', 'success');
+        }
+
+        function newEvaluation() {
+            if (confirm('¿Estás seguro de que quieres iniciar una nueva evaluación? Se perderán todos los datos actuales.')) {
+                appState.currentStep = 0;
+                appState.evaluationData = {
+                    agentName: '',
+                    evaluatorName: '',
+                    callType: '',
+                    evaluationDate: new Date().toISOString().split('T')[0],
+                    difficulty: '',
+                    characteristics: [],
+                    metrics: {},
+                    comments: '',
+                    totalScore: 0,
+                    implementedImprovements: [],
+                    pendingImprovements: [],
+                    priority: 'media',
+                    attachments: {
+                        transcription: null,
+                        recording: null,
+                        transcriptionText: ''
+                    }
+                };
+                render();
+                showNotification('🔄 Nueva evaluación iniciada', 'success');
+            }
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            let content = '';
+            switch (appState.currentStep) {
+                case 0: content = renderStep0(); break;
+                case 1: content = renderStep1(); break;
+                case 2: content = renderStep2(); break;
+                case 3: content = renderStep3(); break;
+                case 4: content = renderStep4(); break;
+                default: content = renderStep0();
+            }
+            
+            app.innerHTML = content;
+            
+            // Configurar sliders después del render para el paso 2
+            if (appState.currentStep === 2) {
+                setTimeout(() => {
+                    const filteredMetrics = getFilteredMetrics();
+                    filteredMetrics.forEach(([key, metric]) => {
+                        const score = appState.evaluationData.metrics[key] || 0;
+                        updateSliderBackground(key, score);
+                    });
+                }, 100);
+            }
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            render();
+        });
+
+        // Renderizar inmediatamente si el DOM ya está cargado
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', render);
+        } else {
+            render();
+        }
+    </script>
+</body>
+</html>
