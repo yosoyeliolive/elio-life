@@ -65,6 +65,28 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
         
         .logo-section {
             margin-bottom: 30px;
@@ -1419,7 +1441,7 @@
             </div>
             
             <!-- Step 10: Resumen y confirmación -->
-            <div class="step" data-step="10">
+            <div class="step" data-step="10" id="divStep10">
                 <div class="step-header">
                     <h2 class="step-title">Resumen de tu configuración</h2>
                     <p class="step-subtitle">Revisa todos los detalles antes de generar el presupuesto</p>
@@ -1457,12 +1479,12 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="divFinalComments">
                     <label>Comentarios adicionales</label>
                     <textarea id="finalComments" placeholder="¿Hay algo más que debamos saber sobre tu proyecto?"></textarea>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="divTimeline">
                     <label>¿Cuándo te gustaría tener el sistema operativo? <span class="required">*</span></label>
                     <select id="timeline" required>
                         <option value="">Selecciona</option>
@@ -1474,10 +1496,28 @@
                         <option value="explorando">Solo estoy explorando opciones</option>
                     </select>
                 </div>
-                
-                <div class="buttons">
+                <div class="summary-item" id="divComments" style="display: none;">
+                    <span class="summary-label">Comentarios adicionales:</span>
+                    <span class="summary-value" id="spanComments"></span>
+                </div>
+                <div class="summary-item" id="divTiempo" style="display: none;">
+                    <span class="summary-label">¿Cuándo te gustaría tener el sistema operativo?</span>
+                    <span class="summary-value" id="spanTiempo"></span>
+                </div>
+                <div class="checkbox-group" id="divLinkPrivacityLinkConditions">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="linkPrivacity" name="linkPrivacity" value=">Acepto la totalidad de condiciones del Aviso Legal y Política de privacidad">
+                        <label for="linkPrivacity">Acepto la totalidad de condiciones del <a href="https://www.netelip.com/aviso-legal" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Aviso Legal</a> y <a href="https://www.netelip.com/politica-de-privacidad" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Política de privacidad</a></label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="linkConditions" name="linkConditions" value=">Acepto la totalidad de condiciones del Aviso Legal y Política de privacidad">
+                        <label for="linkConditions">He leído y acepto las <a href="https://static.netelip.com/downloads/info/CondicionesgeneralesdeusodeNetelip.pdf" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Condiciones generales de uso</a>.</label>
+                    </div>
+                </div>
+                <div class="buttons" id="divButtonsPrevSub">
                     <button class="btn-prev" onclick="prevStep()">← Anterior</button>
-                    <button class="btn-submit" onclick="generateQuote()">Enviar correo al Sales Hacker →</button>
+                    <button class="btn-submit" onclick="sendEvaluation()">Enviar correo al Sales Hacker →</button>
                 </div>
             </div>
             
@@ -1634,7 +1674,6 @@
                     formData[currentStep][input.id] = input.value;
                 }
             });
-            console.log('Datos guardados:', formData);
         }
         
         // Event listeners para checkboxes y radios
@@ -1772,6 +1811,72 @@
         }
         function capitalizeFirstLetter(val) {
             return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+        }
+        function sendEvaluation(){
+            if (document.getElementById("linkPrivacity").checked==true && document.getElementById("linkConditions").checked==true){
+                saveStepData(totalSteps);
+                localStorage.setItem('elio-qualification-' + Date.now(), JSON.stringify(formData));
+                console.log('Datos guardados localmente:', formData);
+                document.getElementById("divButtonsPrevSub").style.display="none";
+                document.getElementById("divLinkPrivacityLinkConditions").style.display="none";
+                document.getElementById("spanComments").textContent=document.getElementById("finalComments").value;
+                document.getElementById("divComments").style.display="flex";
+                document.getElementById("spanTiempo").textContent=document.getElementById("timeline").value;
+                document.getElementById("divTiempo").style.display="flex";
+                document.getElementById("divFinalComments").style.display="none";
+                document.getElementById("divTimeline").style.display="none";
+                htmlStep10=document.getElementById("divStep10").innerHTML;
+                document.getElementById("divButtonsPrevSub").style.display="flex";
+                document.getElementById("divLinkPrivacityLinkConditions").style.display="grid";
+                document.getElementById("divComments").style.display="none";
+                document.getElementById("divTiempo").style.display="none";
+                document.getElementById("divFinalComments").style.display="block";
+                document.getElementById("divTimeline").style.display="block";
+                sendEmail(htmlStep10);
+            }else{
+                showNotification('Debes aceptar las condiciones', 'info');
+            }
+            /*if (appState.evaluationData.linkPrivacity==true && appState.evaluationData.linkConditions==true){
+                localStorage.setItem('netelip-evaluation-' + Date.now(), JSON.stringify(appState.evaluationData));
+                document.getElementById("divButtonsModSend").style.display="none";
+                document.getElementById("divlinkPrivacity").style.display="none";
+                document.getElementById("divlinkConditions").style.display="none";
+                htmlNetelipCard=document.getElementById("divNetelipCard").innerHTML;
+                document.getElementById("divButtonsModSend").style.display="flex";
+                document.getElementById("divlinkPrivacity").style.display="flex";
+                document.getElementById("divlinkConditions").style.display="flex";
+                sendEmail(htmlNetelipCard);
+            }else{
+                showNotification('Debes aceptar las condiciones', 'info');
+            }*/
+        }
+        async function sendEmail(html){
+            // Enviar datos con fetch
+            const url = "https://apps.netelip.com/evalua_agent_elio/send-cualificacion.php";
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        content: html,
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const result = await response.text();
+                if (result=="true"){
+                    showNotification('Datos enviados satisfactoriamente', 'success');
+                }else{
+                    showNotification('Datos no enviados', 'info'); 
+                }
+            } catch (error) {
+                console.error(error.message);
+                showNotification(error.message, 'info'); 
+            }
         }
     </script>
 </body>
