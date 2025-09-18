@@ -65,6 +65,28 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
         
         .logo-section {
             margin-bottom: 30px;
@@ -83,12 +105,13 @@
             content: 'by netelip';
             position: absolute;
             bottom: -8px;
-            right: -10px;
+            right: 17px;
             font-size: 12px;
             font-weight: 400;
             color: var(--white);
             letter-spacing: 1px;
             opacity: 0.8;
+            white-space: nowrap;
         }
         
         .header h1 {
@@ -585,7 +608,11 @@
             .logo {
                 font-size: 36px;
             }
-            
+
+            .logo::after {
+                font-size: 8px;
+            }
+
             .buttons {
                 flex-direction: column;
             }
@@ -684,19 +711,19 @@
                         <label>Sector de actividad <span class="required">*</span></label>
                         <select id="sector" required>
                             <option value="">Selecciona tu sector</option>
-                            <option value="ecommerce">E-commerce / Retail</option>
-                            <option value="servicios">Servicios profesionales</option>
-                            <option value="salud">Salud y bienestar</option>
-                            <option value="educacion">Educación</option>
-                            <option value="inmobiliaria">Inmobiliaria</option>
-                            <option value="turismo">Turismo y viajes</option>
-                            <option value="logistica">Logística y transporte</option>
-                            <option value="tecnologia">Tecnología / SaaS</option>
-                            <option value="finanzas">Finanzas / Seguros</option>
-                            <option value="legal">Legal / Consultoría</option>
-                            <option value="hosteleria">Hostelería / Restauración</option>
-                            <option value="industrial">Industrial / Manufactura</option>
-                            <option value="otro">Otro sector</option>
+                            <option value="E-commerce / Retail">E-commerce / Retail</option>
+                            <option value="Servicios profesionales">Servicios profesionales</option>
+                            <option value="Salud y bienestar">Salud y bienestar</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Inmobiliaria">Inmobiliaria</option>
+                            <option value="Turismo y viajes">Turismo y viajes</option>
+                            <option value="Logística y transporte">Logística y transporte</option>
+                            <option value="Tecnología / SaaS">Tecnología / SaaS</option>
+                            <option value="Finanzas / Seguros">Finanzas / Seguros</option>
+                            <option value="Legal / Consultoría">Legal / Consultoría</option>
+                            <option value="Hostelería / Restauración">Hostelería / Restauración</option>
+                            <option value="Industrial / Manufactura">Industrial / Manufactura</option>
+                            <option value="Otro sector">Otro sector</option>
                         </select>
                     </div>
                 </div>
@@ -762,7 +789,7 @@
                 
                 <div class="checkbox-group">
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_faq" name="defaultFunctions" value="faq">
+                        <input type="checkbox" id="func_faq" name="defaultFunctions" value="Responder preguntas frecuentes">
                         <label for="func_faq">
                             <strong>Responder preguntas frecuentes</strong>
                             <span class="help-text">Horarios, ubicación, servicios básicos, información general</span>
@@ -770,7 +797,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_qualify" name="defaultFunctions" value="qualify">
+                        <input type="checkbox" id="func_qualify" name="defaultFunctions" value="Cualificar leads comerciales">
                         <label for="func_qualify">
                             <strong>Cualificar leads comerciales</strong>
                             <span class="help-text">Identificar necesidades, presupuesto, timeline, decisor (BANT)</span>
@@ -778,7 +805,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_appointment" name="defaultFunctions" value="appointment">
+                        <input type="checkbox" id="func_appointment" name="defaultFunctions" value="Agendar citas y reuniones">
                         <label for="func_appointment">
                             <strong>Agendar citas y reuniones</strong>
                             <span class="help-text">Gestionar calendario, proponer horarios, confirmar citas</span>
@@ -786,7 +813,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_orders" name="defaultFunctions" value="orders">
+                        <input type="checkbox" id="func_orders" name="defaultFunctions" value="Consultar estado de pedidos">
                         <label for="func_orders">
                             <strong>Consultar estado de pedidos</strong>
                             <span class="help-text">Tracking, fechas de entrega, información de envíos</span>
@@ -794,7 +821,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_support" name="defaultFunctions" value="support">
+                        <input type="checkbox" id="func_support" name="defaultFunctions" value="Soporte técnico nivel 1">
                         <label for="func_support">
                             <strong>Soporte técnico nivel 1</strong>
                             <span class="help-text">Troubleshooting básico, reseteo de contraseñas, guías</span>
@@ -802,7 +829,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_transfer" name="defaultFunctions" value="transfer">
+                        <input type="checkbox" id="func_transfer" name="defaultFunctions" value="Transferir llamadas inteligentemente">
                         <label for="func_transfer">
                             <strong>Transferir llamadas inteligentemente</strong>
                             <span class="help-text">Derivar al departamento correcto según la consulta</span>
@@ -810,7 +837,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_collect" name="defaultFunctions" value="collect">
+                        <input type="checkbox" id="func_collect" name="defaultFunctions" value="Recopilar información antes de transferir">
                         <label for="func_collect">
                             <strong>Recopilar información antes de transferir</strong>
                             <span class="help-text">Datos del cliente, motivo de consulta, prioridad</span>
@@ -818,7 +845,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_survey" name="defaultFunctions" value="survey">
+                        <input type="checkbox" id="func_survey" name="defaultFunctions" value="Realizar encuestas de satisfacción">
                         <label for="func_survey">
                             <strong>Realizar encuestas de satisfacción</strong>
                             <span class="help-text">NPS, feedback post-servicio, evaluación de calidad</span>
@@ -826,7 +853,7 @@
                     </div>
                     
                     <div class="checkbox-item">
-                        <input type="checkbox" id="func_outbound" name="defaultFunctions" value="outbound">
+                        <input type="checkbox" id="func_outbound" name="defaultFunctions" value="Llamadas salientes (outbound)">
                         <label for="func_outbound">
                             <strong>Llamadas salientes (outbound)</strong>
                             <span class="help-text">Recordatorios, confirmaciones, seguimiento comercial</span>
@@ -864,13 +891,13 @@
                     <label>Tono de comunicación <span class="required">*</span></label>
                     <select id="communicationTone" required>
                         <option value="">Selecciona el tono</option>
-                        <option value="profesional">Profesional y formal</option>
-                        <option value="amigable">Amigable y cercano</option>
-                        <option value="neutral">Neutral y eficiente</option>
-                        <option value="entusiasta">Entusiasta y energético</option>
-                        <option value="empatico">Empático y comprensivo</option>
-                        <option value="tecnico">Técnico y preciso</option>
-                        <option value="casual">Casual y relajado</option>
+                        <option value="Profesional y formal">Profesional y formal</option>
+                        <option value="Amigable y cercano">Amigable y cercano</option>
+                        <option value="Neutral y eficiente">Neutral y eficiente</option>
+                        <option value="Entusiasta y energético">Entusiasta y energético</option>
+                        <option value="Empático y comprensivo">Empático y comprensivo</option>
+                        <option value="Técnico y preciso">Técnico y preciso</option>
+                        <option value="Casual y relajado">Casual y relajado</option>
                     </select>
                 </div>
                 
@@ -878,21 +905,21 @@
                     <label>Nivel de formalidad <span class="required">*</span></label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="formal_muy" name="formality" value="muy_formal">
+                            <input type="radio" id="formal_muy" name="formality" value="Muy formal (Usted)">
                             <label for="formal_muy">
                                 <strong>Muy formal (Usted)</strong>
                                 <span class="help-text">Protocolo empresarial estricto</span>
                             </label>
                         </div>
                         <div class="radio-item selected">
-                            <input type="radio" id="formal_medio" name="formality" value="formal" checked>
+                            <input type="radio" id="formal_medio" name="formality" value="Formal (Usted, pero cercano)" checked>
                             <label for="formal_medio">
                                 <strong>Formal (Usted, pero cercano)</strong>
                                 <span class="help-text">Profesional pero accesible</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="formal_informal" name="formality" value="informal">
+                            <input type="radio" id="formal_informal" name="formality" value="Informal (Tú)">
                             <label for="formal_informal">
                                 <strong>Informal (Tú)</strong>
                                 <span class="help-text">Lenguaje directo y moderno</span>
@@ -904,11 +931,11 @@
                 <div class="form-group">
                     <label>Velocidad de habla preferida <span class="required">*</span></label>
                     <select id="speechSpeed" required>
-                        <option value="muy_lenta">Muy lenta (personas mayores)</option>
-                        <option value="lenta">Lenta</option>
-                        <option value="normal" selected>Normal</option>
-                        <option value="rapida">Rápida</option>
-                        <option value="muy_rapida">Muy rápida (usuarios tech)</option>
+                        <option value="Muy lenta (personas mayores)">Muy lenta (personas mayores)</option>
+                        <option value="Lenta">Lenta</option>
+                        <option value="Normal" selected>Normal</option>
+                        <option value="Rápida">Rápida</option>
+                        <option value="Muy rápida (usuarios tech)">Muy rápida (usuarios tech)</option>
                     </select>
                 </div>
                 
@@ -934,15 +961,15 @@
                     <label>Género de la voz <span class="required">*</span></label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="voice_male" name="voiceGender" value="masculina">
+                            <input type="radio" id="voice_male" name="voiceGender" value="Masculina">
                             <label for="voice_male">Masculina</label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="voice_female" name="voiceGender" value="femenina">
+                            <input type="radio" id="voice_female" name="voiceGender" value="Femenina">
                             <label for="voice_female">Femenina</label>
                         </div>
                         <div class="radio-item selected">
-                            <input type="radio" id="voice_neutral" name="voiceGender" value="neutral" checked>
+                            <input type="radio" id="voice_neutral" name="voiceGender" value="Neutral / Sin preferencia" checked>
                             <label for="voice_neutral">Neutral / Sin preferencia</label>
                         </div>
                     </div>
@@ -952,24 +979,24 @@
                     <label>Edad aparente de la voz <span class="required">*</span></label>
                     <select id="voiceAge" required>
                         <option value="">Selecciona</option>
-                        <option value="joven">Joven (20-30 años)</option>
-                        <option value="adulto">Adulto (30-45 años)</option>
-                        <option value="maduro">Maduro (45-60 años)</option>
-                        <option value="senior">Senior (60+ años)</option>
+                        <option value="Joven (20-30 años)">Joven (20-30 años)</option>
+                        <option value="Adulto (30-45 años)">Adulto (30-45 años)</option>
+                        <option value="Maduro (45-60 años)">Maduro (45-60 años)</option>
+                        <option value="Senior (60+ años)">Senior (60+ años)</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label>Acento preferido <span class="required">*</span></label>
                     <select id="accent" required>
-                        <option value="españa">Español de España (neutro)</option>
-                        <option value="españa_andaluz">Español de España (andaluz)</option>
-                        <option value="españa_catalan">Español de España (catalán)</option>
-                        <option value="latam_neutro">Latinoamericano neutro</option>
-                        <option value="mexico">Mexicano</option>
-                        <option value="argentina">Argentino</option>
-                        <option value="colombia">Colombiano</option>
-                        <option value="otro">Otro</option>
+                        <option value="Español de España (neutro)">Español de España (neutro)</option>
+                        <option value="Español de España (andaluz)">Español de España (andaluz)</option>
+                        <option value="Español de España (catalán)">Español de España (catalán)</option>
+                        <option value="Latinoamericano neutro">Latinoamericano neutro</option>
+                        <option value="Mexicano">Mexicano</option>
+                        <option value="Argentino">Argentino</option>
+                        <option value="Colombiano">Colombiano</option>
+                        <option value="Otro">Otro</option>
                     </select>
                 </div>
                 
@@ -977,21 +1004,21 @@
                     <label>Calidad de voz preferida</label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="quality_standard" name="voiceQuality" value="standard">
+                            <input type="radio" id="quality_standard" name="voiceQuality" value="Estándar">
                             <label for="quality_standard">
                                 <strong>Estándar</strong>
                                 <span class="help-text">Buena calidad, menor coste</span>
                             </label>
                         </div>
                         <div class="radio-item selected">
-                            <input type="radio" id="quality_neural" name="voiceQuality" value="neural" checked>
+                            <input type="radio" id="quality_neural" name="voiceQuality" value="Neural (Recomendado)" checked>
                             <label for="quality_neural">
                                 <strong>Neural (Recomendado)</strong>
                                 <span class="help-text">Muy natural, ideal para conversaciones largas</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="quality_studio" name="voiceQuality" value="studio">
+                            <input type="radio" id="quality_studio" name="voiceQuality" value="Studio">
                             <label for="quality_studio">
                                 <strong>Studio</strong>
                                 <span class="help-text">Calidad premium, indistinguible de humano</span>
@@ -1021,21 +1048,21 @@
                     <label>Tipo de respuestas <span class="required">*</span></label>
                     <div class="radio-group">
                         <div class="radio-item selected">
-                            <input type="radio" id="resp_predefined" name="responseType" value="predefinidas" checked>
+                            <input type="radio" id="resp_predefined" name="responseType" value="Respuestas predefinidas" checked>
                             <label for="resp_predefined">
                                 <strong>Respuestas predefinidas</strong>
                                 <span class="help-text">Guiones específicos para cada situación</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="resp_dynamic" name="responseType" value="dinamicas">
+                            <input type="radio" id="resp_dynamic" name="responseType" value="Base de conocimiento dinámica">
                             <label for="resp_dynamic">
                                 <strong>Base de conocimiento dinámica</strong>
                                 <span class="help-text">El agente genera respuestas basadas en documentación</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="resp_hybrid" name="responseType" value="hibrido">
+                            <input type="radio" id="resp_hybrid" name="responseType" value="Híbrido">
                             <label for="resp_hybrid">
                                 <strong>Híbrido</strong>
                                 <span class="help-text">Combina respuestas predefinidas con generación dinámica</span>
@@ -1048,11 +1075,11 @@
                     <label>¿Cuántas preguntas frecuentes diferentes estimas? <span class="required">*</span></label>
                     <select id="faqCount" required>
                         <option value="">Selecciona</option>
-                        <option value="1-10">1-10 preguntas</option>
-                        <option value="11-25">11-25 preguntas</option>
-                        <option value="26-50">26-50 preguntas</option>
-                        <option value="51-100">51-100 preguntas</option>
-                        <option value="100+">Más de 100 preguntas</option>
+                        <option value="1-10 preguntas">1-10 preguntas</option>
+                        <option value="11-25 preguntas">11-25 preguntas</option>
+                        <option value="26-50 preguntas">26-50 preguntas</option>
+                        <option value="51-100 preguntas">51-100 preguntas</option>
+                        <option value="Más de 100 preguntas">Más de 100 preguntas</option>
                     </select>
                 </div>
                 
@@ -1060,23 +1087,23 @@
                     <label>¿Tienes documentación preparada? <span class="required">*</span></label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="doc_faq" name="docPrep" value="faq_doc">
+                            <input type="checkbox" id="doc_faq" name="docPrep" value="FAQ / Preguntas frecuentes documentadas">
                             <label for="doc_faq">FAQ / Preguntas frecuentes documentadas</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="doc_scripts" name="docPrep" value="scripts">
+                            <input type="checkbox" id="doc_scripts" name="docPrep" value="Scripts de atención actuales">
                             <label for="doc_scripts">Scripts de atención actuales</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="doc_productos" name="docPrep" value="catalogo">
+                            <input type="checkbox" id="doc_productos" name="docPrep" value="Catálogo de productos/servicios">
                             <label for="doc_productos">Catálogo de productos/servicios</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="doc_procedimientos" name="docPrep" value="procedimientos">
+                            <input type="checkbox" id="doc_procedimientos" name="docPrep" value="Procedimientos internos">
                             <label for="doc_procedimientos">Procedimientos internos</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="doc_none" name="docPrep" value="none">
+                            <input type="checkbox" id="doc_none" name="docPrep" value="No tengo documentación preparada">
                             <label for="doc_none">No tengo documentación preparada</label>
                         </div>
                     </div>
@@ -1086,27 +1113,27 @@
                     <label>Idiomas que debe manejar el asistente <span class="required">*</span></label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="lang_es" name="language" value="español" checked>
+                            <input type="checkbox" id="lang_es" name="language" value="Español" checked>
                             <label for="lang_es">Español</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="lang_en" name="language" value="ingles">
+                            <input type="checkbox" id="lang_en" name="language" value="Inglés">
                             <label for="lang_en">Inglés</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="lang_ca" name="language" value="catalan">
+                            <input type="checkbox" id="lang_ca" name="language" value="Catalán">
                             <label for="lang_ca">Catalán</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="lang_fr" name="language" value="frances">
+                            <input type="checkbox" id="lang_fr" name="language" value="Francés">
                             <label for="lang_fr">Francés</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="lang_de" name="language" value="aleman">
+                            <input type="checkbox" id="lang_de" name="language" value="Alemán">
                             <label for="lang_de">Alemán</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="lang_pt" name="language" value="portugues">
+                            <input type="checkbox" id="lang_pt" name="language" value="Portugués">
                             <label for="lang_pt">Portugués</label>
                         </div>
                     </div>
@@ -1129,27 +1156,27 @@
                     <label>CRM / Gestión de clientes <span class="required">*</span></label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="crm_hubspot" name="crm_s" value="hubspot">
+                            <input type="checkbox" id="crm_hubspot" name="crm_s" value="HubSpot">
                             <label for="crm_hubspot">HubSpot</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="crm_salesforce" name="crm_s" value="salesforce">
+                            <input type="checkbox" id="crm_salesforce" name="crm_s" value="Salesforce">
                             <label for="crm_salesforce">Salesforce</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="crm_pipedrive" name="crm_s" value="pipedrive">
+                            <input type="checkbox" id="crm_pipedrive" name="crm_s" value="Pipedrive">
                             <label for="crm_pipedrive">Pipedrive</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="crm_clientify" name="crm_s" value="clientify">
+                            <input type="checkbox" id="crm_clientify" name="crm_s" value="Clientify">
                             <label for="crm_clientify">Clientify</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="crm_zoho" name="crm_s" value="zoho">
+                            <input type="checkbox" id="crm_zoho" name="crm_s" value="Zoho CRM">
                             <label for="crm_zoho">Zoho CRM</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="crm_none" name="crm_s" value="none">
+                            <input type="checkbox" id="crm_none" name="crm_s" value="No tengo CRM / No necesito integración">
                             <label for="crm_none">No tengo CRM / No necesito integración</label>
                         </div>
                     </div>
@@ -1159,19 +1186,19 @@
                     <label>E-commerce / Tienda online <span class="required">*</span></label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ecom_shopify" name="ecommerce_s" value="shopify">
+                            <input type="checkbox" id="ecom_shopify" name="ecommerce_s" value="Shopify">
                             <label for="ecom_shopify">Shopify</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ecom_woo" name="ecommerce_s" value="woocommerce">
+                            <input type="checkbox" id="ecom_woo" name="ecommerce_s" value="WooCommerce">
                             <label for="ecom_woo">WooCommerce</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ecom_prestashop" name="ecommerce_s" value="prestashop">
+                            <input type="checkbox" id="ecom_prestashop" name="ecommerce_s" value="PrestaShop">
                             <label for="ecom_prestashop">PrestaShop</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ecom_none" name="ecommerce_s" value="none">
+                            <input type="checkbox" id="ecom_none" name="ecommerce_s" value="No tengo tienda online">
                             <label for="ecom_none">No tengo tienda online</label>
                         </div>
                     </div>
@@ -1181,19 +1208,19 @@
                     <label>¿Necesitas integración con calendario para citas? <span class="required">*</span></label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="calendar_google" name="calendar" value="google">
+                            <input type="radio" id="calendar_google" name="calendar" value="Google Calendar">
                             <label for="calendar_google">Google Calendar</label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="calendar_outlook" name="calendar" value="outlook">
+                            <input type="radio" id="calendar_outlook" name="calendar" value="Outlook Calendar">
                             <label for="calendar_outlook">Outlook Calendar</label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="calendar_calendly" name="calendar" value="calendly">
+                            <input type="radio" id="calendar_calendly" name="calendar" value="Calendly">
                             <label for="calendar_calendly">Calendly</label>
                         </div>
                         <div class="radio-item selected">
-                            <input type="radio" id="calendar_none" name="calendar" value="none" checked>
+                            <input type="radio" id="calendar_none" name="calendar" value="No necesito integración de calendario" checked>
                             <label for="calendar_none">No necesito integración de calendario</label>
                         </div>
                     </div>
@@ -1218,22 +1245,22 @@
                         <select id="monthlyVolume" required>
                             <option value="">Selecciona</option>
                             <option value="0-500">Menos de 500</option>
-                            <option value="500-1000">500 - 1,000</option>
-                            <option value="1000-2500">1,000 - 2,500</option>
-                            <option value="2500-5000">2,500 - 5,000</option>
-                            <option value="5000-10000">5,000 - 10,000</option>
-                            <option value="10000+">Más de 10,000</option>
+                            <option value="500-1000">500 - 1000</option>
+                            <option value="1000-2500">1000 - 2500</option>
+                            <option value="2500-5000">2500 - 5000</option>
+                            <option value="5000-10000">5000 - 10000</option>
+                            <option value="Más de 10000">Más de 10000</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label>Duración media por llamada <span class="required">*</span></label>
                         <select id="avgDuration" required>
-                            <option value="1-2">1-2 minutos</option>
-                            <option value="3-5" selected>3-5 minutos</option>
-                            <option value="6-10">6-10 minutos</option>
-                            <option value="11-15">11-15 minutos</option>
-                            <option value="15+">Más de 15 minutos</option>
+                            <option value="1-2 minutos">1-2 minutos</option>
+                            <option value="3-5 minutos" selected>3-5 minutos</option>
+                            <option value="6-10 minutos">6-10 minutos</option>
+                            <option value="11-15 minutos">11-15 minutos</option>
+                            <option value="Más de 15 minutos">Más de 15 minutos</option>
                         </select>
                     </div>
                 </div>
@@ -1242,15 +1269,15 @@
                     <label>Horario de atención <span class="required">*</span></label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="schedule_business" name="schedule" value="horario_comercial">
+                            <input type="checkbox" id="schedule_business" name="schedule" value="Horario comercial (9:00 - 18:00)">
                             <label for="schedule_business">Horario comercial (9:00 - 18:00)</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="schedule_extended" name="schedule" value="horario_extendido">
+                            <input type="checkbox" id="schedule_extended" name="schedule" value="Horario extendido (8:00 - 20:00)">
                             <label for="schedule_extended">Horario extendido (8:00 - 20:00)</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="schedule_247" name="schedule" value="24_7">
+                            <input type="checkbox" id="schedule_247" name="schedule" value="24/7 (siempre disponible)">
                             <label for="schedule_247">24/7 (siempre disponible)</label>
                         </div>
                     </div>
@@ -1260,11 +1287,11 @@
                     <label>¿Tienes picos estacionales?</label>
                     <div class="radio-group">
                         <div class="radio-item selected">
-                            <input type="radio" id="seasonal_no" name="seasonal" value="no" checked>
+                            <input type="radio" id="seasonal_no" name="seasonal" value="No, volumen constante todo el año" checked>
                             <label for="seasonal_no">No, volumen constante todo el año</label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="seasonal_yes" name="seasonal" value="si">
+                            <input type="radio" id="seasonal_yes" name="seasonal" value="Sí, tenemos temporadas altas">
                             <label for="seasonal_yes">Sí, tenemos temporadas altas</label>
                         </div>
                     </div>
@@ -1287,21 +1314,21 @@
                     <label>¿Quién configurará el asistente? <span class="required">*</span></label>
                     <div class="radio-group">
                         <div class="radio-item selected">
-                            <input type="radio" id="config_self" name="configuration" value="autonomo" checked>
+                            <input type="radio" id="config_self" name="configuration" value="Mi equipo (autónomo)" checked>
                             <label for="config_self">
                                 <strong>Mi equipo (autónomo)</strong>
                                 <span class="help-text">Tenemos equipo técnico, solo necesitamos acceso</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="config_assisted" name="configuration" value="asistido">
+                            <input type="radio" id="config_assisted" name="configuration" value="Con vuestra ayuda (asistido)">
                             <label for="config_assisted">
                                 <strong>Con vuestra ayuda (asistido)</strong>
                                 <span class="help-text">Configuración inicial + formación</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="config_full" name="configuration" value="completo">
+                            <input type="radio" id="config_full" name="configuration" value="Vosotros completamente (llave en mano)">
                             <label for="config_full">
                                 <strong>Vosotros completamente (llave en mano)</strong>
                                 <span class="help-text">Os encargáis de todo</span>
@@ -1313,17 +1340,17 @@
                 <div class="form-group">
                     <label>Modelo predictivo preferido <span class="required">*</span></label>
                     <select id="predictiveModel" required>
-                        <option value="necesito_asesoramiento">Necesito asesoramiento</option>
-                        <option value="atencion_basica">Atención básica (FAQ)</option>
-                        <option value="ventas_inbound">Ventas Inbound</option>
-                        <option value="ventas_outbound">Ventas Outbound</option>
-                        <option value="soporte_tecnico">Soporte técnico</option>
-                        <option value="reservas_citas">Reservas y citas</option>
-                        <option value="cobros_pagos">Cobros y pagos</option>
-                        <option value="encuestas">Encuestas y feedback</option>
-                        <option value="emergencias">Gestión de emergencias</option>
-                        <option value="inmobiliaria">Inmobiliaria especializado</option>
-                        <option value="personalizado">Modelo personalizado</option>
+                        <option value="Necesito asesoramiento">Necesito asesoramiento</option>
+                        <option value="Atención básica (FAQ)">Atención básica (FAQ)</option>
+                        <option value="Ventas Inbound">Ventas Inbound</option>
+                        <option value="Ventas Outbound">Ventas Outbound</option>
+                        <option value="Soporte técnico">Soporte técnico</option>
+                        <option value="Reservas y citas">Reservas y citas</option>
+                        <option value="Cobros y pagos">Cobros y pagos</option>
+                        <option value="Encuestas y feedback">Encuestas y feedback</option>
+                        <option value="Gestión de emergencias">Gestión de emergencias</option>
+                        <option value="Inmobiliaria especializado">Inmobiliaria especializado</option>
+                        <option value="Modelo personalizado">Modelo personalizado</option>
                     </select>
                 </div>
                 
@@ -1331,10 +1358,10 @@
                     <label>¿Ya tienes sistema de telefonía? <span class="required">*</span></label>
                     <select id="currentTelephony" required>
                         <option value="">Selecciona</option>
-                        <option value="netelip">Ya soy cliente de Netelip</option>
-                        <option value="otro_voip">Otro proveedor VoIP</option>
-                        <option value="tradicional">Telefonía tradicional</option>
-                        <option value="sin_telefonia">No tengo sistema de telefonía</option>
+                        <option value="Ya soy cliente de Netelip">Ya soy cliente de Netelip</option>
+                        <option value="Otro proveedor VoIP">Otro proveedor VoIP</option>
+                        <option value="Telefonía tradicional">Telefonía tradicional</option>
+                        <option value="No tengo sistema de telefonía">No tengo sistema de telefonía</option>
                     </select>
                 </div>
                 
@@ -1355,28 +1382,28 @@
                     <label>Nivel de soporte deseado <span class="required">*</span></label>
                     <div class="radio-group">
                         <div class="radio-item selected">
-                            <input type="radio" id="support_none" name="supportLevel" value="ninguno" checked>
+                            <input type="radio" id="support_none" name="supportLevel" value="Sin soporte" checked>
                             <label for="support_none">
                                 <strong>Sin soporte</strong>
                                 <span class="help-text">Gestionamos todo internamente</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="support_basic" name="supportLevel" value="basico">
+                            <input type="radio" id="support_basic" name="supportLevel" value="Soporte básico">
                             <label for="support_basic">
                                 <strong>Soporte básico</strong>
                                 <span class="help-text">2 horas/mes para ajustes menores</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="support_standard" name="supportLevel" value="estandar">
+                            <input type="radio" id="support_standard" name="supportLevel" value="Soporte estándar">
                             <label for="support_standard">
                                 <strong>Soporte estándar</strong>
                                 <span class="help-text">5 horas/mes + respuesta en 24h</span>
                             </label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="support_premium" name="supportLevel" value="premium">
+                            <input type="radio" id="support_premium" name="supportLevel" value="Soporte premium">
                             <label for="support_premium">
                                 <strong>Soporte premium</strong>
                                 <span class="help-text">10 horas/mes + respuesta prioritaria + account manager</span>
@@ -1389,19 +1416,19 @@
                     <label>¿Necesitas formación para tu equipo? <span class="required">*</span></label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="training_initial" name="training" value="formacion_inicial">
+                            <input type="checkbox" id="training_initial" name="training" value="Formación inicial del equipo">
                             <label for="training_initial">Formación inicial del equipo</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="training_ongoing" name="training" value="formacion_continua">
+                            <input type="checkbox" id="training_ongoing" name="training" value="Formación continua/actualizaciones">
                             <label for="training_ongoing">Formación continua/actualizaciones</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="training_docs" name="training" value="documentacion">
+                            <input type="checkbox" id="training_docs" name="training" value="Documentación técnica personalizada">
                             <label for="training_docs">Documentación técnica personalizada</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="training_none" name="training" value="sin_formacion">
+                            <input type="checkbox" id="training_none" name="training" value="No necesitamos formación">
                             <label for="training_none">No necesitamos formación</label>
                         </div>
                     </div>
@@ -1414,7 +1441,7 @@
             </div>
             
             <!-- Step 10: Resumen y confirmación -->
-            <div class="step" data-step="10">
+            <div class="step" data-step="10" id="divStep10">
                 <div class="step-header">
                     <h2 class="step-title">Resumen de tu configuración</h2>
                     <p class="step-subtitle">Revisa todos los detalles antes de generar el presupuesto</p>
@@ -1431,13 +1458,53 @@
                         <span class="summary-value" id="summary_sector">-</span>
                     </div>
                     <div class="summary-item">
-                        <span class="summary-label">Contacto:</span>
+                        <span class="summary-label">Persona de contacto:</span>
+                        <span class="summary-value" id="summary_person_contact">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Email:</span>
                         <span class="summary-value" id="summary_contact">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Teléfono de contacto:</span>
+                        <span class="summary-value" id="summary_phone_contact">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Tamaño de la empresa:</span>
+                        <span class="summary-value" id="summary_size">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">¿Cuántos empleados atienden llamadas actualmente?:</span>
+                        <span class="summary-value" id="summary_calls">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Sitio web corporativo:</span>
+                        <span class="summary-value" id="summary_web">-</span>
                     </div>
                 </div>
                 
                 <div class="summary-section">
                     <h3 class="summary-title">🤖 Configuración del agente</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Nombre del agente: </span>
+                        <span class="summary-value" id="summary_nombre_agent">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Tono de comunicación: </span>
+                        <span class="summary-value" id="summary_tone_agent">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Nivel de formalidad: </span>
+                        <span class="summary-value" id="summary_formality_agent">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Velocidad de habla preferida: </span>
+                        <span class="summary-value" id="summary_speed_agent">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Descripción de personalidad específica: </span>
+                        <span class="summary-value" id="summary_details_agent">-</span>
+                    </div>
                     <div class="summary-item">
                         <span class="summary-label">Funcionalidades:</span>
                         <span class="summary-value" id="summary_functions">-</span>
@@ -1451,25 +1518,71 @@
                         <span class="summary-value" id="summary_languages">-</span>
                     </div>
                 </div>
-                
                 <div class="summary-section">
-                    <h3 class="summary-title">💰 Presupuesto estimado</h3>
+                    <h3 class="summary-title">Base de conocimiento y respuestas</h3>
                     <div class="summary-item">
-                        <span class="summary-label">Configuración inicial:</span>
-                        <span class="summary-value" id="summary_setup">Calculando...</span>
+                        <span class="summary-label">Tipo de respuestas: </span>
+                        <span class="summary-value" id="summary_responseType">-</span>
                     </div>
                     <div class="summary-item">
-                        <span class="summary-label">Coste mensual estimado:</span>
-                        <span class="summary-value" id="summary_monthly">Calculando...</span>
+                        <span class="summary-label">Estimación de preguntas frecuentes diferentes: </span>
+                        <span class="summary-value" id="summary_faqCount">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Documentación preparada: </span>
+                        <span class="summary-value" id="summary_doc">-</span>
                     </div>
                 </div>
-                
-                <div class="form-group">
+                <div class="summary-section">
+                    <h3 class="summary-title">Integraciones con sistemas externos</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Integraciones: </span>
+                        <span class="summary-value" id="summary_integrations">-</span>
+                    </div>
+                </div>
+                <div class="summary-section">
+                    <h3 class="summary-title">Volumen de llamadas</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Llamadas estimadas: </span>
+                        <span class="summary-value" id="summary_volume_calls">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Horario de atención: </span>
+                        <span class="summary-value" id="summary_schedule_calls">-</span>
+                    </div>
+                </div>
+                <div class="summary-section">
+                    <h3 class="summary-title">Configuración técnica y desarrollo</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">¿Quién configura el asistente?: </span>
+                        <span class="summary-value" id="summary_configuration">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Modelo predictivo preferido: </span>
+                        <span class="summary-value" id="summary_predictiveModel">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Sistema de telefonía: </span>
+                        <span class="summary-value" id="summary_currentTelephony">-</span>
+                    </div>
+                </div>
+                <div class="summary-section">
+                    <h3 class="summary-title">Soporte y mantenimiento</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Nivel de soporte deseado: </span>
+                        <span class="summary-value" id="summary_supportLevel">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Formación para tu equipo: </span>
+                        <span class="summary-value" id="summary_training">-</span>
+                    </div>
+                </div>
+                <div class="form-group" id="divFinalComments">
                     <label>Comentarios adicionales</label>
                     <textarea id="finalComments" placeholder="¿Hay algo más que debamos saber sobre tu proyecto?"></textarea>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="divTimeline">
                     <label>¿Cuándo te gustaría tener el sistema operativo? <span class="required">*</span></label>
                     <select id="timeline" required>
                         <option value="">Selecciona</option>
@@ -1481,11 +1594,34 @@
                         <option value="explorando">Solo estoy explorando opciones</option>
                     </select>
                 </div>
-                
-                <div class="buttons">
+                <div class="summary-section" id="divComments" style="display: none;">
+                    <h3 class="summary-title">Comentarios adicionales</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Comentarios adicionales:</span>
+                        <span class="summary-value" id="spanComments"></span>
+                    </div>
+                </div>
+                <div class="summary-section" id="divTiempo" style="display: none;">
+                    <h3 class="summary-title">¿Cuándo te gustaría tener el sistema operativo?</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">¿Cuándo te gustaría tener el sistema operativo?:</span>
+                        <span class="summary-value" id="spanTiempo"></span>
+                    </div>
+                </div>
+                <div class="checkbox-group" id="divLinkPrivacityLinkConditions">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="linkPrivacity" name="linkPrivacity" value=">Acepto la totalidad de condiciones del Aviso Legal y Política de privacidad">
+                        <label for="linkPrivacity">Acepto la totalidad de condiciones del <a href="https://www.netelip.com/aviso-legal" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Aviso Legal</a> y <a href="https://www.netelip.com/politica-de-privacidad" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Política de privacidad</a></label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="linkConditions" name="linkConditions" value=">Acepto la totalidad de condiciones del Aviso Legal y Política de privacidad">
+                        <label for="linkConditions">He leído y acepto las <a href="https://static.netelip.com/downloads/info/CondicionesgeneralesdeusodeNetelip.pdf" target="_blank" style="color: var(--secondary-blue); text-decoration:none">Condiciones generales de uso</a>.</label>
+                    </div>
+                </div>
+                <div class="buttons" id="divButtonsPrevSub">
                     <button class="btn-prev" onclick="prevStep()">← Anterior</button>
-                    <button class="btn-save" onclick="saveProgress()">💾 Guardar borrador</button>
-                    <button class="btn-submit" onclick="generateQuote()">Enviar correo al Sales Hacker →</button>
+                    <button class="btn-submit" onclick="sendEvaluation()">Enviar correo al Sales Hacker →</button>
                 </div>
             </div>
             
@@ -1521,17 +1657,20 @@
                 // Scroll al top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                if (totalSteps-1==currentStep){
-                    document.getElementById("summary_company").innerHTML=capitalizeFirstLetter(formData[1]["companyName"]);
-                    document.getElementById("summary_sector").innerHTML=capitalizeFirstLetter(formData[1]["sector"]);
-                    document.getElementById("summary_contact").innerHTML=formData[1]["email"];
-                    //document.getElementById("summary_voice").innerHTML=formData[1]["email"];
+                if (totalSteps==currentStep){
+                    showSummaryCompany();
+                    showSummaryPersonAgent();
                     summaryLang=showSummaryLanguage();
                     summaryFunctions=showSummaryFunctions();
                     summaryVoices=showSummaryVoices();
                     document.getElementById("summary_languages").innerHTML=summaryLang;
                     document.getElementById("summary_functions").innerHTML=summaryFunctions+"<br>"+formData[2]["customFunctions"];
                     document.getElementById("summary_voice").innerHTML=summaryVoices;
+                    showSummaryBaseResponse();
+                    showSummaryIntegrations();
+                    showSummaryVolume();
+                    showSummaryConfiguration();
+                    showSummarySupport();
                 }
             }
         }
@@ -1642,7 +1781,6 @@
                     formData[currentStep][input.id] = input.value;
                 }
             });
-            console.log('Datos guardados:', formData);
         }
         
         // Event listeners para checkboxes y radios
@@ -1741,6 +1879,28 @@
                 }, 300);
             }, 3000);
         }
+        function showSummaryCompany(){
+            document.getElementById("summary_company").innerHTML=capitalizeFirstLetter(formData[1]["companyName"]);
+            document.getElementById("summary_sector").innerHTML=capitalizeFirstLetter(formData[1]["sector"]);
+            document.getElementById("summary_contact").innerHTML=formData[1]["email"];
+            document.getElementById("summary_person_contact").innerHTML=formData[1]["contactName"];
+            document.getElementById("summary_phone_contact").innerHTML=formData[1]["phone"];
+            document.getElementById("summary_size").innerHTML=formData[1]["companySize"];
+            document.getElementById("summary_calls").innerHTML=formData[1]["callAgents"];
+            document.getElementById("summary_web").innerHTML=formData[1]["website"];
+        }
+        function showSummaryPersonAgent(){
+            document.getElementById("summary_nombre_agent").innerHTML=capitalizeFirstLetter(formData[3]["agentName"]);
+            document.getElementById("summary_tone_agent").innerHTML=capitalizeFirstLetter(formData[3]["communicationTone"]);
+            Object.entries(formData[3]).forEach(([key, value]) => {
+                trozocar=key.substring(0,7);
+                if (trozocar=="formal_" && value==true){
+                    document.getElementById("summary_formality_agent").innerHTML=capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            document.getElementById("summary_speed_agent").innerHTML=capitalizeFirstLetter(formData[3]["speechSpeed"]);
+            document.getElementById("summary_details_agent").innerHTML=capitalizeFirstLetter(formData[3]["personalityDetails"]);
+        }
         function showSummaryLanguage(){
             summary="";
             Object.entries(formData[5]).forEach(([key, value]) => {
@@ -1769,6 +1929,9 @@
                 if (key=="voiceAge"){
                     summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
                 }
+                if (key=="accent"){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
                 if (trozo8car=="quality_" && value==true){
                     summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
                 }
@@ -1778,8 +1941,151 @@
             });
             return summary;
         }
+        function showSummaryBaseResponse(){
+            summary="";
+            Object.entries(formData[5]).forEach(([key, value]) => {
+                trozo5car=key.substring(0,5);
+                trozo4car=key.substring(0,4);
+                if (trozo5car=="resp_" && value==true){
+                    document.getElementById("summary_responseType").innerHTML=capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo4car=="doc_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            document.getElementById("summary_doc").innerHTML=capitalizeFirstLetter(summary);
+            document.getElementById("summary_faqCount").innerHTML=capitalizeFirstLetter(formData[5]["faqCount"]);
+        }
+        function showSummaryIntegrations(){
+            summary="";
+            Object.entries(formData[6]).forEach(([key, value]) => {
+                trozo5car=key.substring(0,5);
+                trozo4car=key.substring(0,4);
+                trozo9car=key.substring(0,9);
+                if (trozo4car=="crm_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo5car=="ecom_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo9car=="calendar_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            document.getElementById("summary_integrations").innerHTML=capitalizeFirstLetter(summary);
+        }
+        function showSummaryVolume(){
+            summary="";
+            seasonal="";
+            monthlyVolume=capitalizeFirstLetter(formData[7]["monthlyVolume"]+" llamadas al mes");
+            duration=capitalizeFirstLetter(formData[7]["avgDuration"]);
+            Object.entries(formData[7]).forEach(([key, value]) => {
+                trozo5car=key.substring(0,9);
+                if (trozo5car=="schedule_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo5car=="seasonal_" && value==true){
+                    seasonal=capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            document.getElementById("summary_volume_calls").innerHTML=monthlyVolume+"<br>"+duration+"<br>"+seasonal;
+            document.getElementById("summary_schedule_calls").innerHTML=summary;
+        }
+
+        function showSummaryConfiguration(){
+            Object.entries(formData[8]).forEach(([key, value]) => {
+                trozo5car=key.substring(0,7);
+                if (trozo5car=="config_" && value==true){
+                    document.getElementById("summary_configuration").innerHTML=capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            document.getElementById("summary_predictiveModel").innerHTML=capitalizeFirstLetter(formData[8]["predictiveModel"]);
+            document.getElementById("summary_currentTelephony").innerHTML=capitalizeFirstLetter(formData[8]["currentTelephony"]);
+        }
+
+        function showSummarySupport(){
+            summary="";
+            Object.entries(formData[9]).forEach(([key, value]) => {
+                trozo5car=key.substring(0,8);
+                trozo9car=key.substring(0,9);
+                if (trozo5car=="support_" && value==true){
+                    document.getElementById("summary_supportLevel").innerHTML=capitalizeFirstLetter(document.getElementById(key).value);
+                }
+                if (trozo9car=="training_" && value==true){
+                    summary=summary+"<br>"+capitalizeFirstLetter(document.getElementById(key).value);
+                }
+            });
+            document.getElementById("summary_training").innerHTML=summary;
+        }
+
         function capitalizeFirstLetter(val) {
             return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+        }
+        function sendEvaluation(){
+            if (document.getElementById("linkPrivacity").checked==true && document.getElementById("linkConditions").checked==true){
+                saveStepData(totalSteps);
+                localStorage.setItem('elio-qualification-' + Date.now(), JSON.stringify(formData));
+                console.log('Datos guardados localmente:', formData);
+                document.getElementById("divButtonsPrevSub").style.display="none";
+                document.getElementById("divLinkPrivacityLinkConditions").style.display="none";
+                document.getElementById("spanComments").textContent=document.getElementById("finalComments").value;
+                document.getElementById("divComments").style.display="block";
+                document.getElementById("spanTiempo").textContent=document.getElementById("timeline").value;
+                document.getElementById("divTiempo").style.display="block";
+                document.getElementById("divFinalComments").style.display="none";
+                document.getElementById("divTimeline").style.display="none";
+                htmlStep10=document.getElementById("divStep10").innerHTML;
+                document.getElementById("divButtonsPrevSub").style.display="flex";
+                document.getElementById("divLinkPrivacityLinkConditions").style.display="grid";
+                document.getElementById("divComments").style.display="none";
+                document.getElementById("divTiempo").style.display="none";
+                document.getElementById("divFinalComments").style.display="block";
+                document.getElementById("divTimeline").style.display="block";
+                sendEmail(htmlStep10);
+            }else{
+                showNotification('Debes aceptar las condiciones', 'info');
+            }
+            /*if (appState.evaluationData.linkPrivacity==true && appState.evaluationData.linkConditions==true){
+                localStorage.setItem('netelip-evaluation-' + Date.now(), JSON.stringify(appState.evaluationData));
+                document.getElementById("divButtonsModSend").style.display="none";
+                document.getElementById("divlinkPrivacity").style.display="none";
+                document.getElementById("divlinkConditions").style.display="none";
+                htmlNetelipCard=document.getElementById("divNetelipCard").innerHTML;
+                document.getElementById("divButtonsModSend").style.display="flex";
+                document.getElementById("divlinkPrivacity").style.display="flex";
+                document.getElementById("divlinkConditions").style.display="flex";
+                sendEmail(htmlNetelipCard);
+            }else{
+                showNotification('Debes aceptar las condiciones', 'info');
+            }*/
+        }
+        async function sendEmail(html){
+            // Enviar datos con fetch
+            const url = "https://apps.netelip.com/evalua_agent_elio/send-cualificacion.php";
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        content: html,
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const result = await response.text();
+                if (result=="true"){
+                    showNotification('Datos enviados satisfactoriamente', 'success');
+                }else{
+                    showNotification('Datos no enviados', 'info'); 
+                }
+            } catch (error) {
+                console.error(error.message);
+                showNotification(error.message, 'info'); 
+            }
         }
     </script>
 </body>
