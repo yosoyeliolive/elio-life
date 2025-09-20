@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELIO - La Fábrica de Agentes IA | AI Andalucía 2024</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables globales - Paleta oficial ELIO del documento */
+        :root {
+            --primary-black: #000000;
+            --secondary-dark: #0a0a0a;
+            --text-white: #ffffff;
+            --accent-green: #10b981;
+            --alert-yellow: #fbbf24;
+            --glass-white-3: rgba(255, 255, 255, 0.03);
+            --glass-white-5: rgba(255, 255, 255, 0.05);
+            --glass-white-10: rgba(255, 255, 255, 0.1);
+            --glass-white-30: rgba(255, 255, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Logo ELIO exacto del documento de identidad */
+        .elio-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .elio-waves {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .elio-wave {
+            width: 2px;
+            background: white;
+            border-radius: 1px;
+            animation: elioWave 1.5s ease-in-out infinite alternate;
+        }
+        
+        .ew1 { height: 8px; animation-delay: 0s; }
+        .ew2 { height: 14px; animation-delay: 0.2s; }
+        .ew3 { height: 10px; animation-delay: 0.4s; }
+        .ew4 { height: 16px; animation-delay: 0.6s; }
+        .ew5 { height: 12px; animation-delay: 0.8s; }
+
+        @keyframes elioWave {
+            0% { transform: scaleY(0.5); opacity: 0.7; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+
+        /* Glassmorphism del documento */
+        .glass {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Animaciones del documento */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLogo {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInWaves {
+            0% {
+                opacity: 0;
+                transform: rotate(-90deg) scale(0.5);
+            }
+            100% {
+                opacity: 0.05;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes quoteGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+            50% { text-shadow: 0 0 30px rgba(255,255,255,0.5); }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Timer */
+        .timer {
+            font-size: 1rem;
+            font-weight: 200;
+            color: white;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
+
+        /* Slides */
+        .slide {
+            min-height: 100vh;
+            display: none;
+            padding: 120px 40px 50px;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        /* Tipografía ELIO exacta del documento */
+        h1 {
+            font-size: clamp(5rem, 8vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -6px;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(45deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 3.5vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .subtitle {
+            font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+            font-weight: 300;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.7;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Background waves */
+        .background-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Métricas */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 60px auto;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .metric-card:hover {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-10px);
+        }
+
+        .metric-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #008dcb;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .metric-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+        /* Chat container */
+        .chat-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(15px);
+        }
+
+        .chat-message {
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .chat-message.user {
+            text-align: right;
+            animation-delay: 0.5s;
+        }
+
+        .chat-message.elio {
+            text-align: left;
+            animation-delay: 1s;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 20px;
+            max-width: 70%;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .user .message-bubble {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .elio .message-bubble {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+            border: 1px solid #10b981;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #10b981, transparent);
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px 40px;
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+            padding-right: 60px;
+            animation-delay: 0.2s;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 60px;
+            animation-delay: 0.4s;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border: 3px solid #10b981;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -11px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -11px;
+        }
+
+        /* Comparison */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 60px auto;
+        }
+
+        .comparison-side {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .comparison-side.them {
+            opacity: 0.7;
+        }
+
+        .comparison-side h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .comparison-list {
+            list-style: none;
+            font-size: 1.1rem;
+            line-height: 2.5;
+        }
+
+        /* Investment */
+        .investment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 800px;
+            margin: 60px auto;
+        }
+
+        .investment-item {
+            text-align: center;
+        }
+
+        .investment-number {
+            font-size: 3rem;
+            font-weight: 100;
+        }
+
+        .investment-label {
+            opacity: 0.7;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            padding: 20px 60px;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            font-weight: 300;
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-top: 40px;
+            border: 1px solid white;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: white;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            color: #000;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* Progress dots */
+        .progress-dots {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #10b981;
+            transform: scale(1.5);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav { padding: 15px 20px; }
+            .slide { padding: 100px 20px 50px; }
+            h1 { font-size: 4rem; letter-spacing: -3px; }
+            h2 { font-size: 2rem; }
+            .subtitle { font-size: 1.5rem; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .investment-grid { grid-template-columns: 1fr; gap: 40px; }
+            .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding-left: 60px !important; }
+            .timeline-line { left: 20px; }
+            .timeline-item .timeline-dot { left: 9px !important; right: auto !important; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effect -->
+    <div class="background-waves"></div>
+
+    <!-- Navigation con logo ELIO exacto -->
+    <nav class="nav glass">
+        <div class="elio-logo">
+            elio
+            <div class="elio-waves">
+                <div class="elio-wave ew1"></div>
+                <div class="elio-wave ew2"></div>
+                <div class="elio-wave ew3"></div>
+                <div class="elio-wave ew4"></div>
+                <div class="elio-wave ew5"></div>
+            </div>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+    </nav>
+
+    <!-- Slide 1: Hero -->
+    <div class="slide active" id="slide1">
+        <div style="max-width: 1200px; text-align: center;">
+            <h1>LA FÁBRICA DE<br>AGENTES IA</h1>
+            <p class="subtitle">NO VENDEMOS UN AGENTE. VENDEMOS LA PLATAFORMA QUE LOS INDUSTRIALIZA.</p>
+            <p class="tagline">"Tu copiloto de aventuras en la era digital"</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card glass">
+                    <div class="metric-number">1,182</div>
+                    <div class="metric-label">Horas de desarrollo</div>
+                    <div class="metric-desc">Trabajo especializado documentado desde mayo 2025</div>
+                </div>
+                <div class="metric-card glass">
+                    <div class="metric-number">85%</div>
+                    <div class="metric-label">Proyecto completado</div>
+                    <div class="metric-desc">Solo falta activar webhooks y magia</div>
+                </div>
+                <div class="metric-card glass">
+                    <div class="metric-number">400%</div>
+                    <div class="metric-label">ROI proyectado</div>
+                    <div class="metric-desc">Retorno de inversión primer año</div>
+                </div>
+                <div class="metric-card glass">
+                    <div class="metric-number">60s</div>
+                    <div class="metric-label">Para crear 100 agentes</div>
+                    <div class="metric-desc">De semanas a segundos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: El Origen -->
+    <div class="slide" id="slide2">
+        <div style="max-width: 1000px;">
+            <h2 style="text-align: center;">EL ORIGEN</h2>
+            <p class="subtitle">SIERRA NEVADA · GRANADA · MAYO 2025</p>
+            
+            <div class="chat-container">
+                <div class="chat-message user">
+                    <div class="message-bubble">
+                        "Necesitamos automatizar la atención telefónica con IA"
+                    </div>
+                </div>
+                <div class="chat-message elio">
+                    <div class="message-bubble">
+                        "No te voy a crear un agente. Te voy a crear la fábrica que los produce."
+                    </div>
+                </div>
+                <div class="chat-message user" style="animation-delay: 1.5s;">
+                    <div class="message-bubble">
+                        "¿Una fábrica?"
+                    </div>
+                </div>
+                <div class="chat-message elio" style="animation-delay: 2s;">
+                    <div class="message-bubble">
+                        "De 0 a 100 agentes en 60 segundos. Modelo SaaS. Ingresos recurrentes. El futuro."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: DEMO EN VIVO - NUEVO -->
+    <div class="slide" id="slide3">
+        <div style="max-width: 1000px; text-align: center;">
+            <h2 style="margin-bottom: 20px;">PRUEBA ELIO AHORA</h2>
+            <p class="subtitle" style="margin-bottom: 60px;">EXPERIMENTA EL FUTURO EN VIVO</p>
+            
+            <div class="glass" style="border-radius: 30px; padding: 60px 40px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
+                
+                <div style="position: relative; z-index: 1;">
+                    <div style="font-size: 4rem; font-weight: 200; margin-bottom: 30px; letter-spacing: -2px;">
+                        +34 910 052 019
+                    </div>
+                    
+                    <p style="font-size: 1.5rem; font-weight: 200; margin-bottom: 50px; opacity: 0.8; font-style: italic;">
+                        Elio no duerme. Habla cuando tú quieras.
+                    </p>
+                    
+                    <div style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin-top: 60px;">
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 20px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <div style="width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.8); border-radius: 50%;"></div>
+                                <div style="position: absolute; width: 8px; height: 8px; background: white; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                            </div>
+                            <p style="opacity: 0.7; font-size: 1rem;">Acceso inmediato</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 20px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <div style="width: 40px; height: 2px; background: rgba(255,255,255,0.8); position: absolute;"></div>
+                                <div style="width: 2px; height: 40px; background: rgba(255,255,255,0.8); position: absolute;"></div>
+                            </div>
+                            <p style="opacity: 0.7; font-size: 1rem;">Sin compromiso</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 20px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <div class="elio-waves" style="transform: scale(1.5);">
+                                    <div class="elio-wave ew1" style="background: rgba(255,255,255,0.8);"></div>
+                                    <div class="elio-wave ew2" style="background: rgba(255,255,255,0.8);"></div>
+                                    <div class="elio-wave ew3" style="background: rgba(255,255,255,0.8);"></div>
+                                    <div class="elio-wave ew4" style="background: rgba(255,255,255,0.8);"></div>
+                                    <div class="elio-wave ew5" style="background: rgba(255,255,255,0.8);"></div>
+                                </div>
+                            </div>
+                            <p style="opacity: 0.7; font-size: 1rem;">Demo real</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 40px; font-size: 1.1rem; opacity: 0.5; font-style: italic;">
+                "La mejor demo es la que experimentas tú mismo"
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 4: El Problema -->
+    <div class="slide" id="slide3">
+        <div style="max-width: 1000px;">
+            <h2 style="text-align: center;">EL PROBLEMA</h2>
+            <p class="subtitle">EL TELÉFONO GENERA EL 70% DE VENTAS PERO ESTÁ ABANDONADO</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px;">
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <h3 style="font-size: 2rem; font-weight: 100; margin-bottom: 15px;">3 SEMANAS</h3>
+                    <p style="opacity: 0.7;">Para crear un agente tradicional</p>
+                </div>
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <h3 style="font-size: 2rem; font-weight: 100; margin-bottom: 15px;">€50,000</h3>
+                    <p style="opacity: 0.7;">Coste medio por agente personalizado</p>
+                </div>
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <h3 style="font-size: 2rem; font-weight: 100; margin-bottom: 15px;">ARTESANAL</h3>
+                    <p style="opacity: 0.7;">Proceso manual sin escalabilidad</p>
+                </div>
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <h3 style="font-size: 2rem; font-weight: 100; margin-bottom: 15px;">PÉRDIDAS</h3>
+                    <p style="opacity: 0.7;">Miles de leads perdidos diariamente</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: La Solución -->
+    <div class="slide" id="slide5">
+        <div style="max-width: 1200px;">
+            <h2 style="text-align: center;">LA SOLUCIÓN</h2>
+            <p class="subtitle">CONVERTIMOS LA ARTESANÍA EN INDUSTRIA</p>
+            
+            <div style="display: flex; justify-content: space-around; align-items: center; margin: 60px 0; flex-wrap: wrap; gap: 40px;">
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; border: 2px solid #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <div style="width: 30px; height: 2px; background: #10b981; position: absolute;"></div>
+                        <div style="width: 2px; height: 30px; background: #10b981; position: absolute;"></div>
+                        <div style="width: 20px; height: 20px; background: #10b981; border-radius: 50%; position: absolute; animation: pulse 2s infinite;"></div>
+                    </div>
+                    <h3 style="margin: 20px 0; font-weight: 200;">CREACIÓN INSTANTÁNEA</h3>
+                    <p style="opacity: 0.7;">De semanas a segundos</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; border: 2px solid #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <div style="font-size: 3rem; font-weight: 100; color: #10b981; font-family: 'Inter', sans-serif;">∞</div>
+                    </div>
+                    <h3 style="margin: 20px 0; font-weight: 200;">ESCALABILIDAD INFINITA</h3>
+                    <p style="opacity: 0.7;">Sin límites técnicos</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; border: 2px solid #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                        <div style="width: 40px; height: 40px; border: 2px solid #10b981; border-radius: 50%; position: absolute; animation: rotate 3s linear infinite;"></div>
+                        <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; position: absolute; top: 18px; animation: rotate 3s linear infinite;"></div>
+                    </div>
+                    <h3 style="margin: 20px 0; font-weight: 200;">MODELO RECURRENTE</h3>
+                    <p style="opacity: 0.7;">SaaS con pagos mensuales</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Diferencial -->
+    <div class="slide" id="slide6">
+        <div style="max-width: 1200px;">
+            <h2 style="text-align: center;">NUESTRO DIFERENCIAL</h2>
+            <p class="subtitle">NO VENDEMOS UN AGENTE. VENDEMOS LA FÁBRICA.</p>
+            
+            <div class="comparison-grid">
+                <div class="comparison-side them">
+                    <h3>ELLOS</h3>
+                    <ul class="comparison-list">
+                        <li>Un agente por proyecto</li>
+                        <li>Semanas de desarrollo</li>
+                        <li>Modelo consultoría</li>
+                        <li>Sin escalabilidad</li>
+                        <li>Ingresos puntuales</li>
+                    </ul>
+                </div>
+                <div class="comparison-side us">
+                    <h3 style="color: #10b981;">NOSOTROS</h3>
+                    <ul class="comparison-list">
+                        <li>Cientos de agentes</li>
+                        <li>Minutos de creación</li>
+                        <li>Modelo SaaS</li>
+                        <li>Escalabilidad infinita</li>
+                        <li>Ingresos recurrentes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Modelo de Negocio -->
+    <div class="slide" id="slide7">
+        <div style="max-width: 1000px;">
+            <h2 style="text-align: center;">MODELO DE NEGOCIO</h2>
+            <p class="subtitle">SAAS PURO · MARGEN 80% · GLOBAL</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 60px 0;">
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; font-weight: 100; color: #10b981;">€299</div>
+                    <div style="margin-top: 10px; opacity: 0.7;">STARTER/MES</div>
+                </div>
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; font-weight: 100; color: #10b981;">€999</div>
+                    <div style="margin-top: 10px; opacity: 0.7;">BUSINESS/MES</div>
+                </div>
+                <div class="glass" style="padding: 30px; text-align: center; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; font-weight: 100; color: #10b981;">€2999+</div>
+                    <div style="margin-top: 10px; opacity: 0.7;">ENTERPRISE/MES</div>
+                </div>
+            </div>
+            
+            <div class="glass" style="padding: 40px; text-align: center; border-radius: 20px;">
+                <div style="font-size: 5rem; font-weight: 100;">€400B</div>
+                <div style="font-size: 1.2rem; opacity: 0.7; margin-top: 10px;">MERCADO GLOBAL DE CONTACT CENTERS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Tracción -->
+    <div class="slide" id="slide8">
+        <div style="max-width: 1200px;">
+            <h2 style="text-align: center;">TRACCIÓN</h2>
+            <p class="subtitle">DEL CONCEPTO AL UNICORNIO</p>
+            
+            <div class="timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 style="font-weight: 200;">MAYO 2025</h3>
+                    <p style="opacity: 0.7;">Nacimiento en Sierra Nevada</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 style="font-weight: 200;">SEPTIEMBRE 2025</h3>
+                    <p style="opacity: 0.7;">85% completado · MVP funcional</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 style="font-weight: 200;">Q4 2025</h3>
+                    <p style="opacity: 0.7;">Lanzamiento plataforma SaaS</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 style="font-weight: 200;">Q2 2026</h3>
+                    <p style="opacity: 0.7;">500 agentes activos</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 style="font-weight: 200;">2027</h3>
+                    <p style="opacity: 0.7;">Expansión global</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Inversión -->
+    <div class="slide" id="slide9">
+        <div style="max-width: 1000px; text-align: center;">
+            <h2>INVERSIÓN</h2>
+            <p class="subtitle">€500K PARA DOMINAR EL MERCADO</p>
+            
+            <div class="investment-grid">
+                <div>
+                    <div class="investment-number">40%</div>
+                    <div class="investment-label">PRODUCTO</div>
+                </div>
+                <div>
+                    <div class="investment-number">35%</div>
+                    <div class="investment-label">MARKETING</div>
+                </div>
+                <div>
+                    <div class="investment-number">25%</div>
+                    <div class="investment-label">EQUIPO</div>
+                </div>
+            </div>
+            
+            <div class="glass" style="padding: 40px; margin-top: 60px; border-radius: 20px;">
+                <h3 style="font-weight: 200; margin-bottom: 30px;">PROYECCIÓN 18 MESES</h3>
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+                    <div style="margin: 10px;">
+                        <div style="font-size: 2rem; font-weight: 100; color: #10b981;">€2M</div>
+                        <div style="opacity: 0.7;">ARR</div>
+                    </div>
+                    <div style="margin: 10px;">
+                        <div style="font-size: 2rem; font-weight: 100; color: #10b981;">50</div>
+                        <div style="opacity: 0.7;">CLIENTES</div>
+                    </div>
+                    <div style="margin: 10px;">
+                        <div style="font-size: 2rem; font-weight: 100; color: #10b981;">x10</div>
+                        <div style="opacity: 0.7;">VALORACIÓN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Cierre -->
+    <div class="slide" id="slide10">
+        <div style="max-width: 1000px; text-align: center;">
+            <div style="margin-bottom: 60px;">
+                <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; line-height: 1.4; margin-bottom: 20px; letter-spacing: -2px;">
+                    HEMOS CONVERTIDO<br>
+                    LA ARTESANÍA EN FÁBRICA.
+                </h2>
+                <p style="font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 200; opacity: 0.8; line-height: 1.4;">
+                    Y las fábricas son las que<br>
+                    generan las grandes escalas.
+                </p>
+            </div>
+            
+            <a href="https://meetings.hubspot.com/mili-perez?uuid=add50f36-dc80-4222-ad85-37f8f8fab7f6" 
+               target="_blank" 
+               class="cta-button">
+                CONSTRUYAMOS EL FUTURO
+            </a>
+            
+            <div style="margin-top: 80px;">
+                <p style="font-size: 1.5rem; font-weight: 300; margin-bottom: 10px;">MILI PÉREZ</p>
+                <p style="font-size: 1.1rem; color: #10b981; margin-bottom: 20px;">AI Business Transformation Architect</p>
+                <p style="font-size: 1.1rem; opacity: 0.9;">
+                    <a href="mailto:mili@elio.live" style="color: white; text-decoration: none;">mili@elio.live</a> · 
+                    <a href="tel:+34647621857" style="color: white; text-decoration: none;">+34 647 62 18 57</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn" onclick="previousSlide()">←</button>
+        <button class="control-btn" onclick="toggleTimer()">⏱</button>
+        <button class="control-btn" onclick="nextSlide()">→</button>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="progress-dots">
+        <span class="dot active" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+        <span class="dot" onclick="goToSlide(3)"></span>
+        <span class="dot" onclick="goToSlide(4)"></span>
+        <span class="dot" onclick="goToSlide(5)"></span>
+        <span class="dot" onclick="goToSlide(6)"></span>
+        <span class="dot" onclick="goToSlide(7)"></span>
+        <span class="dot" onclick="goToSlide(8)"></span>
+        <span class="dot" onclick="goToSlide(9)"></span>
+        <span class="dot" onclick="goToSlide(10)"></span>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        let timerInterval;
+        let seconds = 0;
+        let timerActive = false;
+
+        function showSlide(n) {
+            const slides = document.getElementsByClassName('slide');
+            const dots = document.getElementsByClassName('dot');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove('active');
+            }
+            
+            slides[currentSlide - 1].classList.add('active');
+            dots[currentSlide - 1].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+        }
+
+        function toggleTimer() {
+            const timerElement = document.getElementById('timer');
+            
+            if (!timerActive) {
+                timerActive = true;
+                seconds = 0;
+                
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    const mins = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    timerElement.textContent = 
+                        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+            } else {
+                timerActive = false;
+                clearInterval(timerInterval);
+                timerElement.textContent = '00:00';
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key >= '1' && e.key <= '9') {
+                goToSlide(parseInt(e.key));
+            }
+            if (e.key === '0') {
+                goToSlide(10);
+            }
+            if (e.key === 't' || e.key === 'T') toggleTimer();
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        });
+    </script>
+</body>
+</html>
