@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxForge - Enterprise AI Platform | Voice Agents Factory & LLM Training</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --vf-black: #000000;
+            --vf-white: #ffffff;
+            --vf-gray-900: #0a0a0a;
+            --vf-gray-800: #1a1a1a;
+            --vf-gray-700: #2a2a2a;
+            --vf-gray-600: #404040;
+            --vf-gray-500: #666666;
+            --vf-gray-400: #999999;
+            --vf-gray-300: #cccccc;
+            --vf-gray-200: #e5e5e5;
+            --vf-gray-100: #f5f5f5;
+            /* Solo blanco y negro para acentos */
+            --vf-gradient: linear-gradient(135deg, #fff 0%, #666 100%);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: var(--vf-black);
+            color: var(--vf-white);
+            overflow-x: hidden;
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav.scrolled {
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.98);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        
+        .logo-bar {
+            width: 3px;
+            background: white;
+            border-radius: 2px;
+            animation: logoWave 2s ease-in-out infinite;
+        }
+        
+        @keyframes logoWave {
+            0%, 100% { height: 15px; opacity: 0.7; }
+            50% { height: 30px; opacity: 1; }
+        }
+        
+        .logo-bar:nth-child(1) { animation-delay: 0s; }
+        .logo-bar:nth-child(2) { animation-delay: 0.2s; }
+        .logo-bar:nth-child(3) { animation-delay: 0.4s; }
+        .logo-bar:nth-child(4) { animation-delay: 0.6s; }
+        .logo-bar:nth-child(5) { animation-delay: 0.8s; }
+        
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--vf-gray-400);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--vf-white);
+        }
+        
+        .cta-button {
+            padding: 12px 30px;
+            background: var(--vf-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 132, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 120px 40px 80px;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 132, 255, 0.1) 0%, transparent 50%);
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--vf-white);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 100;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -3px;
+        }
+        
+        .gradient-text {
+            background: var(--vf-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            font-weight: 300;
+            color: var(--vf-gray-400);
+            margin-bottom: 50px;
+            line-height: 1.4;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .primary-btn {
+            padding: 18px 40px;
+            background: var(--vf-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 132, 255, 0.4);
+        }
+        
+        .secondary-btn {
+            padding: 18px 40px;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-weight: 400;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            padding: 60px 40px;
+            background: var(--vf-gray-900);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 100;
+            background: var(--vf-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--vf-gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Products Section */
+        .products {
+            padding: 120px 40px;
+            position: relative;
+        }
+        
+        .section-header {
+            max-width: 800px;
+            margin: 0 auto 80px;
+            text-align: center;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--vf-gray-400);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 200;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+        
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--vf-gray-400);
+            line-height: 1.6;
+        }
+        
+        .products-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: var(--vf-gray-900);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--vf-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .product-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .product-description {
+            color: var(--vf-gray-400);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .product-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+            color: var(--vf-gray-400);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .product-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-check {
+            color: var(--vf-success);
+            font-size: 1.2rem;
+        }
+        
+        .product-cta {
+            color: var(--vf-white);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: gap 0.3s ease;
+        }
+        
+        .product-cta:hover {
+            gap: 15px;
+        }
+        
+        /* Platform Features */
+        .platform-features {
+            padding: 120px 40px;
+            background: var(--vf-gray-900);
+        }
+        
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        .feature-text {
+            color: var(--vf-gray-400);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* Industries Section */
+        .industries {
+            padding: 120px 40px;
+        }
+        
+        .industries-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .industries-content h3 {
+            font-size: 2.5rem;
+            font-weight: 200;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+        
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .industry-item {
+            padding: 25px;
+            background: var(--vf-gray-900);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .industry-item:hover {
+            border-color: var(--vf-white);
+            transform: translateX(5px);
+        }
+        
+        .industry-name {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        
+        .industry-use {
+            font-size: 0.85rem;
+            color: var(--vf-gray-500);
+        }
+        
+        .industries-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .visual-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            transform: perspective(1000px) rotateY(-20deg);
+        }
+        
+        .grid-cell {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            animation: gridPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .grid-cell:nth-child(odd) { animation-delay: 0.2s; }
+        .grid-cell:nth-child(even) { animation-delay: 0.4s; }
+        
+        /* Technology Stack */
+        .tech-stack {
+            padding: 120px 40px;
+            background: var(--vf-gray-900);
+        }
+        
+        .tech-logos {
+            max-width: 1000px;
+            margin: 60px auto 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .tech-logo {
+            width: 100px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--vf-gray-400);
+        }
+        
+        .tech-logo:hover {
+            opacity: 1;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 40px;
+        }
+        
+        .pricing-cards {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .pricing-card {
+            background: var(--vf-gray-900);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--vf-white);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'MÁS POPULAR';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 20px;
+            background: var(--vf-gradient);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+        
+        .pricing-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .pricing-tier {
+            font-size: 1.2rem;
+            color: var(--vf-gray-400);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 100;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-period {
+            color: var(--vf-gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--vf-gray-400);
+        }
+        
+        /* CTA Section */
+        .final-cta {
+            padding: 120px 40px;
+            background: linear-gradient(135deg, rgba(0, 132, 255, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        .final-cta-subtitle {
+            font-size: 1.5rem;
+            color: var(--vf-gray-400);
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 80px 40px 40px;
+            background: var(--vf-black);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-brand {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-description {
+            color: var(--vf-gray-400);
+            line-height: 1.6;
+        }
+        
+        .footer-column h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--vf-gray-500);
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--vf-gray-400);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--vf-white);
+        }
+        
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--vf-gray-500);
+            font-size: 0.9rem;
+        }
+        
+        /* Demo Modal */
+        .demo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        .demo-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            max-width: 600px;
+            width: 100%;
+            background: var(--vf-gray-900);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .industries-showcase {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="scrollToTop()">
+                <div class="logo-icon">
+                    <div class="logo-bar"></div>
+                    <div class="logo-bar"></div>
+                    <div class="logo-bar"></div>
+                    <div class="logo-bar"></div>
+                    <div class="logo-bar"></div>
+                </div>
+                <span>VoxForge</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#products" class="nav-link">Productos</a>
+                <a href="#industries" class="nav-link">Industrias</a>
+                <a href="#pricing" class="nav-link">Precios</a>
+                <a href="#" class="nav-link">Documentación</a>
+                <a href="#" class="cta-button" onclick="openDemo()">Solicitar demo</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content animate-on-scroll">
+            <div class="hero-badge">15 empresas ya transformando su negocio</div>
+            <h1>
+                La <span class="gradient-text">Plataforma IA Empresarial</span><br>
+                que escala tu negocio
+            </h1>
+            <p class="hero-subtitle">
+                Fábrica de agentes de voz, entrenamiento de LLMs, orquestación de datos.<br>
+                Todo lo que necesitas para dominar la era de la IA.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="primary-btn" onclick="openDemo()">Ver demo en Vivo</a>
+                <a href="#products" class="secondary-btn">Explorar Servicios</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">60s</div>
+                <div class="stat-label">Para crear 100 agentes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">70%</div>
+                <div class="stat-label">Reducción de costes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1,182h</div>
+                <div class="stat-label">De desarrollo IA</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Operación continua</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Escalabilidad</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="section-header animate-on-scroll">
+            <span class="section-badge">Productos</span>
+            <h2>Suite completa de IA empresarial</h2>
+            <p class="section-description">
+                Desde agentes conversacionales hasta modelos personalizados. 
+                Una plataforma, infinitas posibilidades.
+            </p>
+        </div>
+        
+        <div class="products-grid">
+            <!-- Voice Agents Factory -->
+            <div class="product-card animate-on-scroll">
+                <div class="product-icon">
+                    <!-- Voice Waves Icon -->
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect x="5" y="15" width="2" height="10" fill="white" opacity="0.7"/>
+                        <rect x="10" y="10" width="2" height="20" fill="white" opacity="0.8"/>
+                        <rect x="15" y="12" width="2" height="16" fill="white" opacity="0.9"/>
+                        <rect x="20" y="8" width="2" height="24" fill="white"/>
+                        <rect x="25" y="12" width="2" height="16" fill="white" opacity="0.9"/>
+                        <rect x="30" y="10" width="2" height="20" fill="white" opacity="0.8"/>
+                        <rect x="35" y="15" width="2" height="10" fill="white" opacity="0.7"/>
+                    </svg>
+                </div>
+                <h3 class="product-title">Voice Agents Factory</h3>
+                <p class="product-description">
+                    Crea y despliega cientos de agentes de voz IA en minutos. 
+                    Perfectos para ventas, soporte y atención 24/7.
+                </p>
+                <ul class="product-features">
+                    <li><span class="feature-check">✓</span> 0 → 100 agentes en 60 segundos</li>
+                    <li><span class="feature-check">✓</span> 15+ idiomas nativos</li>
+                    <li><span class="feature-check">✓</span> Integración con telefonía</li>
+                    <li><span class="feature-check">✓</span> Análisis de sentimiento en tiempo real</li>
+                </ul>
+                <a href="#" class="product-cta">Conocer más →</a>
+            </div>
+            
+            <!-- LLM Training Platform -->
+            <div class="product-card animate-on-scroll">
+                <div class="product-icon">
+                    <!-- Neural Network Icon -->
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <circle cx="10" cy="10" r="3" stroke="white" fill="none" stroke-width="1"/>
+                        <circle cx="30" cy="10" r="3" stroke="white" fill="none" stroke-width="1"/>
+                        <circle cx="10" cy="30" r="3" stroke="white" fill="none" stroke-width="1"/>
+                        <circle cx="30" cy="30" r="3" stroke="white" fill="none" stroke-width="1"/>
+                        <circle cx="20" cy="20" r="4" fill="white"/>
+                        <line x1="13" y1="13" x2="17" y2="17" stroke="white" stroke-width="1"/>
+                        <line x1="27" y1="13" x2="23" y2="17" stroke="white" stroke-width="1"/>
+                        <line x1="13" y1="27" x2="17" y2="23" stroke="white" stroke-width="1"/>
+                        <line x1="27" y1="27" x2="23" y2="23" stroke="white" stroke-width="1"/>
+                    </svg>
+                </div>
+                <h3 class="product-title">LLM Training Platform</h3>
+                <p class="product-description">
+                    Entrena modelos de lenguaje personalizados con tus datos. 
+                    IA que entiende tu negocio como nadie más.
+                </p>
+                <ul class="product-features">
+                    <li><span class="feature-check">✓</span> Fine-tuning de GPT, Claude, Llama</li>
+                    <li><span class="feature-check">✓</span> RAG (Retrieval Augmented Generation)</li>
+                    <li><span class="feature-check">✓</span> Embeddings vectoriales</li>
+                    <li><span class="feature-check">✓</span> Modelos especializados por industria</li>
+                </ul>
+                <a href="#" class="product-cta">Conocer más →</a>
+            </div>
+            
+            <!-- Data Orchestration -->
+            <div class="product-card animate-on-scroll">
+                <div class="product-icon">
+                    <!-- Flow Icon -->
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect x="5" y="18" width="8" height="4" rx="2" fill="white"/>
+                        <rect x="27" y="8" width="8" height="4" rx="2" fill="white"/>
+                        <rect x="27" y="18" width="8" height="4" rx="2" fill="white"/>
+                        <rect x="27" y="28" width="8" height="4" rx="2" fill="white"/>
+                        <path d="M13 20 L18 20 L18 10 L27 10" stroke="white" stroke-width="1" fill="none"/>
+                        <path d="M13 20 L27 20" stroke="white" stroke-width="1" fill="none"/>
+                        <path d="M13 20 L18 20 L18 30 L27 30" stroke="white" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <h3 class="product-title">Data Orchestration Engine</h3>
+                <p class="product-description">
+                    Automatiza flujos de trabajo complejos. Conecta todas tus 
+                    herramientas y datos en pipelines inteligentes.
+                </p>
+                <ul class="product-features">
+                    <li><span class="feature-check">✓</span> 500+ integraciones nativas</li>
+                    <li><span class="feature-check">✓</span> ETL/ELT automatizado</li>
+                    <li><span class="feature-check">✓</span> Workflows visuales sin código</li>
+                    <li><span class="feature-check">✓</span> Procesamiento en tiempo real</li>
+                </ul>
+                <a href="#" class="product-cta">Conocer más →</a>
+            </div>
+            
+            <!-- Knowledge Base AI -->
+            <div class="product-card animate-on-scroll">
+                <div class="product-icon">
+                    <!-- Database Icon -->
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <ellipse cx="20" cy="10" rx="10" ry="4" stroke="white" fill="none" stroke-width="1"/>
+                        <path d="M10 10 L10 30 Q10 34 20 34 Q30 34 30 30 L30 10" stroke="white" stroke-width="1" fill="none"/>
+                        <ellipse cx="20" cy="20" rx="10" ry="4" stroke="white" fill="none" stroke-width="1"/>
+                        <ellipse cx="20" cy="30" rx="10" ry="4" stroke="white" fill="none" stroke-width="1"/>
+                    </svg>
+                </div>
+                <h3 class="product-title">Knowledge Base AI</h3>
+                <p class="product-description">
+                    Convierte documentos en inteligencia. Tu base de conocimiento 
+                    empresarial potenciada por IA.
+                </p>
+                <ul class="product-features">
+                    <li><span class="feature-check">✓</span> Procesamiento de PDFs, docs, sheets</li>
+                    <li><span class="feature-check">✓</span> Q&A inteligente</li>
+                    <li><span class="feature-check">✓</span> Extracción automática de insights</li>
+                    <li><span class="feature-check">✓</span> Versionado y control de acceso</li>
+                </ul>
+                <a href="#" class="product-cta">Conocer más →</a>
+            </div>
+            
+            <!-- Predictive Analytics -->
+            <div class="product-card animate-on-scroll">
+                <div class="product-icon">
+                    <!-- Chart Icon -->
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect x="5" y="28" width="4" height="7" fill="white" opacity="0.7"/>
+                        <rect x="12" y="22" width="4" height="13" fill="white" opacity="0.8"/>
+                        <rect x="19" y="18" width="4" height="17" fill="white" opacity="0.9"/>
+                        <rect x="26" y="15" width="4" height="20" fill="white"/>
+                        <path d="M7 25 L14 20 L21 16 L28 10" stroke="white" stroke-width="1" fill="none" opacity="0.5"/>
+                    </svg>
+                </div>
+                <h3 class="product-title">Predictive Analytics</h3>
+                <p class="product-description">
+                    Modelos predictivos que anticipan tendencias. Toma decisiones 
+                    basadas en datos, no en intuiciones.
+                </p>
+                <ul class="product-features">
+                    <li><span class="feature-check">✓</span> Forecasting avanzado</li>
+                    <li><span class="feature-check">✓</span> Detección de anomalías</li>
+                    <li><span class="feature-check">✓</span> Scoring de leads</li>
+                    <li><span class="feature-check">✓</span> Análisis de churn</li>
+                </ul>
+                <a href="#" class="product-cta">Conocer más →</a>
+            </div>
+            
+            <!-- Custom AI Solutions -->
+            <div class="product-card animate-on-scroll">
+                <div class="product-icon">
+                    <!-- Settings Icon -->
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="6" stroke="white" fill="none" stroke-width="1"/>
+                        <path d="M20 5 L23 10 L30 10 L27 15 L30 20 L27 25 L30 30 L23 30 L20 35 L17 30 L10 30 L13 25 L10 20 L13 15 L10 10 L17 10 Z" stroke="white" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <h3 class="product-title">Custom AI Solutions</h3>
+                <p class="product-description">
+                    Soluciones a medida para casos únicos. Si lo puedes imaginar, 
+                    lo podemos construir con IA.
+                </p>
+                <ul class="product-features">
+                    <li><span class="feature-check">✓</span> Desarrollo personalizado</li>
+                    <li><span class="feature-check">✓</span> APIs dedicadas</li>
+                    <li><span class="feature-check">✓</span> Infraestructura on-premise</li>
+                    <li><span class="feature-check">✓</span> SLAs empresariales</li>
+                </ul>
+                <a href="#" class="product-cta">Hablar con ventas →</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Platform Features -->
+    <section class="platform-features">
+        <div class="section-header animate-on-scroll">
+            <span class="section-badge">Plataforma</span>
+            <h2>Diseñada para escalar</h2>
+            <p class="section-description">
+                Infraestructura enterprise-grade que crece con tu negocio
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <!-- Lock Icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect x="8" y="14" width="16" height="12" rx="2" stroke="white" stroke-width="1" fill="none"/>
+                        <path d="M12 14 L12 10 Q12 6 16 6 Q20 6 20 10 L20 14" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="16" cy="19" r="1.5" fill="white"/>
+                        <line x1="16" y1="20" x2="16" y2="23" stroke="white" stroke-width="1"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Seguridad total</h3>
+                <p class="feature-text">
+                    SOC 2, GDPR compliant. Encriptación end-to-end. 
+                    Tu data está segura.
+                </p>
+            </div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <!-- Lightning Icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M18 4 L10 16 L16 16 L14 28 L22 16 L16 16 Z" stroke="white" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Ultra Rápido</h3>
+                <p class="feature-text">
+                    Latencia <50ms. Procesamiento en edge. 
+                    Velocidad que impresiona.
+                </p>
+            </div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <!-- Globe Icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="12" stroke="white" stroke-width="1" fill="none"/>
+                        <ellipse cx="16" cy="16" rx="12" ry="6" stroke="white" stroke-width="1" fill="none"/>
+                        <line x1="16" y1="4" x2="16" y2="28" stroke="white" stroke-width="1"/>
+                        <line x1="4" y1="16" x2="28" y2="16" stroke="white" stroke-width="1"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Global scale</h3>
+                <p class="feature-text">
+                    CDN mundial. Multi-región. Disponible donde 
+                    tu negocio lo necesite.
+                </p>
+            </div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <!-- Layers Icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect x="8" y="8" width="8" height="8" stroke="white" stroke-width="1" fill="none"/>
+                        <rect x="12" y="12" width="8" height="8" stroke="white" stroke-width="1" fill="none"/>
+                        <rect x="16" y="16" width="8" height="8" stroke="white" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">No-Code Ready</h3>
+                <p class="feature-text">
+                    Interfaces visuales. Drag & drop. 
+                    IA sin escribir una línea de código.
+                </p>
+            </div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <!-- Graph Icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <polyline points="6,26 12,20 18,22 26,10" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="6" cy="26" r="2" fill="white"/>
+                        <circle cx="12" cy="20" r="2" fill="white"/>
+                        <circle cx="18" cy="22" r="2" fill="white"/>
+                        <circle cx="26" cy="10" r="2" fill="white"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Analytics Built-in</h3>
+                <p class="feature-text">
+                    Dashboards en tiempo real. Métricas que importan. 
+                    ROI transparente.
+                </p>
+            </div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <!-- Tag Icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M6 6 L16 6 L26 16 L16 26 L6 26 Z" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="11" cy="11" r="2" fill="white"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">White label</h3>
+                <p class="feature-text">
+                    Tu marca, nuestra tecnología. Perfecto para 
+                    agencias y partners.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Industries Section -->
+    <section class="industries" id="industries">
+        <div class="section-header animate-on-scroll">
+            <span class="section-badge">Industrias</span>
+            <h2>IA especializada por sector</h2>
+            <p class="section-description">
+                Soluciones pre-entrenadas que entienden tu industria desde el día uno
+            </p>
+        </div>
+        
+        <div class="industries-showcase">
+            <div class="industries-content animate-on-scroll">
+                <h3>Transformación digital real</h3>
+                <p style="color: var(--vf-gray-400); line-height: 1.6; margin-bottom: 30px;">
+                    Cada industria tiene sus propios desafíos. Nuestros modelos están 
+                    pre-entrenados con millones de interacciones específicas de cada sector, 
+                    garantizando resultados desde el primer día.
+                </p>
+                
+                <div class="industries-grid">
+                    <div class="industry-item">
+                        <div class="industry-name">Salud</div>
+                        <div class="industry-use">Citas, triaje, seguimiento</div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-name">Finanzas</div>
+                        <div class="industry-use">KYC, soporte, cobros</div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-name">E-commerce</div>
+                        <div class="industry-use">Ventas, tracking, returns</div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-name">Real estate</div>
+                        <div class="industry-use">Tours, calificación, citas</div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-name">Educación</div>
+                        <div class="industry-use">Admisiones, tutorías, soporte</div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-name">Legal</div>
+                        <div class="industry-use">Consultas, documentos, agenda</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="industries-visual animate-on-scroll">
+                <div class="visual-grid">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Technology Stack -->
+    <section class="tech-stack">
+        <div class="section-header animate-on-scroll">
+            <span class="section-badge">Tecnología</span>
+            <h2>Powered by the best</h2>
+            <p class="section-description">
+                Construido sobre los cimientos de la mejor tecnología IA disponible
+            </p>
+        </div>
+        
+        <div class="tech-logos">
+            <div class="tech-logo">OpenAI</div>
+            <div class="tech-logo">Anthropic</div>
+            <div class="tech-logo">Google AI</div>
+            <div class="tech-logo">Meta AI</div>
+            <div class="tech-logo">Mistral</div>
+            <div class="tech-logo">Retell AI</div>
+            <div class="tech-logo">Make</div>
+            <div class="tech-logo">n8n</div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="section-header animate-on-scroll">
+            <span class="section-badge">Precios</span>
+            <h2>Inversión que se paga sola</h2>
+            <p class="section-description">
+                ROI positivo garantizado en 3-6 meses. Sin letra pequeña.
+            </p>
+        </div>
+        
+        <div class="pricing-cards">
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-price">€2,500</div>
+                <div class="pricing-period">por mes</div>
+                <ul class="pricing-features">
+                    <li><span class="feature-check">✓</span> Hasta 10 agentes de voz</li>
+                    <li><span class="feature-check">✓</span> 1 modelo LLM personalizado</li>
+                    <li><span class="feature-check">✓</span> 100GB procesamiento datos</li>
+                    <li><span class="feature-check">✓</span> Soporte por email</li>
+                    <li><span class="feature-check">✓</span> Analytics básico</li>
+                </ul>
+                <a href="#" class="secondary-btn" style="width: 100%; text-align: center;">Empezar Ahora</a>
+            </div>
+            
+            <div class="pricing-card featured animate-on-scroll">
+                <div class="pricing-tier">Scale</div>
+                <div class="pricing-price">€7,500</div>
+                <div class="pricing-period">por mes</div>
+                <ul class="pricing-features">
+                    <li><span class="feature-check">✓</span> Hasta 100 agentes de voz</li>
+                    <li><span class="feature-check">✓</span> 5 modelos LLM personalizados</li>
+                    <li><span class="feature-check">✓</span> 1TB procesamiento datos</li>
+                    <li><span class="feature-check">✓</span> Soporte prioritario 24/7</li>
+                    <li><span class="feature-check">✓</span> Analytics avanzado</li>
+                    <li><span class="feature-check">✓</span> API access</li>
+                    <li><span class="feature-check">✓</span> White label básico</li>
+                </ul>
+                <a href="#" class="primary-btn" style="width: 100%; text-align: center;">Solicitar Demo</a>
+            </div>
+            
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <div class="pricing-period">pricing</div>
+                <ul class="pricing-features">
+                    <li><span class="feature-check">✓</span> Agentes ilimitados</li>
+                    <li><span class="feature-check">✓</span> Modelos LLM ilimitados</li>
+                    <li><span class="feature-check">✓</span> Procesamiento ilimitado</li>
+                    <li><span class="feature-check">✓</span> Soporte dedicado</li>
+                    <li><span class="feature-check">✓</span> SLA personalizado</li>
+                    <li><span class="feature-check">✓</span> On-premise disponible</li>
+                    <li><span class="feature-check">✓</span> White label completo</li>
+                </ul>
+                <a href="#" class="secondary-btn" style="width: 100%; text-align: center;">Contactar Ventas</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>¿Listo para escalar con IA?</h2>
+        <p class="final-cta-subtitle">
+            Únete a las empresas que ya están transformando su negocio
+        </p>
+        <div class="hero-cta" style="margin-top: 40px;">
+            <a href="#" class="primary-btn" onclick="openDemo()">Programa una demo</a>
+            <a href="tel:+34910052019" class="secondary-btn">Llamar Ahora: +34 647 621 857</a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <div class="logo-bar"></div>
+                        <div class="logo-bar"></div>
+                        <div class="logo-bar"></div>
+                        <div class="logo-bar"></div>
+                        <div class="logo-bar"></div>
+                    </div>
+                    <span>VoxForge</span>
+                </div>
+                <p class="footer-description">
+                    La plataforma de IA empresarial que transforma negocios. 
+                    Desde agentes de voz hasta modelos personalizados, 
+                    escalamos tu empresa al futuro.
+                </p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Productos</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Voice agents</a></li>
+                    <li><a href="#">LLM training</a></li>
+                    <li><a href="#">Data orchestra</a></li>
+                    <li><a href="#">Knowledge AI</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Empresa</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Sobre nosotros</a></li>
+                    <li><a href="#">Casos de éxito</a></li>
+                    <li><a href="#">Partners</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Recursos</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Documentación</a></li>
+                    <li><a href="#">API reference</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 VoxForge. Todos los derechos reservados.</p>
+            <div style="display: flex; gap: 30px;">
+                <a href="#" style="color: var(--vf-gray-500); text-decoration: none;">Privacidad</a>
+                <a href="#" style="color: var(--vf-gray-500); text-decoration: none;">Términos</a>
+                <a href="#" style="color: var(--vf-gray-500); text-decoration: none;">Cookies</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Demo Modal -->
+    <div class="demo-modal" id="demoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDemo()">×</button>
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Solicita tu demo personalizada</h3>
+            <p style="color: var(--vf-gray-400); margin-bottom: 30px;">
+                Descubre cómo VoxForge puede transformar tu empresa en 30 minutos
+            </p>
+            
+            <form style="display: flex; flex-direction: column; gap: 20px;">
+                <input type="text" placeholder="Nombre completo" style="padding: 15px; background: var(--vf-gray-800); border: 1px solid var(--vf-gray-700); border-radius: 10px; color: white;">
+                <input type="email" placeholder="Email corporativo" style="padding: 15px; background: var(--vf-gray-800); border: 1px solid var(--vf-gray-700); border-radius: 10px; color: white;">
+                <input type="text" placeholder="Empresa" style="padding: 15px; background: var(--vf-gray-800); border: 1px solid var(--vf-gray-700); border-radius: 10px; color: white;">
+                <select style="padding: 15px; background: var(--vf-gray-800); border: 1px solid var(--vf-gray-700); border-radius: 10px; color: white;">
+                    <option>Tamaño de empresa</option>
+                    <option>1-10 empleados</option>
+                    <option>11-50 empleados</option>
+                    <option>51-200 empleados</option>
+                    <option>200+ empleados</option>
+                </select>
+                <button type="submit" class="primary-btn" style="width: 100%;">Solicitar Demo</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px; color: var(--vf-gray-500); font-size: 0.9rem;">
+                O llámanos directamente: <a href="tel:+34910052019" style="color: var(--vf-white); text-decoration: none;">+34 910 052 019</a>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Demo modal
+        function openDemo() {
+            document.getElementById('demoModal').classList.add('active');
+        }
+        
+        function closeDemo() {
+            document.getElementById('demoModal').classList.remove('active');
+        }
+        
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+        
+        // Grid cells random animation
+        document.querySelectorAll('.grid-cell').forEach((cell, index) => {
+            cell.style.animationDelay = `${Math.random() * 3}s`;
+        });
+    </script>
+</body>
+</html>
