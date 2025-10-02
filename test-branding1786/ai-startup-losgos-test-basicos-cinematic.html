@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Startup Animated Logos - Cinematic Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+            overflow: hidden;
+        }
+        
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 20s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                opacity: 0;
+                transform: translateY(100vh) translateX(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+            }
+        }
+        
+        .main-logo {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+        
+        .logo-mark {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .company-name {
+            font-size: 48px;
+            font-weight: 200;
+            letter-spacing: 8px;
+            opacity: 0;
+            animation: fadeInUp 1.5s forwards 0.5s;
+        }
+        
+        .tagline {
+            font-size: 12px;
+            letter-spacing: 3px;
+            opacity: 0;
+            animation: fadeInUp 1.5s forwards 0.8s;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        
+        /* Grid Section */
+        .concepts-section {
+            padding: 100px 20px;
+            background: #000;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: #666;
+            margin-bottom: 80px;
+        }
+        
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #222;
+            padding: 2px;
+        }
+        
+        .concept-card {
+            background: #000;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .concept-card:hover {
+            background: #0a0a0a;
+        }
+        
+        .concept-card:hover .concept-logo {
+            transform: scale(1.1);
+        }
+        
+        .concept-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #333;
+        }
+        
+        .concept-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .concept-name {
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-align: center;
+            color: #fff;
+        }
+        
+        /* Logo Animations */
+        
+        /* Neural Pulse Animation */
+        .neural-pulse-logo {
+            animation: neuralBreathe 3s ease-in-out infinite;
+        }
+        
+        @keyframes neuralBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .neural-ring {
+            stroke: white;
+            fill: none;
+            stroke-width: 0.5;
+            opacity: 0;
+            animation: pulseRing 3s ease-out infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes pulseRing {
+            0% {
+                opacity: 0.8;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(2);
+            }
+        }
+        
+        .neural-core {
+            fill: white;
+            animation: coreGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes coreGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* Infinity Animation */
+        .infinity-path {
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawInfinity 3s ease-in-out infinite;
+        }
+        
+        @keyframes drawInfinity {
+            0% {
+                stroke-dashoffset: 100;
+            }
+            50% {
+                stroke-dashoffset: 0;
+            }
+            100% {
+                stroke-dashoffset: -100;
+            }
+        }
+        
+        /* Bracket Animation */
+        .bracket-text {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            font-size: 48px;
+            font-weight: 100;
+            animation: typeWriter 2s steps(3) infinite;
+        }
+        
+        @keyframes typeWriter {
+            0%, 20% { content: '{/}'; }
+            40% { content: '{_}'; }
+            60% { content: '</>'; }
+            80%, 100% { content: '{/}'; }
+        }
+        
+        .bracket-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 40px;
+            background: white;
+            animation: blink 1s infinite;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Quantum Animation */
+        .quantum-outer {
+            stroke: white;
+            fill: none;
+            stroke-width: 1;
+            animation: quantumRotate 8s linear infinite;
+            transform-origin: center;
+        }
+        
+        .quantum-inner {
+            fill: white;
+            animation: quantumPulse 2s ease-in-out infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes quantumRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes quantumPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.8); opacity: 0.6; }
+        }
+        
+        /* Circuit Animation */
+        .circuit-line {
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 30;
+            stroke-dashoffset: 0;
+            animation: circuitFlow 2s linear infinite;
+        }
+        
+        @keyframes circuitFlow {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -60; }
+        }
+        
+        .circuit-node {
+            fill: white;
+            animation: nodeGlow 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes nodeGlow {
+            0%, 100% { 
+                opacity: 1;
+                filter: drop-shadow(0 0 0px white);
+            }
+            50% { 
+                opacity: 0.8;
+                filter: drop-shadow(0 0 10px white);
+            }
+        }
+        
+        /* Apex Animation */
+        .apex-triangle {
+            fill: white;
+            animation: apexMorph 4s ease-in-out infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes apexMorph {
+            0%, 100% { 
+                transform: scaleY(1);
+            }
+            25% {
+                transform: scaleY(1.1);
+            }
+            50% { 
+                transform: scaleY(0.95);
+            }
+            75% {
+                transform: scaleY(1.05);
+            }
+        }
+        
+        .apex-dot {
+            fill: black;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+        
+        /* Interactive Effects */
+        .interactive-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            text-align: center;
+        }
+        
+        .interactive-logo {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 40px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .interactive-logo:hover .glow-effect {
+            opacity: 1;
+        }
+        
+        /* Cinematic Transitions */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            animation: cinematicFade 3s ease-in-out;
+        }
+        
+        @keyframes cinematicFade {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* Text Reveal Animation */
+        .reveal-text {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .reveal-text::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            animation: revealSlide 1.5s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+        }
+        
+        @keyframes revealSlide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .company-name {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+        }
+        
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOut 0.5s forwards 2s;
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        .loader-logo {
+            width: 60px;
+            height: 60px;
+            animation: loaderPulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader">
+        <svg class="loader-logo" viewBox="0 0 32 32">
+            <circle cx="16" cy="16" r="2" fill="white"/>
+            <circle cx="16" cy="16" r="6" fill="none" stroke="white" stroke-width="0.5" opacity="0.5"/>
+            <circle cx="16" cy="16" r="10" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+        </svg>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="particles" id="particles"></div>
+        
+        <div class="main-logo">
+            <div class="logo-mark">
+                <svg class="neural-pulse-logo" viewBox="0 0 120 120">
+                    <!-- Animated Rings -->
+                    <circle class="neural-ring" cx="60" cy="60" r="20" style="animation-delay: 0s;"/>
+                    <circle class="neural-ring" cx="60" cy="60" r="30" style="animation-delay: 0.5s;"/>
+                    <circle class="neural-ring" cx="60" cy="60" r="40" style="animation-delay: 1s;"/>
+                    <circle class="neural-ring" cx="60" cy="60" r="50" style="animation-delay: 1.5s;"/>
+                    
+                    <!-- Static Rings -->
+                    <circle cx="60" cy="60" r="15" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+                    <circle cx="60" cy="60" r="25" fill="none" stroke="white" stroke-width="0.5" opacity="0.2"/>
+                    <circle cx="60" cy="60" r="35" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/>
+                    
+                    <!-- Core -->
+                    <circle class="neural-core" cx="60" cy="60" r="5"/>
+                </svg>
+            </div>
+            <h1 class="company-name">NEURAL</h1>
+            <p class="tagline">FUTURE IS NOW</p>
+        </div>
+    </section>
+    
+    <!-- Concepts Grid -->
+    <section class="concepts-section">
+        <h2 class="section-title">CINEMATIC CONCEPTS</h2>
+        
+        <div class="concepts-grid">
+            <!-- Neural Concept -->
+            <div class="concept-card">
+                <span class="concept-number">01</span>
+                <div class="concept-logo">
+                    <svg viewBox="0 0 80 80">
+                        <circle class="neural-ring" cx="40" cy="40" r="15" style="animation-delay: 0s;"/>
+                        <circle class="neural-ring" cx="40" cy="40" r="25" style="animation-delay: 0.3s;"/>
+                        <circle cx="40" cy="40" r="10" fill="none" stroke="white" stroke-width="0.5" opacity="0.5"/>
+                        <circle cx="40" cy="40" r="20" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+                        <circle class="neural-core" cx="40" cy="40" r="3"/>
+                    </svg>
+                </div>
+                <div class="concept-name">NEURAL PULSE</div>
+            </div>
+            
+            <!-- Infinity Concept -->
+            <div class="concept-card">
+                <span class="concept-number">02</span>
+                <div class="concept-logo">
+                    <svg viewBox="0 0 80 80">
+                        <path class="infinity-path" d="M20 40c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10zm20 0c0 5.5 4.5 10 10 10s10-4.5 10-10-4.5-10-10-10-10 4.5-10 10z"/>
+                    </svg>
+                </div>
+                <div class="concept-name">INFINITE LOOP</div>
+            </div>
+            
+            <!-- Bracket Concept -->
+            <div class="concept-card">
+                <span class="concept-number">03</span>
+                <div class="concept-logo" style="display: flex; align-items: center; justify-content: center;">
+                    <span class="bracket-text">{/}</span>
+                    <span class="bracket-cursor"></span>
+                </div>
+                <div class="concept-name">CODE SYNTAX</div>
+            </div>
+            
+            <!-- Quantum Concept -->
+            <div class="concept-card">
+                <span class="concept-number">04</span>
+                <div class="concept-logo">
+                    <svg viewBox="0 0 80 80">
+                        <rect class="quantum-outer" x="20" y="20" width="40" height="40"/>
+                        <rect class="quantum-inner" x="32" y="32" width="16" height="16"/>
+                    </svg>
+                </div>
+                <div class="concept-name">QUANTUM SHIFT</div>
+            </div>
+            
+            <!-- Circuit Concept -->
+            <div class="concept-card">
+                <span class="concept-number">05</span>
+                <div class="concept-logo">
+                    <svg viewBox="0 0 80 80">
+                        <path class="circuit-line" d="M20 40h15m10 0h15m-20-20v15m0 10v15"/>
+                        <circle class="circuit-node" cx="40" cy="40" r="5"/>
+                        <circle class="circuit-node" cx="20" cy="40" r="2"/>
+                        <circle class="circuit-node" cx="60" cy="40" r="2"/>
+                        <circle class="circuit-node" cx="40" cy="20" r="2"/>
+                        <circle class="circuit-node" cx="40" cy="60" r="2"/>
+                    </svg>
+                </div>
+                <div class="concept-name">CIRCUIT FLOW</div>
+            </div>
+            
+            <!-- Apex Concept -->
+            <div class="concept-card">
+                <span class="concept-number">06</span>
+                <div class="concept-logo">
+                    <svg viewBox="0 0 80 80">
+                        <path class="apex-triangle" d="M40 20L25 50h30L40 20z"/>
+                        <circle class="apex-dot" cx="40" cy="38" r="3"/>
+                    </svg>
+                </div>
+                <div class="concept-name">APEX POINT</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Interactive Section -->
+    <section class="interactive-section">
+        <h2 class="section-title">INTERACTIVE EXPERIENCE</h2>
+        
+        <div class="interactive-logo" id="interactiveLogo">
+            <div class="glow-effect"></div>
+            <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                <!-- Main Circle -->
+                <circle cx="100" cy="100" r="30" fill="none" stroke="white" stroke-width="1" opacity="0.5"/>
+                
+                <!-- Rotating Elements -->
+                <g id="rotatingGroup">
+                    <circle cx="100" cy="70" r="3" fill="white"/>
+                    <circle cx="130" cy="100" r="3" fill="white"/>
+                    <circle cx="100" cy="130" r="3" fill="white"/>
+                    <circle cx="70" cy="100" r="3" fill="white"/>
+                </g>
+                
+                <!-- Center -->
+                <circle cx="100" cy="100" r="5" fill="white"/>
+            </svg>
+        </div>
+        
+        <p style="color: #666; font-size: 12px; letter-spacing: 2px;">CLICK TO INTERACT</p>
+    </section>
+    
+    <script>
+        // Particle Generator
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+        
+        // Interactive Logo
+        const interactiveLogo = document.getElementById('interactiveLogo');
+        const rotatingGroup = document.getElementById('rotatingGroup');
+        let rotation = 0;
+        let isAnimating = false;
+        
+        interactiveLogo.addEventListener('click', function() {
+            if (!isAnimating) {
+                isAnimating = true;
+                
+                // Create explosion effect
+                for (let i = 0; i < 8; i++) {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', '100');
+                    circle.setAttribute('cy', '100');
+                    circle.setAttribute('r', '3');
+                    circle.setAttribute('fill', 'white');
+                    circle.style.opacity = '1';
+                    circle.style.transformOrigin = 'center';
+                    
+                    const angle = (i / 8) * Math.PI * 2;
+                    const distance = 60;
+                    
+                    interactiveLogo.querySelector('svg').appendChild(circle);
+                    
+                    // Animate outward
+                    setTimeout(() => {
+                        circle.style.transition = 'all 1s ease-out';
+                        circle.setAttribute('cx', 100 + Math.cos(angle) * distance);
+                        circle.setAttribute('cy', 100 + Math.sin(angle) * distance);
+                        circle.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            circle.remove();
+                        }, 1000);
+                    }, 50);
+                }
+                
+                // Rotate main elements
+                rotation += 90;
+                rotatingGroup.style.transform = `rotate(${rotation}deg)`;
+                rotatingGroup.style.transformOrigin = '100px 100px';
+                rotatingGroup.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 1000);
+            }
+        });
+        
+        // Smooth scroll reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.concept-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+        
+        // Dynamic bracket animation
+        const bracketTexts = ['{/}', '</>',  '[_]', '(*)'];
+        let bracketIndex = 0;
+        
+        setInterval(() => {
+            document.querySelectorAll('.bracket-text').forEach(bracket => {
+                bracket.textContent = bracketTexts[bracketIndex];
+            });
+            bracketIndex = (bracketIndex + 1) % bracketTexts.length;
+        }, 2000);
+        
+        // Mouse follow effect on hero
+        const hero = document.querySelector('.hero');
+        const mainLogo = document.querySelector('.main-logo');
+        
+        hero.addEventListener('mousemove', (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+            const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+            
+            mainLogo.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+        });
+        
+        // Add cinematic transition on logo clicks
+        document.querySelectorAll('.concept-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const overlay = document.createElement('div');
+                overlay.className = 'transition-overlay';
+                document.body.appendChild(overlay);
+                
+                setTimeout(() => {
+                    overlay.remove();
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
