@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice AI Factory - Brand Identity System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at top, #0a0a0a 0%, #000 50%);
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #666;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .main-title {
+            font-size: 48px;
+            font-weight: 100;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff 0%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .tagline-main {
+            font-size: 18px;
+            color: #999;
+            font-weight: 200;
+        }
+        
+        /* Name Suggestions Section */
+        .names-section {
+            margin-bottom: 100px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            letter-spacing: 3px;
+            color: #666;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+        
+        .names-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .name-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .name-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .name-card:hover::before {
+            left: 100%;
+        }
+        
+        .name-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .name-logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .name-title {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .name-meaning {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .name-description {
+            font-size: 14px;
+            color: #999;
+            line-height: 1.6;
+        }
+        
+        /* Logo Concepts */
+        .logos-section {
+            margin-bottom: 100px;
+        }
+        
+        .logo-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2px;
+            background: rgba(255,255,255,0.1);
+            padding: 2px;
+        }
+        
+        .logo-concept {
+            background: #000;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .logo-main {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+        }
+        
+        .logo-name {
+            font-size: 28px;
+            font-weight: 200;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .logo-tagline {
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        /* Voice Wave Animation */
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            height: 60px;
+        }
+        
+        .wave-bar {
+            width: 3px;
+            background: white;
+            animation: voiceWave 1s ease-in-out infinite;
+            border-radius: 3px;
+        }
+        
+        @keyframes voiceWave {
+            0%, 100% { height: 10px; opacity: 0.3; }
+            50% { height: 40px; opacity: 1; }
+        }
+        
+        .wave-bar:nth-child(1) { animation-delay: 0s; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+        .wave-bar:nth-child(6) { animation-delay: 0.5s; }
+        .wave-bar:nth-child(7) { animation-delay: 0.6s; }
+        
+        /* Echo Rings Animation */
+        .echo-rings {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        
+        .echo-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid white;
+            border-radius: 50%;
+            animation: echoExpand 2s ease-out infinite;
+        }
+        
+        @keyframes echoExpand {
+            0% {
+                width: 10px;
+                height: 10px;
+                opacity: 1;
+            }
+            100% {
+                width: 60px;
+                height: 60px;
+                opacity: 0;
+            }
+        }
+        
+        .echo-ring:nth-child(1) { animation-delay: 0s; }
+        .echo-ring:nth-child(2) { animation-delay: 0.4s; }
+        .echo-ring:nth-child(3) { animation-delay: 0.8s; }
+        
+        .echo-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        /* Factory Grid Animation */
+        .factory-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .factory-cell {
+            background: white;
+            opacity: 0;
+            animation: factoryBuild 2s ease-in-out infinite;
+        }
+        
+        @keyframes factoryBuild {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Stagger animation */
+        .factory-cell:nth-child(1) { animation-delay: 0s; }
+        .factory-cell:nth-child(2) { animation-delay: 0.05s; }
+        .factory-cell:nth-child(3) { animation-delay: 0.1s; }
+        .factory-cell:nth-child(4) { animation-delay: 0.15s; }
+        .factory-cell:nth-child(5) { animation-delay: 0.2s; }
+        .factory-cell:nth-child(6) { animation-delay: 0.25s; }
+        .factory-cell:nth-child(7) { animation-delay: 0.3s; }
+        .factory-cell:nth-child(8) { animation-delay: 0.35s; }
+        .factory-cell:nth-child(9) { animation-delay: 0.4s; }
+        .factory-cell:nth-child(10) { animation-delay: 0.45s; }
+        
+        /* Swarm Animation */
+        .swarm-logo {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        
+        .swarm-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: swarmMove 3s ease-in-out infinite;
+        }
+        
+        @keyframes swarmMove {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        /* Position dots in a pattern */
+        .swarm-dot:nth-child(1) { top: 30%; left: 30%; animation-delay: 0s; }
+        .swarm-dot:nth-child(2) { top: 30%; left: 70%; animation-delay: 0.2s; }
+        .swarm-dot:nth-child(3) { top: 70%; left: 30%; animation-delay: 0.4s; }
+        .swarm-dot:nth-child(4) { top: 70%; left: 70%; animation-delay: 0.6s; }
+        .swarm-dot:nth-child(5) { top: 50%; left: 50%; animation-delay: 0.8s; }
+        
+        /* Spectrum Animation */
+        .spectrum-logo {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spectrum-line {
+            width: 2px;
+            height: 40px;
+            background: white;
+            margin: 0 1px;
+            animation: spectrumPulse 1.5s ease-in-out infinite;
+            transform-origin: bottom;
+        }
+        
+        @keyframes spectrumPulse {
+            0%, 100% { 
+                transform: scaleY(0.3);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+        
+        .spectrum-line:nth-child(1) { animation-delay: 0s; height: 30px; }
+        .spectrum-line:nth-child(2) { animation-delay: 0.1s; height: 40px; }
+        .spectrum-line:nth-child(3) { animation-delay: 0.2s; height: 35px; }
+        .spectrum-line:nth-child(4) { animation-delay: 0.3s; height: 45px; }
+        .spectrum-line:nth-child(5) { animation-delay: 0.4s; height: 40px; }
+        .spectrum-line:nth-child(6) { animation-delay: 0.5s; height: 35px; }
+        .spectrum-line:nth-child(7) { animation-delay: 0.6s; height: 30px; }
+        
+        /* Cascade Logo */
+        .cascade-logo {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        
+        .cascade-layer {
+            position: absolute;
+            border: 1px solid white;
+            border-radius: 4px;
+            animation: cascadeFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes cascadeFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-5px, -5px) rotate(5deg);
+                opacity: 1;
+            }
+        }
+        
+        .cascade-layer:nth-child(1) { 
+            width: 30px; 
+            height: 30px; 
+            top: 15px; 
+            left: 15px;
+            animation-delay: 0s;
+        }
+        .cascade-layer:nth-child(2) { 
+            width: 40px; 
+            height: 40px; 
+            top: 10px; 
+            left: 10px;
+            animation-delay: 0.2s;
+        }
+        .cascade-layer:nth-child(3) { 
+            width: 50px; 
+            height: 50px; 
+            top: 5px; 
+            left: 5px;
+            animation-delay: 0.4s;
+        }
+        
+        /* Value Props */
+        .values-section {
+            margin-bottom: 100px;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .value-card {
+            text-align: center;
+        }
+        
+        .value-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        
+        .value-number {
+            font-size: 32px;
+            font-weight: 100;
+            color: white;
+        }
+        
+        .value-title {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .value-description {
+            font-size: 24px;
+            font-weight: 300;
+            color: white;
+        }
+        
+        /* Interactive Demo */
+        .demo-section {
+            margin-bottom: 100px;
+            text-align: center;
+        }
+        
+        .demo-container {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 60px;
+            margin-top: 40px;
+        }
+        
+        .demo-button {
+            padding: 20px 60px;
+            font-size: 16px;
+            letter-spacing: 3px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-weight: 300;
+        }
+        
+        .demo-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
+        }
+        
+        .agents-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 10px;
+            margin-top: 40px;
+            max-width: 800px;
+            margin: 40px auto;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .agents-display.active {
+            opacity: 1;
+        }
+        
+        .agent-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            opacity: 0;
+            transform: scale(0);
+            animation: agentPop 0.5s ease forwards;
+        }
+        
+        @keyframes agentPop {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .counter {
+            font-size: 48px;
+            font-weight: 100;
+            margin-top: 30px;
+            opacity: 0;
+        }
+        
+        .counter.active {
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 32px;
+            }
+            
+            .names-grid, .logo-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-container {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <p class="subtitle">AI Voice Agent Factory</p>
+                <h1 class="main-title">Tu startup necesita un nombre épico</h1>
+                <p class="tagline-main">0 → 100 agentes en menos de 60 segundos</p>
+            </header>
+            
+            <!-- Name Suggestions -->
+            <section class="names-section">
+                <h2 class="section-title">Propuestas de Naming</h2>
+                
+                <div class="names-grid">
+                    <!-- VoxForge -->
+                    <div class="name-card">
+                        <div class="name-logo">
+                            <div class="voice-wave">
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                            </div>
+                        </div>
+                        <h3 class="name-title">VoxForge</h3>
+                        <p class="name-meaning">Voice + Forge</p>
+                        <p class="name-description">
+                            Forja de voces. Industrial, potente, evoca la creación masiva. 
+                            Perfecto para la metáfora de "fábrica". Dominio probablemente disponible.
+                        </p>
+                    </div>
+                    
+                    <!-- EchoScale -->
+                    <div class="name-card">
+                        <div class="name-logo">
+                            <div class="echo-rings">
+                                <div class="echo-ring"></div>
+                                <div class="echo-ring"></div>
+                                <div class="echo-ring"></div>
+                                <div class="echo-core"></div>
+                            </div>
+                        </div>
+                        <h3 class="name-title">EchoScale</h3>
+                        <p class="name-meaning">Echo + Scale</p>
+                        <p class="name-description">
+                            Resonancia multiplicada. Captura la idea de voz y escalabilidad masiva. 
+                            Suena tech y memorable. Fácil de pronunciar globalmente.
+                        </p>
+                    </div>
+                    
+                    <!-- AgentFlow -->
+                    <div class="name-card">
+                        <div class="name-logo">
+                            <div class="factory-grid">
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                                <div class="factory-cell"></div>
+                            </div>
+                        </div>
+                        <h3 class="name-title">AgentFlow</h3>
+                        <p class="name-meaning">Agent + Flow</p>
+                        <p class="name-description">
+                            Flujo continuo de agentes. Simple, directo, describe exactamente lo que haces. 
+                            Muy Silicon Valley. Comunica velocidad y eficiencia.
+                        </p>
+                    </div>
+                    
+                    <!-- Swarm.ai -->
+                    <div class="name-card">
+                        <div class="name-logo">
+                            <div class="swarm-logo">
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                                <div class="swarm-dot"></div>
+                            </div>
+                        </div>
+                        <h3 class="name-title">Swarm.ai</h3>
+                        <p class="name-meaning">Swarm Intelligence</p>
+                        <p class="name-description">
+                            Enjambre de agentes inteligentes. Concepto poderoso de inteligencia colectiva.
+                            El .ai le da autoridad instantánea. Muy brandeable.
+                        </p>
+                    </div>
+                    
+                    <!-- Spectrum -->
+                    <div class="name-card">
+                        <div class="name-logo">
+                            <div class="spectrum-logo">
+                                <div class="spectrum-line"></div>
+                                <div class="spectrum-line"></div>
+                                <div class="spectrum-line"></div>
+                                <div class="spectrum-line"></div>
+                                <div class="spectrum-line"></div>
+                                <div class="spectrum-line"></div>
+                                <div class="spectrum-line"></div>
+                            </div>
+                        </div>
+                        <h3 class="name-title">Spectrum</h3>
+                        <p class="name-meaning">Full Voice Spectrum</p>
+                        <p class="name-description">
+                            Espectro completo de voces. Sugiere variedad, personalización, cobertura total.
+                            Nombre premium, fácil de recordar. Muy corporate-friendly.
+                        </p>
+                    </div>
+                    
+                    <!-- Cascade -->
+                    <div class="name-card">
+                        <div class="name-logo">
+                            <div class="cascade-logo">
+                                <div class="cascade-layer"></div>
+                                <div class="cascade-layer"></div>
+                                <div class="cascade-layer"></div>
+                            </div>
+                        </div>
+                        <h3 class="name-title">Cascade</h3>
+                        <p class="name-meaning">Cascading Agents</p>
+                        <p class="name-description">
+                            Cascada de agentes desplegándose. Transmite fluidez, velocidad, elegancia.
+                            Nombre corto, impactante, con muchas posibilidades de branding.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Logo Concepts -->
+            <section class="logos-section">
+                <h2 class="section-title">Conceptos de Logo Animados</h2>
+                
+                <div class="logo-showcase">
+                    <!-- VoxForge Logo -->
+                    <div class="logo-concept">
+                        <div class="logo-main">
+                            <svg viewBox="0 0 120 120" width="120" height="120">
+                                <!-- Sound waves emanating from center -->
+                                <g id="voxforge-waves">
+                                    <path d="M20 60 Q35 40 40 60 T60 60" stroke="white" fill="none" stroke-width="1" opacity="0.3">
+                                        <animate attributeName="d" 
+                                            values="M20 60 Q35 40 40 60 T60 60;
+                                                    M20 60 Q35 80 40 60 T60 60;
+                                                    M20 60 Q35 40 40 60 T60 60"
+                                            dur="2s" repeatCount="indefinite"/>
+                                    </path>
+                                    <path d="M60 60 Q75 40 80 60 T100 60" stroke="white" fill="none" stroke-width="1" opacity="0.3">
+                                        <animate attributeName="d" 
+                                            values="M60 60 Q75 40 80 60 T100 60;
+                                                    M60 60 Q75 80 80 60 T100 60;
+                                                    M60 60 Q75 40 80 60 T100 60"
+                                            dur="2s" repeatCount="indefinite"/>
+                                    </path>
+                                </g>
+                                <!-- Center forge -->
+                                <rect x="50" y="40" width="20" height="40" fill="white" opacity="0.8">
+                                    <animate attributeName="height" values="40;50;40" dur="1s" repeatCount="indefinite"/>
+                                    <animate attributeName="y" values="40;35;40" dur="1s" repeatCount="indefinite"/>
+                                </rect>
+                                <circle cx="60" cy="60" r="3" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="logo-name">VOXFORGE</div>
+                        <div class="logo-tagline">Voice Factory Platform</div>
+                    </div>
+                    
+                    <!-- EchoScale Logo -->
+                    <div class="logo-concept">
+                        <div class="logo-main">
+                            <svg viewBox="0 0 120 120" width="120" height="120">
+                                <!-- Expanding circles -->
+                                <circle cx="60" cy="60" r="10" fill="none" stroke="white" stroke-width="1" opacity="0.8">
+                                    <animate attributeName="r" values="10;30;10" dur="2s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="60" cy="60" r="20" fill="none" stroke="white" stroke-width="0.5" opacity="0.5">
+                                    <animate attributeName="r" values="20;40;20" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                                    <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                                </circle>
+                                <circle cx="60" cy="60" r="30" fill="none" stroke="white" stroke-width="0.3" opacity="0.3">
+                                    <animate attributeName="r" values="30;50;30" dur="2s" repeatCount="indefinite" begin="1s"/>
+                                    <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite" begin="1s"/>
+                                </circle>
+                                <!-- Center dot -->
+                                <circle cx="60" cy="60" r="5" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="logo-name">ECHOSCALE</div>
+                        <div class="logo-tagline">Amplify Intelligence</div>
+                    </div>
+                    
+                    <!-- AgentFlow Logo -->
+                    <div class="logo-concept">
+                        <div class="logo-main">
+                            <svg viewBox="0 0 120 120" width="120" height="120">
+                                <!-- Grid of agents flowing -->
+                                <g id="agent-grid">
+                                    <rect x="30" y="30" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+                                    </rect>
+                                    <rect x="45" y="30" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.2s"/>
+                                    </rect>
+                                    <rect x="60" y="30" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+                                    </rect>
+                                    <rect x="75" y="30" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                                    </rect>
+                                    
+                                    <rect x="30" y="45" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.2s"/>
+                                    </rect>
+                                    <rect x="45" y="45" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+                                    </rect>
+                                    <rect x="60" y="45" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                                    </rect>
+                                    <rect x="75" y="45" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+                                    </rect>
+                                    
+                                    <rect x="30" y="60" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+                                    </rect>
+                                    <rect x="45" y="60" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                                    </rect>
+                                    <rect x="60" y="60" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+                                    </rect>
+                                    <rect x="75" y="60" width="10" height="10" fill="white" opacity="0">
+                                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s"/>
+                                    </rect>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="logo-name">AGENTFLOW</div>
+                        <div class="logo-tagline">Instant Deploy</div>
+                    </div>
+                    
+                    <!-- Swarm.ai Logo -->
+                    <div class="logo-concept">
+                        <div class="logo-main">
+                            <svg viewBox="0 0 120 120" width="120" height="120">
+                                <!-- Swarm of dots -->
+                                <g id="swarm">
+                                    <circle cx="60" cy="40" r="3" fill="white">
+                                        <animate attributeName="cx" values="60;70;50;60" dur="3s" repeatCount="indefinite"/>
+                                        <animate attributeName="cy" values="40;50;45;40" dur="3s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="40" cy="60" r="3" fill="white">
+                                        <animate attributeName="cx" values="40;50;45;40" dur="3s" repeatCount="indefinite" begin="0.5s"/>
+                                        <animate attributeName="cy" values="60;50;70;60" dur="3s" repeatCount="indefinite" begin="0.5s"/>
+                                    </circle>
+                                    <circle cx="80" cy="60" r="3" fill="white">
+                                        <animate attributeName="cx" values="80;70;75;80" dur="3s" repeatCount="indefinite" begin="1s"/>
+                                        <animate attributeName="cy" values="60;70;50;60" dur="3s" repeatCount="indefinite" begin="1s"/>
+                                    </circle>
+                                    <circle cx="60" cy="80" r="3" fill="white">
+                                        <animate attributeName="cx" values="60;50;70;60" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+                                        <animate attributeName="cy" values="80;70;75;80" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+                                    </circle>
+                                    <!-- Center larger dot -->
+                                    <circle cx="60" cy="60" r="5" fill="white" opacity="0.8"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="logo-name">SWARM.AI</div>
+                        <div class="logo-tagline">Collective Intelligence</div>
+                    </div>
+                    
+                    <!-- Spectrum Logo -->
+                    <div class="logo-concept">
+                        <div class="logo-main">
+                            <svg viewBox="0 0 120 120" width="120" height="120">
+                                <!-- Frequency bars -->
+                                <rect x="20" y="50" width="4" height="20" fill="white">
+                                    <animate attributeName="height" values="20;40;20" dur="1s" repeatCount="indefinite" begin="0s"/>
+                                    <animate attributeName="y" values="50;40;50" dur="1s" repeatCount="indefinite" begin="0s"/>
+                                </rect>
+                                <rect x="30" y="45" width="4" height="30" fill="white">
+                                    <animate attributeName="height" values="30;50;30" dur="1s" repeatCount="indefinite" begin="0.1s"/>
+                                    <animate attributeName="y" values="45;35;45" dur="1s" repeatCount="indefinite" begin="0.1s"/>
+                                </rect>
+                                <rect x="40" y="40" width="4" height="40" fill="white">
+                                    <animate attributeName="height" values="40;60;40" dur="1s" repeatCount="indefinite" begin="0.2s"/>
+                                    <animate attributeName="y" values="40;30;40" dur="1s" repeatCount="indefinite" begin="0.2s"/>
+                                </rect>
+                                <rect x="50" y="35" width="4" height="50" fill="white">
+                                    <animate attributeName="height" values="50;70;50" dur="1s" repeatCount="indefinite" begin="0.3s"/>
+                                    <animate attributeName="y" values="35;25;35" dur="1s" repeatCount="indefinite" begin="0.3s"/>
+                                </rect>
+                                <rect x="60" y="35" width="4" height="50" fill="white">
+                                    <animate attributeName="height" values="50;70;50" dur="1s" repeatCount="indefinite" begin="0.4s"/>
+                                    <animate attributeName="y" values="35;25;35" dur="1s" repeatCount="indefinite" begin="0.4s"/>
+                                </rect>
+                                <rect x="70" y="40" width="4" height="40" fill="white">
+                                    <animate attributeName="height" values="40;60;40" dur="1s" repeatCount="indefinite" begin="0.5s"/>
+                                    <animate attributeName="y" values="40;30;40" dur="1s" repeatCount="indefinite" begin="0.5s"/>
+                                </rect>
+                                <rect x="80" y="45" width="4" height="30" fill="white">
+                                    <animate attributeName="height" values="30;50;30" dur="1s" repeatCount="indefinite" begin="0.6s"/>
+                                    <animate attributeName="y" values="45;35;45" dur="1s" repeatCount="indefinite" begin="0.6s"/>
+                                </rect>
+                                <rect x="90" y="50" width="4" height="20" fill="white">
+                                    <animate attributeName="height" values="20;40;20" dur="1s" repeatCount="indefinite" begin="0.7s"/>
+                                    <animate attributeName="y" values="50;40;50" dur="1s" repeatCount="indefinite" begin="0.7s"/>
+                                </rect>
+                            </svg>
+                        </div>
+                        <div class="logo-name">SPECTRUM</div>
+                        <div class="logo-tagline">Full Range Voice AI</div>
+                    </div>
+                    
+                    <!-- Cascade Logo -->
+                    <div class="logo-concept">
+                        <div class="logo-main">
+                            <svg viewBox="0 0 120 120" width="120" height="120">
+                                <!-- Cascading squares -->
+                                <rect x="35" y="35" width="20" height="20" fill="none" stroke="white" stroke-width="1" opacity="0.3">
+                                    <animateTransform attributeName="transform" type="rotate" 
+                                        values="0 60 60;5 60 60;0 60 60" dur="3s" repeatCount="indefinite"/>
+                                </rect>
+                                <rect x="40" y="40" width="20" height="20" fill="none" stroke="white" stroke-width="1" opacity="0.5">
+                                    <animateTransform attributeName="transform" type="rotate" 
+                                        values="0 60 60;-5 60 60;0 60 60" dur="3s" repeatCount="indefinite" begin="0.2s"/>
+                                </rect>
+                                <rect x="45" y="45" width="20" height="20" fill="none" stroke="white" stroke-width="1" opacity="0.7">
+                                    <animateTransform attributeName="transform" type="rotate" 
+                                        values="0 60 60;5 60 60;0 60 60" dur="3s" repeatCount="indefinite" begin="0.4s"/>
+                                </rect>
+                                <rect x="50" y="50" width="20" height="20" fill="white" opacity="1"/>
+                            </svg>
+                        </div>
+                        <div class="logo-name">CASCADE</div>
+                        <div class="logo-tagline">Agent Waterfall</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Value Propositions -->
+            <section class="values-section">
+                <h2 class="section-title">Tu propuesta de valor única</h2>
+                
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <div class="value-number">&lt;1</div>
+                        </div>
+                        <div class="value-title">Minuto</div>
+                        <div class="value-description">Para desplegar</div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <div class="value-number">100</div>
+                        </div>
+                        <div class="value-title">Agentes</div>
+                        <div class="value-description">Simultáneos</div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <div class="value-number">∞</div>
+                        </div>
+                        <div class="value-title">Nichos</div>
+                        <div class="value-description">Personalizables</div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <div class="value-number">0</div>
+                        </div>
+                        <div class="value-title">Código</div>
+                        <div class="value-description">Necesario</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Interactive Demo -->
+            <section class="demo-section">
+                <h2 class="section-title">Experimenta la velocidad</h2>
+                
+                <div class="demo-container">
+                    <button class="demo-button" onclick="deployAgents()">
+                        Desplegar 100 Agentes
+                    </button>
+                    
+                    <div class="agents-display" id="agentsDisplay"></div>
+                    
+                    <div class="counter" id="counter">0 / 100</div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <script>
+        // Deploy agents animation
+        function deployAgents() {
+            const display = document.getElementById('agentsDisplay');
+            const counter = document.getElementById('counter');
+            const button = document.querySelector('.demo-button');
+            
+            // Reset
+            display.innerHTML = '';
+            display.classList.remove('active');
+            counter.classList.remove('active');
+            button.disabled = true;
+            button.textContent = 'Desplegando...';
+            
+            setTimeout(() => {
+                display.classList.add('active');
+                counter.classList.add('active');
+                
+                let count = 0;
+                const interval = setInterval(() => {
+                    if (count < 100) {
+                        const agent = document.createElement('div');
+                        agent.className = 'agent-icon';
+                        agent.style.animationDelay = `${count * 0.01}s`;
+                        agent.textContent = count + 1;
+                        display.appendChild(agent);
+                        
+                        count++;
+                        counter.textContent = `${count} / 100`;
+                        
+                        if (count === 100) {
+                            clearInterval(interval);
+                            setTimeout(() => {
+                                counter.innerHTML = '✓ 100 Agentes Activos';
+                                button.disabled = false;
+                                button.textContent = 'Desplegar de Nuevo';
+                            }, 500);
+                        }
+                    }
+                }, 10); // 10ms per agent = 1 second for 100 agents
+            }, 500);
+        }
+        
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.querySelectorAll('.name-card').forEach((card, index) => {
+                const speed = 0.5 + (index * 0.1);
+                card.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+        
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.value-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
