@@ -1,0 +1,2503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- 
+    ===============================================
+    MILI PÉREZ - TECH EXPLORER
+    Brand Identity System v1.0
+    ===============================================
+    Designer: Mili Pérez
+    Year: 2024
+    Location: Málaga, España
+    
+    Concept: Where code meets compass, 
+    algorithms meet adventures
+    ===============================================
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MILI PÉREZ - Tech Explorer Brand Identity System. Where code meets compass, algorithms meet adventures.">
+    <meta name="author" content="Mili Pérez">
+    <meta name="keywords" content="brand identity, tech explorer, digital nomad, adventure, technology, branding">
+    <title>MILI PÉREZ | Tech Explorer - Brand Identity System</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='16' cy='16' r='14' stroke='black' stroke-width='1'/%3E%3Ctext x='16' y='20' fill='black' text-anchor='middle' font-size='10' font-family='monospace'%3E%3C/%3E%3C/text%3E%3Cline x1='16' y1='16' x2='16' y2='6' stroke='%23008DCB' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='5' r='1.5' fill='%23008DCB'/%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+        
+        :root {
+            /* MILI PÉREZ CORE PALETTE */
+            --mp-pure-black: #000000;
+            --mp-pure-white: #ffffff;
+            --mp-dark: #0a0a0a;
+            --mp-gray-900: #1a1a1a;
+            --mp-gray-800: #2a2a2a;
+            --mp-gray-700: #3a3a3a;
+            --mp-gray-600: #4a4a4a;
+            --mp-gray-500: #6a6a6a;
+            --mp-gray-400: #8a8a8a;
+            --mp-gray-300: #aaaaaa;
+            --mp-gray-200: #cacaca;
+            --mp-gray-100: #eaeaea;
+            --mp-gray-50: #f5f5f5;
+            
+            /* ACCENT COLOR - Solo uno */
+            --mp-blue-accent: #008DCB;
+            
+            /* SIGNATURE GRADIENTS */
+            --mp-gradient-horizon: linear-gradient(135deg, #fff 0%, #000 100%);
+            --mp-gradient-subtle: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);
+            --mp-gradient-path: linear-gradient(90deg, transparent 0%, white 50%, transparent 100%);
+            
+            /* TYPOGRAPHY SCALE */
+            --font-display: clamp(3rem, 10vw, 8rem);
+            --font-headline: clamp(2rem, 6vw, 4rem);
+            --font-title: clamp(1.5rem, 4vw, 2.5rem);
+            --font-body: clamp(1rem, 2vw, 1.25rem);
+            --font-small: clamp(0.875rem, 1.5vw, 1rem);
+            --font-micro: 0.75rem;
+            
+            /* ANIMATION TIMING */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+        }
+        
+        /* CUSTOM CURSOR */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s var(--ease-out-expo);
+            mix-blend-mode: difference;
+        }
+        
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+            background: var(--mp-pure-black);
+            color: var(--mp-pure-white);
+            overflow-x: hidden;
+            cursor: none;
+        }
+        
+        /* LOADING SCREEN */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--mp-pure-black);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s var(--ease-out-expo);
+        }
+        
+        .loader-content {
+            text-align: center;
+        }
+        
+        .loader-logo {
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.6s 0.2s forwards;
+        }
+        
+        .loader-text {
+            font-size: var(--font-micro);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 0.6s 0.4s forwards;
+            color: var(--mp-gray-500);
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+            font-size: var(--font-small);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        .loader-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            background: white;
+            transition: width 2s var(--ease-out-expo);
+        }
+        
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 40px;
+            z-index: 1000;
+            mix-blend-mode: difference;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+        
+        nav.scrolled {
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            mix-blend-mode: normal;
+        }
+        
+        .nav-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 100;
+            letter-spacing: 0.3em;
+            cursor: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: var(--font-micro);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 5px 0;
+            cursor: none;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #008DCB;
+            transition: width 0.3s var(--ease-out-expo);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+        }
+        
+        .hero-bg canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: var(--font-display);
+            font-weight: 100;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s 0.5s forwards var(--ease-out-expo);
+        }
+        
+        .hero-subtitle {
+            font-size: var(--font-body);
+            font-weight: 200;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s 0.7s forwards var(--ease-out-expo);
+        }
+        
+        .hero-tagline {
+            font-size: var(--font-small);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s 0.9s forwards var(--ease-out-expo);
+            margin-top: 20px;
+            color: var(--mp-gray-400);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* SECTION LAYOUTS */
+        .section {
+            padding: 150px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .section-header {
+            margin-bottom: 80px;
+        }
+        
+        .section-number {
+            font-size: var(--font-micro);
+            letter-spacing: 0.3em;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: var(--font-headline);
+            font-weight: 100;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+        }
+        
+        .section-subtitle {
+            font-size: var(--font-body);
+            color: var(--mp-gray-400);
+            font-weight: 300;
+            max-width: 600px;
+        }
+        
+        /* LOGO SYSTEM SECTION */
+        .logo-system {
+            background: var(--mp-pure-black);
+        }
+        
+        .logo-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            margin-bottom: 120px;
+            position: relative;
+        }
+        
+        .logo-main {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+        
+        .logo-versions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            margin-bottom: 120px;
+        }
+        
+        .logo-version {
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+        }
+        
+        .logo-version.black {
+            background: var(--mp-pure-black);
+            border: 1px solid var(--mp-gray-900);
+        }
+        
+        .logo-version.white {
+            background: var(--mp-pure-white);
+        }
+        
+        .logo-version.gray {
+            background: var(--mp-gray-900);
+        }
+        
+        .logo-version.gradient {
+            background: var(--mp-gradient-horizon);
+        }
+        
+        .version-label {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: var(--font-micro);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        .logo-version.white .version-label {
+            color: var(--mp-pure-black);
+        }
+        
+        /* LOGO VARIATIONS */
+        .logo-variations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 120px;
+        }
+        
+        .logo-card {
+            background: var(--mp-gray-900);
+            padding: 60px 40px;
+            border-radius: 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s var(--ease-out-expo);
+            cursor: none;
+        }
+        
+        .logo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--mp-gradient-eclipse);
+            opacity: 0;
+            transition: opacity 0.5s var(--ease-out-expo);
+        }
+        
+        .logo-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .logo-card:hover::before {
+            opacity: 1;
+        }
+        
+        .logo-container {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo-name {
+            font-size: var(--font-small);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo-usage {
+            font-size: var(--font-micro);
+            color: var(--mp-gray-500);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* CLEAR SPACE & PROPORTIONS */
+        .logo-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 80px;
+            margin-bottom: 120px;
+        }
+        
+        .spec-demo {
+            background: var(--mp-gray-900);
+            padding: 60px;
+            position: relative;
+        }
+        
+        .spec-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        /* COLOR SYSTEM */
+        .color-system {
+            background: var(--mp-pure-white);
+            color: var(--mp-pure-black);
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0;
+            margin-bottom: 80px;
+        }
+        
+        .color-card {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.3s var(--ease-out-expo);
+            cursor: none;
+        }
+        
+        .color-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        
+        .color-info {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .color-name {
+            font-size: var(--font-small);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .color-hex {
+            font-family: 'SF Mono', monospace;
+            font-size: var(--font-micro);
+            opacity: 0.6;
+        }
+        
+        /* TYPOGRAPHY SYSTEM */
+        .typography-system {
+            background: var(--mp-pure-black);
+        }
+        
+        .type-specimen {
+            margin-bottom: 80px;
+        }
+        
+        .type-sample {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--mp-gray-900);
+        }
+        
+        .type-label {
+            font-size: var(--font-micro);
+            color: var(--mp-gray-500);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        
+        .type-display {
+            margin-bottom: 20px;
+        }
+        
+        .type-specs {
+            display: flex;
+            gap: 40px;
+            font-size: var(--font-micro);
+            color: var(--mp-gray-500);
+            font-family: 'SF Mono', monospace;
+        }
+        
+        /* BRAND APPLICATIONS */
+        .applications {
+            background: var(--mp-gray-900);
+        }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            margin-bottom: 80px;
+        }
+        
+        .app-card {
+            background: var(--mp-pure-black);
+            min-height: 600px;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+        }
+        
+        .app-preview {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 40px;
+        }
+        
+        .app-title {
+            font-size: var(--font-title);
+            font-weight: 200;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .app-description {
+            color: var(--mp-gray-400);
+            font-size: var(--font-small);
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        /* DIGITAL ELEMENTS */
+        .digital-elements {
+            background: var(--mp-pure-black);
+        }
+        
+        .element-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            margin-bottom: 120px;
+        }
+        
+        .element-card {
+            text-align: center;
+        }
+        
+        .element-visual {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .element-name {
+            font-size: var(--font-small);
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .element-desc {
+            font-size: var(--font-micro);
+            color: var(--mp-gray-500);
+            line-height: 1.6;
+        }
+        
+        /* TONE OF VOICE */
+        .tone-voice {
+            background: var(--mp-pure-white);
+            color: var(--mp-pure-black);
+        }
+        
+        .tone-principles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+        
+        .tone-card {
+            padding: 40px;
+            background: var(--mp-gray-50);
+            position: relative;
+        }
+        
+        .tone-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--mp-pure-black);
+        }
+        
+        .tone-title {
+            font-size: var(--font-title);
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .tone-description {
+            font-size: var(--font-body);
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .tone-examples {
+            padding: 20px;
+            background: white;
+            font-family: 'SF Mono', monospace;
+            font-size: var(--font-small);
+        }
+        
+        .tone-do {
+            color: var(--mp-pure-black);
+            padding: 10px 0;
+        }
+        
+        .tone-dont {
+            color: var(--mp-gray-500);
+            padding: 10px 0;
+            text-decoration: line-through;
+        }
+        
+        /* MOTION PRINCIPLES */
+        .motion-principles {
+            background: var(--mp-pure-black);
+        }
+        
+        .motion-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            margin-bottom: 120px;
+        }
+        
+        .motion-card {
+            text-align: center;
+        }
+        
+        .motion-demo {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .motion-box {
+            width: 60px;
+            height: 60px;
+            background: white;
+        }
+        
+        .motion-linear {
+            animation: slideLinear 2s linear infinite;
+        }
+        
+        .motion-ease {
+            animation: slideEase 2s var(--ease-out-expo) infinite;
+        }
+        
+        .motion-spring {
+            animation: slideSpring 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        
+        @keyframes slideLinear {
+            0%, 100% { transform: translateX(-50px); }
+            50% { transform: translateX(50px); }
+        }
+        
+        @keyframes slideEase {
+            0%, 100% { transform: translateX(-50px); }
+            50% { transform: translateX(50px); }
+        }
+        
+        @keyframes slideSpring {
+            0%, 100% { transform: translateX(-50px) rotate(0deg); }
+            50% { transform: translateX(50px) rotate(180deg); }
+        }
+        
+        /* BRAND MANIFESTO */
+        .manifesto {
+            background: var(--mp-pure-black);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .manifesto-content {
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+        }
+        
+        .manifesto-text {
+            font-size: var(--font-headline);
+            font-weight: 100;
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+            margin-bottom: 60px;
+        }
+        
+        .manifesto-signature {
+            font-size: var(--font-body);
+            color: var(--mp-gray-400);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+        
+        /* INTERACTIVE ELEMENTS */
+        .interactive-demo {
+            padding: 120px 0;
+            background: var(--mp-pure-black);
+            position: relative;
+        }
+        
+        .terminal {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--mp-pure-black);
+            border: 1px solid var(--mp-gray-800);
+            border-radius: 0;
+            overflow: hidden;
+        }
+        
+        .terminal-header {
+            background: var(--mp-gray-900);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--mp-gray-700);
+        }
+        
+        .terminal-body {
+            padding: 30px;
+            font-family: 'SF Mono', monospace;
+            font-size: var(--font-small);
+            line-height: 1.8;
+            min-height: 400px;
+        }
+        
+        .terminal-line {
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: terminalType 0.5s forwards var(--ease-out-expo);
+        }
+        
+        .terminal-input {
+            color: #0f0;
+        }
+        
+        .terminal-output {
+            color: var(--mp-gray-300);
+        }
+        
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: white;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes terminalType {
+            to { opacity: 1; }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* DOWNLOAD SECTION */
+        .downloads {
+            background: var(--mp-gray-900);
+            text-align: center;
+        }
+        
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+        }
+        
+        .download-card {
+            background: var(--mp-pure-black);
+            padding: 40px 20px;
+            transition: transform 0.3s var(--ease-out-expo);
+            cursor: none;
+            position: relative;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .download-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .download-label {
+            font-size: var(--font-small);
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .download-format {
+            font-size: var(--font-micro);
+            color: var(--mp-gray-500);
+            font-family: 'SF Mono', monospace;
+        }
+        
+        /* FOOTER */
+        footer {
+            background: var(--mp-pure-black);
+            padding: 80px 40px;
+            text-align: center;
+            border-top: 1px solid var(--mp-gray-900);
+        }
+        
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            margin-bottom: 40px;
+        }
+        
+        .footer-info {
+            font-size: var(--font-small);
+            color: var(--mp-gray-500);
+            line-height: 2;
+        }
+        
+        .footer-coords {
+            font-family: 'SF Mono', monospace;
+            font-size: var(--font-micro);
+            color: var(--mp-gray-600);
+            margin-top: 20px;
+        }
+        
+        /* MOBILE MENU */
+        .mobile-menu-toggle {
+            display: none;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            cursor: none;
+        }
+        
+        .mobile-menu-toggle span {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: white;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+        
+        .mobile-menu-toggle span:nth-child(1) { top: 0; }
+        .mobile-menu-toggle span:nth-child(2) { top: 50%; }
+        .mobile-menu-toggle span:nth-child(3) { bottom: 0; }
+        
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .logo-versions {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tone-principles {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            :root {
+                cursor: auto;
+            }
+            
+            * {
+                cursor: auto !important;
+            }
+            
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
+            
+            .section {
+                padding: 80px 20px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .logo-variations {
+                grid-template-columns: 1fr;
+            }
+            
+            .color-palette {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .element-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .motion-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* SCROLL ANIMATIONS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--ease-out-expo);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    <circle cx="30" cy="30" r="25" stroke="white" stroke-width="1" fill="none" opacity="0.3"/>
+                    <text x="30" y="35" fill="white" text-anchor="middle" font-size="14" font-family="monospace" opacity="0.8">&lt;/&gt;</text>
+                    <line x1="30" y1="30" x2="30" y2="12" stroke="#008DCB" stroke-width="1.5" opacity="0.8">
+                        <animate attributeName="y2" values="12;14;12" dur="2s" repeatCount="indefinite"/>
+                    </line>
+                    <circle cx="30" cy="11" r="2" fill="#008DCB" opacity="0.8">
+                        <animate attributeName="cy" values="11;13;11" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+            </div>
+            <div class="loader-text">Initializing Brand System</div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav id="nav">
+        <div class="nav-content">
+            <div class="nav-logo">MP</div>
+            
+            <ul class="nav-menu">
+                <li><a href="#logo-system" class="nav-link">Logo</a></li>
+                <li><a href="#colors" class="nav-link">Colores</a></li>
+                <li><a href="#typography" class="nav-link">Tipografía</a></li>
+                <li><a href="#applications" class="nav-link">Aplicaciones</a></li>
+                <li><a href="#tone" class="nav-link">Voz</a></li>
+                <li><a href="#downloads" class="nav-link">Descargas</a></li>
+            </ul>
+            
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <!-- Subtle topographic pattern -->
+            <svg width="100%" height="100%" style="position: absolute; opacity: 0.02;">
+                <pattern id="topo" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                    <circle cx="100" cy="100" r="80" stroke="white" stroke-width="0.5" fill="none"/>
+                    <circle cx="100" cy="100" r="60" stroke="white" stroke-width="0.5" fill="none"/>
+                    <circle cx="100" cy="100" r="40" stroke="white" stroke-width="0.5" fill="none"/>
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#topo)"/>
+            </svg>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">MILI PÉREZ</h1>
+            <p class="hero-subtitle" style="color: #008DCB;">Tech Explorer</p>
+            <p class="hero-tagline">Brand Identity System</p>
+        </div>
+    </section>
+    
+    <!-- MAIN BRAND IDENTITY - DESTACADO -->
+    <section style="background: white; padding: 100px 40px;">
+        <div class="section-header" style="text-align: center;">
+            <div class="section-number" style="color: #008DCB; opacity: 0.5; font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 20px;">01</div>
+            <h2 style="font-size: 2.5rem; font-weight: 100; color: black; margin-bottom: 20px; letter-spacing: -1px;">Sistema de Identidad</h2>
+            <p style="font-size: 1.3rem; color: #6a6a6a; margin-bottom: 80px; font-weight: 300;">Una marca que fusiona código y compass, algoritmos y aventuras</p>
+        </div>
+        
+        <div style="display: flex; justify-content: center; align-items: center; gap: 100px; flex-wrap: wrap; margin-bottom: 100px;">
+            <!-- LOGOTIPO PRINCIPAL -->
+            <div style="text-align: center;">
+                <h3 style="font-size: 1.2rem; font-weight: 300; color: #6a6a6a; margin-bottom: 40px; letter-spacing: 0.2em; text-transform: uppercase;">Logo Principal - Tech Compass</h3>
+                <div style="background: black; padding: 60px; border-radius: 20px; display: inline-block;">
+                    <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                        <!-- Main Compass Circle -->
+                        <circle cx="100" cy="100" r="80" stroke="white" stroke-width="1.5" fill="none"/>
+                        <circle cx="100" cy="100" r="65" stroke="white" stroke-width="0.5" fill="none" opacity="0.3"/>
+                        
+                        <!-- Cardinal Points -->
+                        <text x="100" y="15" fill="white" text-anchor="middle" font-size="10" font-weight="100" opacity="0.7">N</text>
+                        <text x="100" y="190" fill="white" text-anchor="middle" font-size="10" font-weight="100" opacity="0.7">S</text>
+                        <text x="15" y="103" fill="white" text-anchor="middle" font-size="10" font-weight="100" opacity="0.7">W</text>
+                        <text x="185" y="103" fill="white" text-anchor="middle" font-size="10" font-weight="100" opacity="0.7">E</text>
+                        
+                        <!-- Central Code Symbol -->
+                        <text x="100" y="108" fill="white" text-anchor="middle" font-size="32" font-family="'SF Mono', monospace" font-weight="100">&lt;/&gt;</text>
+                        
+                        <!-- Compass Needle with animation -->
+                        <line x1="100" y1="100" x2="100" y2="40" stroke="#008DCB" stroke-width="2" stroke-linecap="round">
+                            <animate attributeName="y2" values="40;42;40" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                        </line>
+                        <polygon points="100,35 97,42 103,42" fill="#008DCB">
+                            <animate attributeName="points" values="100,35 97,42 103,42;100,37 97,44 103,44;100,35 97,42 103,42" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                        </polygon>
+                    </svg>
+                </div>
+                <p style="margin-top: 30px; color: #6a6a6a; font-size: 0.9rem;">Compass + Code + Explorer Blue (#008DCB)</p>
+            </div>
+            
+            <!-- FAVICON ANIMADO -->
+            <div style="text-align: center;">
+                <h3 style="font-size: 1.2rem; font-weight: 300; color: #6a6a6a; margin-bottom: 40px; letter-spacing: 0.2em; text-transform: uppercase;">Favicon Animado</h3>
+                
+                <!-- Versión grande para visualización -->
+                <div style="background: black; padding: 60px; border-radius: 20px; display: inline-block; margin-bottom: 30px;">
+                    <svg width="128" height="128" viewBox="0 0 128 128" fill="none">
+                        <circle cx="64" cy="64" r="56" stroke="white" stroke-width="3" fill="none"/>
+                        <text x="64" y="76" fill="white" text-anchor="middle" font-size="36" font-family="monospace" font-weight="300">&lt;/&gt;</text>
+                        <line x1="64" y1="64" x2="64" y2="20" stroke="#008DCB" stroke-width="3">
+                            <animate attributeName="y2" values="20;24;20" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                        </line>
+                        <circle cx="64" cy="16" r="6" fill="#008DCB">
+                            <animate attributeName="cy" values="16;20;16" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                        </circle>
+                    </svg>
+                </div>
+                
+                <!-- Tamaños reales -->
+                <div style="display: flex; gap: 20px; justify-content: center;">
+                    <div style="background: white; border: 1px solid #eaeaea; padding: 20px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="14" stroke="black" stroke-width="1" fill="none"/>
+                            <text x="16" y="20" fill="black" text-anchor="middle" font-size="10" font-family="monospace" font-weight="400">&lt;/&gt;</text>
+                            <line x1="16" y1="16" x2="16" y2="6" stroke="#008DCB" stroke-width="1.5">
+                                <animate attributeName="y2" values="6;7;6" dur="3s" repeatCount="indefinite"/>
+                            </line>
+                            <circle cx="16" cy="5" r="1.5" fill="#008DCB">
+                                <animate attributeName="cy" values="5;6;5" dur="3s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div style="background: white; border: 1px solid #eaeaea; padding: 20px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <circle cx="8" cy="8" r="7" stroke="black" stroke-width="0.5" fill="none"/>
+                            <text x="8" y="11" fill="black" text-anchor="middle" font-size="6" font-family="monospace" font-weight="400">&lt;/&gt;</text>
+                            <line x1="8" y1="8" x2="8" y2="3" stroke="#008DCB" stroke-width="1">
+                                <animate attributeName="y2" values="3;3.5;3" dur="3s" repeatCount="indefinite"/>
+                            </line>
+                            <circle cx="8" cy="2.5" r="0.8" fill="#008DCB">
+                                <animate attributeName="cy" values="2.5;3;2.5" dur="3s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #6a6a6a; font-size: 0.8rem;">32x32px | 16x16px</p>
+            </div>
+        </div>
+        
+        <!-- NAMING + LOGO + FAVICON INTEGRATION -->
+        <div style="background: linear-gradient(135deg, #000 0%, #1a1a1a 100%); padding: 80px 40px; margin: 0 -40px 60px;">
+            <h3 style="font-size: 1.8rem; font-weight: 100; color: white; margin-bottom: 60px; text-align: center;">Sistema Completo: Naming + Logo + Favicon</h3>
+            
+            <!-- Desktop Version -->
+            <div style="margin-bottom: 80px;">
+                <h4 style="color: #008DCB; font-size: 0.9rem; letter-spacing: 0.3em; text-transform: uppercase; text-align: center; margin-bottom: 40px; opacity: 0.7;">VERSIÓN DESKTOP</h4>
+                <div style="background: white; padding: 40px; border-radius: 10px; max-width: 800px; margin: 0 auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                    <div style="display: flex; align-items: center; gap: 30px; justify-content: center;">
+                        <!-- Favicon animado -->
+                        <div>
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <circle cx="24" cy="24" r="21" stroke="black" stroke-width="1.5" fill="none"/>
+                                <text x="24" y="29" fill="black" text-anchor="middle" font-size="14" font-family="monospace" font-weight="400">&lt;/&gt;</text>
+                                <line x1="24" y1="24" x2="24" y2="8" stroke="#008DCB" stroke-width="2">
+                                    <animate attributeName="y2" values="8;10;8" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </line>
+                                <circle cx="24" cy="7" r="2.5" fill="#008DCB">
+                                    <animate attributeName="cy" values="7;9;7" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        
+                        <!-- Naming -->
+                        <div style="text-align: left;">
+                            <h1 style="font-size: 2.5rem; font-weight: 100; color: black; letter-spacing: 0.15em; margin: 0;">MILI PÉREZ</h1>
+                            <p style="font-size: 1rem; color: #008DCB; margin: 5px 0 0 0; letter-spacing: 0.3em; text-transform: uppercase;">Tech Explorer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile/Tab Version -->
+            <div style="margin-bottom: 80px;">
+                <h4 style="color: #008DCB; font-size: 0.9rem; letter-spacing: 0.3em; text-transform: uppercase; text-align: center; margin-bottom: 40px; opacity: 0.7;">VERSIÓN MÓVIL / TAB</h4>
+                <div style="background: black; padding: 30px; border-radius: 10px; max-width: 400px; margin: 0 auto; border: 1px solid #2a2a2a;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <!-- Favicon pequeño -->
+                        <div>
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1" fill="none"/>
+                                <text x="16" y="20" fill="white" text-anchor="middle" font-size="10" font-family="monospace" font-weight="300">&lt;/&gt;</text>
+                                <line x1="16" y1="16" x2="16" y2="6" stroke="#008DCB" stroke-width="1.5">
+                                    <animate attributeName="y2" values="6;7;6" dur="3s" repeatCount="indefinite"/>
+                                </line>
+                                <circle cx="16" cy="5" r="1.5" fill="#008DCB">
+                                    <animate attributeName="cy" values="5;6;5" dur="3s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        
+                        <!-- Naming compacto -->
+                        <div>
+                            <div style="font-size: 1.3rem; font-weight: 100; color: white; letter-spacing: 0.1em;">MILI PÉREZ</div>
+                            <div style="font-size: 0.7rem; color: #008DCB; margin-top: 2px; letter-spacing: 0.2em;">TECH EXPLORER</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Browser Tab Simulation -->
+            <div>
+                <h4 style="color: #008DCB; font-size: 0.9rem; letter-spacing: 0.3em; text-transform: uppercase; text-align: center; margin-bottom: 40px; opacity: 0.7;">EN NAVEGADOR WEB</h4>
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <!-- Browser Chrome -->
+                    <div style="background: #2a2a2a; padding: 10px; border-radius: 8px 8px 0 0; display: flex; align-items: center; gap: 10px;">
+                        <div style="display: flex; gap: 5px;">
+                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f57;"></div>
+                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e;"></div>
+                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #28ca42;"></div>
+                        </div>
+                        
+                        <!-- Tab with favicon -->
+                        <div style="flex: 1; display: flex; align-items: center; gap: 8px; background: #1a1a1a; padding: 8px 12px; border-radius: 4px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="white" stroke-width="0.5" fill="none"/>
+                                <text x="8" y="11" fill="white" text-anchor="middle" font-size="6" font-family="monospace" font-weight="400">&lt;/&gt;</text>
+                                <line x1="8" y1="8" x2="8" y2="3" stroke="#008DCB" stroke-width="1">
+                                    <animate attributeName="y2" values="3;3.5;3" dur="3s" repeatCount="indefinite"/>
+                                </line>
+                                <circle cx="8" cy="2.5" r="0.8" fill="#008DCB">
+                                    <animate attributeName="cy" values="2.5;3;2.5" dur="3s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                            <span style="color: white; font-size: 0.85rem;">Mili Pérez - Tech Explorer</span>
+                        </div>
+                        
+                        <!-- URL Bar -->
+                        <div style="background: #1a1a1a; padding: 8px 12px; border-radius: 4px; min-width: 200px;">
+                            <span style="color: #6a6a6a; font-size: 0.8rem; font-family: 'SF Mono', monospace;">miliperez.tech</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Page Preview -->
+                    <div style="background: black; height: 200px; border: 1px solid #2a2a2a; border-top: none; display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center;">
+                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin-bottom: 20px;">
+                                <circle cx="40" cy="40" r="35" stroke="white" stroke-width="1" fill="none" opacity="0.3"/>
+                                <text x="40" y="46" fill="white" text-anchor="middle" font-size="18" font-family="monospace" font-weight="100">&lt;/&gt;</text>
+                                <line x1="40" y1="40" x2="40" y2="15" stroke="#008DCB" stroke-width="2" opacity="0.8">
+                                    <animate attributeName="y2" values="15;18;15" dur="4s" repeatCount="indefinite"/>
+                                </line>
+                                <circle cx="40" cy="13" r="3" fill="#008DCB" opacity="0.8">
+                                    <animate attributeName="cy" values="13;16;13" dur="4s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                            <div style="font-size: 1.5rem; font-weight: 100; color: white; letter-spacing: 0.2em;">MILI PÉREZ</div>
+                            <div style="font-size: 0.8rem; color: #008DCB; margin-top: 5px; letter-spacing: 0.3em;">TECH EXPLORER</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Variaciones del Sistema -->
+        <div style="background: #f5f5f5; padding: 60px 40px; margin: 0 -40px;">
+            <h3 style="font-size: 1.5rem; font-weight: 200; color: black; margin-bottom: 50px;">Variaciones del Sistema</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+                <!-- Mountain Code -->
+                <div style="background: white; padding: 40px 20px; text-align: center;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin-bottom: 15px;">
+                        <path d="M40 15 L25 50 L55 50 Z" stroke="black" stroke-width="1" fill="none"/>
+                        <path d="M52 27 L45 50 L65 50 Z" stroke="black" stroke-width="0.5" fill="none"/>
+                        <text x="40" y="65" fill="#6a6a6a" text-anchor="middle" font-size="6" font-family="monospace">01001101 01010000</text>
+                    </svg>
+                    <p style="font-size: 0.9rem; color: #2a2a2a; font-weight: 500;">Mountain Code</p>
+                </div>
+                
+                <!-- Monograma MP -->
+                <div style="background: white; padding: 40px 20px; text-align: center;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin-bottom: 15px;">
+                        <path d="M 15 50 L 15 20 L 25 35 L 35 20 L 35 50" stroke="black" stroke-width="1.5" fill="none"/>
+                        <path d="M 45 50 L 45 20 L 60 20 Q 65 20 65 30 Q 65 40 60 40 L 45 40" stroke="black" stroke-width="1.5" fill="none"/>
+                    </svg>
+                    <p style="font-size: 0.9rem; color: #2a2a2a; font-weight: 500;">Monograma MP</p>
+                </div>
+                
+                <!-- Path Finder -->
+                <div style="background: white; padding: 40px 20px; text-align: center;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin-bottom: 15px;">
+                        <circle cx="15" cy="40" r="2" fill="#008DCB"/>
+                        <circle cx="30" cy="30" r="2" fill="#008DCB"/>
+                        <circle cx="45" cy="35" r="2" fill="#008DCB"/>
+                        <circle cx="60" cy="30" r="2" fill="#008DCB"/>
+                        <circle cx="70" cy="40" r="2" fill="#008DCB"/>
+                        <path d="M 15 40 Q 30 20 45 35 T 70 40" stroke="black" stroke-width="0.5" fill="none" stroke-dasharray="2,2"/>
+                    </svg>
+                    <p style="font-size: 0.9rem; color: #2a2a2a; font-weight: 500;">Path Finder</p>
+                </div>
+                
+                <!-- Coordinate System -->
+                <div style="background: white; padding: 40px 20px; text-align: center;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin-bottom: 15px;">
+                        <line x1="10" y1="40" x2="70" y2="40" stroke="black" stroke-width="0.5"/>
+                        <line x1="40" y1="10" x2="40" y2="70" stroke="black" stroke-width="0.5"/>
+                        <circle cx="52" cy="28" r="3" fill="#008DCB"/>
+                        <text x="40" y="65" fill="#6a6a6a" text-anchor="middle" font-size="5" font-family="monospace">40.7128°, -74.0060°</text>
+                    </svg>
+                    <p style="font-size: 0.9rem; color: #2a2a2a; font-weight: 500;">Coordinate System</p>
+                </div>
+                
+                <!-- Terminal Explorer -->
+                <div style="background: white; padding: 40px 20px; text-align: center;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin-bottom: 15px;">
+                        <rect x="10" y="25" width="60" height="30" stroke="black" stroke-width="1" fill="none"/>
+                        <text x="15" y="40" fill="black" font-size="7" font-family="monospace">$ explore --world</text>
+                        <rect x="15" y="45" width="5" height="1" fill="#008DCB">
+                            <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+                        </rect>
+                    </svg>
+                    <p style="font-size: 0.9rem; color: #2a2a2a; font-weight: 500;">Terminal Explorer</p>
+                </div>
+                
+                <!-- Gradiente Signature -->
+                <div style="background: linear-gradient(135deg, white 0%, black 100%); padding: 40px 20px; text-align: center;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <circle cx="30" cy="30" r="25" stroke="white" stroke-width="1" fill="none" mix-blend-mode="difference"/>
+                            <text x="30" y="35" fill="white" text-anchor="middle" font-size="12" font-family="monospace" mix-blend-mode="difference">&lt;/&gt;</text>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: white; font-weight: 500; mix-blend-mode="difference;">Gradient Signature</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Valores y Narrativa -->
+        <div style="padding: 80px 40px; background: black; margin: 80px -40px 0; color: white;">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <h3 style="font-size: 2rem; font-weight: 100; margin-bottom: 60px; text-align: center;">Valores de Marca</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 80px;">
+                    <div style="text-align: center; padding: 30px; border: 1px solid #2a2a2a;">
+                        <h4 style="font-size: 1.2rem; font-weight: 200; margin-bottom: 15px; color: #008DCB;">Exploración</h4>
+                        <p style="color: #8a8a8a; font-size: 0.95rem; line-height: 1.6;">Cada proyecto es una nueva expedición digital</p>
+                    </div>
+                    <div style="text-align: center; padding: 30px; border: 1px solid #2a2a2a;">
+                        <h4 style="font-size: 1.2rem; font-weight: 200; margin-bottom: 15px; color: #008DCB;">Innovación</h4>
+                        <p style="color: #8a8a8a; font-size: 0.95rem; line-height: 1.6;">Tecnología de vanguardia en contextos únicos</p>
+                    </div>
+                    <div style="text-align: center; padding: 30px; border: 1px solid #2a2a2a;">
+                        <h4 style="font-size: 1.2rem; font-weight: 200; margin-bottom: 15px; color: #008DCB;">Autenticidad</h4>
+                        <p style="color: #8a8a8a; font-size: 0.95rem; line-height: 1.6;">Lo local y genuino en cada destino</p>
+                    </div>
+                </div>
+                
+                <!-- Narrativa de Marca -->
+                <div style="border-left: 2px solid #008DCB; padding-left: 40px; margin-bottom: 60px;">
+                    <h4 style="font-size: 1.1rem; font-weight: 200; margin-bottom: 20px; opacity: 0.7;">Body / Narrativa</h4>
+                    <p style="font-size: 1.2rem; line-height: 1.8; font-weight: 300;">
+                        Combino la precisión del desarrollo tecnológico con la pasión por explorar el mundo. 
+                        Cada expedición es una oportunidad para innovar, cada línea de código es un paso hacia nuevos horizontes.
+                    </p>
+                </div>
+                
+                <!-- Headlines -->
+                <div style="border-left: 2px solid #008DCB; padding-left: 40px; margin-bottom: 60px;">
+                    <h4 style="font-size: 1.1rem; font-weight: 200; margin-bottom: 20px; opacity: 0.7;">Headlines / Proyectos</h4>
+                    <p style="font-size: 2.5rem; font-weight: 100; letter-spacing: -1px;">
+                        Código desde el Everest
+                    </p>
+                </div>
+                
+                <!-- Code Terminal -->
+                <div style="background: #0a0a0a; padding: 30px; border-radius: 0; font-family: 'SF Mono', monospace;">
+                    <h4 style="font-size: 1.1rem; font-weight: 200; margin-bottom: 20px; opacity: 0.7; font-family: -apple-system, sans-serif;">Code / Terminal</h4>
+                    <div style="color: #0f0; font-size: 1rem; line-height: 1.8;">
+                        <div>$ git commit -m "Summit reached: Deploy from 8,848m"</div>
+                        <div>$ ssh user@basecamp.himalayas</div>
+                        <div>$ ./launch-expedition --location="next_adventure"</div>
+                        <div style="margin-top: 10px;"><span style="animation: blink 1s infinite;">_</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Logo System -->
+    <section class="section logo-system" id="logo-system">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2 class="section-title reveal">Desarrollo del Sistema</h2>
+            <p class="section-subtitle reveal">Un logo que evoluciona entre lo digital y lo analógico</p>
+        </div>
+        
+        <!-- Primary Logo Display -->
+        <div class="logo-primary reveal">
+            <div class="logo-main">
+                <svg viewBox="0 0 300 300" fill="none">
+                    <!-- Main Compass Circle -->
+                    <circle cx="150" cy="150" r="120" stroke="white" stroke-width="1.5" fill="none"/>
+                    <circle cx="150" cy="150" r="100" stroke="white" stroke-width="0.5" fill="none" opacity="0.2"/>
+                    
+                    <!-- Cardinal Points - Subtle -->
+                    <text x="150" y="25" fill="white" text-anchor="middle" font-size="12" font-weight="100" opacity="0.6">N</text>
+                    <text x="150" y="285" fill="white" text-anchor="middle" font-size="12" font-weight="100" opacity="0.6">S</text>
+                    <text x="25" y="155" fill="white" text-anchor="middle" font-size="12" font-weight="100" opacity="0.6">W</text>
+                    <text x="275" y="155" fill="white" text-anchor="middle" font-size="12" font-weight="100" opacity="0.6">E</text>
+                    
+                    <!-- Central Code Symbol - Clean -->
+                    <g transform="translate(150, 150)">
+                        <text x="0" y="5" fill="white" text-anchor="middle" font-size="42" font-family="'SF Mono', monospace" font-weight="100">&lt;/&gt;</text>
+                    </g>
+                    
+                    <!-- Static Needle - Pointing North -->
+                    <line x1="150" y1="150" x2="150" y2="60" stroke="#008DCB" stroke-width="2" stroke-linecap="round"/>
+                    <polygon points="150,55 147,62 153,62" fill="#008DCB"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Logo Versions Grid -->
+        <div class="logo-versions reveal">
+            <div class="logo-version black">
+                <span class="version-label">Fondo Negro</span>
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="50" stroke="white" stroke-width="1" fill="none"/>
+                    <text x="60" y="65" fill="white" text-anchor="middle" font-size="20" font-family="monospace">&lt;/&gt;</text>
+                    <line x1="60" y1="60" x2="60" y2="20" stroke="#008DCB" stroke-width="1.5"/>
+                    <polygon points="60,17 58,22 62,22" fill="#008DCB"/>
+                </svg>
+            </div>
+            
+            <div class="logo-version white">
+                <span class="version-label">Fondo Blanco</span>
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="50" stroke="black" stroke-width="1" fill="none"/>
+                    <text x="60" y="65" fill="black" text-anchor="middle" font-size="20" font-family="monospace">&lt;/&gt;</text>
+                    <line x1="60" y1="60" x2="60" y2="20" stroke="#008DCB" stroke-width="1.5"/>
+                    <polygon points="60,17 58,22 62,22" fill="#008DCB"/>
+                </svg>
+            </div>
+            
+            <div class="logo-version gray">
+                <span class="version-label">Fondo Gris</span>
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="50" stroke="white" stroke-width="1" fill="none"/>
+                    <text x="60" y="65" fill="white" text-anchor="middle" font-size="20" font-family="monospace">&lt;/&gt;</text>
+                    <line x1="60" y1="60" x2="60" y2="20" stroke="#008DCB" stroke-width="1.5"/>
+                    <polygon points="60,17 58,22 62,22" fill="#008DCB"/>
+                </svg>
+            </div>
+            
+            <div class="logo-version gradient">
+                <span class="version-label">Gradiente</span>
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:white;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:black;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="60" cy="60" r="50" stroke="url(#grad1)" stroke-width="2" fill="none"/>
+                    <text x="60" y="65" fill="white" text-anchor="middle" font-size="20" font-family="monospace">&lt;/&gt;</text>
+                    <line x1="60" y1="60" x2="60" y2="20" stroke="white" stroke-width="2"/>
+                    <polygon points="60,15 57,20 63,20" fill="white"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Logo Variations -->
+        <div class="logo-variations reveal">
+            <!-- Horizontal Logo -->
+            <div class="logo-card">
+                <div class="logo-container">
+                    <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+                        <circle cx="30" cy="30" r="25" stroke="white" stroke-width="1" fill="none"/>
+                        <text x="30" y="35" fill="white" text-anchor="middle" font-size="12" font-family="monospace">&lt;/&gt;</text>
+                        <text x="90" y="35" fill="white" font-size="20" font-weight="100" letter-spacing="3">MILI PÉREZ</text>
+                    </svg>
+                </div>
+                <div class="logo-name">Logo Horizontal</div>
+                <div class="logo-usage">Documentos y presentaciones</div>
+            </div>
+            
+            <!-- Minimal Icon -->
+            <div class="logo-card">
+                <div class="logo-container">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                        <text x="30" y="38" fill="white" text-anchor="middle" font-size="24" font-family="monospace">&lt;/&gt;</text>
+                    </svg>
+                </div>
+                <div class="logo-name">Ícono Minimal</div>
+                <div class="logo-usage">Favicon y redes sociales</div>
+            </div>
+            
+            <!-- Monogram MP -->
+            <div class="logo-card">
+                <div class="logo-container">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+                        <path d="M 20 70 L 20 30 L 35 50 L 50 30 L 50 70" stroke="white" stroke-width="2" fill="none"/>
+                        <path d="M 55 70 L 55 30 L 75 30 Q 80 30 80 40 Q 80 50 75 50 L 55 50" stroke="white" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <div class="logo-name">Monograma</div>
+                <div class="logo-usage">Marca personal</div>
+            </div>
+            
+            <!-- Coordinates Version -->
+            <div class="logo-card">
+                <div class="logo-container">
+                    <svg width="150" height="80" viewBox="0 0 150 80" fill="none">
+                        <text x="75" y="30" fill="white" text-anchor="middle" font-size="20" font-family="monospace">&lt;/&gt;</text>
+                        <text x="75" y="50" fill="white" text-anchor="middle" font-size="8" font-family="'SF Mono', monospace">40.7128° N</text>
+                        <text x="75" y="62" fill="white" text-anchor="middle" font-size="8" font-family="'SF Mono', monospace">74.0060° W</text>
+                    </svg>
+                </div>
+                <div class="logo-name">Coordenadas</div>
+                <div class="logo-usage">Firma de expedición</div>
+            </div>
+            
+            <!-- Terminal Version -->
+            <div class="logo-card">
+                <div class="logo-container">
+                    <svg width="180" height="60" viewBox="0 0 180 60" fill="none">
+                        <rect x="10" y="15" width="160" height="30" stroke="white" stroke-width="1" fill="none"/>
+                        <text x="20" y="35" fill="white" font-size="12" font-family="'SF Mono', monospace">$ mili --explore</text>
+                        <rect x="130" y="30" width="8" height="2" fill="white">
+                            <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+                        </rect>
+                    </svg>
+                </div>
+                <div class="logo-name">Terminal</div>
+                <div class="logo-usage">Firma digital</div>
+            </div>
+            
+            <!-- Badge Version -->
+            <div class="logo-card">
+                <div class="logo-container">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+                        <polygon points="50,10 61,40 90,40 67,58 78,88 50,70 22,88 33,58 10,40 39,40" stroke="white" stroke-width="1" fill="none"/>
+                        <text x="50" y="55" fill="white" text-anchor="middle" font-size="14" font-family="monospace">&lt;/&gt;</text>
+                    </svg>
+                </div>
+                <div class="logo-name">Badge</div>
+                <div class="logo-usage">Certificaciones</div>
+            </div>
+        </div>
+        
+        <!-- Clear Space & Grid -->
+        <div class="logo-specs reveal">
+            <div class="spec-demo">
+                <div class="spec-grid">
+                    <svg width="100%" height="100%" fill="none">
+                        <defs>
+                            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                <line x1="0" y1="0" x2="0" y2="20" stroke="white" stroke-width="0.5"/>
+                                <line x1="0" y1="0" x2="20" y2="0" stroke="white" stroke-width="0.5"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </svg>
+                </div>
+                <div style="position: relative; z-index: 1; text-align: center;">
+                    <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                        <rect x="50" y="50" width="100" height="100" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none" stroke-dasharray="5,5"/>
+                        <circle cx="100" cy="100" r="30" stroke="white" stroke-width="1" fill="none"/>
+                        <text x="100" y="105" fill="white" text-anchor="middle" font-size="14" font-family="monospace">&lt;/&gt;</text>
+                    </svg>
+                    <p style="margin-top: 20px; font-size: var(--font-micro); color: var(--mp-gray-500);">Área de protección: x = altura del logo</p>
+                </div>
+            </div>
+            
+            <div class="spec-demo">
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 30px; font-size: var(--font-title); font-weight: 200;">Tamaños Mínimos</h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 30px; align-items: center;">
+                        <div>
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <circle cx="20" cy="20" r="18" stroke="white" stroke-width="1" fill="none"/>
+                                <text x="20" y="24" fill="white" text-anchor="middle" font-size="8" font-family="monospace">&lt;/&gt;</text>
+                            </svg>
+                            <p style="margin-top: 10px; font-size: var(--font-micro); color: var(--mp-gray-500);">Digital: 40px</p>
+                        </div>
+                        
+                        <div>
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                                <circle cx="30" cy="30" r="28" stroke="white" stroke-width="1" fill="none"/>
+                                <text x="30" y="35" fill="white" text-anchor="middle" font-size="12" font-family="monospace">&lt;/&gt;</text>
+                            </svg>
+                            <p style="margin-top: 10px; font-size: var(--font-micro); color: var(--mp-gray-500);">Impreso: 15mm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Color System -->
+    <section class="section color-system" id="colors">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2 class="section-title reveal">Sistema Cromático</h2>
+            <p class="section-subtitle reveal">Monocromático con propósito: la elegancia de lo esencial</p>
+        </div>
+        
+        <div class="color-palette reveal">
+            <div class="color-card" style="background: #000000;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Pure Black</div>
+                    <div class="color-hex">#000000</div>
+                    <div class="color-hex">RGB 0 0 0</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #0a0a0a;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Dark</div>
+                    <div class="color-hex">#0A0A0A</div>
+                    <div class="color-hex">RGB 10 10 10</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #1a1a1a;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Night</div>
+                    <div class="color-hex">#1A1A1A</div>
+                    <div class="color-hex">RGB 26 26 26</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #2a2a2a;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Charcoal</div>
+                    <div class="color-hex">#2A2A2A</div>
+                    <div class="color-hex">RGB 42 42 42</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #4a4a4a;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Stone</div>
+                    <div class="color-hex">#4A4A4A</div>
+                    <div class="color-hex">RGB 74 74 74</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #6a6a6a;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Trail</div>
+                    <div class="color-hex">#6A6A6A</div>
+                    <div class="color-hex">RGB 106 106 106</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #8a8a8a;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Fog</div>
+                    <div class="color-hex">#8A8A8A</div>
+                    <div class="color-hex">RGB 138 138 138</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #008DCB;">
+                <div class="color-info" style="color: white;">
+                    <div class="color-name">Explorer Blue</div>
+                    <div class="color-hex">#008DCB</div>
+                    <div class="color-hex">RGB 0 141 203</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #aaaaaa;">
+                <div class="color-info" style="color: black;">
+                    <div class="color-name">Mist</div>
+                    <div class="color-hex">#AAAAAA</div>
+                    <div class="color-hex">RGB 170 170 170</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #cacaca;">
+                <div class="color-info" style="color: black;">
+                    <div class="color-name">Cloud</div>
+                    <div class="color-hex">#CACACA</div>
+                    <div class="color-hex">RGB 202 202 202</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #eaeaea;">
+                <div class="color-info" style="color: black;">
+                    <div class="color-name">Summit</div>
+                    <div class="color-hex">#EAEAEA</div>
+                    <div class="color-hex">RGB 234 234 234</div>
+                </div>
+            </div>
+            
+            <div class="color-card" style="background: #ffffff;">
+                <div class="color-info" style="color: black;">
+                    <div class="color-name">Pure White</div>
+                    <div class="color-hex">#FFFFFF</div>
+                    <div class="color-hex">RGB 255 255 255</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Typography System -->
+    <section class="section typography-system" id="typography">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2 class="section-title reveal">Sistema Tipográfico</h2>
+            <p class="section-subtitle reveal">Claridad técnica, elegancia aventurera</p>
+        </div>
+        
+        <div class="type-specimen reveal">
+            <div class="type-sample">
+                <div class="type-label">Display / Hero</div>
+                <div class="type-display" style="font-size: clamp(4rem, 8vw, 6rem); font-weight: 100; letter-spacing: -0.05em;">
+                    Tech Expedition
+                </div>
+                <div class="type-specs">
+                    <span>SF Pro Display Thin</span>
+                    <span>Size: 72-96px</span>
+                    <span>Tracking: -50</span>
+                    <span>Leading: 0.9</span>
+                </div>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-label">Headlines</div>
+                <div class="type-display" style="font-size: 3rem; font-weight: 200; letter-spacing: -0.02em;">
+                    Código desde las alturas
+                </div>
+                <div class="type-specs">
+                    <span>SF Pro Display Light</span>
+                    <span>Size: 48px</span>
+                    <span>Tracking: -20</span>
+                    <span>Leading: 1.1</span>
+                </div>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-label">Subheadings</div>
+                <div class="type-display" style="font-size: 2rem; font-weight: 300; letter-spacing: -0.01em;">
+                    Explorando nuevos horizontes digitales
+                </div>
+                <div class="type-specs">
+                    <span>SF Pro Display Light</span>
+                    <span>Size: 32px</span>
+                    <span>Tracking: -10</span>
+                    <span>Leading: 1.3</span>
+                </div>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-label">Body Text</div>
+                <div class="type-display" style="font-size: 1.125rem; font-weight: 300; line-height: 1.8; max-width: 800px;">
+                    La intersección entre tecnología y aventura define mi enfoque único. Cada línea de código es un paso hacia territorios inexplorados, cada proyecto una expedición hacia la innovación. Combino la precisión del desarrollo con la pasión por descubrir, creando soluciones que trascienden los límites convencionales.
+                </div>
+                <div class="type-specs">
+                    <span>SF Pro Text Regular</span>
+                    <span>Size: 16-18px</span>
+                    <span>Tracking: 0</span>
+                    <span>Leading: 1.8</span>
+                </div>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-label">Code / Monospace</div>
+                <div class="type-display" style="font-family: 'SF Mono', monospace; font-size: 1rem; background: var(--mp-gray-900); padding: 20px; border-radius: 0;">
+<pre style="margin: 0;">$ git clone adventure
+$ cd into-the-unknown
+$ npm install courage
+$ ./deploy --altitude=8848m --location="everest"
+> Mission accomplished ✓</pre>
+                </div>
+                <div class="type-specs">
+                    <span>SF Mono Regular</span>
+                    <span>Size: 14-16px</span>
+                    <span>Tracking: 0</span>
+                    <span>Leading: 1.6</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Brand Applications -->
+    <section class="section applications" id="applications">
+        <div class="section-header">
+            <div class="section-number">05</div>
+            <h2 class="section-title reveal">Aplicaciones de Marca</h2>
+            <p class="section-subtitle reveal">La identidad en acción: del código a la cumbre</p>
+        </div>
+        
+        <div class="app-grid reveal">
+            <!-- Business Card -->
+            <div class="app-card">
+                <div class="app-preview">
+                    <div style="width: 350px; height: 200px; background: black; border: 1px solid var(--mp-gray-800); padding: 30px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <circle cx="20" cy="20" r="18" stroke="white" stroke-width="1" fill="none"/>
+                                <text x="20" y="24" fill="white" text-anchor="middle" font-size="10" font-family="monospace">&lt;/&gt;</text>
+                                <line x1="20" y1="20" x2="20" y2="8" stroke="#008DCB" stroke-width="1" opacity="0.8"/>
+                            </svg>
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 100; letter-spacing: 2px;">MILI PÉREZ</div>
+                                <div style="font-size: 0.7rem; color: var(--mp-gray-500); margin-top: 3px;">Tech Explorer</div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 0.8rem; line-height: 1.8; font-family: 'SF Mono', monospace; color: var(--mp-gray-300);">
+                            <div>hello@miliperez.tech</div>
+                            <div>github.com/miliperez</div>
+                            <div style="color: var(--mp-gray-600); margin-top: 10px;">36.7213° N, 4.4214° W</div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="app-title">Business Card</h3>
+                <p class="app-description">Tarjeta minimalista con coordenadas dinámicas</p>
+            </div>
+            
+            <!-- Mobile Interface -->
+            <div class="app-card">
+                <div class="app-preview">
+                    <div style="width: 200px; height: 400px; background: black; border: 2px solid var(--mp-gray-800); border-radius: 20px; padding: 20px; position: relative;">
+                        <div style="height: 20px; background: var(--mp-gray-900); border-radius: 10px; margin-bottom: 30px;"></div>
+                        
+                        <div style="text-align: center; margin-bottom: 40px;">
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                                <circle cx="30" cy="30" r="28" stroke="white" stroke-width="1" fill="none"/>
+                                <text x="30" y="35" fill="white" text-anchor="middle" font-size="14" font-family="monospace">&lt;/&gt;</text>
+                            </svg>
+                        </div>
+                        
+                        <div style="font-family: 'SF Mono', monospace; font-size: 0.7rem; color: var(--mp-gray-400); line-height: 2;">
+                            <div>&gt; Loading expedition...</div>
+                            <div>&gt; Coordinates locked</div>
+                            <div>&gt; Ready to explore</div>
+                            <div style="margin-top: 20px;">
+                                <span style="color: #0f0;">$</span> _
+                            </div>
+                        </div>
+                        
+                        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px;">
+                            <div style="width: 8px; height: 8px; background: var(--mp-gray-600); border-radius: 50%;"></div>
+                            <div style="width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+                            <div style="width: 8px; height: 8px; background: var(--mp-gray-600); border-radius: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="app-title">Mobile App</h3>
+                <p class="app-description">Interfaz móvil estilo terminal</p>
+            </div>
+            
+            <!-- Email Signature -->
+            <div class="app-card">
+                <div class="app-preview">
+                    <div style="width: 100%; max-width: 400px; background: white; color: black; padding: 30px;">
+                        <div style="border-left: 2px solid black; padding-left: 20px;">
+                            <div style="font-size: 1.1rem; font-weight: 300; margin-bottom: 5px;">Mili Pérez</div>
+                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Tech Explorer</div>
+                            
+                            <div style="font-size: 0.85rem; line-height: 1.8; color: #333;">
+                                <div>📧 hello@miliperez.tech</div>
+                                <div>🌐 miliperez.tech</div>
+                                <div>📍 Currently: Patagonia, Argentina</div>
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                                    <circle cx="15" cy="15" r="14" stroke="black" stroke-width="1" fill="none"/>
+                                    <text x="15" y="19" fill="black" text-anchor="middle" font-size="8" font-family="monospace">&lt;/&gt;</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="app-title">Email Signature</h3>
+                <p class="app-description">Firma profesional con ubicación actual</p>
+            </div>
+            
+            <!-- Expedition Badge -->
+            <div class="app-card">
+                <div class="app-preview">
+                    <div style="width: 250px; height: 300px; background: var(--mp-gray-900); border: 1px solid var(--mp-gray-700); padding: 30px; text-align: center;">
+                        <div style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px;">Achievement Unlocked</div>
+                        
+                        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" style="margin: 0 auto 20px;">
+                            <polygon points="50,10 65,35 95,35 72,55 87,85 50,65 13,85 28,55 5,35 35,35" stroke="white" stroke-width="1" fill="none"/>
+                            <text x="50" y="55" fill="white" text-anchor="middle" font-size="14" font-family="monospace">&lt;/&gt;</text>
+                        </svg>
+                        
+                        <div style="font-size: 1rem; margin-bottom: 10px;">K2 WINTER ASCENT</div>
+                        <div style="font-size: 0.8rem; color: var(--mp-gray-500); margin-bottom: 20px;">Code deployed at 8,611m</div>
+                        
+                        <div style="font-family: 'SF Mono', monospace; font-size: 0.7rem; color: var(--mp-gray-600);">
+                            2024.02.15 | -20°C | git push origin summit
+                        </div>
+                    </div>
+                </div>
+                <h3 class="app-title">Expedition Badge</h3>
+                <p class="app-description">NFT para certificar hazañas tech</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ENHANCED FAVICON & TRAVEL ICONS Section -->
+    <section class="section" style="background: var(--mp-gray-900);">
+        <div class="section-header">
+            <div class="section-number">06</div>
+            <h2 class="section-title reveal">Sistema de Iconos</h2>
+            <p class="section-subtitle reveal">Elementos visuales para la aventurera tech</p>
+        </div>
+        
+        <!-- FAVICON Section -->
+        <div style="margin-bottom: 120px;">
+            <h3 style="font-size: 1.5rem; font-weight: 100; margin-bottom: 60px; text-align: center; opacity: 0.8;">Favicon & App Icons</h3>
+            
+            <!-- Versiones sobre fondo negro -->
+            <div style="margin-bottom: 80px;">
+                <h4 style="font-size: 0.9rem; font-weight: 200; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; margin-bottom: 40px; opacity: 0.4;">Fondo Oscuro</h4>
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                    <!-- Favicon 32x32 Negro -->
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: black; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border: 1px solid var(--mp-gray-800);">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1" fill="none"/>
+                                <text x="16" y="20" fill="white" text-anchor="middle" font-size="10" font-family="monospace" font-weight="300">&lt;/&gt;</text>
+                                <line x1="16" y1="16" x2="16" y2="6" stroke="#008DCB" stroke-width="1.5">
+                                    <animate attributeName="y2" values="6;7;6" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </line>
+                                <circle cx="16" cy="5" r="1.5" fill="#008DCB">
+                                    <animate attributeName="cy" values="5;6;5" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--mp-gray-500);">32x32px</p>
+                    </div>
+                    
+                    <!-- Favicon 64x64 Negro -->
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: black; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border: 1px solid var(--mp-gray-800);">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                                <circle cx="32" cy="32" r="28" stroke="white" stroke-width="2" fill="none"/>
+                                <text x="32" y="38" fill="white" text-anchor="middle" font-size="18" font-family="monospace" font-weight="300">&lt;/&gt;</text>
+                                <line x1="32" y1="32" x2="32" y2="10" stroke="#008DCB" stroke-width="2">
+                                    <animate attributeName="y2" values="10;12;10" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </line>
+                                <circle cx="32" cy="8" r="3" fill="#008DCB">
+                                    <animate attributeName="cy" values="8;10;8" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--mp-gray-500);">64x64px</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Versiones sobre fondo blanco -->
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: 200; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; margin-bottom: 40px; opacity: 0.4;">Fondo Claro</h4>
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                    <!-- Favicon 32x32 Blanco -->
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: white; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <circle cx="16" cy="16" r="14" stroke="black" stroke-width="1" fill="none"/>
+                                <text x="16" y="20" fill="black" text-anchor="middle" font-size="10" font-family="monospace" font-weight="400">&lt;/&gt;</text>
+                                <line x1="16" y1="16" x2="16" y2="6" stroke="#008DCB" stroke-width="1.5">
+                                    <animate attributeName="y2" values="6;7;6" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </line>
+                                <circle cx="16" cy="5" r="1.5" fill="#008DCB">
+                                    <animate attributeName="cy" values="5;6;5" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--mp-gray-500);">32x32px</p>
+                    </div>
+                    
+                    <!-- Favicon 64x64 Blanco -->
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: white; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                                <circle cx="32" cy="32" r="28" stroke="black" stroke-width="2" fill="none"/>
+                                <text x="32" y="38" fill="black" text-anchor="middle" font-size="18" font-family="monospace" font-weight="400">&lt;/&gt;</text>
+                                <line x1="32" y1="32" x2="32" y2="10" stroke="#008DCB" stroke-width="2">
+                                    <animate attributeName="y2" values="10;12;10" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </line>
+                                <circle cx="32" cy="8" r="3" fill="#008DCB">
+                                    <animate attributeName="cy" values="8;10;8" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;1"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--mp-gray-500);">64x64px</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TRAVEL ICONS -->
+        <div>
+            <h3 style="font-size: 1.5rem; font-weight: 100; margin-bottom: 60px; text-align: center; opacity: 0.8;">Iconografía de Exploración</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto;">
+                <!-- Compass Icon -->
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: black; border: 1px solid var(--mp-gray-800);">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <circle cx="30" cy="30" r="28" stroke="white" stroke-width="1" fill="none"/>
+                            <line x1="30" y1="5" x2="30" y2="55" stroke="white" stroke-width="0.5" opacity="0.3"/>
+                            <line x1="5" y1="30" x2="55" y2="30" stroke="white" stroke-width="0.5" opacity="0.3"/>
+                            <polygon points="30,10 25,25 30,20 35,25" fill="#008DCB" opacity="0.8">
+                                <animateTransform attributeName="transform" type="rotate" from="0 30 30" to="360 30 30" dur="20s" repeatCount="indefinite"/>
+                            </polygon>
+                            <circle cx="30" cy="30" r="3" fill="white"/>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--mp-gray-400);">Compass</p>
+                </div>
+                
+                <!-- Map Pin -->
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: black; border: 1px solid var(--mp-gray-800);">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M30 10 C 20 10, 15 18, 15 25 C 15 35, 30 50, 30 50 S 45 35, 45 25 C 45 18, 40 10, 30 10 Z" stroke="white" stroke-width="1" fill="none"/>
+                            <circle cx="30" cy="25" r="5" fill="#008DCB">
+                                <animate attributeName="r" values="5;6;5" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--mp-gray-400);">Location</p>
+                </div>
+                
+                <!-- Plane -->
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: black; border: 1px solid var(--mp-gray-800);">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <g transform="rotate(-45 30 30)">
+                                <path d="M30 10 L30 40 L25 35 L30 40 L35 35" stroke="white" stroke-width="1" fill="none"/>
+                                <path d="M20 30 L40 30" stroke="white" stroke-width="1"/>
+                                <circle cx="30" cy="30" r="2" fill="#008DCB"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--mp-gray-400);">Travel</p>
+                </div>
+                
+                <!-- Mountain -->
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: black; border: 1px solid var(--mp-gray-800);">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M30 15 L20 40 L40 40 Z" stroke="white" stroke-width="1" fill="none"/>
+                            <path d="M40 25 L35 40 L50 40 Z" stroke="white" stroke-width="1" fill="none" opacity="0.5"/>
+                            <circle cx="30" cy="15" r="2" fill="#008DCB"/>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--mp-gray-400);">Adventure</p>
+                </div>
+                
+                <!-- Globe -->
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: black; border: 1px solid var(--mp-gray-800);">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <circle cx="30" cy="30" r="25" stroke="white" stroke-width="1" fill="none"/>
+                            <ellipse cx="30" cy="30" rx="25" ry="12" stroke="white" stroke-width="1" fill="none" opacity="0.5"/>
+                            <ellipse cx="30" cy="30" rx="12" ry="25" stroke="white" stroke-width="1" fill="none" opacity="0.5"/>
+                            <circle cx="35" cy="25" r="2" fill="#008DCB"/>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--mp-gray-400);">Global</p>
+                </div>
+                
+                <!-- Code Map -->
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; background: black; border: 1px solid var(--mp-gray-800);">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <rect x="10" y="15" width="40" height="30" stroke="white" stroke-width="1" fill="none"/>
+                            <text x="30" y="32" fill="#008DCB" text-anchor="middle" font-size="14" font-family="monospace">&lt;/&gt;</text>
+                            <circle cx="20" cy="25" r="1" fill="white" opacity="0.5"/>
+                            <circle cx="40" cy="35" r="1" fill="white" opacity="0.5"/>
+                            <line x1="20" y1="25" x2="40" y2="35" stroke="white" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.3">
+                                <animate attributeName="stroke-dashoffset" values="0;4" dur="1s" repeatCount="indefinite"/>
+                            </line>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--mp-gray-400);">Code Map</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Digital Elements -->
+    <section class="section digital-elements">
+        <div class="section-header">
+            <div class="section-number">07</div>
+            <h2 class="section-title reveal">Elementos Digitales</h2>
+            <p class="section-subtitle reveal">Componentes visuales que definen la experiencia</p>
+        </div>
+        
+        <div class="element-showcase reveal">
+            <div class="element-card">
+                <div class="element-visual">
+                    <div style="position: relative; width: 150px; height: 150px;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            <div style="width: 100px; height: 100px; border: 1px solid white; animation: rotate 10s linear infinite;"></div>
+                            <div style="width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.5); position: absolute; top: 10px; left: 10px; animation: rotate 15s linear infinite reverse;"></div>
+                            <div style="width: 60px; height: 60px; border: 1px solid rgba(255,255,255,0.3); position: absolute; top: 20px; left: 20px; animation: rotate 20s linear infinite;"></div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="element-name">Loading States</h3>
+                <p class="element-desc">Animaciones geométricas que representan procesos en curso</p>
+            </div>
+            
+            <div class="element-card">
+                <div class="element-visual">
+                    <svg width="150" height="150" viewBox="0 0 150 150" fill="none">
+                        <circle cx="30" cy="75" r="3" fill="white" opacity="0.3"/>
+                        <circle cx="50" cy="60" r="3" fill="white" opacity="0.5"/>
+                        <circle cx="75" cy="45" r="3" fill="white" opacity="0.7"/>
+                        <circle cx="100" cy="60" r="3" fill="white" opacity="0.9"/>
+                        <circle cx="120" cy="75" r="3" fill="white"/>
+                        <path d="M 30 75 Q 50 30 75 45 T 120 75" stroke="white" stroke-width="1" fill="none" opacity="0.2" stroke-dasharray="2,4"/>
+                    </svg>
+                </div>
+                <h3 class="element-name">Progress Paths</h3>
+                <p class="element-desc">Visualización del progreso como rutas de expedición</p>
+            </div>
+            
+            <div class="element-card">
+                <div class="element-visual">
+                    <div style="font-family: 'SF Mono', monospace; font-size: 0.8rem; text-align: left; padding: 20px; background: var(--mp-gray-900); width: 150px;">
+                        <div style="color: #0f0;">&gt; init</div>
+                        <div style="color: white; opacity: 0.7;">&gt; explore</div>
+                        <div style="color: white; opacity: 0.5;">&gt; build</div>
+                        <div style="color: white; opacity: 0.3;">&gt; deploy</div>
+                        <span style="animation: blink 1s infinite;">_</span>
+                    </div>
+                </div>
+                <h3 class="element-name">Terminal Elements</h3>
+                <p class="element-desc">Componentes de interfaz inspirados en CLI</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Tone of Voice -->
+    <section class="section tone-voice" id="tone">
+        <div class="section-header">
+            <div class="section-number">08</div>
+            <h2 class="section-title reveal">Tono de Comunicación</h2>
+            <p class="section-subtitle reveal">La voz que guía cada expedición digital</p>
+        </div>
+        
+        <div class="tone-principles reveal">
+            <div class="tone-card">
+                <h3 class="tone-title">Técnico pero Accesible</h3>
+                <p class="tone-description">
+                    Comunicamos con precisión técnica sin perder la calidez humana. Cada mensaje es claro, directo y comprensible.
+                </p>
+                <div class="tone-examples">
+                    <div class="tone-do">✓ "Explorando nuevas arquitecturas cloud"</div>
+                    <div class="tone-dont">✗ "Implementando paradigmas sinérgicos"</div>
+                </div>
+            </div>
+            
+            <div class="tone-card">
+                <h3 class="tone-title">Aventurero y Motivador</h3>
+                <p class="tone-description">
+                    Inspiramos acción y descubrimiento. Cada proyecto es una nueva expedición hacia lo desconocido.
+                </p>
+                <div class="tone-examples">
+                    <div class="tone-do">✓ "Cada bug es un nuevo pico por conquistar"</div>
+                    <div class="tone-dont">✗ "Solucionando problemas rutinarios"</div>
+                </div>
+            </div>
+            
+            <div class="tone-card">
+                <h3 class="tone-title">Minimalista y Elegante</h3>
+                <p class="tone-description">
+                    Menos es más. Comunicamos lo esencial con elegancia, sin adornos innecesarios.
+                </p>
+                <div class="tone-examples">
+                    <div class="tone-do">✓ "Code. Explore. Evolve."</div>
+                    <div class="tone-dont">✗ "Texto extenso y redundante"</div>
+                </div>
+            </div>
+            
+            <div class="tone-card">
+                <h3 class="tone-title">Global y Local</h3>
+                <p class="tone-description">
+                    Pensamos globalmente, actuamos localmente. Nuestra voz trasciende fronteras manteniendo raíces.
+                </p>
+                <div class="tone-examples">
+                    <div class="tone-do">✓ "Desde Málaga al mundo"</div>
+                    <div class="tone-dont">✗ "Limitado por geografía"</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Motion Principles -->
+    <section class="section motion-principles">
+        <div class="section-header">
+            <div class="section-number">09</div>
+            <h2 class="section-title reveal">Principios de Movimiento</h2>
+            <p class="section-subtitle reveal">Animaciones que cuentan la historia de cada expedición</p>
+        </div>
+        
+        <div class="motion-grid reveal">
+            <div class="motion-card">
+                <div class="motion-demo">
+                    <div class="motion-box motion-linear"></div>
+                </div>
+                <h3 class="element-name">Linear</h3>
+                <p class="element-desc">Movimiento constante y predecible para elementos de navegación</p>
+            </div>
+            
+            <div class="motion-card">
+                <div class="motion-demo">
+                    <div class="motion-box motion-ease"></div>
+                </div>
+                <h3 class="element-name">Ease Exponential</h3>
+                <p class="element-desc">Aceleración natural para transiciones principales</p>
+            </div>
+            
+            <div class="motion-card">
+                <div class="motion-demo">
+                    <div class="motion-box motion-spring"></div>
+                </div>
+                <h3 class="element-name">Spring</h3>
+                <p class="element-desc">Rebote sutil para interacciones especiales</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Interactive Terminal Demo -->
+    <section class="interactive-demo">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+                <div class="terminal-line terminal-input" style="animation-delay: 0.5s;">$ whoami</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 1s;">mili_perez - tech_explorer</div>
+                
+                <div class="terminal-line terminal-input" style="animation-delay: 1.5s;">$ cat mission.txt</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 2s;">Building tomorrow's technology from today's adventures.</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 2.5s;">Every line of code is a step into the unknown.</div>
+                
+                <div class="terminal-line terminal-input" style="animation-delay: 3s;">$ ls expeditions/</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 3.5s;">everest_api/  sahara_server/  amazon_app/  arctic_ai/</div>
+                
+                <div class="terminal-line terminal-input" style="animation-delay: 4s;">$ git status</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 4.5s;">On branch: adventure</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 5s;">Your branch is ahead of 'origin/adventure' by ∞ commits</div>
+                
+                <div class="terminal-line terminal-input" style="animation-delay: 5.5s;">$ echo "Ready for next expedition?"</div>
+                <div class="terminal-line terminal-output" style="animation-delay: 6s;">Ready for next expedition?</div>
+                
+                <div class="terminal-line terminal-input" style="animation-delay: 6.5s;">$ <span class="terminal-cursor"></span></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Brand Manifesto -->
+    <section class="manifesto">
+        <div class="manifesto-content">
+            <h2 class="manifesto-text reveal" style="font-weight: 100; letter-spacing: -0.02em;">
+                "El código es mi brújula.<br>
+                El mundo es mi oficina."
+            </h2>
+            <p class="manifesto-signature reveal" style="margin-top: 40px;">— Mili Pérez, Tech Explorer</p>
+        </div>
+    </section>
+    
+    <!-- Downloads Section -->
+    <section class="section downloads" id="downloads">
+        <div class="section-header">
+            <div class="section-number">10</div>
+            <h2 class="section-title reveal">Kit de Marca</h2>
+            <p class="section-subtitle reveal">Todos los recursos para tu próxima expedición</p>
+        </div>
+        
+        <div class="download-grid reveal">
+            <div class="download-card">
+                <div class="download-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect x="8" y="5" width="24" height="30" stroke="white" stroke-width="1" fill="none"/>
+                        <polyline points="18,15 20,18 22,15" stroke="white" stroke-width="1" fill="none"/>
+                        <line x1="20" y1="10" x2="20" y2="18" stroke="white" stroke-width="1"/>
+                        <line x1="12" y1="25" x2="28" y2="25" stroke="white" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="download-label">Logo Pack</div>
+                <div class="download-format">SVG, PNG, EPS</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <circle cx="10" cy="10" r="4" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="30" cy="10" r="4" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="10" cy="30" r="4" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="30" cy="30" r="4" stroke="white" stroke-width="1" fill="white"/>
+                    </svg>
+                </div>
+                <div class="download-label">Color Guide</div>
+                <div class="download-format">ASE, PDF</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <text x="20" y="25" fill="white" text-anchor="middle" font-size="24" font-weight="100">Aa</text>
+                    </svg>
+                </div>
+                <div class="download-label">Typography</div>
+                <div class="download-format">OTF, WOFF2</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect x="5" y="10" width="30" height="20" stroke="white" stroke-width="1" fill="none"/>
+                        <line x1="5" y1="15" x2="35" y2="15" stroke="white" stroke-width="1"/>
+                        <circle cx="10" cy="12.5" r="1" fill="white"/>
+                        <circle cx="14" cy="12.5" r="1" fill="white"/>
+                        <circle cx="18" cy="12.5" r="1" fill="white"/>
+                    </svg>
+                </div>
+                <div class="download-label">UI Kit</div>
+                <div class="download-format">SKETCH, FIGMA</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect x="10" y="5" width="20" height="30" stroke="white" stroke-width="1" fill="none"/>
+                        <line x1="15" y1="10" x2="25" y2="10" stroke="white" stroke-width="1"/>
+                        <line x1="15" y1="15" x2="25" y2="15" stroke="white" stroke-width="1"/>
+                        <line x1="15" y1="20" x2="20" y2="20" stroke="white" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="download-label">Brand Guide</div>
+                <div class="download-format">PDF 120 pages</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 5 L10 15 L10 35 L30 35 L30 15 Z" stroke="white" stroke-width="1" fill="none"/>
+                        <polyline points="20,5 20,15 30,15" stroke="white" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <div class="download-label">Templates</div>
+                <div class="download-format">AI, PSD, XD</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    <circle cx="30" cy="30" r="28" stroke="white" stroke-width="1" fill="none"/>
+                    <text x="30" y="35" fill="white" text-anchor="middle" font-size="14" font-family="monospace">&lt;/&gt;</text>
+                    <line x1="30" y1="30" x2="30" y2="12" stroke="#008DCB" stroke-width="1" opacity="0.7"/>
+                    <circle cx="30" cy="11" r="1.5" fill="#008DCB" opacity="0.7"/>
+                </svg>
+            </div>
+            
+            <div class="footer-info">
+                <div style="font-weight: 200; font-size: 1.1rem; margin-bottom: 10px;">MILI PÉREZ</div>
+                <div style="color: #008DCB; margin-bottom: 5px;">Tech Explorer</div>
+                <div style="font-size: 0.9rem; opacity: 0.7;">Brand Identity System | Version 1.0</div>
+                <div style="font-size: 0.8rem; opacity: 0.5; margin-top: 20px;">© 2024 Mili Pérez. All expeditions reserved.</div>
+            </div>
+            
+            <div class="footer-coords">
+                <div style="margin-bottom: 5px;">Current Location</div>
+                <div style="color: #008DCB;">Málaga, España | 36.7213° N, 4.4214° W</div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorDot.style.left = e.clientX - 2 + 'px';
+            cursorDot.style.top = e.clientY - 2 + 'px';
+        });
+        
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'scale(0.8)';
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'scale(1)';
+        });
+        
+        // Simple Loading
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 800);
+        });
+        
+        // Navigation Scroll Effect - Subtle
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Simple Reveal on Scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+    </script>
+</body>
+</html>
