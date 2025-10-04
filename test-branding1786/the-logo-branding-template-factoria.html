@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Logo - Factory IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            overflow-x: hidden;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .logo-showcase {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px;
+            background: white;
+            position: relative;
+        }
+        
+        .section-label {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        /* THE AGENT LOGO */
+        .agent-logo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 60px auto;
+        }
+        
+        .agent-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            background: #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: agent-morph 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        
+        @keyframes agent-morph {
+            0%, 100% {
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+            25% {
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(2) rotate(90deg);
+            }
+            50% {
+                border-radius: 0%;
+                transform: translate(-50%, -50%) scale(1.5) rotate(180deg);
+            }
+            75% {
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(1) rotate(270deg);
+            }
+        }
+        
+        .agent-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            transform: translate(-50%, -50%);
+            animation: orbit-rotate 8s linear infinite;
+        }
+        
+        @keyframes orbit-rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .orbit-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: dot-fade 2s ease-in-out infinite;
+        }
+        
+        .orbit-dot:nth-child(2) {
+            top: 50%;
+            left: 100%;
+            transform: translate(-50%, -50%);
+            animation-delay: 0.5s;
+        }
+        
+        .orbit-dot:nth-child(3) {
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            animation-delay: 1s;
+        }
+        
+        .orbit-dot:nth-child(4) {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes dot-fade {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* THE PULSE LOGO */
+        .pulse-logo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 60px auto;
+        }
+        
+        .pulse-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-expand 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        
+        .pulse-ring:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+        
+        .pulse-ring:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+        
+        .pulse-ring:nth-child(4) {
+            animation-delay: 1.2s;
+        }
+        
+        @keyframes pulse-expand {
+            0% {
+                width: 12px;
+                height: 12px;
+                opacity: 1;
+            }
+            100% {
+                width: 120px;
+                height: 120px;
+                opacity: 0;
+            }
+        }
+        
+        /* THE FACTORY LOGO */
+        .factory-logo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 60px auto;
+        }
+        
+        .factory-block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #000;
+            top: 50%;
+            left: 50%;
+        }
+        
+        .block1 {
+            transform: translate(-50%, -50%);
+            animation: factory-build 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        
+        .block2 {
+            width: 20px;
+            height: 20px;
+            transform: translate(-150%, -50%);
+            animation: factory-build 3s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.2s;
+        }
+        
+        .block3 {
+            width: 20px;
+            height: 20px;
+            transform: translate(50%, -50%);
+            animation: factory-build 3s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.4s;
+        }
+        
+        @keyframes factory-build {
+            0%, 100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        /* THE TRANSFORM LOGO */
+        .transform-logo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 60px auto;
+        }
+        
+        .transform-shape {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: #000;
+            transform: translate(-50%, -50%);
+            animation: shape-transform 6s cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
+        }
+        
+        @keyframes shape-transform {
+            0%, 100% {
+                border-radius: 0;
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            }
+            20% {
+                border-radius: 50%;
+                transform: translate(-50%, -50%) rotate(72deg) scale(0.8);
+            }
+            40% {
+                border-radius: 0;
+                transform: translate(-50%, -50%) rotate(144deg) scale(1.2);
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            }
+            60% {
+                border-radius: 0;
+                transform: translate(-50%, -50%) rotate(216deg) scale(0.9);
+                clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            }
+            80% {
+                border-radius: 50%;
+                transform: translate(-50%, -50%) rotate(288deg) scale(1.1);
+                clip-path: none;
+            }
+        }
+        
+        /* THE SPLIT LOGO */
+        .split-logo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 60px auto;
+        }
+        
+        .split-part {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 4px;
+            background: #000;
+            transform-origin: center;
+        }
+        
+        .split1 {
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: split-move 3s ease-in-out infinite;
+        }
+        
+        .split2 {
+            transform: translate(-50%, -50%) rotate(60deg);
+            animation: split-move 3s ease-in-out infinite 0.2s;
+        }
+        
+        .split3 {
+            transform: translate(-50%, -50%) rotate(120deg);
+            animation: split-move 3s ease-in-out infinite 0.4s;
+        }
+        
+        @keyframes split-move {
+            0%, 100% {
+                transform: translate(-50%, -50%) rotate(var(--rotation)) scaleX(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) rotate(calc(var(--rotation) + 180deg)) scaleX(2);
+            }
+        }
+        
+        /* THE BRACKET LOGO */
+        .bracket-logo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 60px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bracket-container {
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 60px;
+            font-weight: 300;
+            letter-spacing: 20px;
+            position: relative;
+        }
+        
+        .bracket-left,
+        .bracket-right {
+            display: inline-block;
+            animation: bracket-breathe 3s ease-in-out infinite;
+        }
+        
+        .bracket-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            margin: 0 20px;
+            animation: dot-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes bracket-breathe {
+            0%, 100% {
+                transform: scaleX(1);
+            }
+            50% {
+                transform: scaleX(1.5);
+            }
+        }
+        
+        @keyframes dot-pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(2);
+            }
+        }
+        
+        .logo-name {
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .logo-name h2 {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin: 0;
+        }
+        
+        .logo-name p {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #999;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .description {
+            max-width: 400px;
+            text-align: center;
+            margin: 40px auto 0;
+            padding: 0 20px;
+        }
+        
+        .description p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .winner-section {
+            min-height: 100vh;
+            background: #000;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .winner-badge {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: white;
+            color: black;
+            padding: 8px 16px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        
+        .winner-logo {
+            text-align: center;
+        }
+        
+        .final-logo {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-showcase {
+                padding: 60px 20px;
+            }
+            
+            .agent-logo, .pulse-logo, .factory-logo, .transform-logo, .split-logo, .bracket-logo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <div class="hero">
+        <div style="text-align: center;">
+            <h1 style="font-size: 72px; font-weight: 900; letter-spacing: -4px; margin-bottom: 20px;">
+                THE LOGO
+            </h1>
+            <p style="font-size: 18px; color: #666; letter-spacing: 6px; text-transform: uppercase;">
+                Factory IA Revolution
+            </p>
+        </div>
+    </div>
+    
+    <!-- AGENT LOGO -->
+    <div class="logo-showcase">
+        <span class="section-label">Option 01</span>
+        
+        <div class="agent-logo">
+            <div class="agent-orbit">
+                <div class="orbit-dot"></div>
+                <div class="orbit-dot"></div>
+                <div class="orbit-dot"></div>
+                <div class="orbit-dot"></div>
+            </div>
+            <div class="agent-core"></div>
+        </div>
+        
+        <div class="logo-name">
+            <h2>FACTORY IA</h2>
+            <p>The Agent</p>
+        </div>
+        
+        <div class="description">
+            <p>
+                Un núcleo que se transforma constantemente de círculo a cuadrado. 
+                Los agentes orbitando representan la producción continua. 
+                Simple. Brutal. Imparable.
+            </p>
+        </div>
+    </div>
+    
+    <!-- PULSE LOGO -->
+    <div class="logo-showcase" style="background: #fafafa;">
+        <span class="section-label">Option 02</span>
+        
+        <div class="pulse-logo">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-center"></div>
+        </div>
+        
+        <div class="logo-name">
+            <h2>FACTORY IA</h2>
+            <p>The Pulse</p>
+        </div>
+        
+        <div class="description">
+            <p>
+                Un punto que emite ondas infinitas. Cada pulso es un nuevo agente 
+                creado y enviado al mundo. Minimalismo puro estilo Sierra.
+            </p>
+        </div>
+    </div>
+    
+    <!-- FACTORY LOGO -->
+    <div class="logo-showcase">
+        <span class="section-label">Option 03</span>
+        
+        <div class="factory-logo">
+            <div class="factory-block block1"></div>
+            <div class="factory-block block2"></div>
+            <div class="factory-block block3"></div>
+        </div>
+        
+        <div class="logo-name">
+            <h2>FACTORY IA</h2>
+            <p>The Builder</p>
+        </div>
+        
+        <div class="description">
+            <p>
+                Bloques que aparecen y desaparecen. La fábrica en constante 
+                construcción y reconstrucción. Cada bloque es un agente.
+            </p>
+        </div>
+    </div>
+    
+    <!-- TRANSFORM LOGO -->
+    <div class="logo-showcase" style="background: #fafafa;">
+        <span class="section-label">Option 04</span>
+        
+        <div class="transform-logo">
+            <div class="transform-shape"></div>
+        </div>
+        
+        <div class="logo-name">
+            <h2>FACTORY IA</h2>
+            <p>The Transformer</p>
+        </div>
+        
+        <div class="description">
+            <p>
+                Una forma en metamorfosis constante. De cuadrado a círculo, 
+                de diamante a triángulo. La evolución perpetua de la IA.
+            </p>
+        </div>
+    </div>
+    
+    <!-- SPLIT LOGO -->
+    <div class="logo-showcase">
+        <span class="section-label">Option 05</span>
+        
+        <div class="split-logo">
+            <div class="split-part split1" style="--rotation: 0deg"></div>
+            <div class="split-part split2" style="--rotation: 60deg"></div>
+            <div class="split-part split3" style="--rotation: 120deg"></div>
+        </div>
+        
+        <div class="logo-name">
+            <h2>FACTORY IA</h2>
+            <p>The Split</p>
+        </div>
+        
+        <div class="description">
+            <p>
+                Tres líneas que rotan y se expanden. Representan la trinidad: 
+                Input, Processing, Output. Simple geometría en movimiento.
+            </p>
+        </div>
+    </div>
+    
+    <!-- BRACKET LOGO -->
+    <div class="logo-showcase" style="background: #fafafa;">
+        <span class="section-label">Option 06</span>
+        
+        <div class="bracket-logo">
+            <div class="bracket-container">
+                <span class="bracket-left">[</span>
+                <span class="bracket-dot"></span>
+                <span class="bracket-right">]</span>
+            </div>
+        </div>
+        
+        <div class="logo-name">
+            <h2>FACTORY IA</h2>
+            <p>The Code</p>
+        </div>
+        
+        <div class="description">
+            <p>
+                Brackets que respiran con un punto pulsante en el centro. 
+                El código que cobra vida. La esencia de los agentes IA.
+            </p>
+        </div>
+    </div>
+    
+    <!-- THE WINNER -->
+    <div class="winner-section">
+        <span class="winner-badge">Recommended</span>
+        
+        <div class="winner-logo">
+            <div class="final-logo">
+                <div class="pulse-logo">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-center"></div>
+                </div>
+            </div>
+            
+            <div class="logo-name">
+                <h2 style="font-size: 48px; color: white;">FACTORY IA</h2>
+                <p style="color: #666;">Agent Factory Revolution</p>
+            </div>
+            
+            <div class="description">
+                <p style="color: #999; max-width: 500px; margin: 40px auto;">
+                    "Un punto. Un pulso. Infinitos agentes."
+                    <br><br>
+                    Este es el logo que cambiará todo. Tan simple que duele. 
+                    Tan potente que no se olvida. Como Sierra, pero mejor.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
