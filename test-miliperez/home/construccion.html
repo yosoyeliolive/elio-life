@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MILI PÉREZ - Cruzando fronteras. Expediciones sin WiFi. Sistemas sin límites.">
+    <title>MILI PÉREZ | En Construcción</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --mp-black: #000000;
+            --mp-white: #ffffff;
+            --mp-blue: #008DCB;
+            --mp-gray-200: #d4d4d4;
+            --mp-gray-400: #8a8a8a;
+            --mp-gray-600: #4a4a4a;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        /* CONTENEDOR PRINCIPAL A PANTALLA COMPLETA */
+        .fullscreen-container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        /* PORTAL LADO IZQUIERDO - TRAVEL */
+        .portal-travel {
+            flex: 1;
+            background: var(--mp-white);
+            color: var(--mp-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.8s var(--ease-out);
+            cursor: pointer;
+        }
+        
+        .portal-travel:hover {
+            flex: 1.1;
+        }
+        
+        /* PORTAL LADO DERECHO - TECH */
+        .portal-tech {
+            flex: 1;
+            background: var(--mp-black);
+            color: var(--mp-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.8s var(--ease-out);
+            cursor: pointer;
+        }
+        
+        .portal-tech:hover {
+            flex: 1.1;
+        }
+        
+        /* CONTENIDO DEL PORTAL */
+        .portal-content {
+            text-align: center;
+            padding: 0 4rem;
+            transition: transform 0.5s var(--ease-out);
+            z-index: 2;
+            position: relative;
+        }
+        
+        .portal-travel:hover .portal-content,
+        .portal-tech:hover .portal-content {
+            transform: scale(1.05);
+        }
+        
+        .portal-icon {
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .portal-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 100;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .portal-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            opacity: 0.7;
+            margin-bottom: 1.875rem;
+        }
+        
+        .portal-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        .portal-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 40px;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out);
+            font-weight: 500;
+        }
+        
+        .portal-travel .portal-cta {
+            background: var(--mp-black);
+            color: var(--mp-white);
+        }
+        
+        .portal-travel .portal-cta:hover {
+            background: var(--mp-blue);
+            transform: translateY(-2px);
+        }
+        
+        .portal-tech .portal-cta {
+            border: 1px solid var(--mp-white);
+            color: var(--mp-white);
+        }
+        
+        .portal-tech .portal-cta:hover {
+            background: var(--mp-white);
+            color: var(--mp-black);
+            transform: translateY(-2px);
+        }
+        
+        /* DIVISOR CENTRAL */
+        .portal-divider {
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            bottom: 20%;
+            transform: translateX(-50%);
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #666, transparent);
+            opacity: 0.3;
+            z-index: 10;
+        }
+        
+        /* OVERLAY DE CONSTRUCCIÓN CENTRADO */
+        .construction-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(25px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeInOverlay 1.5s ease-out;
+        }
+        
+        .construction-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5rem 4rem;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            width: 90vw;
+            position: relative;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            animation: slideInUp 1.2s ease-out 0.5s backwards;
+        }
+        
+        .construction-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, transparent, var(--mp-blue), transparent);
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* HEADER DE LA CONSTRUCCIÓN */
+        .brand-header {
+            margin-bottom: 3rem;
+        }
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: 0.1em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--mp-blue);
+            color: var(--mp-blue);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--mp-blue);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+        
+        .status-badge:hover {
+            color: var(--mp-black);
+        }
+        
+        .status-badge:hover::before {
+            left: 0;
+        }
+        
+        .main-title {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 100;
+            margin-bottom: 1.5rem;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--mp-gray-400);
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* PREVIEW DE LOS MUNDOS */
+        .worlds-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .world-preview {
+            padding: 2.5rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .world-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--mp-blue);
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+        
+        .world-preview:hover {
+            border-color: var(--mp-blue);
+            background: rgba(0, 141, 203, 0.08);
+            transform: translateY(-5px);
+        }
+        
+        .world-preview:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .world-name {
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .world-stats {
+            font-size: 0.85rem;
+            color: var(--mp-gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            line-height: 1.6;
+        }
+        
+        /* SECCIÓN DE LANZAMIENTO */
+        .launch-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .launch-label {
+            font-size: 0.8rem;
+            color: var(--mp-gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
+        }
+        
+        .launch-date {
+            font-size: 1.6rem;
+            color: var(--mp-blue);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+        
+        /* HEADER LOGO SUPERIOR */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            z-index: 1002;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        .top-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .top-brand-name {
+            font-size: 1.8rem;
+            font-weight: 200;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        /* FOOTER */
+        .footer {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+            letter-spacing: 0.05em;
+            z-index: 1001;
+            white-space: nowrap;
+        }
+        
+        /* ANIMACIONES */
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(25px);
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .construction-card {
+                padding: 4rem 3rem;
+                width: 95vw;
+            }
+            
+            .portal-content {
+                padding: 0 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .fullscreen-container {
+                flex-direction: column;
+            }
+            
+            .portal-divider {
+                width: 60%;
+                height: 1px;
+                left: 50%;
+                top: 50%;
+                background: linear-gradient(to right, transparent, #666, transparent);
+            }
+            
+            .construction-card {
+                padding: 3rem 2rem;
+                margin: 1rem;
+                width: calc(100vw - 2rem);
+            }
+            
+            .worlds-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .brand-name {
+                font-size: 1.6rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .construction-card {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .footer {
+                font-size: 0.7rem;
+                padding: 0 1rem;
+                white-space: normal;
+                line-height: 1.4;
+            }
+            
+            .portal-content {
+                padding: 0 1.5rem;
+            }
+            
+            .portal-description {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            .construction-card {
+                padding: 2rem 3rem;
+            }
+            
+            .brand-header {
+                margin-bottom: 2rem;
+            }
+            
+            .subtitle {
+                margin-bottom: 2rem;
+            }
+            
+            .worlds-grid {
+                margin: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER LOGO SUPERIOR -->
+    <div class="top-header">
+        <div class="top-logo">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <path d="M20 8 L12 24 L28 24 Z" stroke="#008DCB" stroke-width="1.5" fill="none"/>
+                <circle cx="20" cy="26" r="10" stroke="white" stroke-width="1" fill="none"/>
+                <circle cx="20" cy="26" r="2" fill="#008DCB"/>
+            </svg>
+            <span class="top-brand-name">Mili Pérez</span>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR A PANTALLA COMPLETA -->
+    <div class="fullscreen-container">
+        <!-- MUNDO TRAVEL - LADO IZQUIERDO -->
+        <div class="portal-travel">
+            <div class="portal-content">
+                <div class="portal-icon">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="30" stroke="#000" stroke-width="1.5" fill="none"/>
+                        <path d="M40 20 L30 40 L50 40 Z" stroke="#000" stroke-width="2" fill="none"/>
+                        <circle cx="40" cy="43" r="4" fill="#008DCB"/>
+                    </svg>
+                </div>
+                
+                <h2 class="portal-title">MUNDO TRAVEL</h2>
+                <p class="portal-subtitle">53 países pisados</p>
+                <p class="portal-description">
+                    Expediciones sin WiFi.<br>
+                    Grupos reducidos.<br>
+                    Transformación garantizada.
+                </p>
+                <div class="portal-cta">
+                    <span>Explorar expediciones</span>
+                    <span>→</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MUNDO TECH - LADO DERECHO -->
+        <div class="portal-tech">
+            <div class="portal-content">
+                <div class="portal-icon">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <rect x="20" y="20" width="40" height="40" stroke="#fff" stroke-width="2" fill="none"/>
+                        <rect x="26" y="26" width="28" height="28" stroke="#fff" stroke-width="1" fill="none" opacity="0.5"/>
+                        <circle cx="40" cy="40" r="5" fill="#008DCB"/>
+                    </svg>
+                </div>
+                
+                <h2 class="portal-title">MUNDO TECH</h2>
+                <p class="portal-subtitle">14 años resolviendo</p>
+                <p class="portal-description">
+                    Sistemas que no duermen.<br>
+                    Sin reuniones. Sin drama.<br>
+                    Solo resultados.
+                </p>
+                <div class="portal-cta">
+                    <span>Ver servicios</span>
+                    <span>→</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DIVISOR CENTRAL -->
+        <div class="portal-divider"></div>
+    </div>
+    
+    <!-- OVERLAY DE CONSTRUCCIÓN -->
+    <div class="construction-overlay">
+        <div class="construction-card">
+            <div class="brand-header">
+                <div class="brand-logo">
+                    <svg width="50" height="50" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 8 L12 24 L28 24 Z" stroke="#008DCB" stroke-width="1.5" fill="none"/>
+                        <circle cx="20" cy="26" r="10" stroke="white" stroke-width="1" fill="none"/>
+                        <circle cx="20" cy="26" r="2" fill="#008DCB"/>
+                    </svg>
+                    <span class="brand-name">MILI PÉREZ</span>
+                </div>
+                
+                <div class="status-badge">Sitio en construcción</div>
+            </div>
+            
+            <h1 class="main-title">
+                Nuevos mundos<br>
+                en desarrollo
+            </h1>
+            
+            <p class="subtitle">
+                Dos universos únicos se están forjando. Expediciones que transforman vidas. 
+                Tecnología que revoluciona negocios. La experiencia definitiva llega pronto.
+            </p>
+            
+            <div class="worlds-grid">
+                <div class="world-preview">
+                    <h3 class="world-name">MUNDO TRAVEL</h3>
+                    <div class="world-stats">
+                        53 países pisados<br>
+                        Expediciones sin WiFi<br>
+                        Transformación garantizada
+                    </div>
+                </div>
+                
+                <div class="world-preview">
+                    <h3 class="world-name">MUNDO TECH</h3>
+                    <div class="world-stats">
+                        14 años resolviendo<br>
+                        Sistemas que no duermen<br>
+                        Solo resultados
+                    </div>
+                </div>
+            </div>
+            
+            <div class="launch-section">
+                <div class="launch-label">Lanzamiento previsto</div>
+                <div class="launch-date">Próximamente</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FOOTER -->
+    <div class="footer">
+        © 2025 Mili Pérez • Todos los derechos reservados • Desde mis raíces más profundas al mundo
+    </div>
+</body>
+</html>
