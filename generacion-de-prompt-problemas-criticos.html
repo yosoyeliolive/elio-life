@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELIO | Generador de Prompts IA - Documentación Técnica</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --elio-black: #000000;
+            --elio-white: #FFFFFF;
+            --elio-blue-primary: #098dcb;
+            --elio-blue-secondary: #056fa3;
+            --elio-blue-light: #3ba8e0;
+            --elio-blue-dark: #003D99;
+            --elio-blue-gradient: linear-gradient(135deg, #098dcb 0%, #003D99 100%);
+            --elio-gray-100: #F8F9FA;
+            --elio-gray-200: #E9ECEF;
+            --elio-gray-300: #DEE2E6;
+            --elio-gray-700: #495057;
+            --elio-gray-900: #212529;
+            --success: #00D98E;
+            --warning: #FFB800;
+            --error: #FF3366;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--elio-black);
+            color: var(--elio-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Header Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--elio-blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            max-width: 400px;
+            height: 3px;
+            background: var(--elio-gray-900);
+            border-radius: 10px;
+            margin: 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--elio-blue-gradient);
+            width: 85%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--elio-blue-primary);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 40px 80px;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: 100px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: var(--elio-blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: 24px;
+            color: var(--elio-gray-300);
+            font-weight: 400;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+        
+        .meta-item {
+            text-align: center;
+        }
+        
+        .meta-value {
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--elio-blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+        
+        .meta-label {
+            font-size: 14px;
+            color: var(--elio-gray-300);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        
+        /* Section Title */
+        .section-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 50px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--elio-blue-gradient);
+            border-radius: 3px;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, rgba(0, 61, 153, 0.05) 100%);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--elio-blue-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--elio-blue-primary);
+            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.2);
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--elio-white);
+        }
+        
+        .card-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-success {
+            background: rgba(0, 217, 142, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .badge-warning {
+            background: rgba(255, 184, 0, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+        
+        .badge-info {
+            background: rgba(0, 102, 255, 0.15);
+            color: var(--elio-blue-light);
+            border: 1px solid var(--elio-blue-light);
+        }
+        
+        .card-content {
+            color: var(--elio-gray-200);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        
+        .card-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .card-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+        }
+        
+        .card-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .card-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--elio-blue-primary);
+            border-radius: 50%;
+        }
+        
+        /* Architecture Diagram */
+        .architecture {
+            background: var(--elio-gray-900);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 0;
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .architecture::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 20px,
+                rgba(0, 102, 255, 0.03) 20px,
+                rgba(0, 102, 255, 0.03) 21px
+            );
+            pointer-events: none;
+        }
+        
+        .arch-layer {
+            background: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .arch-layer:last-child {
+            margin-bottom: 0;
+        }
+        
+        .arch-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--elio-blue-light);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .arch-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .arch-item {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            color: var(--elio-white);
+            font-weight: 500;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 60px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--elio-blue-primary), transparent);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            padding: 30px;
+            background: rgba(0, 102, 255, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--elio-blue-primary);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -56px;
+            top: 40px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--elio-blue-primary);
+            border: 4px solid var(--elio-black);
+            box-shadow: 0 0 0 2px var(--elio-blue-primary);
+        }
+        
+        .timeline-phase {
+            font-size: 14px;
+            color: var(--elio-blue-light);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--elio-white);
+            margin-bottom: 15px;
+        }
+        
+        .timeline-duration {
+            font-size: 13px;
+            color: var(--elio-gray-300);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .timeline-tasks {
+            list-style: none;
+        }
+        
+        .timeline-tasks li {
+            padding: 10px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--elio-gray-200);
+        }
+        
+        .timeline-tasks li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--elio-blue-primary);
+            border-radius: 2px;
+        }
+        
+        /* Stats Panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .stat-card {
+            background: var(--elio-gray-900);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--elio-blue-gradient);
+        }
+        
+        .stat-value {
+            font-size: 56px;
+            font-weight: 800;
+            background: var(--elio-blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--elio-gray-300);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .stat-description {
+            font-size: 13px;
+            color: var(--elio-gray-300);
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        
+        /* Comparison Panel */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .comparison-side {
+            background: rgba(0, 102, 255, 0.05);
+            border-radius: 16px;
+            padding: 40px;
+            border: 2px solid rgba(0, 102, 255, 0.2);
+        }
+        
+        .comparison-side.implemented {
+            border-color: var(--success);
+            background: rgba(0, 217, 142, 0.05);
+        }
+        
+        .comparison-side.pending {
+            border-color: var(--warning);
+            background: rgba(255, 184, 0, 0.05);
+        }
+        
+        .comparison-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 102, 255, 0.2);
+        }
+        
+        .comparison-side.implemented .comparison-header {
+            border-bottom-color: var(--success);
+        }
+        
+        .comparison-side.pending .comparison-header {
+            border-bottom-color: var(--warning);
+        }
+        
+        .comparison-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--elio-white);
+        }
+        
+        .comparison-percentage {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--success);
+        }
+        
+        .comparison-side.pending .comparison-percentage {
+            color: var(--warning);
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-item {
+            padding: 15px 0;
+            padding-left: 35px;
+            position: relative;
+            color: var(--elio-gray-200);
+            font-size: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--elio-blue-primary);
+        }
+        
+        .comparison-side.implemented .feature-item::before {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .comparison-side.pending .feature-item::before {
+            background: transparent;
+            border-color: var(--warning);
+        }
+        
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .tech-item {
+            background: var(--elio-gray-900);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--elio-blue-primary);
+            box-shadow: 0 10px 40px rgba(0, 102, 255, 0.2);
+        }
+        
+        .tech-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--elio-white);
+            margin-bottom: 8px;
+        }
+        
+        .tech-category {
+            font-size: 12px;
+            color: var(--elio-blue-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Alert Box */
+        .alert {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--elio-blue-primary);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        
+        .alert-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--elio-blue-light);
+            margin-bottom: 15px;
+        }
+        
+        .alert-content {
+            color: var(--elio-gray-200);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 40px;
+            border-top: 1px solid rgba(0, 102, 255, 0.2);
+            margin-top: 100px;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: var(--elio-gray-300);
+        }
+        
+        .footer-logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--elio-blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 56px;
+            }
+            
+            .section-title {
+                font-size: 36px;
+            }
+            
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 20px 60px;
+            }
+            
+            .header-content {
+                padding: 15px 20px;
+            }
+            
+            .progress-bar {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 42px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .hero-meta {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Fábrica de Agentes IA - Elio</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">65% Completado</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">Generador Inteligente de Prompts para Retell AI</h1>
+            <p class="hero-subtitle">Plataforma SaaS de Generación Asistida con Verificación Determinística y Feedback Loop desde Producción</p>
+            
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <span class="meta-value">65%</span>
+                    <span class="meta-label">Completitud</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-value">170h</span>
+                    <span class="meta-label">Horas Invertidas</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-value">8-10</span>
+                    <span class="meta-label">Semanas Restantes</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visión General -->
+        <section class="section">
+            <h2 class="section-title">Visión General del Proyecto</h2>
+            
+            <div class="alert">
+                <div class="alert-title">Objetivo Principal</div>
+                <div class="alert-content">
+                    Desarrollar una plataforma interna para Netelip que permita crear prompts profesionales para agentes de voz IA en Retell AI, con verificación determinística de calidad, integración directa y optimización mediante Claude AI. El sistema cierra el loop conectando generación → producción → mejora continua.
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Categoría</div>
+                        <span class="card-badge badge-info">SaaS B2B</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="card-list">
+                            <li>AI Development Tool</li>
+                            <li>No-Code/Low-Code AI Platform</li>
+                            <li>Prompt Management System</li>
+                            <li>Conversational AI Builder</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Complejidad</div>
+                        <span class="card-badge badge-warning">Media-Alta</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="card-list">
+                            <li>Frontend avanzado (React 18)</li>
+                            <li>Backend robusto (Supabase)</li>
+                            <li>Automatización compleja (N8N)</li>
+                            <li>Integraciones múltiples</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Diferenciación</div>
+                        <span class="card-badge badge-success">Alta</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="card-list">
+                            <li>Verificación determinística (KPU)</li>
+                            <li>Feedback loop cerrado</li>
+                            <li>Auto-optimización basada en datos</li>
+                            <li>Trazabilidad completa</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Arquitectura del Sistema -->
+        <section class="section">
+            <h2 class="section-title">Arquitectura del Sistema</h2>
+            
+            <div class="architecture">
+                <div class="arch-layer">
+                    <div class="arch-title">Frontend Layer</div>
+                    <div class="arch-items">
+                        <span class="arch-item">React 18</span>
+                        <span class="arch-item">Tailwind CSS</span>
+                        <span class="arch-item">Wizard 12 Pasos</span>
+                        <span class="arch-item">Preview Tiempo Real</span>
+                        <span class="arch-item">Dashboard Métricas</span>
+                    </div>
+                </div>
+                
+                <div class="arch-layer">
+                    <div class="arch-title">Backend & Database</div>
+                    <div class="arch-items">
+                        <span class="arch-item">Supabase</span>
+                        <span class="arch-item">PostgreSQL</span>
+                        <span class="arch-item">Row Level Security</span>
+                        <span class="arch-item">Edge Functions</span>
+                        <span class="arch-item">Auth (@netelip.com)</span>
+                    </div>
+                </div>
+                
+                <div class="arch-layer">
+                    <div class="arch-title">AI & Automation</div>
+                    <div class="arch-items">
+                        <span class="arch-item">N8N Workflows</span>
+                        <span class="arch-item">Claude Sonnet 4</span>
+                        <span class="arch-item">Verificación Determinística</span>
+                        <span class="arch-item">Análisis Performance</span>
+                    </div>
+                </div>
+                
+                <div class="arch-layer">
+                    <div class="arch-title">Integraciones Externas</div>
+                    <div class="arch-items">
+                        <span class="arch-item">Retell AI API</span>
+                        <span class="arch-item">Anthropic API</span>
+                        <span class="arch-item">Slack Webhooks</span>
+                        <span class="arch-item">Google Drive</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estado Actual vs Pendiente -->
+        <section class="section">
+            <h2 class="section-title">Estado del Desarrollo</h2>
+            
+            <div class="comparison">
+                <div class="comparison-side implemented">
+                    <div class="comparison-header">
+                        <div class="comparison-title">Ya Implementado</div>
+                        <div class="comparison-percentage">65%</div>
+                    </div>
+                    <ul class="feature-list">
+                        <li class="feature-item">Frontend completo con 12 pasos guiados</li>
+                        <li class="feature-item">Base de datos diseñada con 7 tablas</li>
+                        <li class="feature-item">Autenticación solo emails @netelip.com</li>
+                        <li class="feature-item">Row Level Security (RLS) activo</li>
+                        <li class="feature-item">Generación determinística de prompts</li>
+                        <li class="feature-item">Sistema de templates reutilizables</li>
+                        <li class="feature-item">Integración con Retell AI API</li>
+                        <li class="feature-item">Workflow N8N para crear agentes</li>
+                        <li class="feature-item">Optimización básica con Claude</li>
+                        <li class="feature-item">Preview en tiempo real</li>
+                        <li class="feature-item">Exportación multi-formato (TXT, JSON)</li>
+                        <li class="feature-item">Sistema de versionado de prompts</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-side pending">
+                    <div class="comparison-header">
+                        <div class="comparison-title">Por Implementar</div>
+                        <div class="comparison-percentage">35%</div>
+                    </div>
+                    <ul class="feature-list">
+                        <li class="feature-item">Verificación determinística con 15+ reglas</li>
+                        <li class="feature-item">Sistema de trazabilidad completo</li>
+                        <li class="feature-item">Score 0-100 con desglose detallado</li>
+                        <li class="feature-item">Optimización verificada con Claude</li>
+                        <li class="feature-item">Comparativa antes/después automática</li>
+                        <li class="feature-item">Rollback automático si empeora</li>
+                        <li class="feature-item">Feedback loop desde producción</li>
+                        <li class="feature-item">Sincronización métricas Retell (24h)</li>
+                        <li class="feature-item">Análisis determinista de performance</li>
+                        <li class="feature-item">Sistema de alertas automáticas</li>
+                        <li class="feature-item">Auto-optimización basada en datos</li>
+                        <li class="feature-item">Dashboard métricas producción</li>
+                        <li class="feature-item">Tests E2E completos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <span class="stat-value">~170h</span>
+                    <div class="stat-label">Ya Invertidas</div>
+                    <p class="stat-description">Equivalente a 1 mes full-time de desarrollo</p>
+                </div>
+                
+                <div class="stat-card">
+                    <span class="stat-value">~230h</span>
+                    <div class="stat-label">Estimadas Restantes</div>
+                    <p class="stat-description">6-8 semanas adicionales de trabajo</p>
+                </div>
+                
+                <div class="stat-card">
+                    <span class="stat-value">400h</span>
+                    <div class="stat-label">Total Proyecto</div>
+                    <p class="stat-description">2.5 meses de desarrollo completo</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Innovación KPU -->
+        <section class="section">
+            <h2 class="section-title">Innovación: Verificación Determinística</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Enfoque Tradicional</div>
+                        <span class="card-badge badge-warning">Problemático</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 20px;">Generas el prompt → "Se ve bien" → Lo usas en producción → Cruzas los dedos</p>
+                        <ul class="card-list">
+                            <li>Sin validación objetiva</li>
+                            <li>Confianza ciega en IA</li>
+                            <li>No hay trazabilidad</li>
+                            <li>Debugging manual si falla</li>
+                            <li>Sin aprendizaje continuo</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Nuestro Enfoque</div>
+                        <span class="card-badge badge-success">Innovador</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 20px;">Generas → Verificación con 15+ reglas → Score 0-100 → Trazabilidad → Producción con confianza</p>
+                        <ul class="card-list">
+                            <li>Validación objetiva y ejecutable</li>
+                            <li>Verificación post-optimización</li>
+                            <li>Trazabilidad completa</li>
+                            <li>Feedback loop cerrado</li>
+                            <li>Mejora continua automática</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert" style="margin-top: 40px;">
+                <div class="alert-title">Ventaja Competitiva Clave</div>
+                <div class="alert-content">
+                    <p style="margin-bottom: 15px;">La verificación determinística inspirada en KPU nos diferencia de cualquier otro generador de prompts en el mercado. No solo generamos el prompt, lo VALIDAMOS con código ejecutable y MEJORAMOS basándonos en datos reales de producción.</p>
+                    <p>Esto garantiza prompts de calidad enterprise con trazabilidad completa, algo que los enfoques tradicionales no logran.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Plan de Implementación -->
+        <section class="section">
+            <h2 class="section-title">Plan de Implementación</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-phase">Fase 1</div>
+                    <div class="timeline-title">Sistema de Verificación Determinística</div>
+                    <div class="timeline-duration">Semanas 1-2 · ~40 horas</div>
+                    <ul class="timeline-tasks">
+                        <li>Implementar 15+ reglas de verificación ejecutables</li>
+                        <li>Sistema de scoring objetivo (0-100)</li>
+                        <li>Trazabilidad completa de cada verificación</li>
+                        <li>UI para mostrar score y desglose detallado</li>
+                        <li>Tests unitarios para cada regla</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-phase">Fase 2</div>
+                    <div class="timeline-title">Optimización Verificada con Claude</div>
+                    <div class="timeline-duration">Semanas 3-4 · ~35 horas</div>
+                    <ul class="timeline-tasks">
+                        <li>Integración Claude con verificación post-optimización</li>
+                        <li>Comparativa automática antes/después</li>
+                        <li>Sistema de rollback si empeora el score</li>
+                        <li>Historial de optimizaciones con métricas</li>
+                        <li>UI para visualizar mejoras</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-phase">Fase 3</div>
+                    <div class="timeline-title">Feedback Loop desde Producción</div>
+                    <div class="timeline-duration">Semanas 5-7 · ~60 horas</div>
+                    <ul class="timeline-tasks">
+                        <li>N8N Workflow sincronización métricas Retell AI</li>
+                        <li>Análisis determinista de performance</li>
+                        <li>Sistema de alertas automáticas (Slack)</li>
+                        <li>Detección temprana de problemas</li>
+                        <li>Auto-optimización basada en datos (opcional)</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-phase">Fase 4</div>
+                    <div class="timeline-title">Dashboard de Métricas y Testing</div>
+                    <div class="timeline-duration">Semana 8 · ~45 horas</div>
+                    <ul class="timeline-tasks">
+                        <li>Dashboard métricas producción con gráficos</li>
+                        <li>Comparativa de versiones de prompts</li>
+                        <li>Sistema de filtros y análisis temporal</li>
+                        <li>Tests E2E completos (Cypress)</li>
+                        <li>Documentación final y deploy</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-phase">Fase 5</div>
+                    <div class="timeline-title">Refinamiento y Producción</div>
+                    <div class="timeline-duration">Semanas 9-10 · ~50 horas</div>
+                    <ul class="timeline-tasks">
+                        <li>Testing exhaustivo con usuarios reales</li>
+                        <li>Optimización de performance</li>
+                        <li>Bug fixing y ajustes finales</li>
+                        <li>Documentación técnica completa</li>
+                        <li>Deploy a producción y monitoreo</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stack Tecnológico -->
+        <section class="section">
+            <h2 class="section-title">Stack Tecnológico Completo</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-name">React 18</div>
+                    <div class="tech-category">Frontend</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Tailwind CSS</div>
+                    <div class="tech-category">Styling</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Supabase</div>
+                    <div class="tech-category">Backend</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">PostgreSQL</div>
+                    <div class="tech-category">Database</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">N8N</div>
+                    <div class="tech-category">Automation</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Claude Sonnet 4</div>
+                    <div class="tech-category">AI Engine</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Retell AI API</div>
+                    <div class="tech-category">Integration</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Netlify</div>
+                    <div class="tech-category">Deployment</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estimaciones -->
+        <section class="section">
+            <h2 class="section-title">Estimaciones y Viabilidad</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Inversión Estimada</div>
+                        <span class="card-badge badge-warning">Total</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="card-list">
+                            <li>Desarrollo: â‚¬20,000 - â‚¬40,000</li>
+                            <li>Infraestructura anual: ~â‚¬2,000</li>
+                            <li>APIs (Claude + Retell): ~â‚¬6,000/año</li>
+                            <li><strong>Total Año 1: â‚¬28,000 - â‚¬48,000</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">ROI Esperado</div>
+                        <span class="card-badge badge-success">Positivo</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="card-list">
+                            <li>Ahorro tiempo: 3.5h por prompt</li>
+                            <li>5 prompts/mes = 210h/año ahorradas</li>
+                            <li>Valor: ~â‚¬10,500/año (uso interno)</li>
+                            <li>Break-even: 2-3 años</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Potencial Comercial</div>
+                        <span class="card-badge badge-info">Alto</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="card-list">
+                            <li>Precio estimado: â‚¬100-200/mes</li>
+                            <li>Con 10 clientes: â‚¬12-24k/año</li>
+                            <li>Break-even: 1-2 años</li>
+                            <li>Escalabilidad: Muy alta (SaaS)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Riesgos y Mitigaciones -->
+        <section class="section">
+            <h2 class="section-title">Análisis de Riesgos</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Dependencia APIs</div>
+                        <span class="card-badge badge-warning">Medio</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px;"><strong>Riesgo:</strong> Cambios en Retell AI o Claude API</p>
+                        <p style="margin-bottom: 15px;"><strong>Mitigación:</strong></p>
+                        <ul class="card-list">
+                            <li>Abstraer integraciones en servicios</li>
+                            <li>Versionado de API adapters</li>
+                            <li>Monitoreo de cambios proactivo</li>
+                            <li>Documentación de breaking changes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Complejidad Técnica</div>
+                        <span class="card-badge badge-warning">Medio</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px;"><strong>Riesgo:</strong> Sistema complejo de mantener</p>
+                        <p style="margin-bottom: 15px;"><strong>Mitigación:</strong></p>
+                        <ul class="card-list">
+                            <li>Documentación exhaustiva</li>
+                            <li>Arquitectura modular y desacoplada</li>
+                            <li>Tests automatizados extensivos</li>
+                            <li>Monitoreo y alertas desde día 1</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Costos IA Variables</div>
+                        <span class="card-badge badge-info">Bajo</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px;"><strong>Riesgo:</strong> Costos de Claude se disparan</p>
+                        <p style="margin-bottom: 15px;"><strong>Mitigación:</strong></p>
+                        <ul class="card-list">
+                            <li>Optimización opcional (tier premium)</li>
+                            <li>Cacheo de resultados similares</li>
+                            <li>Rate limiting inteligente</li>
+                            <li>Modelos más baratos cuando suficiente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fallos Críticos -->
+        <section class="section">
+            <h2 class="section-title">Fallos Críticos Identificados (Análisis KPU)</h2>
+            
+            <div class="alert" style="background: linear-gradient(135deg, rgba(255, 51, 102, 0.1) 0%, rgba(255, 51, 102, 0.05) 100%); border: 2px solid var(--error);">
+                <div class="alert-title" style="color: var(--error);">⚠️ PROBLEMA PRINCIPAL: Sin Verificación Determinística</div>
+                <div class="alert-content">
+                    <p style="margin-bottom: 15px; font-size: 16px;">El sistema actual genera prompts pero <strong>no verifica objetivamente su calidad</strong>. Todo depende de la "intuición" del LLM sin validación técnica. Esto es crítico porque:</p>
+                    <ul class="card-list">
+                        <li>No hay garantía de que el prompt cumpla estándares mínimos</li>
+                        <li>Imposible auditar por qué un prompt es "bueno" o "malo"</li>
+                        <li>Las optimizaciones son "ciegas" (no sabemos si realmente mejoraron)</li>
+                        <li>Sin feedback loop desde producción para aprender de errores reales</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cards-grid" style="margin-top: 40px;">
+                <div class="card" style="border-color: var(--error);">
+                    <div class="card-header">
+                        <div class="card-title">Fallo 1: Sin Sistema de Reglas</div>
+                        <span class="card-badge" style="background: var(--error);">Crítico</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; color: var(--error); font-weight: 600;">❌ Problema</p>
+                        <p style="margin-bottom: 15px;">No existen reglas ejecutables que verifiquen aspectos técnicos del prompt (estructura, instrucciones, herramientas, etc.)</p>
+                        
+                        <p style="margin-bottom: 15px; color: var(--success); font-weight: 600;">✅ Solución KPU</p>
+                        <ul class="card-list">
+                            <li>Implementar 15+ reglas determinísticas</li>
+                            <li>Cada regla evalúa un aspecto específico</li>
+                            <li>Scoring objetivo de 0-100 con trazabilidad</li>
+                            <li>Feedback accionable para mejoras</li>
+                        </ul>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,255,0.1); border-radius: 8px; border-left: 3px solid var(--elio-blue-primary);">
+                            <strong>Impacto:</strong> Sin esto, no hay diferenciación real vs competidores
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-color: var(--error);">
+                    <div class="card-header">
+                        <div class="card-title">Fallo 2: Optimización Ciega</div>
+                        <span class="card-badge" style="background: var(--error);">Crítico</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; color: var(--error); font-weight: 600;">❌ Problema</p>
+                        <p style="margin-bottom: 15px;">Claude optimiza el prompt pero no hay verificación de que la optimización realmente mejoró la calidad objetivamente.</p>
+                        
+                        <p style="margin-bottom: 15px; color: var(--success); font-weight: 600;">✅ Solución KPU</p>
+                        <ul class="card-list">
+                            <li>Verificar prompt ANTES de optimizar (baseline)</li>
+                            <li>Optimizar con Claude</li>
+                            <li>RE-VERIFICAR el prompt optimizado</li>
+                            <li>Solo aplicar si score aumentó</li>
+                            <li>Mostrar comparativa antes/después</li>
+                        </ul>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,255,0.1); border-radius: 8px; border-left: 3px solid var(--elio-blue-primary);">
+                            <strong>Impacto:</strong> Garantiza mejora medible, no subjetiva
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-color: var(--error);">
+                    <div class="card-header">
+                        <div class="card-title">Fallo 3: Sin Trazabilidad</div>
+                        <span class="card-badge" style="background: var(--error);">Alto</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; color: var(--error); font-weight: 600;">❌ Problema</p>
+                        <p style="margin-bottom: 15px;">No hay manera de auditar qué reglas pasaron/fallaron, ni explicar por qué un prompt tiene score X.</p>
+                        
+                        <p style="margin-bottom: 15px; color: var(--success); font-weight: 600;">✅ Solución KPU</p>
+                        <ul class="card-list">
+                            <li>Cada verificación registra timestamp y duración</li>
+                            <li>Detalle de cada regla: pasó/falló + score parcial</li>
+                            <li>Sugerencias priorizadas por impacto</li>
+                            <li>Historial de evolución del prompt</li>
+                        </ul>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,255,0.1); border-radius: 8px; border-left: 3px solid var(--elio-blue-primary);">
+                            <strong>Impacto:</strong> Debug más rápido, confianza del usuario
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-color: var(--error);">
+                    <div class="card-header">
+                        <div class="card-title">Fallo 4: Sin Feedback Loop</div>
+                        <span class="card-badge" style="background: var(--error);">Alto</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; color: var(--error); font-weight: 600;">❌ Problema</p>
+                        <p style="margin-bottom: 15px;">Las métricas de producción (duración, interrupciones, sentiment) no influyen en el generador. No hay aprendizaje iterativo.</p>
+                        
+                        <p style="margin-bottom: 15px; color: var(--success); font-weight: 600;">✅ Solución KPU</p>
+                        <ul class="card-list">
+                            <li>Webhook de Retell envía métricas reales</li>
+                            <li>Análisis de correlación: reglas ↔ KPIs</li>
+                            <li>Ajuste automático de pesos de reglas</li>
+                            <li>A/B testing de prompts en producción</li>
+                        </ul>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,255,0.1); border-radius: 8px; border-left: 3px solid var(--elio-blue-primary);">
+                            <strong>Impacto:</strong> Sistema auto-mejora con data real
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-color: var(--warning);">
+                    <div class="card-header">
+                        <div class="card-title">Fallo 5: Sin Scoring Objetivo</div>
+                        <span class="card-badge" style="background: var(--warning);">Medio</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; color: var(--warning); font-weight: 600;">⚠️ Problema</p>
+                        <p style="margin-bottom: 15px;">No hay métrica unificada (0-100) que resuma la calidad del prompt. Difícil comparar versiones.</p>
+                        
+                        <p style="margin-bottom: 15px; color: var(--success); font-weight: 600;">✅ Solución KPU</p>
+                        <ul class="card-list">
+                            <li>Score normalizado 0-100</li>
+                            <li>Niveles: Excelente, Bueno, Suficiente, Deficiente</li>
+                            <li>Desglose por categorías (estructura, claridad, herramientas)</li>
+                            <li>Benchmark contra prompts exitosos</li>
+                        </ul>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,255,0.1); border-radius: 8px; border-left: 3px solid var(--elio-blue-primary);">
+                            <strong>Impacto:</strong> UX más clara, decisiones data-driven
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-color: var(--warning);">
+                    <div class="card-header">
+                        <div class="card-title">Fallo 6: Dependencia Total LLM</div>
+                        <span class="card-badge" style="background: var(--warning);">Medio</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; color: var(--warning); font-weight: 600;">⚠️ Problema</p>
+                        <p style="margin-bottom: 15px;">Todo el sistema confía ciegamente en la "intuición" del LLM. No hay validación técnica independiente.</p>
+                        
+                        <p style="margin-bottom: 15px; color: var(--success); font-weight: 600;">✅ Solución KPU</p>
+                        <ul class="card-list">
+                            <li>LLM genera, verificador valida (separación de concerns)</li>
+                            <li>Reglas determinísticas no dependen de IA</li>
+                            <li>Fallback si optimización falla o empeora</li>
+                            <li>Tests automatizados con assertions técnicas</li>
+                        </ul>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,255,0.1); border-radius: 8px; border-left: 3px solid var(--elio-blue-primary);">
+                            <strong>Impacto:</strong> Mayor confiabilidad y resiliencia
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert" style="margin-top: 40px; background: linear-gradient(135deg, rgba(0, 217, 142, 0.1) 0%, rgba(0, 217, 142, 0.05) 100%); border: 2px solid var(--success);">
+                <div class="alert-title" style="color: var(--success);">💡 DIFERENCIACIÓN COMPETITIVA</div>
+                <div class="alert-content">
+                    <p style="margin-bottom: 15px; font-size: 16px;">Implementando el modelo KPU, ELIO será <strong>único en el mercado</strong>:</p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+                        <div style="padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 4px solid var(--success);">
+                            <div style="font-weight: 700; margin-bottom: 10px; font-size: 15px;">Competidores</div>
+                            <ul style="list-style: none; padding-left: 0; font-size: 14px; line-height: 1.8;">
+                                <li style="opacity: 0.7;">❌ Generación "mágica" sin explicación</li>
+                                <li style="opacity: 0.7;">❌ No verifican calidad objetivamente</li>
+                                <li style="opacity: 0.7;">❌ Sin feedback desde producción</li>
+                                <li style="opacity: 0.7;">❌ Optimización sin validación</li>
+                            </ul>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,217,142,0.1); border-radius: 12px; border-left: 4px solid var(--success);">
+                            <div style="font-weight: 700; margin-bottom: 10px; font-size: 15px;">ELIO con KPU</div>
+                            <ul style="list-style: none; padding-left: 0; font-size: 14px; line-height: 1.8;">
+                                <li>✅ Verificación determinística (15+ reglas)</li>
+                                <li>✅ Score 0-100 explicable y trazable</li>
+                                <li>✅ Feedback loop con métricas reales</li>
+                                <li>✅ Optimización verificada (solo aplica si mejora)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 15px; font-weight: 600; text-align: center;">Con estas mejoras, ELIO no solo genera prompts, sino que <strong>garantiza su calidad</strong>.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(0,102,255,0.05); border-radius: 16px; border: 2px solid var(--elio-blue-primary);">
+                <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 20px; color: var(--elio-blue-primary);">📊 Plan de Implementación KPU</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
+                    <div>
+                        <div style="font-size: 36px; font-weight: 800; background: var(--elio-blue-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;">Fase 1</div>
+                        <div style="font-weight: 600; margin-bottom: 10px; font-size: 15px;">Semanas 1-2</div>
+                        <ul style="font-size: 14px; line-height: 1.8; list-style: none; padding-left: 0;">
+                            <li style="padding: 5px 0;">• 5 reglas básicas (estructura, claridad)</li>
+                            <li style="padding: 5px 0;">• Sistema de scoring simple</li>
+                            <li style="padding: 5px 0;">• UI para mostrar resultados</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 800; background: var(--elio-blue-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;">Fase 2</div>
+                        <div style="font-weight: 600; margin-bottom: 10px; font-size: 15px;">Semanas 3-4</div>
+                        <ul style="font-size: 14px; line-height: 1.8; list-style: none; padding-left: 0;">
+                            <li style="padding: 5px 0;">• Ampliar a 15+ reglas completas</li>
+                            <li style="padding: 5px 0;">• Optimización con re-verificación</li>
+                            <li style="padding: 5px 0;">• Trazabilidad y logs</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 800; background: var(--elio-blue-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;">Fase 3</div>
+                        <div style="font-weight: 600; margin-bottom: 10px; font-size: 15px;">Semanas 5+</div>
+                        <ul style="font-size: 14px; line-height: 1.8; list-style: none; padding-left: 0;">
+                            <li style="padding: 5px 0;">• Webhook Retell para métricas</li>
+                            <li style="padding: 5px 0;">• Análisis correlaciones</li>
+                            <li style="padding: 5px 0;">• A/B testing en producción</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center;">
+                    <strong style="font-size: 15px;">Inversión estimada:</strong> 3-5 semanas de desarrollo
+                    <span style="margin: 0 20px; opacity: 0.5;">|</span>
+                    <strong style="font-size: 15px;">ROI esperado:</strong> Diferenciación única en el mercado
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusiones -->
+        <section class="section">
+            <h2 class="section-title">Conclusiones y Recomendaciones</h2>
+            
+            <div class="alert">
+                <div class="alert-title">Evaluación General: Proyecto Viable con Ajustes Críticos Necesarios</div>
+                <div class="alert-content">
+                    <p style="margin-bottom: 15px;">El proyecto está bien encaminado con un 65% de completitud. La arquitectura es sólida y el stack tecnológico apropiado. <strong>Sin embargo, el análisis KPU revela 6 fallos críticos</strong> que deben corregirse para lograr diferenciación real en el mercado.</p>
+                    
+                    <p style="margin-bottom: 15px; font-weight: 600; color: var(--error);">⚠️ Situación Actual:</p>
+                    <ul style="list-style: none; padding-left: 0; margin-bottom: 20px;">
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--error);">❌</span>
+                            Sin verificación determinística de calidad
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--error);">❌</span>
+                            Optimización "ciega" sin validación técnica
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--error);">❌</span>
+                            Sin feedback loop desde producción
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--error);">❌</span>
+                            Dependencia total en "intuición" del LLM
+                        </li>
+                    </ul>
+                    
+                    <p style="margin-bottom: 15px; font-weight: 600; color: var(--success);">✅ Con Modelo KPU Implementado:</p>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            Diferenciación real y única en el mercado (verificación + feedback loop)
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            Calidad garantizada con scoring 0-100 explicable
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            Sistema auto-mejorable con métricas reales
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            Stack probado y escalable (Next.js + Supabase)
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            Validación interna antes de comercializar (bajo riesgo)
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            Potencial de escalado alto (modelo SaaS)
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--success);">â–¸</span>
+                            ROI positivo proyectado en 2-3 años
+                        </li>
+                    </ul>
+                    
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(0,102,255,0.1); border-radius: 12px; border-left: 4px solid var(--elio-blue-primary);">
+                        <strong style="font-size: 16px; display: block; margin-bottom: 10px;">📌 Conclusión Clave</strong>
+                        <p style="font-size: 15px; line-height: 1.8;">El proyecto tiene <strong>fundamentos sólidos pero requiere implementar el modelo KPU</strong> para convertirse en una solución única y defendible en el mercado. Sin estas mejoras, será "otro generador de prompts más". Con ellas, será <strong>el único con verificación determinística y feedback loop real</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cards-grid" style="margin-top: 40px;">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recomendación 1</div>
+                        <span class="card-badge badge-success">Crítico</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px;"><strong>Implementar por Fases</strong></p>
+                        <p>No construir toda la verificación de golpe. Empezar con 5 reglas básicas, testear con usuarios reales, e iterar según feedback.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recomendación 2</div>
+                        <span class="card-badge badge-success">Crítico</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px;"><strong>Monitoreo Desde Día 1</strong></p>
+                        <p>Implementar Sentry, logs estructurados, alertas en Slack y dashboard de health del sistema desde el inicio del proyecto.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recomendación 3</div>
+                        <span class="card-badge badge-info">Importante</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px;"><strong>Documentación Exhaustiva</strong></p>
+                        <p>Con un sistema complejo, la documentación es crítica. README técnico, diagramas actualizados, y changelog riguroso son esenciales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recursos y Enlaces -->
+        <section class="section" style="margin-bottom: 60px;">
+            <h2 class="section-title">Recursos del Proyecto</h2>
+            
+            <div class="alert" style="background: rgba(0,102,255,0.05); border: 2px solid var(--elio-blue-primary); margin-bottom: 30px;">
+                <div class="alert-title" style="color: var(--elio-blue-primary);">🔗 Acceso a Prototipos y Demos</div>
+                <div class="alert-content">
+                    <p style="font-size: 15px; line-height: 1.8;">Los siguientes enlaces proporcionan acceso directo a las implementaciones actuales del proyecto. Ten en cuenta que están en entornos de desarrollo (StackBlitz) y no representan el despliegue final en producción.</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card" style="border: 2px solid var(--elio-blue-primary);">
+                    <div class="card-header">
+                        <div class="card-title">🏭 Fábrica de Agentes IA</div>
+                        <span class="card-badge" style="background: var(--warning);">Demo/Trucho</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; font-size: 14px; line-height: 1.8;">Prototipo visual de la interfaz completa de la Fábrica de Agentes. Este es un mockup para validar el diseño y flujo de usuario.</p>
+                        
+                        <div style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; border-left: 3px solid var(--warning);">
+                            <div style="font-size: 12px; color: var(--gray-300); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">⚠️ Estado: Prototipo Visual</div>
+                            <div style="font-size: 13px; line-height: 1.6;">
+                                • No conectado a APIs reales<br>
+                                • Solo para validación de UX/UI<br>
+                                • Datos simulados/estáticos
+                            </div>
+                        </div>
+                        
+                        <a href="https://react-jmn3ttkr.stackblitz.io/" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 24px; background: var(--elio-blue-gradient); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; transition: transform 0.2s; margin-top: 10px;">
+                            🚀 Abrir Demo →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card" style="border: 2px solid var(--success);">
+                    <div class="card-header">
+                        <div class="card-title">⚡ Generador de Prompts</div>
+                        <span class="card-badge badge-success">Funcional</span>
+                    </div>
+                    <div class="card-content">
+                        <p style="margin-bottom: 15px; font-size: 14px; line-height: 1.8;">Implementación funcional del generador de prompts para Retell AI. Conectado a APIs reales y operativo.</p>
+                        
+                        <div style="margin: 20px 0; padding: 15px; background: rgba(255,184,0,0.1); border-radius: 8px; border-left: 3px solid var(--warning);">
+                            <div style="font-size: 12px; color: var(--warning); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">⚠️ Limitaciones Actuales</div>
+                            <div style="font-size: 13px; line-height: 1.6;">
+                                • <strong>Entorno no controlado</strong> (StackBlitz)<br>
+                                • Sin monitoreo ni alertas<br>
+                                • Sin garantía de uptime (99%)<br>
+                                • No optimizado para producción<br>
+                                • Rate limiting básico
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 15px 0; padding: 12px; background: rgba(0,217,142,0.1); border-radius: 8px; border-left: 3px solid var(--success);">
+                            <div style="font-size: 12px; color: var(--success); margin-bottom: 5px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">✅ Funciona</div>
+                            <div style="font-size: 13px; line-height: 1.6;">
+                                Generación y optimización de prompts operativa con Claude API
+                            </div>
+                        </div>
+                        
+                        <a href="https://react-e377q8cv.stackblitz.io/" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 24px; background: var(--elio-blue-gradient); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; transition: transform 0.2s; margin-top: 10px;">
+                            🚀 Abrir Generador →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert" style="margin-top: 40px; background: rgba(255,184,0,0.1); border: 2px solid var(--warning);">
+                <div class="alert-title" style="color: var(--warning);">📋 Nota para el Equipo Técnico</div>
+                <div class="alert-content">
+                    <p style="font-size: 15px; line-height: 1.8; margin-bottom: 15px;">Estos prototipos están alojados en <strong>StackBlitz</strong>, un entorno de desarrollo online. Para el despliegue en producción, se recomienda:</p>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--elio-blue-primary);">1.</span>
+                            Migrar a infraestructura propia (Vercel/Netlify o servidor dedicado)
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--elio-blue-primary);">2.</span>
+                            Implementar el sistema de verificación KPU antes del lanzamiento
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--elio-blue-primary);">3.</span>
+                            Configurar monitoreo, logs y alertas (Sentry, DataDog, etc.)
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--elio-blue-primary);">4.</span>
+                            Establecer CI/CD pipeline para deploys controlados
+                        </li>
+                        <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--elio-blue-primary);">5.</span>
+                            Implementar autenticación y autorización robustas
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-logo">Fábrica de Agentes IA - Elio</div>
+        <p class="footer-text">Documentación Técnica · Proyecto Generador de Prompts Retell AI</p>
+        <p class="footer-text" style="margin-top: 10px; opacity: 0.6;">Confidencial · Solo uso interno Netelip</p>
+    </div>
+
+</body>
+</html>
