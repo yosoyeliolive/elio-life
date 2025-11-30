@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Prompts Retell AI - Netelip Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+        .voice-card { transition: all 0.2s; }
+        .voice-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .selected-voice { border: 2px solid #10b981; background: #f0fdf4; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Generador de Prompts Retell AI</h1>
+                    <p class="text-gray-600 mt-2">Crea agentes de voz profesionales con configuración completa para Retell AI API</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-500">Progreso</div>
+                    <div class="text-2xl font-bold text-blue-600" id="progress">0%</div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="mt-4 bg-gray-200 rounded-full h-2">
+                <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Steps Navigation -->
+        <div class="bg-white rounded-lg shadow-lg p-4 mb-6">
+            <div class="flex justify-between items-center overflow-x-auto" id="stepsNav">
+                <!-- Steps will be generated here -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div id="stepContainer">
+                <!-- Steps content will be generated here -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between mt-8 pt-6 border-t">
+                <button id="btnPrevious" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                    ← Anterior
+                </button>
+                <button id="btnNext" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Siguiente →
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview Panel (visible from step 3 onwards) -->
+        <div id="previewPanel" class="bg-white rounded-lg shadow-lg p-6 mt-6" style="display: none;">
+            <h3 class="text-xl font-bold mb-4">📋 Vista Previa del Agente</h3>
+            <div id="previewContent" class="bg-gray-50 p-4 rounded-lg font-mono text-sm max-h-96 overflow-y-auto"></div>
+            
+            <div class="mt-6 flex gap-4">
+                <button onclick="exportJSON()" class="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    📥 Exportar JSON para Retell AI
+                </button>
+                <button onclick="copyToClipboard()" class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    📋 Copiar Configuración
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN Y DATOS
+        // ============================================
+        
+        const TOTAL_STEPS = 8;
+        let currentStep = 1;
+
+        // Form Data Storage
+        const formData = {
+            // Step 1: Basic Info
+            agent_name: '',
+            sector: '',
+            nicho: '',
+            
+            // Step 2: LLM Configuration
+            llm_model: 'gpt-4.1',
+            llm_temperature: 0.7,
+            llm_max_tokens: 1000,
+            general_prompt: '',
+            begin_message: '',
+            start_speaker: 'agent',
+            
+            // Step 3: Voice Settings
+            voice_id: '',
+            voice_model: 'eleven_turbo_v2_5',
+            voice_temperature: 1.0,
+            voice_speed: 1.0,
+            volume: 1.5,
+            fallback_voice_ids: [],
+            
+            // Step 4: Conversation Settings
+            language: 'es-ES',
+            responsiveness: 0.8,
+            interruption_sensitivity: 0.9,
+            enable_backchannel: true,
+            backchannel_frequency: 0.7,
+            backchannel_words: ['mmm...', 'déjame ver...', 'claro...', 'vale...', 'ajá...'],
+            
+            // Step 5: Timing & Reminders
+            reminder_trigger_ms: 25000,
+            reminder_max_count: 2,
+            end_call_after_silence_ms: 21000,
+            max_call_duration_ms: 600000,
+            begin_message_delay_ms: 200,
+            ring_duration_ms: 5000,
+            
+            // Step 6: Audio & Environment
+            ambient_sound: 'coffee-shop',
+            ambient_sound_volume: 0.3,
+            normalize_for_speech: true,
+            stt_mode: 'fast',
+            
+            // Step 7: Tools & Integrations
+            general_tools: [],
+            webhook_url: '',
+            boosted_keywords: [],
+            pronunciation_dictionary: [],
+            
+            // Step 8: Post-Call Analysis
+            post_call_analysis_model: 'gpt-4.1-mini',
+            post_call_analysis_data: []
+        };
+
+        // Voces disponibles (las más usadas en español)
+        const VOICES = [
+            { id: 'custom_voice_a24ff2d6349ee726c14d64cb67', name: 'Victor (Custom)', provider: 'elevenlabs', accent: 'Spanish', gender: 'male', recommended: true },
+            { id: '11labs-Santiago', name: 'Santiago', provider: 'elevenlabs', accent: 'Spanish', gender: 'male' },
+            { id: 'cartesia-Sofia', name: 'Sofia', provider: 'cartesia', accent: 'Mexican', gender: 'female' },
+            { id: 'cartesia-Miguel', name: 'Miguel', provider: 'cartesia', accent: 'Mexican', gender: 'male' },
+            { id: 'cartesia-Isabel', name: 'Isabel', provider: 'cartesia', accent: 'Spanish', gender: 'female' },
+            { id: 'cartesia-Manuel', name: 'Manuel', provider: 'cartesia', accent: 'Spanish', gender: 'male' },
+            { id: '11labs-Hailey-Latin-America-Spanish-localized', name: 'Hailey', provider: 'elevenlabs', accent: 'American', gender: 'female' },
+            { id: 'openai-Santiago', name: 'Santiago', provider: 'openai', accent: 'Spanish', gender: 'male' }
+        ];
+
+        // Sectores Netelip
+        const SECTORES = [
+            { value: 'atencion_cliente', label: '📞 Atención al Cliente', icon: '📞' },
+            { value: 'gestion_citas', label: '📅 Gestión de Citas', icon: '📅' },
+            { value: 'cualificacion_leads', label: '🎯 Cualificación de Leads', icon: '🎯' },
+            { value: 'turismo', label: '✈️ Turismo y Hostelería', icon: '✈️' },
+            { value: 'inmobiliaria', label: '🏠 Inmobiliaria', icon: '🏠' },
+            { value: 'servicios_profesionales', label: '⚖️ Servicios Profesionales', icon: '⚖️' },
+            { value: 'encuestas', label: '📊 Encuestas y Feedback', icon: '📊' }
+        ];
+
+        // Modelos LLM disponibles
+        const LLM_MODELS = [
+            { value: 'gpt-4.1', label: 'GPT-4.1 (Recomendado)', cost: '$$$', description: 'Máxima calidad y comprensión' },
+            { value: 'gpt-4.1-mini', label: 'GPT-4.1 Mini', cost: '$$', description: 'Equilibrio calidad-precio' },
+            { value: 'gpt-4.1-nano', label: 'GPT-4.1 Nano', cost: '$', description: 'Ultra rápido y económico' },
+            { value: 'claude-3.7-sonnet', label: 'Claude 3.7 Sonnet', cost: '$$$', description: 'Excelente en conversación' },
+            { value: 'claude-3.5-haiku', label: 'Claude 3.5 Haiku', cost: '$$', description: 'Rápido y preciso' }
+        ];
+
+        // Prompts base por sector
+        const PROMPTS_BASE = {
+            atencion_cliente: {
+                begin_message: "¡Hola! Soy el asistente virtual de {{nombre_empresa}}. ¿En qué puedo ayudarte hoy?",
+                general_prompt: `## 🎯 Identidad y Contexto
+
+Eres un agente de atención al cliente especializado en resolver consultas de manera rápida y eficiente para {{nombre_empresa}}.
+
+## 🎭 Personalidad y Estilo
+
+**Rasgos principales:**
+- 👔 **Profesional**: Conocimiento experto de productos y servicios
+- 😊 **Amigable**: Cercano y empático con cada cliente
+- ⚡ **Eficiente**: Resoluciones rápidas y efectivas
+
+**Tono:** Semi-formal, adaptable al cliente
+**Idioma:** {{idioma}}
+
+## 🗣️ Flujo de Conversación
+
+### 1. Saludo y Validación
+- Dar bienvenida cálida
+- Identificar nombre del cliente si es posible
+- Preguntar en qué puede ayudar
+
+### 2. Identificar Tipo de Consulta
+- **Facturación**: Problemas con pagos, facturas
+- **Envíos**: Seguimiento de pedidos, tiempos de entrega
+- **Productos**: Información, características, disponibilidad
+- **Devoluciones**: Política de devolución, proceso
+
+### 3. Proporcionar Solución
+- Dar respuesta clara y completa
+- Proporcionar pasos específicos si es necesario
+- Confirmar que se entendió la solución
+
+### 4. Confirmar Resolución
+- Preguntar si queda alguna duda
+- Ofrecer ayuda adicional
+- Despedida cordial
+
+## 🛡️ Reglas de Comportamiento
+
+### ✅ SIEMPRE hacer:
+1. Escuchar completamente antes de responder
+2. Confirmar información importante
+3. Ser específico con fechas y números
+4. Ofrecer soluciones alternativas cuando sea posible
+5. Agradecer la paciencia del cliente
+
+### ❌ NUNCA hacer:
+1. Inventar información que no tienes
+2. Prometer lo que no puedes cumplir
+3. Discutir o ponerte defensivo
+4. Transferir sin explicar el motivo
+5. Dejar al cliente sin respuesta
+
+## 🆘 Casos Especiales
+
+### Cliente Molesto
+- Mantén la calma absoluta
+- Reconoce su frustración: "Entiendo perfectamente tu molestia"
+- Ofrece solución inmediata
+- Si escala, transfiere a supervisor
+
+### No Puedes Resolver
+- Sé honesto: "No tengo esa información en este momento"
+- Ofrece alternativa: "Puedo conectarte con un especialista"
+- No dejes al cliente sin solución
+
+## 📋 Información Clave
+
+**Horarios de atención:** Lunes a Viernes 9:00-18:00
+**Tiempo de respuesta email:** 24-48 horas
+**Política de devolución:** 30 días desde compra
+
+---
+
+**Recuerda:** Tu objetivo es dejar al cliente completamente satisfecho y resolver su consulta en la primera interacción.`
+            },
+            
+            gestion_citas: {
+                begin_message: "¡Hola! Soy el asistente de citas de {{nombre_empresa}}. ¿Te gustaría agendar una cita?",
+                general_prompt: `## 🎯 Identidad y Contexto
+
+Eres un asistente especializado en gestión de citas para {{nombre_empresa}}. Tu misión es agendar citas de forma eficiente y reducir los no-shows.
+
+## 🗣️ Flujo de Conversación
+
+### 1. Saludo Inicial
+"¡Hola! Soy el asistente de citas de {{nombre_empresa}}. ¿Te gustaría agendar una cita?"
+
+### 2. Consultar Disponibilidad
+- Preguntar preferencia de fecha/hora
+- Ofrecer opciones disponibles
+- Ser flexible con alternativas
+
+### 3. Recopilar Datos
+- Nombre completo
+- Teléfono de contacto
+- Email (opcional pero recomendado)
+- Motivo de la cita (si aplica)
+
+### 4. Confirmar Cita
+- Repetir fecha, hora y datos
+- Explicar política de cancelación
+- Ofrecer recordatorio automático
+
+### 5. Recordatorio Automático
+- Se enviará 24 horas antes
+- Por SMS y/o email
+- Opción de confirmar/cancelar
+
+## 🛡️ Reglas Críticas
+
+### ✅ SIEMPRE:
+1. Confirmar TODA la información antes de agendar
+2. Deletrear el email si lo proporcionan
+3. Dar número de confirmación de cita
+4. Explicar cómo cancelar/reprogramar
+5. Agradecer y despedirse cordialmente
+
+### ❌ NUNCA:
+1. Agendar sin confirmar disponibilidad real
+2. Olvidar pedir datos de contacto
+3. Dar por hecho el email sin verificar
+4. Terminar sin confirmar la cita completa
+
+## 📋 Herramientas Disponibles
+
+- **book_appointment_cal**: Crear cita en calendario
+- **check_availability_cal**: Verificar disponibilidad
+- **transfer_call**: Transferir a recepcionista si necesario
+
+---
+
+**Objetivo:** Agenda eficiente con 0% no-shows gracias a recordatorios automáticos.`
+            },
+            
+            cualificacion_leads: {
+                begin_message: "¡Hola! Soy {{nombre_agente}} de {{nombre_empresa}}. Veo que estás interesado en nuestros servicios. ¿Te gustaría que conversemos sobre cómo podemos ayudarte?",
+                general_prompt: `## 🎯 Identidad y Contexto
+
+Eres {{nombre_agente}}, especialista en cualificación de leads para {{nombre_empresa}}.
+
+Tu objetivo es identificar oportunidades de negocio reales usando la metodología BANT.
+
+## 🗣️ Flujo de Conversación BANT
+
+### 1. Saludo y Contexto
+"¡Hola! Soy {{nombre_agente}} de {{nombre_empresa}}. Veo que estás interesado en nuestros servicios. ¿Te gustaría que conversemos sobre cómo podemos ayudarte?"
+
+### 2. Budget (Presupuesto)
+- ¿Tienes presupuesto asignado para este tipo de solución?
+- ¿Cuál es el rango de inversión que estás considerando?
+- ¿Es este año o más adelante?
+
+### 3. Authority (Autoridad de Decisión)
+- ¿Eres tú quien toma la decisión final?
+- ¿Quién más participa en la decisión?
+- ¿Necesitas consultar con alguien más?
+
+### 4. Need (Necesidad)
+- ¿Qué problema específico buscas resolver?
+- ¿Cómo lo están manejando actualmente?
+- ¿Qué pasaría si no lo resuelven?
+
+### 5. Timeline (Urgencia)
+- ¿Cuándo necesitas tener esto implementado?
+- ¿Hay alguna fecha límite específica?
+- ¿Qué tan urgente es para ti?
+
+### 6. Calificación y Cierre
+**Lead Calificado** (3-4 BANT positivos):
+- "Perfecto, veo que tienes un proyecto muy interesante. Me gustaría agendarte una demo personalizada con nuestro equipo comercial. ¿Te viene bien mañana a las 11h?"
+
+**Lead No Calificado** (0-2 BANT):
+- "Entiendo. Te voy a enviar información por email y te daremos seguimiento en el futuro. ¿Cuál es tu email?"
+
+## 🛡️ Reglas de Cualificación
+
+### ✅ SIEMPRE:
+1. Hacer TODAS las preguntas BANT
+2. Escuchar activamente las respuestas
+3. Tomar notas de información clave
+4. Ser consultivo, no vendedor agresivo
+5. Respetar si no están listos
+
+### ❌ NUNCA:
+1. Presionar para cerrar venta inmediata
+2. Saltarte preguntas de calificación
+3. Dar pricing sin cualificar
+4. Prometer descuentos sin autorización
+
+## 📊 Criterios de Calificación
+
+**ALTA PRIORIDAD** (4 BANT):
+- Presupuesto confirmado
+- Decisor directo
+- Necesidad urgente
+- Timeline < 30 días
+→ Agendar demo INMEDIATA
+
+**MEDIA PRIORIDAD** (3 BANT):
+- Al menos 1 falta menor
+→ Agendar demo esta semana
+
+**BAJA PRIORIDAD** (2 BANT o menos):
+- Falta información clave
+→ Nutrir con contenido
+
+---
+
+**Objetivo:** Solo pasar leads REALMENTE calificados al equipo comercial.`
+            }
+        };
+
+        // ============================================
+        // STEP DEFINITIONS
+        // ============================================
+        
+        const STEPS = [
+            {
+                id: 1,
+                title: 'Info Básica',
+                icon: '📝',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">📝 Paso 1: Información Básica del Agente</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre del Agente *</label>
+                            <input type="text" id="agent_name" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Ej: Sofia, Carlos, María..."
+                                value="${formData.agent_name}">
+                            <p class="mt-1 text-sm text-gray-500">Este nombre se usará en la conversación</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sector *</label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                ${SECTORES.map(sector => `
+                                    <div class="cursor-pointer p-4 border-2 rounded-lg hover:border-blue-500 transition-colors ${formData.sector === sector.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}"
+                                        onclick="selectSector('${sector.value}')">
+                                        <div class="text-3xl mb-2">${sector.icon}</div>
+                                        <div class="text-sm font-medium">${sector.label.replace(sector.icon + ' ', '')}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nicho Específico</label>
+                            <input type="text" id="nicho" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Ej: Software SaaS, Clínica dental, Agencia inmobiliaria..."
+                                value="${formData.nicho}">
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: 'LLM Config',
+                icon: '🤖',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">🤖 Paso 2: Configuración del LLM</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Modelo de Lenguaje *</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                ${LLM_MODELS.map(model => `
+                                    <div class="cursor-pointer p-4 border-2 rounded-lg hover:border-blue-500 transition-colors ${formData.llm_model === model.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}"
+                                        onclick="selectModel('${model.value}')">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="font-medium">${model.label}</span>
+                                            <span class="text-green-600 text-sm font-bold">${model.cost}</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">${model.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Temperature (Creatividad)
+                                    <span class="text-blue-600 font-bold ml-2">${formData.llm_temperature}</span>
+                                </label>
+                                <input type="range" id="llm_temperature" min="0" max="1" step="0.1" 
+                                    value="${formData.llm_temperature}"
+                                    class="w-full"
+                                    oninput="updateValue('llm_temperature', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Determinista (0)</span>
+                                    <span>Creativo (1)</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Max Tokens</label>
+                                <input type="number" id="llm_max_tokens" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.llm_max_tokens}"
+                                    min="500" max="4000" step="100">
+                                <p class="mt-1 text-xs text-gray-500">Respuestas más largas = más tokens</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mensaje Inicial (Begin Message)</label>
+                            <textarea id="begin_message" rows="3"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Primer mensaje que dirá el agente. Deja vacío para esperar que el usuario hable primero.">${formData.begin_message}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">¿Quién habla primero?</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="start_speaker" value="agent" 
+                                        ${formData.start_speaker === 'agent' ? 'checked' : ''}
+                                        class="mr-2">
+                                    <span>Agente habla primero</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="start_speaker" value="user"
+                                        ${formData.start_speaker === 'user' ? 'checked' : ''}
+                                        class="mr-2">
+                                    <span>Usuario habla primero</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Prompt General (General Prompt) *
+                                <button onclick="loadPromptTemplate()" class="ml-2 text-blue-600 text-sm hover:underline">
+                                    📄 Cargar plantilla por sector
+                                </button>
+                            </label>
+                            <textarea id="general_prompt" rows="15"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                                placeholder="Escribe aquí el prompt completo del agente...">${formData.general_prompt}</textarea>
+                            <p class="mt-2 text-sm text-gray-600">
+                                💡 <strong>Tip:</strong> Click en "Cargar plantilla por sector" para obtener un prompt profesional basado en el sector que elegiste.
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: 'Voz',
+                icon: '🎤',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">🎤 Paso 3: Configuración de Voz</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Selecciona la Voz *</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${VOICES.map(voice => `
+                                    <div class="voice-card cursor-pointer p-4 border-2 rounded-lg ${formData.voice_id === voice.id ? 'selected-voice' : 'border-gray-200'} ${voice.recommended ? 'border-blue-400' : ''}"
+                                        onclick="selectVoice('${voice.id}')">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <div class="font-medium text-lg">${voice.name}</div>
+                                                <div class="text-sm text-gray-600">${voice.provider} • ${voice.accent}</div>
+                                                <div class="text-sm text-gray-500">${voice.gender === 'male' ? '👨' : '👩'} ${voice.gender === 'male' ? 'Masculino' : 'Femenino'}</div>
+                                            </div>
+                                            ${voice.recommended ? '<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Recomendado</span>' : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Modelo de Voz</label>
+                            <select id="voice_model" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                <option value="eleven_turbo_v2_5" ${formData.voice_model === 'eleven_turbo_v2_5' ? 'selected' : ''}>ElevenLabs Turbo v2.5 (Recomendado)</option>
+                                <option value="eleven_flash_v2_5" ${formData.voice_model === 'eleven_flash_v2_5' ? 'selected' : ''}>ElevenLabs Flash v2.5 (Más rápido)</option>
+                                <option value="eleven_multilingual_v2" ${formData.voice_model === 'eleven_multilingual_v2' ? 'selected' : ''}>ElevenLabs Multilingual v2</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Temperatura de Voz
+                                    <span class="text-blue-600 font-bold ml-2">${formData.voice_temperature}</span>
+                                </label>
+                                <input type="range" id="voice_temperature" min="0" max="2" step="0.1" 
+                                    value="${formData.voice_temperature}"
+                                    class="w-full"
+                                    oninput="updateValue('voice_temperature', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Estable</span>
+                                    <span>Expresivo</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Velocidad
+                                    <span class="text-blue-600 font-bold ml-2">${formData.voice_speed}x</span>
+                                </label>
+                                <input type="range" id="voice_speed" min="0.7" max="1.5" step="0.05" 
+                                    value="${formData.voice_speed}"
+                                    class="w-full"
+                                    oninput="updateValue('voice_speed', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Lento</span>
+                                    <span>Rápido</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Volumen
+                                    <span class="text-blue-600 font-bold ml-2">${formData.volume}</span>
+                                </label>
+                                <input type="range" id="volume" min="0.5" max="2" step="0.1" 
+                                    value="${formData.volume}"
+                                    class="w-full"
+                                    oninput="updateValue('volume', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Bajo</span>
+                                    <span>Alto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: 'Conversación',
+                icon: '💬',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">💬 Paso 4: Configuración de Conversación</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Idioma Principal</label>
+                            <select id="language" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                <option value="es-ES" ${formData.language === 'es-ES' ? 'selected' : ''}>🇪🇸 Español (España)</option>
+                                <option value="es-MX" ${formData.language === 'es-MX' ? 'selected' : ''}>🇲🇽 Español (México)</option>
+                                <option value="es-AR" ${formData.language === 'es-AR' ? 'selected' : ''}>🇦🇷 Español (Argentina)</option>
+                                <option value="en-US" ${formData.language === 'en-US' ? 'selected' : ''}>🇺🇸 English (US)</option>
+                                <option value="en-GB" ${formData.language === 'en-GB' ? 'selected' : ''}>🇬🇧 English (UK)</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Responsiveness (Rapidez de respuesta)
+                                    <span class="text-blue-600 font-bold ml-2">${formData.responsiveness}</span>
+                                </label>
+                                <input type="range" id="responsiveness" min="0" max="1" step="0.05" 
+                                    value="${formData.responsiveness}"
+                                    class="w-full"
+                                    oninput="updateValue('responsiveness', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Pausado</span>
+                                    <span>Inmediato</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Interruption Sensitivity
+                                    <span class="text-blue-600 font-bold ml-2">${formData.interruption_sensitivity}</span>
+                                </label>
+                                <input type="range" id="interruption_sensitivity" min="0" max="1" step="0.05" 
+                                    value="${formData.interruption_sensitivity}"
+                                    class="w-full"
+                                    oninput="updateValue('interruption_sensitivity', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Difícil interrumpir</span>
+                                    <span>Fácil interrumpir</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Mayor valor = más fácil que el usuario interrumpa al agente</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" id="enable_backchannel" 
+                                    ${formData.enable_backchannel ? 'checked' : ''}
+                                    class="mr-2">
+                                <label for="enable_backchannel" class="font-medium">Enable Backchannel (Muletillas conversacionales)</label>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">El agente dirá cosas como "mmm...", "ya veo...", "claro..." mientras escucha</p>
+                            
+                            <div id="backchannel_config" ${formData.enable_backchannel ? '' : 'style="display:none"'}>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Frecuencia de Backchannel
+                                        <span class="text-blue-600 font-bold ml-2">${formData.backchannel_frequency}</span>
+                                    </label>
+                                    <input type="range" id="backchannel_frequency" min="0" max="1" step="0.05" 
+                                        value="${formData.backchannel_frequency}"
+                                        class="w-full"
+                                        oninput="updateValue('backchannel_frequency', this.value)">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Palabras de Backchannel</label>
+                                    <div id="backchannel_words_container" class="flex flex-wrap gap-2 mb-2">
+                                        ${formData.backchannel_words.map((word, idx) => `
+                                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center">
+                                                ${word}
+                                                <button onclick="removeBackchannelWord(${idx})" class="ml-2 text-blue-600 hover:text-blue-800">×</button>
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="new_backchannel_word" 
+                                            placeholder="Ej: entiendo..."
+                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                        <button onclick="addBackchannelWord()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
+                                            + Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                title: 'Tiempos',
+                icon: '⏱️',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">⏱️ Paso 5: Configuración de Tiempos y Recordatorios</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tiempo para Recordatorio (ms)</label>
+                                <input type="number" id="reminder_trigger_ms" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.reminder_trigger_ms}"
+                                    step="1000">
+                                <p class="text-xs text-gray-500 mt-1">Si el usuario no responde después de este tiempo, el agente recordará</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Máximo de Recordatorios</label>
+                                <input type="number" id="reminder_max_count" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.reminder_max_count}"
+                                    min="0" max="5">
+                                <p class="text-xs text-gray-500 mt-1">Cuántas veces recordará antes de rendirse</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Finalizar después de Silencio (ms)</label>
+                                <input type="number" id="end_call_after_silence_ms" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.end_call_after_silence_ms}"
+                                    step="1000">
+                                <p class="text-xs text-gray-500 mt-1">Termina la llamada si hay silencio por este tiempo</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duración Máxima de Llamada (ms)</label>
+                                <input type="number" id="max_call_duration_ms" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.max_call_duration_ms}"
+                                    step="10000">
+                                <p class="text-xs text-gray-500 mt-1">Tiempo máximo total de llamada</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Delay Mensaje Inicial (ms)</label>
+                                <input type="number" id="begin_message_delay_ms" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.begin_message_delay_ms}"
+                                    min="0" max="5000" step="100">
+                                <p class="text-xs text-gray-500 mt-1">Espera antes del primer mensaje del agente</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duración del Timbre (ms)</label>
+                                <input type="number" id="ring_duration_ms" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                    value="${formData.ring_duration_ms}"
+                                    min="5000" max="90000" step="1000">
+                                <p class="text-xs text-gray-500 mt-1">Cuánto tiempo sonará antes de contestar</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div class="font-medium text-yellow-800 mb-2">💡 Conversiones Útiles</div>
+                            <div class="text-sm text-gray-700 space-y-1">
+                                <div>• <strong>1 segundo</strong> = 1,000 ms</div>
+                                <div>• <strong>10 segundos</strong> = 10,000 ms</div>
+                                <div>• <strong>30 segundos</strong> = 30,000 ms</div>
+                                <div>• <strong>1 minuto</strong> = 60,000 ms</div>
+                                <div>• <strong>10 minutos</strong> = 600,000 ms</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: 'Audio',
+                icon: '🔊',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">🔊 Paso 6: Configuración de Audio y Ambiente</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sonido Ambiente</label>
+                                <select id="ambient_sound" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                    <option value="" ${formData.ambient_sound === '' ? 'selected' : ''}>Sin sonido ambiente</option>
+                                    <option value="coffee-shop" ${formData.ambient_sound === 'coffee-shop' ? 'selected' : ''}>☕ Cafetería</option>
+                                    <option value="office" ${formData.ambient_sound === 'office' ? 'selected' : ''}>🏢 Oficina</option>
+                                    <option value="restaurant" ${formData.ambient_sound === 'restaurant' ? 'selected' : ''}>🍽️ Restaurante</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">Sonido de fondo para hacer más realista la llamada</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Volumen Ambiente
+                                    <span class="text-blue-600 font-bold ml-2">${formData.ambient_sound_volume}</span>
+                                </label>
+                                <input type="range" id="ambient_sound_volume" min="0" max="1" step="0.05" 
+                                    value="${formData.ambient_sound_volume}"
+                                    class="w-full"
+                                    oninput="updateValue('ambient_sound_volume', this.value)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Silencioso</span>
+                                    <span>Alto</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Modo de Transcripción (STT)</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="stt_mode" value="fast" 
+                                        ${formData.stt_mode === 'fast' ? 'checked' : ''}
+                                        class="mr-2">
+                                    <span>⚡ Fast (Prioriza latencia)</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="stt_mode" value="accurate"
+                                        ${formData.stt_mode === 'accurate' ? 'checked' : ''}
+                                        class="mr-2">
+                                    <span>🎯 Accurate (Prioriza precisión)</span>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Fast es recomendado para la mayoría de casos</p>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="normalize_for_speech" 
+                                    ${formData.normalize_for_speech ? 'checked' : ''}
+                                    class="mr-2">
+                                <label for="normalize_for_speech" class="font-medium">Normalizar para Voz</label>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">Convierte texto a formato más natural para hablar (ej: "10%" → "diez por ciento")</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: 'Herramientas',
+                icon: '🛠️',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">🛠️ Paso 7: Herramientas e Integraciones</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Herramientas Disponibles</label>
+                            <div class="space-y-3">
+                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" class="mt-1 mr-3" value="end_call" onchange="toggleTool(this)">
+                                    <div>
+                                        <div class="font-medium">End Call</div>
+                                        <div class="text-sm text-gray-600">Permite al agente finalizar la llamada</div>
+                                    </div>
+                                </label>
+
+                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" class="mt-1 mr-3" value="transfer_call" onchange="toggleTool(this)">
+                                    <div>
+                                        <div class="font-medium">Transfer Call</div>
+                                        <div class="text-sm text-gray-600">Transferir a otro departamento o número</div>
+                                        <input type="text" id="transfer_number" placeholder="Número de transferencia" 
+                                            class="mt-2 px-3 py-2 border rounded text-sm w-full" style="display:none">
+                                    </div>
+                                </label>
+
+                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" class="mt-1 mr-3" value="book_appointment" onchange="toggleTool(this)">
+                                    <div>
+                                        <div class="font-medium">Book Appointment (Cal.com)</div>
+                                        <div class="text-sm text-gray-600">Agendar citas en calendario</div>
+                                    </div>
+                                </label>
+
+                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" class="mt-1 mr-3" value="custom_webhook" onchange="toggleTool(this)">
+                                    <div>
+                                        <div class="font-medium">Custom Webhook</div>
+                                        <div class="text-sm text-gray-600">Llamar a tu API personalizada</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Webhook URL (Opcional)</label>
+                            <input type="url" id="webhook_url" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                                placeholder="https://tu-servidor.com/webhook"
+                                value="${formData.webhook_url}">
+                            <p class="text-xs text-gray-500 mt-1">URL para recibir eventos de la llamada en tiempo real</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Keywords Boosted (Palabras clave)</label>
+                            <div id="keywords_container" class="flex flex-wrap gap-2 mb-2">
+                                ${formData.boosted_keywords.map((kw, idx) => `
+                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm flex items-center">
+                                        ${kw}
+                                        <button onclick="removeKeyword(${idx})" class="ml-2 text-green-600 hover:text-green-800">×</button>
+                                    </span>
+                                `).join('')}
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="text" id="new_keyword" 
+                                    placeholder="Ej: Netelip, VoIP, centralita virtual..."
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <button onclick="addKeyword()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
+                                    + Agregar
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Palabras que el sistema transcribirá con mayor precisión (marcas, nombres, términos técnicos)</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: 'Post-Call',
+                icon: '📊',
+                render: () => `
+                    <h2 class="text-2xl font-bold mb-6">📊 Paso 8: Análisis Post-Llamada</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Modelo para Análisis Post-Llamada</label>
+                            <select id="post_call_analysis_model" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                <option value="gpt-4.1-mini" ${formData.post_call_analysis_model === 'gpt-4.1-mini' ? 'selected' : ''}>GPT-4.1 Mini (Recomendado - $)</option>
+                                <option value="gpt-4.1" ${formData.post_call_analysis_model === 'gpt-4.1' ? 'selected' : ''}>GPT-4.1 (Mayor precisión - $$)</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1">Modelo usado para analizar y extraer datos después de cada llamada</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Datos a Capturar en Post-Call Analysis</label>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div class="font-medium mb-2">💡 Datos Básicos Recomendados</div>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('user_name', this.checked)">
+                                            <span class="text-sm">Nombre del usuario</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('user_number', this.checked)">
+                                            <span class="text-sm">Teléfono del usuario</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('motivo_llamada', this.checked)">
+                                            <span class="text-sm">Motivo de la llamada</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                ${formData.sector === 'gestion_citas' ? `
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                        <div class="font-medium mb-2">📅 Específico para Gestión de Citas</div>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('email', this.checked)">
+                                                <span class="text-sm">Email del usuario</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('fecha_confirmada', this.checked)">
+                                                <span class="text-sm">Fecha y hora confirmada</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                ` : ''}
+
+                                ${formData.sector === 'cualificacion_leads' ? `
+                                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                                        <div class="font-medium mb-2">🎯 Específico para Cualificación BANT</div>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('presupuesto', this.checked)">
+                                                <span class="text-sm">Presupuesto disponible</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('decision_authority', this.checked)">
+                                                <span class="text-sm">Autoridad de decisión</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('timeline', this.checked)">
+                                                <span class="text-sm">Timeline de implementación</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('lead_score', this.checked)">
+                                                <span class="text-sm">Score de calificación (1-10)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                                <div class="text-sm font-medium text-gray-700 mb-2">Vista Previa de Campos:</div>
+                                <pre class="text-xs bg-white p-2 rounded border overflow-x-auto" id="postCallPreview">user_name, user_number, motivo_llamada</pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-3">🎉</span>
+                                <div>
+                                    <div class="font-medium text-yellow-800 mb-1">¡Configuración Completa!</div>
+                                    <p class="text-sm text-gray-700">Ya tienes toda la configuración necesaria para crear tu agente en Retell AI.</p>
+                                    <p class="text-sm text-gray-700 mt-2">Haz click en "Siguiente" para ver la vista previa y exportar el JSON.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        function init() {
+            renderStepsNav();
+            renderStep();
+            updateProgress();
+        }
+
+        function renderStepsNav() {
+            const nav = document.getElementById('stepsNav');
+            nav.innerHTML = STEPS.map(step => `
+                <div class="flex flex-col items-center min-w-[80px] ${currentStep === step.id ? 'text-blue-600' : 'text-gray-400'}">
+                    <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center mb-1 ${
+                        currentStep === step.id ? 'border-blue-600 bg-blue-50' : 
+                        currentStep > step.id ? 'border-green-600 bg-green-50' : 'border-gray-300'
+                    }">
+                        ${currentStep > step.id ? '✓' : step.icon}
+                    </div>
+                    <div class="text-xs font-medium text-center">${step.title}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderStep() {
+            const container = document.getElementById('stepContainer');
+            container.innerHTML = STEPS[currentStep - 1].render();
+            
+            // Show preview from step 3 onwards
+            document.getElementById('previewPanel').style.display = currentStep >= 3 ? 'block' : 'none';
+            if (currentStep >= 3) {
+                updatePreview();
+            }
+
+            // Update button states
+            document.getElementById('btnPrevious').style.display = currentStep === 1 ? 'none' : 'block';
+            document.getElementById('btnNext').innerHTML = currentStep === TOTAL_STEPS ? 
+                '✅ Finalizar y Exportar' : 'Siguiente →';
+
+            // Attach event listeners
+            attachEventListeners();
+        }
+
+        function attachEventListeners() {
+            // Text inputs
+            const inputs = ['agent_name', 'nicho', 'llm_max_tokens', 'begin_message', 'general_prompt', 
+                           'webhook_url', 'reminder_trigger_ms', 'reminder_max_count', 'end_call_after_silence_ms',
+                           'max_call_duration_ms', 'begin_message_delay_ms', 'ring_duration_ms'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', (e) => saveFormValue(id, e.target.value));
+            });
+
+            // Selects
+            const selects = ['llm_model', 'voice_model', 'language', 'ambient_sound', 'post_call_analysis_model'];
+            selects.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', (e) => saveFormValue(id, e.target.value));
+            });
+
+            // Radios
+            const radios = document.querySelectorAll('input[name="start_speaker"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', (e) => saveFormValue('start_speaker', e.target.value));
+            });
+
+            const sttRadios = document.querySelectorAll('input[name="stt_mode"]');
+            sttRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => saveFormValue('stt_mode', e.target.value));
+            });
+
+            // Checkboxes
+            const checkboxes = ['enable_backchannel', 'normalize_for_speech'];
+            checkboxes.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', (e) => {
+                        saveFormValue(id, e.target.checked);
+                        if (id === 'enable_backchannel') {
+                            document.getElementById('backchannel_config').style.display = e.target.checked ? 'block' : 'none';
+                        }
+                    });
+                }
+            });
+        }
+
+        function saveFormValue(field, value) {
+            formData[field] = value;
+            if (currentStep >= 3) updatePreview();
+        }
+
+        function updateValue(field, value) {
+            formData[field] = parseFloat(value);
+            document.querySelector(`label[for="${field}"] span`).textContent = value;
+            if (currentStep >= 3) updatePreview();
+        }
+
+        function selectSector(sector) {
+            formData.sector = sector;
+            renderStep();
+        }
+
+        function selectModel(model) {
+            formData.llm_model = model;
+            renderStep();
+        }
+
+        function selectVoice(voiceId) {
+            formData.voice_id = voiceId;
+            renderStep();
+        }
+
+        function loadPromptTemplate() {
+            if (!formData.sector) {
+                alert('⚠️ Primero selecciona un sector en el Paso 1');
+                return;
+            }
+            
+            const template = PROMPTS_BASE[formData.sector];
+            if (template) {
+                formData.general_prompt = template.general_prompt
+                    .replace(/\{\{nombre_empresa\}\}/g, formData.agent_name || 'tu empresa')
+                    .replace(/\{\{idioma\}\}/g, formData.language || 'es-ES');
+                
+                if (!formData.begin_message) {
+                    formData.begin_message = template.begin_message
+                        .replace(/\{\{nombre_empresa\}\}/g, formData.agent_name || 'tu empresa');
+                }
+                
+                renderStep();
+                alert('✅ Plantilla cargada con éxito basada en el sector ' + formData.sector);
+            }
+        }
+
+        function addBackchannelWord() {
+            const input = document.getElementById('new_backchannel_word');
+            const word = input.value.trim();
+            if (word) {
+                formData.backchannel_words.push(word);
+                input.value = '';
+                renderStep();
+            }
+        }
+
+        function removeBackchannelWord(index) {
+            formData.backchannel_words.splice(index, 1);
+            renderStep();
+        }
+
+        function addKeyword() {
+            const input = document.getElementById('new_keyword');
+            const keyword = input.value.trim();
+            if (keyword) {
+                formData.boosted_keywords.push(keyword);
+                input.value = '';
+                renderStep();
+            }
+        }
+
+        function removeKeyword(index) {
+            formData.boosted_keywords.splice(index, 1);
+            renderStep();
+        }
+
+        function toggleTool(checkbox) {
+            // Implementation for tool management
+            console.log('Tool toggled:', checkbox.value, checkbox.checked);
+        }
+
+        function togglePostCallField(field, checked) {
+            // Implementation for post-call analysis fields
+            console.log('Post-call field:', field, checked);
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('previewContent');
+            const config = generateRetellConfig();
+            preview.textContent = JSON.stringify(config, null, 2);
+        }
+
+        function generateRetellConfig() {
+            // Generate complete Retell AI compatible JSON
+            return {
+                agent_name: formData.agent_name || 'Sin nombre',
+                response_engine: {
+                    type: 'retell-llm',
+                    llm_id: 'TO_BE_CREATED', // Se creará primero el LLM
+                    general_prompt: formData.general_prompt,
+                    begin_message: formData.begin_message,
+                    model: formData.llm_model,
+                    temperature: formData.llm_temperature,
+                    max_tokens: formData.llm_max_tokens
+                },
+                voice_id: formData.voice_id,
+                voice_model: formData.voice_model,
+                voice_temperature: formData.voice_temperature,
+                voice_speed: formData.voice_speed,
+                volume: formData.volume,
+                fallback_voice_ids: formData.fallback_voice_ids,
+                language: formData.language,
+                responsiveness: formData.responsiveness,
+                interruption_sensitivity: formData.interruption_sensitivity,
+                enable_backchannel: formData.enable_backchannel,
+                backchannel_frequency: formData.backchannel_frequency,
+                backchannel_words: formData.backchannel_words,
+                reminder_trigger_ms: formData.reminder_trigger_ms,
+                reminder_max_count: formData.reminder_max_count,
+                ambient_sound: formData.ambient_sound,
+                ambient_sound_volume: formData.ambient_sound_volume,
+                normalize_for_speech: formData.normalize_for_speech,
+                end_call_after_silence_ms: formData.end_call_after_silence_ms,
+                max_call_duration_ms: formData.max_call_duration_ms,
+                begin_message_delay_ms: formData.begin_message_delay_ms,
+                ring_duration_ms: formData.ring_duration_ms,
+                stt_mode: formData.stt_mode,
+                webhook_url: formData.webhook_url,
+                boosted_keywords: formData.boosted_keywords,
+                pronunciation_dictionary: formData.pronunciation_dictionary,
+                post_call_analysis_model: formData.post_call_analysis_model,
+                post_call_analysis_data: formData.post_call_analysis_data
+            };
+        }
+
+        function updateProgress() {
+            const percent = Math.round((currentStep / TOTAL_STEPS) * 100);
+            document.getElementById('progress').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        function exportJSON() {
+            const config = generateRetellConfig();
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `retell-agent-${formData.agent_name || 'config'}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyToClipboard() {
+            const config = generateRetellConfig();
+            navigator.clipboard.writeText(JSON.stringify(config, null, 2))
+                .then(() => alert('✅ Configuración copiada al portapapeles'))
+                .catch(() => alert('❌ Error al copiar'));
+        }
+
+        // Navigation
+        document.getElementById('btnPrevious').addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                renderStepsNav();
+                renderStep();
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        });
+
+        document.getElementById('btnNext').addEventListener('click', () => {
+            if (currentStep < TOTAL_STEPS) {
+                currentStep++;
+                renderStepsNav();
+                renderStep();
+                updateProgress();
+                window.scrollTo(0, 0);
+            } else {
+                // Final step - show export options
+                alert('🎉 ¡Configuración completada! Usa los botones de exportar para descargar el JSON.');
+            }
+        });
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
