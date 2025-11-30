@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear agente IA - Paso 2 | netelip</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netelip-azul: #267ab0;
+            --netelip-azul-hover: #1e6291;
+            --gris-claro: #f5f6f8;
+            --gris-borde: #e5e7eb;
+            --gris-texto: #6c757d;
+            --oscuro: #1a2428;
+            --exito: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gris-borde);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: var(--gris-texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--netelip-azul);
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 16px 0 6px 0;
+        }
+
+        .wizard-subtitle {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .steps-container {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gris-texto);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .step-item:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .step-item.active {
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            border-left-color: var(--netelip-azul);
+        }
+
+        .step-item.completed {
+            color: var(--exito);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gris-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .step-item.active .step-number {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--exito);
+            color: white;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--gris-claro);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--gris-borde);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .progress-bar-container {
+            background: var(--gris-claro);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--netelip-azul);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .tooltip-icon {
+            margin-left: 6px;
+            color: var(--netelip-azul);
+            cursor: help;
+            font-size: 16px;
+        }
+
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 340px;
+            background: var(--oscuro);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 14px 16px;
+            position: absolute;
+            z-index: 2000;
+            bottom: 130%;
+            left: 50%;
+            margin-left: -170px;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 13px;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--oscuro) transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--netelip-azul);
+            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1);
+            outline: none;
+        }
+
+        .form-text {
+            color: var(--gris-texto);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* SLIDER */
+        .slider-container {
+            margin: 16px 0;
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: var(--netelip-azul);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--gris-claro);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--netelip-azul);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(38, 122, 176, 0.2);
+        }
+
+        /* TEXTAREA */
+        textarea.form-control {
+            min-height: 250px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* GRID 2 COLUMNAS */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* RADIO BUTTONS PERSONALIZADOS */
+        .radio-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .radio-card {
+            flex: 1;
+            min-width: 140px;
+            border: 2px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .radio-card:hover {
+            border-color: var(--netelip-azul);
+            background: #eff6ff;
+        }
+
+        .radio-card input[type="radio"] {
+            display: none;
+        }
+
+        .radio-card input[type="radio"]:checked + .radio-label {
+            color: var(--netelip-azul);
+            font-weight: 700;
+        }
+
+        .radio-card:has(input:checked) {
+            border-color: var(--netelip-azul);
+            background: #eff6ff;
+        }
+
+        .radio-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--oscuro);
+            cursor: pointer;
+        }
+
+        /* CHECKBOXES PERSONALIZADOS */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .checkbox-card {
+            border: 2px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .checkbox-card:hover {
+            border-color: var(--netelip-azul);
+            background: #eff6ff;
+        }
+
+        .checkbox-card input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-card input[type="checkbox"]:checked + .checkbox-label {
+            color: var(--netelip-azul);
+            font-weight: 700;
+        }
+
+        .checkbox-card:has(input:checked) {
+            border-color: var(--netelip-azul);
+            background: #eff6ff;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--oscuro);
+            cursor: pointer;
+        }
+
+        /* BOTÓN CARGAR PLANTILLA */
+        .btn-load-template {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-load-template:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        /* ALERT INFO */
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info i {
+            color: var(--netelip-azul);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: none;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-success i {
+            color: var(--exito);
+            font-size: 18px;
+        }
+
+        /* BOTONES */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gris-borde);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--netelip-azul-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="/dashboard.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver al dashboard
+            </a>
+            <h2 class="wizard-title">Crear agente IA</h2>
+            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+        </div>
+
+        <div class="steps-container">
+            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Información básica</span>
+                    <span class="step-desc">Nombre y sector</span>
+                </div>
+            </a>
+
+            <a href="#" class="step-item active">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                    <span class="step-name">Configuración LLM</span>
+                    <span class="step-desc">Modelo y prompt</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                    <span class="step-name">Selección de voz</span>
+                    <span class="step-desc">Voz y personalidad</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-info">
+                    <span class="step-name">Conversación</span>
+                    <span class="step-desc">Idioma y respuestas</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-info">
+                    <span class="step-name">Tiempos</span>
+                    <span class="step-desc">Duraciones y delays</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-info">
+                    <span class="step-name">Audio y STT</span>
+                    <span class="step-desc">Sonido ambiente</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">7</div>
+                <div class="step-info">
+                    <span class="step-name">Herramientas</span>
+                    <span class="step-desc">Integraciones</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">8</div>
+                <div class="step-info">
+                    <span class="step-name">Resumen</span>
+                    <span class="step-desc">Revisar y crear</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 25%;"></div>
+            </div>
+            <div class="progress-text">Paso 2 de 8 - Configuración del LLM</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-area">
+            <div class="form-card">
+                <h1 class="section-title">Configuración del modelo LLM</h1>
+                <p class="section-subtitle">
+                    Selecciona el modelo de inteligencia artificial y define cómo tu agente responderá.
+                </p>
+
+                <div class="alert-info">
+                    <i class="bi bi-lightbulb-fill"></i>
+                    <div>
+                        <strong>Tip:</strong> El modelo GPT-4o ofrece el mejor balance entre calidad y velocidad. 
+                        Usa temperature bajo (0.3-0.5) para respuestas consistentes.
+                    </div>
+                </div>
+
+                <form id="wizardForm">
+                    <!-- MODELO LLM -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Modelo de IA
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Modelos disponibles:</strong><br><br>
+                                    <strong>GPT-4o:</strong> El más potente. Mejor comprensión contextual.<br><br>
+                                    <strong>GPT-4o Mini:</strong> Rápido y económico.<br><br>
+                                    <strong>Claude 3.7 Sonnet:</strong> Excelente para conversaciones naturales.<br><br>
+                                    <strong>Gemini 2.0:</strong> Gran capacidad multilingüe.
+                                </span>
+                            </span>
+                        </label>
+                        <select class="form-select" id="modelo" required>
+                            <option value="">Selecciona un modelo...</option>
+                            <option value="gpt-4o" selected>GPT-4o (Recomendado)</option>
+                            <option value="gpt-4o-mini">GPT-4o Mini</option>
+                            <option value="gpt-4.1">GPT-4.1</option>
+                            <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
+                            <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+                            <option value="claude-3.7-sonnet">Claude 3.7 Sonnet</option>
+                            <option value="claude-3.5-haiku">Claude 3.5 Haiku</option>
+                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                            <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
+                        </select>
+                        <div class="form-text">
+                            <i class="bi bi-cpu me-1"></i>
+                            El modelo determina la calidad y velocidad de las respuestas
+                        </div>
+                    </div>
+
+                    <!-- GRID: TEMPERATURE Y MAX TOKENS -->
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Temperature
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Controla la creatividad:</strong><br><br>
+                                        <strong>0.0-0.3:</strong> Muy consistente. Ideal para soporte técnico.<br><br>
+                                        <strong>0.4-0.6:</strong> Balance (recomendado).<br><br>
+                                        <strong>0.7-1.0:</strong> Más creativo. Útil para ventas.
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-container">
+                                <div class="slider-value" id="tempValue">0.7</div>
+                                <input type="range" 
+                                       id="temperature" 
+                                       min="0" 
+                                       max="1" 
+                                       step="0.1" 
+                                       value="0.7"
+                                       oninput="document.getElementById('tempValue').textContent = this.value">
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-thermometer-half me-1"></i>
+                                Mayor valor = respuestas más creativas
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Max tokens
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Longitud máxima:</strong><br><br>
+                                        <strong>500-800:</strong> Cortas<br>
+                                        <strong>1000-1500:</strong> Completas (recomendado)<br>
+                                        <strong>2000+:</strong> Muy detalladas<br><br>
+                                        1 token ≈ 0.75 palabras
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="maxTokens" 
+                                   min="100" 
+                                   max="4000" 
+                                   value="1000"
+                                   placeholder="1000">
+                            <div class="form-text">
+                                <i class="bi bi-file-text me-1"></i>
+                                Recomendado: 1000 tokens (~750 palabras)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ¿QUIÉN HABLA PRIMERO? -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            ¿Quién habla primero?
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Agente habla primero:</strong> El agente inicia la conversación con un saludo.<br><br>
+                                    <strong>Usuario habla primero:</strong> El agente espera a que el usuario hable primero.
+                                </span>
+                            </span>
+                        </label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="whoFirst" value="agent" checked>
+                                <div class="radio-label">Agente habla primero</div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="whoFirst" value="user">
+                                <div class="radio-label">Usuario habla primero</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- BEGIN MESSAGE -->
+                    <div class="form-group" id="beginMessageGroup">
+                        <label class="form-label">
+                            Mensaje de inicio
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Primera impresión:</strong><br><br>
+                                    La primera frase que dirá tu agente.<br><br>
+                                    <strong>Tips:</strong><br>
+                                    • Sé breve y claro<br>
+                                    • Presenta agente y empresa<br>
+                                    • Pregunta cómo ayudar
+                                </span>
+                            </span>
+                        </label>
+                        <textarea class="form-control" 
+                                  id="beginMessage" 
+                                  rows="2" 
+                                  required
+                                  placeholder="Ej: ¡Hola! Soy Sofia, asistente virtual de Netelip. ¿En qué puedo ayudarte hoy?"></textarea>
+                        <div class="form-text">
+                            <i class="bi bi-chat-dots me-1"></i>
+                            Primera frase que dirá el agente al contestar
+                        </div>
+                    </div>
+
+                    <!-- PERSONALIDAD -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Personalidad del agente
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Selecciona los rasgos principales:</strong><br><br>
+                                    Define cómo se comportará tu agente. Puedes seleccionar múltiples rasgos.
+                                </span>
+                            </span>
+                        </label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="personalidad" value="profesional">
+                                <div class="checkbox-label">Profesional</div>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="personalidad" value="amigable">
+                                <div class="checkbox-label">Amigable</div>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="personalidad" value="empatico">
+                                <div class="checkbox-label">Empático</div>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="personalidad" value="proactivo">
+                                <div class="checkbox-label">Proactivo</div>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="personalidad" value="paciente">
+                                <div class="checkbox-label">Paciente</div>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="personalidad" value="cercano">
+                                <div class="checkbox-label">Cercano</div>
+                            </label>
+                        </div>
+                        <div class="form-text">
+                            <i class="bi bi-emoji-smile me-1"></i>
+                            Selecciona al menos un rasgo de personalidad
+                        </div>
+                    </div>
+
+                    <!-- TONO -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Tono de comunicación
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Formal:</strong> Lenguaje corporativo, uso de usted.<br><br>
+                                    <strong>Semiformal:</strong> Balance entre profesional y cercano.<br><br>
+                                    <strong>Casual:</strong> Lenguaje relajado, uso de tú.
+                                </span>
+                            </span>
+                        </label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="tono" value="formal">
+                                <div class="radio-label">Formal</div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="tono" value="semiformal" checked>
+                                <div class="radio-label">Semiformal</div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="tono" value="casual">
+                                <div class="radio-label">Casual</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- PROMPT GENERAL -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Prompt general
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>El cerebro de tu agente:</strong><br><br>
+                                    Define su personalidad, conocimientos, reglas de comportamiento y objetivos.<br><br>
+                                    Usa el botón verde para cargar una plantilla profesional.
+                                </span>
+                            </span>
+                        </label>
+                        
+                        <button type="button" class="btn-load-template" onclick="cargarPlantilla()">
+                            <i class="bi bi-file-earmark-text"></i>
+                            Cargar plantilla por sector
+                        </button>
+
+                        <div class="alert-success" id="templateLoaded">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <div>
+                                <strong>¡Plantilla cargada!</strong> Puedes editarla según tus necesidades.
+                            </div>
+                        </div>
+
+                        <textarea class="form-control" 
+                                  id="generalPrompt" 
+                                  rows="15" 
+                                  required
+                                  placeholder="Click en 'Cargar plantilla por sector' para obtener un prompt profesional basado en tu sector, o escribe el tuyo propio..."></textarea>
+                        <div class="form-text">
+                            <i class="bi bi-magic me-1"></i>
+                            Este es el prompt principal que define todo el comportamiento de tu agente (mínimo 100 caracteres)
+                        </div>
+                    </div>
+
+                    <!-- MODEL HIGH PRIORITY -->
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   id="highPriority">
+                            <label class="form-check-label" for="highPriority">
+                                Activar modelo de alta prioridad
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Pool de recursos dedicados:</strong><br><br>
+                                        Garantiza tiempos de respuesta más rápidos.<br><br>
+                                        <strong>Recomendado para:</strong><br>
+                                        • Alto volumen de llamadas<br>
+                                        • Servicios críticos<br>
+                                        • Horarios pico
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="form-text ms-4">
+                            <i class="bi bi-lightning-charge me-1"></i>
+                            Garantiza respuestas más rápidas en momentos de alto tráfico
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso1-DEFINITIVO.html'">
+                            <i class="bi bi-arrow-left"></i>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Siguiente
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PLANTILLAS DE PROMPTS POR SECTOR
+        const PLANTILLAS = {
+            atencion_cliente: `Eres [NOMBRE], asistente virtual de [EMPRESA] especializado en atención al cliente.
+
+## Identidad y contexto
+Trabajas para [EMPRESA], ayudando a resolver consultas de clientes de forma rápida y profesional.
+
+## Objetivo principal
+Resolver consultas frecuentes, proporcionar información precisa sobre productos/servicios, y escalar casos complejos al equipo humano cuando sea necesario.
+
+## Personalidad
+- Profesional pero cercano
+- Empático y paciente
+- Proactivo en ofrecer soluciones
+
+## Reglas de comportamiento
+✅ SIEMPRE:
+- Escucha activa completa antes de responder
+- Confirma información importante
+- Ofrece alternativas cuando no hay solución inmediata
+- Agradece la paciencia del cliente
+
+❌ NUNCA:
+- Inventar información que no conoces
+- Ser defensivo ante quejas
+- Interrumpir al cliente
+- Prometer lo que no puedes cumplir`,
+
+            gestion_citas: `Eres [NOMBRE], asistente de [EMPRESA] especializado en gestión de citas.
+
+## Identidad
+Ayudo a agendar, modificar y cancelar citas de forma eficiente.
+
+## Objetivo
+Maximizar la ocupación del calendario reduciendo no-shows y facilitando el proceso de reserva.
+
+## Flujo de conversación
+1. Saludo y presentación
+2. Tipo de servicio deseado
+3. Disponibilidad del cliente
+4. Confirmación de fecha y hora
+5. Datos de contacto
+6. Envío de confirmación
+
+## Personalidad
+- Organizado y eficiente
+- Amable y servicial
+- Claro en las instrucciones
+
+## Reglas
+✅ SIEMPRE:
+- Confirmar fecha y hora explícitamente
+- Repetir la información para asegurar exactitud
+- Ofrecer opciones alternativas si no hay disponibilidad
+- Enviar recordatorio
+
+❌ NUNCA:
+- Agendar sin confirmar disponibilidad
+- Olvidar recopilar datos de contacto
+- Sobrevender horarios`,
+
+            cualificacion_leads: `Eres [NOMBRE], especialista en cualificación de [EMPRESA].
+
+## Objetivo
+Identificar leads de calidad mediante preguntas estratégicas siguiendo metodología BANT (Budget, Authority, Need, Timeline).
+
+## Flujo de cualificación
+1. Presentación breve
+2. Identificar necesidad principal
+3. Presupuesto aproximado
+4. Autoridad de decisión
+5. Timeline de implementación
+6. Datos de contacto
+7. Agendar siguiente paso
+
+## Personalidad
+- Consultivo, no vendedor
+- Curioso y analítico
+- Profesional y directo
+
+## Preguntas clave
+- ¿Qué problema específico buscas resolver?
+- ¿Qué presupuesto tienes asignado para este proyecto?
+- ¿Eres quien toma la decisión final?
+- ¿Cuándo necesitas tener esto implementado?
+
+## Reglas
+✅ SIEMPRE:
+- Escuchar más que hablar
+- Tomar notas detalladas
+- Clasificar el lead (caliente/tibio/frío)
+- Agendar seguimiento
+
+❌ NUNCA:
+- Presionar para cerrar venta
+- Hacer pitch largo sin entender necesidad
+- Descalificar sin información completa`,
+
+            turismo: `Eres [NOMBRE], asistente de viajes de [EMPRESA].
+
+## Identidad
+Especialista en reservas de viajes, hoteles, vuelos y experiencias turísticas disponible 24/7.
+
+## Objetivo
+Facilitar reservas proporcionando información precisa sobre destinos, precios y disponibilidad.
+
+## Información a recabar
+1. Destino deseado
+2. Fechas de viaje
+3. Número de personas
+4. Tipo de alojamiento
+5. Presupuesto aproximado
+6. Preferencias especiales
+
+## Personalidad
+- Entusiasta por los viajes
+- Informativo y detallista
+- Servicial y paciente
+
+## Reglas
+✅ SIEMPRE:
+- Ofrecer opciones en diferentes rangos de precio
+- Mencionar requisitos de viaje importantes
+- Confirmar todos los detalles antes de reservar
+- Sugerir experiencias según preferencias
+
+❌ NUNCA:
+- Prometer disponibilidad sin verificar
+- Omitir costos adicionales o tasas
+- Recomendar sin conocer preferencias`,
+
+            inmobiliaria: `Eres [NOMBRE], agente inmobiliario virtual de [EMPRESA].
+
+## Objetivo
+Agendar visitas a propiedades cualificando el interés y necesidades del cliente.
+
+## Información a obtener
+1. Tipo de propiedad buscada (casa, apartamento, local)
+2. Zona o ubicación preferida
+3. Presupuesto disponible
+4. Forma de pago (contado/hipoteca)
+5. Timeline de compra
+6. Disponibilidad para visita
+
+## Personalidad
+- Profesional y confiable
+- Conocedor del mercado
+- Orientado a resultados
+
+## Reglas
+✅ SIEMPRE:
+- Confirmar presupuesto realista
+- Agendar visita presencial
+- Enviar fotos e información de la propiedad
+- Mencionar características destacadas
+
+❌ NUNCA:
+- Mostrar propiedades muy fuera del presupuesto
+- Presionar para decisión inmediata
+- Omitir defectos importantes`,
+
+            servicios_profesionales: `Eres [NOMBRE], asistente de [EMPRESA] especializado en servicios profesionales.
+
+## Identidad
+Ayudo en la primera consulta para conectar clientes con el especialista adecuado.
+
+## Objetivo
+Cualificar la consulta y agendar primera cita con el profesional correspondiente.
+
+## Flujo
+1. Tipo de consulta o servicio necesario
+2. Urgencia del caso
+3. Información básica del caso
+4. Experiencia previa con servicios similares
+5. Disponibilidad para consulta
+6. Agendar con especialista
+
+## Personalidad
+- Profesional y discreto
+- Empático con situaciones delicadas
+- Claro en explicar el proceso
+
+## Reglas
+✅ SIEMPRE:
+- Mantener confidencialidad absoluta
+- Explicar el proceso claramente
+- Conectar con especialista humano
+- Tomar notas detalladas
+
+❌ NUNCA:
+- Dar asesoría profesional especializada
+- Prometer resultados específicos
+- Minimizar la importancia de la consulta`,
+
+            encuestas: `Eres [NOMBRE], encuestador virtual de [EMPRESA].
+
+## Objetivo
+Recopilar feedback estructurado de clientes sobre productos, servicios o experiencias.
+
+## Flujo
+1. Presentación y tiempo estimado de la encuesta
+2. Confirmar disponibilidad del cliente
+3. Hacer preguntas de manera clara y neutral
+4. Registrar respuestas textualmente
+5. Agradecer la participación
+6. Mencionar incentivo si aplica
+
+## Personalidad
+- Neutral y objetivo
+- Paciente y respetuoso
+- Agradecido
+
+## Reglas
+✅ SIEMPRE:
+- Respetar si no quieren participar
+- Ser breve y directo (máximo 5 minutos)
+- Registrar respuestas sin interpretación
+- Agradecer sinceramente
+
+❌ NUNCA:
+- Influenciar las respuestas
+- Hacer encuestas muy largas
+- Presionar para completar
+- Discutir o defender respuestas negativas`
+        };
+
+        // Recuperar datos del paso anterior
+        const datosP1 = JSON.parse(localStorage.getItem('wizardData') || '{}');
+
+        function cargarPlantilla() {
+            const sector = datosP1.sector;
+            const nombreAgente = datosP1.agent_name || '[NOMBRE]';
+            const nombreEmpresa = datosP1.empresa || '[EMPRESA]';
+
+            if (!sector) {
+                alert('⚠️ No se detectó un sector del Paso 1. Por favor, completa el Paso 1 primero.');
+                return;
+            }
+
+            const plantilla = PLANTILLAS[sector];
+            
+            if (!plantilla) {
+                alert('⚠️ No hay plantilla disponible para este sector.');
+                return;
+            }
+
+            // Reemplazar placeholders
+            let promptFinal = plantilla
+                .replace(/\[NOMBRE\]/g, nombreAgente)
+                .replace(/\[EMPRESA\]/g, nombreEmpresa);
+
+            document.getElementById('generalPrompt').value = promptFinal;
+            document.getElementById('templateLoaded').style.display = 'flex';
+
+            console.log('✅ Plantilla cargada:', sector);
+        }
+
+        function nextStep() {
+            const modelo = document.getElementById('modelo').value;
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const maxTokens = parseInt(document.getElementById('maxTokens').value);
+            const whoFirst = document.querySelector('input[name="whoFirst"]:checked').value;
+            const beginMessage = document.getElementById('beginMessage').value.trim();
+            const generalPrompt = document.getElementById('generalPrompt').value.trim();
+            const tono = document.querySelector('input[name="tono"]:checked')?.value;
+            const highPriority = document.getElementById('highPriority').checked;
+
+            // Personalidad (múltiple)
+            const personalidad = Array.from(document.querySelectorAll('input[name="personalidad"]:checked'))
+                .map(cb => cb.value);
+
+            // Validaciones
+            if (!modelo) {
+                alert('⚠️ Por favor, selecciona un modelo de IA');
+                document.getElementById('modelo').focus();
+                return;
+            }
+
+            if (whoFirst === 'agent' && !beginMessage) {
+                alert('⚠️ Por favor, escribe el mensaje de inicio');
+                document.getElementById('beginMessage').focus();
+                return;
+            }
+
+            if (personalidad.length === 0) {
+                alert('⚠️ Por favor, selecciona al menos un rasgo de personalidad');
+                return;
+            }
+
+            if (!tono) {
+                alert('⚠️ Por favor, selecciona un tono de comunicación');
+                return;
+            }
+
+            if (!generalPrompt) {
+                alert('⚠️ Por favor, escribe el prompt del agente');
+                document.getElementById('generalPrompt').focus();
+                return;
+            }
+
+            if (generalPrompt.length < 100) {
+                alert('⚠️ El prompt es muy corto. Escribe al menos 100 caracteres para definir bien el comportamiento.');
+                document.getElementById('generalPrompt').focus();
+                return;
+            }
+
+            // Guardar datos
+            const paso2Data = {
+                modelo,
+                temperature,
+                max_tokens: maxTokens,
+                who_speaks_first: whoFirst,
+                begin_message: whoFirst === 'agent' ? beginMessage : null,
+                personalidad,
+                tono,
+                general_prompt: generalPrompt,
+                high_priority: highPriority
+            };
+
+            const allData = { ...datosP1, ...paso2Data };
+            localStorage.setItem('wizardData', JSON.stringify(allData));
+
+            console.log('✅ Datos paso 2:', paso2Data);
+            console.log('📦 Todos los datos:', allData);
+            
+            alert(`✅ ¡Configuración guardada!\n\nModelo: ${modelo}\nTemperature: ${temperature}\nTono: ${tono}\nPersonalidad: ${personalidad.join(', ')}\n\n¡Paso 2 completado! En la versión completa avanzarías al Paso 3.`);
+        }
+
+        console.log('🚀 Wizard paso 2 COMPLETO cargado');
+        console.log('📋 Datos del paso 1:', datosP1);
+    </script>
+</body>
+</html>
