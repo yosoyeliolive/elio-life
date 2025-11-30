@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Fábrica de Agentes IA | Netelip</title>
+    <title>Dashboard - Fábrica de agentes IA | Netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -24,7 +24,6 @@
             --gris-borde: #e5e7eb;
             --gris-texto: #6c757d;
             --oscuro: #1a2428;
-            --oscuro-sidebar: #222d32;
             --exito: #10b981;
             --advertencia: #f59e0b;
             --peligro: #ef4444;
@@ -37,7 +36,7 @@
             color: var(--oscuro);
         }
 
-        /* ===== SIDEBAR MINIMALISTA ===== */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed;
             top: 0;
@@ -170,13 +169,36 @@
             font-weight: 600;
         }
 
+        /* BOTÓN CREAR AGENTE EN SIDEBAR */
+        .btn-crear-agente {
+            margin: 12px 20px;
+            background: var(--netelip-azul);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-crear-agente:hover {
+            background: var(--netelip-azul-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+        }
+
         /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 260px;
             min-height: 100vh;
         }
 
-        /* ===== TOPBAR LIMPIO ===== */
         .topbar {
             background: white;
             padding: 16px 32px;
@@ -250,7 +272,7 @@
             color: var(--gris-texto);
         }
 
-        /* ===== STATS CARDS LIMPIAS ===== */
+        /* ===== STATS CARDS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -398,12 +420,18 @@
         .agent-sector {
             display: inline-flex;
             align-items: center;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             background: var(--gris-claro);
             color: var(--gris-texto);
+            gap: 6px;
+        }
+
+        .sector-icon-small {
+            width: 18px;
+            height: 18px;
         }
 
         .status-badge {
@@ -449,30 +477,6 @@
             color: var(--oscuro);
         }
 
-        .empty-state {
-            padding: 60px 24px;
-            text-align: center;
-        }
-
-        .empty-icon {
-            font-size: 64px;
-            color: var(--gris-borde);
-            margin-bottom: 16px;
-        }
-
-        .empty-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin-bottom: 8px;
-        }
-
-        .empty-text {
-            font-size: 14px;
-            color: var(--gris-texto);
-            margin-bottom: 24px;
-        }
-
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -508,6 +512,12 @@
             </div>
         </div>
 
+        <!-- BOTÓN CREAR NUEVO AGENTE -->
+        <button class="btn-crear-agente" onclick="window.location.href='wizard-paso1-DEFINITIVO.html'">
+            <i class="bi bi-plus-lg"></i>
+            Crear nuevo agente
+        </button>
+
         <nav class="sidebar-nav">
             <div class="nav-section-title">Principal</div>
             <a href="#" class="nav-item active">
@@ -516,12 +526,12 @@
             </a>
             <a href="#" class="nav-item">
                 <i class="bi bi-robot"></i>
-                Mis Agentes IA
+                Mis agentes IA
                 <span class="nav-badge">3</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="bi bi-book"></i>
-                Biblioteca de Plantillas
+                Biblioteca de plantillas
             </a>
             
             <div class="nav-section-title mt-4">Cuenta</div>
@@ -531,7 +541,7 @@
             </a>
             <a href="#" class="nav-item">
                 <i class="bi bi-question-circle"></i>
-                Ayuda y Soporte
+                Ayuda y soporte
             </a>
         </nav>
     </div>
@@ -570,7 +580,7 @@
                         <i class="bi bi-robot"></i>
                     </div>
                     <div class="stat-value">3</div>
-                    <div class="stat-label">Agentes Activos</div>
+                    <div class="stat-label">Agentes activos</div>
                     <div class="stat-trend up">
                         <i class="bi bi-arrow-up me-1"></i>
                         +2 este mes
@@ -582,7 +592,7 @@
                         <i class="bi bi-telephone"></i>
                     </div>
                     <div class="stat-value">1,247</div>
-                    <div class="stat-label">Llamadas Procesadas</div>
+                    <div class="stat-label">Llamadas procesadas</div>
                     <div class="stat-trend up">
                         <i class="bi bi-arrow-up me-1"></i>
                         +18% vs semana
@@ -594,7 +604,7 @@
                         <i class="bi bi-star-fill"></i>
                     </div>
                     <div class="stat-value">94%</div>
-                    <div class="stat-label">Satisfacción Cliente</div>
+                    <div class="stat-label">Satisfacción del cliente</div>
                     <div class="stat-trend up">
                         <i class="bi bi-arrow-up me-1"></i>
                         +4% este mes
@@ -606,7 +616,7 @@
                         <i class="bi bi-clock"></i>
                     </div>
                     <div class="stat-value">2.4 min</div>
-                    <div class="stat-label">Duración Promedio</div>
+                    <div class="stat-label">Duración promedio</div>
                     <div class="stat-trend down">
                         <i class="bi bi-arrow-down me-1"></i>
                         -12% optimizado
@@ -617,10 +627,10 @@
             <!-- AGENTS TABLE -->
             <div class="agents-section">
                 <div class="section-header">
-                    <h3 class="section-title">Tus Agentes IA</h3>
-                    <button class="btn-primary" onclick="window.location.href='wizard-paso1-netelip.html'">
+                    <h3 class="section-title">Tus agentes IA</h3>
+                    <button class="btn-primary" onclick="window.location.href='wizard-paso1-DEFINITIVO.html'">
                         <i class="bi bi-plus-lg"></i>
-                        Crear Nuevo Agente
+                        Crear nuevo agente
                     </button>
                 </div>
                 
@@ -638,10 +648,16 @@
                     <tbody>
                         <tr>
                             <td>
-                                <div class="agent-name">Sofia - Atención Cliente</div>
+                                <div class="agent-name">Sofia - Atención cliente</div>
                             </td>
                             <td>
-                                <span class="agent-sector">📞 Atención al Cliente</span>
+                                <span class="agent-sector">
+                                    <svg class="sector-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" stroke="#267ab0" stroke-width="1.5"/>
+                                        <path d="M8 12H8.01M12 12H12.01M16 12H16.01" stroke="#267ab0" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Atención al cliente
+                                </span>
                             </td>
                             <td>487</td>
                             <td>96%</td>
@@ -667,10 +683,19 @@
                         </tr>
                         <tr>
                             <td>
-                                <div class="agent-name">Carlos - Gestión Citas</div>
+                                <div class="agent-name">Carlos - Gestión de citas</div>
                             </td>
                             <td>
-                                <span class="agent-sector">📅 Gestión de Citas</span>
+                                <span class="agent-sector">
+                                    <svg class="sector-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="6" width="18" height="15" rx="2" stroke="#267ab0" stroke-width="1.5"/>
+                                        <path d="M3 10H21" stroke="#267ab0" stroke-width="1.5"/>
+                                        <path d="M7 3V6M17 3V6" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round"/>
+                                        <circle cx="9" cy="15" r="1" fill="#267ab0"/>
+                                        <circle cx="15" cy="15" r="1" fill="#267ab0"/>
+                                    </svg>
+                                    Gestión de citas
+                                </span>
                             </td>
                             <td>312</td>
                             <td>91%</td>
@@ -699,7 +724,12 @@
                                 <div class="agent-name">Laura - Cualificación</div>
                             </td>
                             <td>
-                                <span class="agent-sector">🎯 Cualificación Leads</span>
+                                <span class="agent-sector">
+                                    <svg class="sector-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#267ab0" stroke-width="1.5" stroke-linejoin="round"/>
+                                    </svg>
+                                    Cualificación de leads
+                                </span>
                             </td>
                             <td>156</td>
                             <td>88%</td>
@@ -731,7 +761,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        console.log('📊 Dashboard Netelip cargado');
+        console.log('📊 Dashboard Netelip cargado - Versión definitiva para presentación');
     </script>
 </body>
 </html>
