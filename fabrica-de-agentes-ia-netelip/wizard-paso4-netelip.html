@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear agente IA - Paso 4 | Netelip</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netelip-azul: #267ab0;
+            --netelip-azul-hover: #1e6291;
+            --gris-claro: #f5f6f8;
+            --gris-borde: #e5e7eb;
+            --gris-texto: #6c757d;
+            --oscuro: #1a2428;
+            --exito: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gris-borde);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: var(--gris-texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--netelip-azul);
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 16px 0 6px 0;
+        }
+
+        .wizard-subtitle {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .steps-container {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gris-texto);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .step-item:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .step-item.active {
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            border-left-color: var(--netelip-azul);
+        }
+
+        .step-item.completed {
+            color: var(--exito);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gris-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .step-item.active .step-number {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--exito);
+            color: white;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--gris-claro);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--gris-borde);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .progress-bar-container {
+            background: var(--gris-claro);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--netelip-azul);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .tooltip-icon {
+            margin-left: 6px;
+            color: var(--netelip-azul);
+            cursor: help;
+            font-size: 16px;
+        }
+
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 340px;
+            background: var(--oscuro);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 14px 16px;
+            position: absolute;
+            z-index: 2000;
+            bottom: 130%;
+            left: 50%;
+            margin-left: -170px;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 13px;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--oscuro) transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--netelip-azul);
+            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1);
+            outline: none;
+        }
+
+        .form-text {
+            color: var(--gris-texto);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* SLIDERS */
+        .slider-container {
+            margin: 16px 0;
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: var(--netelip-azul);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--gris-claro);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--netelip-azul);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(38, 122, 176, 0.2);
+        }
+
+        /* GRID 2 COLUMNAS */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* SWITCH */
+        .form-switch {
+            margin-bottom: 12px;
+        }
+
+        .form-switch .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: var(--netelip-azul);
+            border-color: var(--netelip-azul);
+        }
+
+        .form-switch .form-check-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-top: 2px;
+        }
+
+        /* TAGS INPUT */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 44px;
+            padding: 8px;
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            cursor: text;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--netelip-azul);
+            color: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        .tag-remove:hover {
+            opacity: 1;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 150px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* PRONUNCIATION DICTIONARY */
+        .pronunciation-list {
+            margin-top: 12px;
+        }
+
+        .pronunciation-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gris-claro);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .pronunciation-item input {
+            flex: 1;
+            border: 1px solid var(--gris-borde);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .btn-remove {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-remove:hover {
+            background: #dc2626;
+        }
+
+        .btn-add {
+            background: var(--exito);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .btn-add:hover {
+            background: #059669;
+        }
+
+        /* ALERT */
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info i {
+            color: var(--netelip-azul);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        /* SECTION DIVIDER */
+        .section-divider {
+            margin: 40px 0 32px 0;
+            border-top: 2px solid var(--gris-borde);
+            padding-top: 32px;
+        }
+
+        .section-divider h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-divider p {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 24px;
+        }
+
+        /* BOTONES */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gris-borde);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--netelip-azul-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver al dashboard
+            </a>
+            <h2 class="wizard-title">Crear agente IA</h2>
+            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+        </div>
+
+        <div class="steps-container">
+            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Información básica</span>
+                    <span class="step-desc">Nombre y sector</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Configuración LLM</span>
+                    <span class="step-desc">Modelo y prompt</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Selección de voz</span>
+                    <span class="step-desc">Voz y personalidad</span>
+                </div>
+            </a>
+
+            <a href="#" class="step-item active">
+                <div class="step-number">4</div>
+                <div class="step-info">
+                    <span class="step-name">Conversación</span>
+                    <span class="step-desc">Idioma y respuestas</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-info">
+                    <span class="step-name">Tiempos</span>
+                    <span class="step-desc">Duraciones y delays</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-info">
+                    <span class="step-name">Audio y STT</span>
+                    <span class="step-desc">Sonido ambiente</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">7</div>
+                <div class="step-info">
+                    <span class="step-name">Herramientas</span>
+                    <span class="step-desc">Integraciones</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">8</div>
+                <div class="step-info">
+                    <span class="step-name">Resumen</span>
+                    <span class="step-desc">Revisar y crear</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 50%;"></div>
+            </div>
+            <div class="progress-text">Paso 4 de 8 - Configuración de conversación</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-area">
+            <div class="form-card">
+                <h1 class="section-title">Configuración de conversación</h1>
+                <p class="section-subtitle">
+                    Define cómo tu agente interactuará en las llamadas.
+                </p>
+
+                <div class="alert-info">
+                    <i class="bi bi-lightbulb-fill"></i>
+                    <div>
+                        <strong>Tip:</strong> Una conversación natural requiere ajustar la sensibilidad de interrupción y la capacidad de respuesta. 
+                        Activa el backchannel para que el agente muestre que está escuchando.
+                    </div>
+                </div>
+
+                <form id="wizardForm">
+                    <!-- IDIOMA -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Idioma del agente
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Idioma principal:</strong><br><br>
+                                    Define el idioma en el que el agente conversará. Esto afecta tanto al reconocimiento de voz (STT) como a la síntesis (TTS).
+                                </span>
+                            </span>
+                        </label>
+                        <select class="form-select" id="language" required>
+                            <option value="">Selecciona un idioma...</option>
+                            <option value="es-ES" selected>Español (España)</option>
+                            <option value="es-MX">Español (México)</option>
+                            <option value="es-AR">Español (Argentina)</option>
+                            <option value="es-CO">Español (Colombia)</option>
+                            <option value="en-US">English (USA)</option>
+                            <option value="en-GB">English (UK)</option>
+                            <option value="pt-BR">Português (Brasil)</option>
+                            <option value="fr-FR">Français (France)</option>
+                            <option value="de-DE">Deutsch (Germany)</option>
+                            <option value="it-IT">Italiano (Italy)</option>
+                        </select>
+                        <div class="form-text">
+                            <i class="bi bi-globe me-1"></i>
+                            Idioma y acento para reconocimiento y síntesis de voz
+                        </div>
+                    </div>
+
+                    <!-- BACKCHANNEL -->
+                    <div class="section-divider">
+                        <h3>Backchannel</h3>
+                        <p>El agente emite pequeñas respuestas ("Ajá", "Entiendo") mientras el usuario habla para mostrar que está escuchando activamente.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   id="enableBackchannel"
+                                   checked
+                                   onchange="toggleBackchannel()">
+                            <label class="form-check-label" for="enableBackchannel">
+                                <strong>Activar backchannel</strong>
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Escucha activa:</strong><br><br>
+                                        El agente emitirá palabras de confirmación mientras el usuario habla, creando una conversación más natural y humana.
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="form-text ms-5">
+                            <i class="bi bi-chat-left-dots me-1"></i>
+                            Recomendado para conversaciones naturales
+                        </div>
+                    </div>
+
+                    <div id="backchannelConfig" style="display: block;">
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Frecuencia de backchannel
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Con qué frecuencia responde:</strong><br><br>
+                                            <strong>0.0-0.3:</strong> Muy poco frecuente<br>
+                                            <strong>0.4-0.7:</strong> Frecuencia normal<br>
+                                            <strong>0.8-1.0:</strong> Muy frecuente (recomendado)
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="slider-container">
+                                    <div class="slider-value" id="backchannelFreqValue">0.9</div>
+                                    <input type="range" 
+                                           id="backchannelFrequency" 
+                                           min="0" 
+                                           max="1" 
+                                           step="0.1" 
+                                           value="0.9"
+                                           oninput="document.getElementById('backchannelFreqValue').textContent = this.value">
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-bar-chart me-1"></i>
+                                    Mayor valor = más frecuente
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Palabras de backchannel
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Palabras que usará:</strong><br><br>
+                                            Personaliza las palabras que el agente usará para mostrar que está escuchando. Escribe y presiona Enter.
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="tags-container" onclick="document.getElementById('backchannelInput').focus()">
+                                    <div id="backchannelTags"></div>
+                                    <input type="text" 
+                                           class="tag-input" 
+                                           id="backchannelInput"
+                                           placeholder="Escribe y presiona Enter..."
+                                           onkeydown="handleBackchannelInput(event)">
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-tags me-1"></i>
+                                    Ejemplos: Ajá, Entiendo, Mmm, Claro, Ya veo
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SENSIBILIDAD DE INTERRUPCIÓN -->
+                    <div class="section-divider">
+                        <h3>Sensibilidad y respuesta</h3>
+                        <p>Controla qué tan fácil puede el usuario interrumpir al agente y qué tan rápido responde.</p>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Sensibilidad de interrupción
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Facilidad para interrumpir:</strong><br><br>
+                                        <strong>0.0-0.3:</strong> Difícil interrumpir<br>
+                                        <strong>0.4-0.6:</strong> Balance normal (recomendado)<br>
+                                        <strong>0.7-1.0:</strong> Fácil de interrumpir
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-container">
+                                <div class="slider-value" id="interruptionValue">0.5</div>
+                                <input type="range" 
+                                       id="interruptionSensitivity" 
+                                       min="0" 
+                                       max="1" 
+                                       step="0.1" 
+                                       value="0.5"
+                                       oninput="document.getElementById('interruptionValue').textContent = this.value">
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-pause-circle me-1"></i>
+                                Mayor valor = más fácil de interrumpir
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Capacidad de respuesta
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Velocidad de respuesta:</strong><br><br>
+                                        <strong>0.0-0.4:</strong> Respuestas lentas, más reflexivas<br>
+                                        <strong>0.5-0.7:</strong> Velocidad normal<br>
+                                        <strong>0.8-1.0:</strong> Respuestas muy rápidas
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-container">
+                                <div class="slider-value" id="responsivenessValue">0.8</div>
+                                <input type="range" 
+                                       id="responsiveness" 
+                                       min="0" 
+                                       max="1" 
+                                       step="0.1" 
+                                       value="0.8"
+                                       oninput="document.getElementById('responsivenessValue').textContent = this.value">
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-lightning me-1"></i>
+                                Mayor valor = respuestas más rápidas
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PALABRAS CLAVE REFORZADAS -->
+                    <div class="section-divider">
+                        <h3>Palabras clave reforzadas</h3>
+                        <p>Mejora el reconocimiento de palabras específicas importantes para tu negocio.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Boosted keywords
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Mejora el reconocimiento:</strong><br><br>
+                                    Añade nombres de productos, marcas o términos técnicos que el sistema debe reconocer con mayor precisión.<br><br>
+                                    Ejemplos: Netelip, Centralita, VoIP
+                                </span>
+                            </span>
+                        </label>
+                        <div class="tags-container" onclick="document.getElementById('keywordInput').focus()">
+                            <div id="keywordTags"></div>
+                            <input type="text" 
+                                   class="tag-input" 
+                                   id="keywordInput"
+                                   placeholder="Escribe y presiona Enter..."
+                                   onkeydown="handleKeywordInput(event)">
+                        </div>
+                        <div class="form-text">
+                            <i class="bi bi-search me-1"></i>
+                            Nombres de productos, marcas, términos técnicos de tu negocio
+                        </div>
+                    </div>
+
+                    <!-- NORMALIZACIÓN DE HABLA -->
+                    <div class="form-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   id="normalizeForSpeech"
+                                   checked>
+                            <label class="form-check-label" for="normalizeForSpeech">
+                                <strong>Normalizar para habla</strong>
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Optimización automática:</strong><br><br>
+                                        Convierte números, fechas, URLs y abreviaturas en formato hablado natural.<br><br>
+                                        Ejemplo: "15/04/2025" → "quince de abril de dos mil veinticinco"
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="form-text ms-5">
+                            <i class="bi bi-type me-1"></i>
+                            Convierte texto en formato hablado natural
+                        </div>
+                    </div>
+
+                    <!-- DICCIONARIO DE PRONUNCIACIÓN -->
+                    <div class="section-divider">
+                        <h3>Diccionario de pronunciación</h3>
+                        <p>Enseña al agente cómo pronunciar palabras específicas.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Pronunciación personalizada
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Controla la pronunciación:</strong><br><br>
+                                    Define cómo debe pronunciar el agente palabras específicas usando fonética IPA o CMU.<br><br>
+                                    <strong>Ejemplo:</strong><br>
+                                    Palabra: Netelip<br>
+                                    Fonética: nɛtəlɪp
+                                </span>
+                            </span>
+                        </label>
+                        <div id="pronunciationList" class="pronunciation-list">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                        <button type="button" class="btn-add" onclick="addPronunciation()">
+                            <i class="bi bi-plus-circle"></i>
+                            Añadir pronunciación
+                        </button>
+                        <div class="form-text mt-2">
+                            <i class="bi bi-volume-up me-1"></i>
+                            Útil para nombres propios, marcas o términos técnicos
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso3-SELECCION-VOZ.html'">
+                            <i class="bi bi-arrow-left"></i>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Siguiente
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos del wizard
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
+
+        // Arrays para tags
+        let backchannelWords = ['Ajá', 'Entiendo', 'Mmm', 'Claro'];
+        let boostedKeywords = [];
+        let pronunciations = [];
+
+        // Toggle backchannel
+        function toggleBackchannel() {
+            const enabled = document.getElementById('enableBackchannel').checked;
+            document.getElementById('backchannelConfig').style.display = enabled ? 'block' : 'none';
+        }
+
+        // Manejar input de backchannel
+        function handleBackchannelInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const input = document.getElementById('backchannelInput');
+                const value = input.value.trim();
+                
+                if (value && !backchannelWords.includes(value)) {
+                    backchannelWords.push(value);
+                    renderBackchannelTags();
+                    input.value = '';
+                }
+            }
+        }
+
+        // Renderizar tags de backchannel
+        function renderBackchannelTags() {
+            const container = document.getElementById('backchannelTags');
+            container.innerHTML = backchannelWords.map((word, index) => `
+                <span class="tag">
+                    ${word}
+                    <span class="tag-remove" onclick="removeBackchannelWord(${index})">×</span>
+                </span>
+            `).join('');
+        }
+
+        // Remover palabra de backchannel
+        function removeBackchannelWord(index) {
+            backchannelWords.splice(index, 1);
+            renderBackchannelTags();
+        }
+
+        // Manejar input de keywords
+        function handleKeywordInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const input = document.getElementById('keywordInput');
+                const value = input.value.trim();
+                
+                if (value && !boostedKeywords.includes(value)) {
+                    boostedKeywords.push(value);
+                    renderKeywordTags();
+                    input.value = '';
+                }
+            }
+        }
+
+        // Renderizar tags de keywords
+        function renderKeywordTags() {
+            const container = document.getElementById('keywordTags');
+            container.innerHTML = boostedKeywords.map((word, index) => `
+                <span class="tag">
+                    ${word}
+                    <span class="tag-remove" onclick="removeKeyword(${index})">×</span>
+                </span>
+            `).join('');
+        }
+
+        // Remover keyword
+        function removeKeyword(index) {
+            boostedKeywords.splice(index, 1);
+            renderKeywordTags();
+        }
+
+        // Añadir pronunciación
+        function addPronunciation() {
+            pronunciations.push({ word: '', alphabet: 'ipa', phoneme: '' });
+            renderPronunciations();
+        }
+
+        // Renderizar pronunciaciones
+        function renderPronunciations() {
+            const container = document.getElementById('pronunciationList');
+            container.innerHTML = pronunciations.map((item, index) => `
+                <div class="pronunciation-item">
+                    <input type="text" 
+                           placeholder="Palabra (ej: Netelip)" 
+                           value="${item.word}"
+                           onchange="updatePronunciation(${index}, 'word', this.value)">
+                    <select onchange="updatePronunciation(${index}, 'alphabet', this.value)">
+                        <option value="ipa" ${item.alphabet === 'ipa' ? 'selected' : ''}>IPA</option>
+                        <option value="cmu" ${item.alphabet === 'cmu' ? 'selected' : ''}>CMU</option>
+                    </select>
+                    <input type="text" 
+                           placeholder="Fonética (ej: nɛtəlɪp)" 
+                           value="${item.phoneme}"
+                           onchange="updatePronunciation(${index}, 'phoneme', this.value)">
+                    <button type="button" class="btn-remove" onclick="removePronunciation(${index})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Actualizar pronunciación
+        function updatePronunciation(index, field, value) {
+            pronunciations[index][field] = value;
+        }
+
+        // Remover pronunciación
+        function removePronunciation(index) {
+            pronunciations.splice(index, 1);
+            renderPronunciations();
+        }
+
+        // Siguiente paso
+        function nextStep() {
+            const language = document.getElementById('language').value;
+            const enableBackchannel = document.getElementById('enableBackchannel').checked;
+            const backchannelFrequency = parseFloat(document.getElementById('backchannelFrequency').value);
+            const interruptionSensitivity = parseFloat(document.getElementById('interruptionSensitivity').value);
+            const responsiveness = parseFloat(document.getElementById('responsiveness').value);
+            const normalizeForSpeech = document.getElementById('normalizeForSpeech').checked;
+
+            // Validaciones
+            if (!language) {
+                alert('⚠️ Por favor, selecciona el idioma del agente');
+                document.getElementById('language').focus();
+                return;
+            }
+
+            // Guardar datos
+            const paso4Data = {
+                language,
+                enable_backchannel: enableBackchannel,
+                backchannel_frequency: backchannelFrequency,
+                backchannel_words: backchannelWords,
+                interruption_sensitivity: interruptionSensitivity,
+                responsiveness,
+                boosted_keywords: boostedKeywords,
+                normalize_for_speech: normalizeForSpeech,
+                pronunciation_dictionary: pronunciations.filter(p => p.word && p.phoneme)
+            };
+
+            const allData = { ...wizardData, ...paso4Data };
+            localStorage.setItem('wizardData', JSON.stringify(allData));
+
+            console.log('✅ Datos paso 4:', paso4Data);
+            console.log('📦 Todos los datos:', allData);
+
+            alert(`✅ ¡Conversación configurada!\n\n🌍 Idioma: ${language}\n💬 Backchannel: ${enableBackchannel ? 'Activado' : 'Desactivado'}\n⚡ Responsiveness: ${responsiveness}\n🔇 Interrupción: ${interruptionSensitivity}\n\n¡Paso 4 completado! En la versión completa avanzarías al Paso 5: Tiempos.`);
+        }
+
+        // Inicializar
+        renderBackchannelTags();
+        renderKeywordTags();
+        console.log('🚀 Wizard Paso 4 cargado');
+        console.log('📋 Datos anteriores:', wizardData);
+    </script>
+</body>
+</html>
