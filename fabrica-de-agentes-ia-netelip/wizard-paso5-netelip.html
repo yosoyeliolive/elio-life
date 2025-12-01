@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear agente IA - Paso 5 | Netelip</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netelip-azul: #267ab0;
+            --netelip-azul-hover: #1e6291;
+            --gris-claro: #f5f6f8;
+            --gris-borde: #e5e7eb;
+            --gris-texto: #6c757d;
+            --oscuro: #1a2428;
+            --exito: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gris-borde);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: var(--gris-texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--netelip-azul);
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 16px 0 6px 0;
+        }
+
+        .wizard-subtitle {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .steps-container {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gris-texto);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .step-item:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .step-item.active {
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            border-left-color: var(--netelip-azul);
+        }
+
+        .step-item.completed {
+            color: var(--exito);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gris-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .step-item.active .step-number {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--exito);
+            color: white;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--gris-claro);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--gris-borde);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .progress-bar-container {
+            background: var(--gris-claro);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--netelip-azul);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .tooltip-icon {
+            margin-left: 6px;
+            color: var(--netelip-azul);
+            cursor: help;
+            font-size: 16px;
+        }
+
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 340px;
+            background: var(--oscuro);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 14px 16px;
+            position: absolute;
+            z-index: 2000;
+            bottom: 130%;
+            left: 50%;
+            margin-left: -170px;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 13px;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--oscuro) transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--netelip-azul);
+            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1);
+            outline: none;
+        }
+
+        .form-text {
+            color: var(--gris-texto);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* INPUT CON UNIDAD */
+        .input-with-unit {
+            position: relative;
+        }
+
+        .input-with-unit input {
+            padding-right: 60px;
+        }
+
+        .unit-label {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gris-texto);
+            font-weight: 600;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        /* GRID 2 COLUMNAS */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* SWITCH */
+        .form-switch {
+            margin-bottom: 12px;
+        }
+
+        .form-switch .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: var(--netelip-azul);
+            border-color: var(--netelip-azul);
+        }
+
+        .form-switch .form-check-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-top: 2px;
+        }
+
+        /* ALERT */
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info i {
+            color: var(--netelip-azul);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-warning i {
+            color: var(--warning);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        /* SECTION DIVIDER */
+        .section-divider {
+            margin: 40px 0 32px 0;
+            border-top: 2px solid var(--gris-borde);
+            padding-top: 32px;
+        }
+
+        .section-divider h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-divider p {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 24px;
+        }
+
+        /* TIME CARD */
+        .time-card {
+            background: var(--gris-claro);
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .time-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .time-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .time-card-title {
+            flex: 1;
+        }
+
+        .time-card-title h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 0 0 4px 0;
+        }
+
+        .time-card-title p {
+            font-size: 13px;
+            color: var(--gris-texto);
+            margin: 0;
+        }
+
+        /* VOICEMAIL CONFIG */
+        .voicemail-config {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        /* BOTONES */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gris-borde);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--netelip-azul-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver al dashboard
+            </a>
+            <h2 class="wizard-title">Crear agente IA</h2>
+            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+        </div>
+
+        <div class="steps-container">
+            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Información básica</span>
+                    <span class="step-desc">Nombre y sector</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Configuración LLM</span>
+                    <span class="step-desc">Modelo y prompt</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Selección de voz</span>
+                    <span class="step-desc">Voz y personalidad</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Conversación</span>
+                    <span class="step-desc">Idioma y respuestas</span>
+                </div>
+            </a>
+
+            <a href="#" class="step-item active">
+                <div class="step-number">5</div>
+                <div class="step-info">
+                    <span class="step-name">Tiempos</span>
+                    <span class="step-desc">Duraciones y delays</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-info">
+                    <span class="step-name">Audio y STT</span>
+                    <span class="step-desc">Sonido ambiente</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">7</div>
+                <div class="step-info">
+                    <span class="step-name">Herramientas</span>
+                    <span class="step-desc">Integraciones</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">8</div>
+                <div class="step-info">
+                    <span class="step-name">Resumen</span>
+                    <span class="step-desc">Revisar y crear</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 62.5%;"></div>
+            </div>
+            <div class="progress-text">Paso 5 de 8 - Configuración de tiempos</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-area">
+            <div class="form-card">
+                <h1 class="section-title">Configuración de tiempos</h1>
+                <p class="section-subtitle">
+                    Define las duraciones, delays y comportamientos temporales de tu agente.
+                </p>
+
+                <div class="alert-info">
+                    <i class="bi bi-lightbulb-fill"></i>
+                    <div>
+                        <strong>Tip:</strong> Los tiempos correctos mejoran la experiencia del usuario. Un delay inicial de 1-2 segundos permite que el usuario se prepare, mientras que una duración máxima previene llamadas infinitas.
+                    </div>
+                </div>
+
+                <form id="wizardForm">
+                    <!-- BEGIN MESSAGE DELAY -->
+                    <div class="time-card">
+                        <div class="time-card-header">
+                            <div class="time-icon">
+                                ⏱️
+                            </div>
+                            <div class="time-card-title">
+                                <h4>Delay del mensaje inicial</h4>
+                                <p>Tiempo antes de que el agente comience a hablar</p>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">
+                                Begin message delay (ms)
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Pausa inicial:</strong><br><br>
+                                        Tiempo en milisegundos que espera el agente antes de decir el primer mensaje.<br><br>
+                                        <strong>Recomendado:</strong> 1000-2000ms (1-2 segundos) para dar tiempo al usuario a prepararse.
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="beginMessageDelay" 
+                                       value="1500" 
+                                       min="0" 
+                                       max="10000"
+                                       step="100">
+                                <span class="unit-label">ms</span>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-clock-history me-1"></i>
+                                Valor recomendado: 1500ms (1.5 segundos)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- END CALL AFTER SILENCE -->
+                    <div class="time-card">
+                        <div class="time-card-header">
+                            <div class="time-icon">
+                                🔇
+                            </div>
+                            <div class="time-card-title">
+                                <h4>Finalizar por silencio</h4>
+                                <p>Colgar automáticamente si el usuario no responde</p>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">
+                                End call after silence (ms)
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Auto-finalización:</strong><br><br>
+                                        Si el usuario permanece en silencio durante este tiempo, la llamada se finalizará automáticamente.<br><br>
+                                        <strong>Común:</strong> 30000ms (30 segundos)
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="endCallAfterSilence" 
+                                       value="30000" 
+                                       min="5000" 
+                                       max="120000"
+                                       step="1000">
+                                <span class="unit-label">ms</span>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-telephone-x me-1"></i>
+                                Colgar si no hay respuesta durante este tiempo
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MAX CALL DURATION -->
+                    <div class="time-card">
+                        <div class="time-card-header">
+                            <div class="time-icon">
+                                📞
+                            </div>
+                            <div class="time-card-title">
+                                <h4>Duración máxima de llamada</h4>
+                                <p>Límite de tiempo total de la llamada</p>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">
+                                Max call duration (ms)
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Límite de duración:</strong><br><br>
+                                        Tiempo máximo permitido para una llamada. Al alcanzar este límite, la llamada se finalizará automáticamente.<br><br>
+                                        <strong>Típico:</strong> 1800000ms (30 minutos)
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="maxCallDuration" 
+                                       value="1800000" 
+                                       min="60000" 
+                                       max="7200000"
+                                       step="60000">
+                                <span class="unit-label">ms</span>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-hourglass-split me-1"></i>
+                                <span id="durationDisplay">30 minutos</span> - Previene llamadas infinitas
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REMINDER -->
+                    <div class="section-divider">
+                        <h3>Recordatorios</h3>
+                        <p>Configura recordatorios cuando el usuario no responde.</p>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="time-card">
+                            <div class="time-card-header">
+                                <div class="time-icon" style="font-size: 20px;">
+                                    🔔
+                                </div>
+                                <div class="time-card-title">
+                                    <h4>Trigger de recordatorio</h4>
+                                    <p>Tiempo de silencio antes de recordar</p>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="form-label">
+                                    Reminder trigger (ms)
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Activar recordatorio:</strong><br><br>
+                                            Si el usuario no responde durante este tiempo, el agente dirá algo como "¿Sigues ahí?" o "¿Me escuchas?"<br><br>
+                                            <strong>Típico:</strong> 10000ms (10 segundos)
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="input-with-unit">
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="reminderTrigger" 
+                                           value="10000" 
+                                           min="3000" 
+                                           max="60000"
+                                           step="1000">
+                                    <span class="unit-label">ms</span>
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-bell me-1"></i>
+                                    <span id="reminderTriggerDisplay">10 segundos</span> de silencio
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="time-card">
+                            <div class="time-card-header">
+                                <div class="time-icon" style="font-size: 20px;">
+                                    🔢
+                                </div>
+                                <div class="time-card-title">
+                                    <h4>Máximo de recordatorios</h4>
+                                    <p>Veces que puede recordar al usuario</p>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="form-label">
+                                    Reminder max count
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Límite de recordatorios:</strong><br><br>
+                                            Número máximo de veces que el agente intentará obtener respuesta del usuario antes de colgar.<br><br>
+                                            <strong>Recomendado:</strong> 2-3 intentos
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="reminderMaxCount" 
+                                       value="2" 
+                                       min="0" 
+                                       max="10"
+                                       step="1">
+                                <div class="form-text">
+                                    <i class="bi bi-arrow-repeat me-1"></i>
+                                    Intentos antes de colgar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VOICEMAIL DETECTION -->
+                    <div class="section-divider">
+                        <h3>Detección de buzón de voz</h3>
+                        <p>Detecta automáticamente si la llamada va a buzón de voz.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   id="enableVoicemailDetection"
+                                   onchange="toggleVoicemailConfig()">
+                            <label class="form-check-label" for="enableVoicemailDetection">
+                                <strong>Activar detección de voicemail</strong>
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Detección automática:</strong><br><br>
+                                        El sistema detectará si la llamada va a buzón de voz y puede dejar un mensaje automático o colgar según tu configuración.
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="form-text ms-5">
+                            <i class="bi bi-voicemail me-1"></i>
+                            Útil para llamadas salientes automatizadas
+                        </div>
+                    </div>
+
+                    <div id="voicemailConfig" style="display: none;">
+                        <div class="voicemail-config">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Timeout de detección (ms)
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Tiempo de análisis:</strong><br><br>
+                                            Tiempo máximo que el sistema esperará para detectar si es voicemail. Si no detecta nada, asume que es una persona real.<br><br>
+                                            <strong>Típico:</strong> 5000ms (5 segundos)
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="input-with-unit">
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="voicemailTimeout" 
+                                           value="5000" 
+                                           min="1000" 
+                                           max="15000"
+                                           step="500">
+                                    <span class="unit-label">ms</span>
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-stopwatch me-1"></i>
+                                    Tiempo de análisis para detectar voicemail
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label class="form-label">
+                                    Mensaje para voicemail
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Mensaje automático:</strong><br><br>
+                                            Si se detecta voicemail, el agente dirá este mensaje y colgará. Déjalo vacío si prefieres que simplemente cuelgue sin dejar mensaje.
+                                        </span>
+                                    </span>
+                                </label>
+                                <textarea class="form-control" 
+                                          id="voicemailMessage" 
+                                          rows="3"
+                                          placeholder="Ej: Hola, soy Sofia de Netelip. Intentaremos contactarte más tarde. Gracias."></textarea>
+                                <div class="form-text">
+                                    <i class="bi bi-chat-left-text me-1"></i>
+                                    Opcional - Deja vacío para colgar sin mensaje
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RING DURATION -->
+                    <div class="section-divider">
+                        <h3>Duración de timbre</h3>
+                        <p>Para llamadas salientes, tiempo máximo de espera antes de colgar.</p>
+                    </div>
+
+                    <div class="time-card">
+                        <div class="time-card-header">
+                            <div class="time-icon">
+                                📲
+                            </div>
+                            <div class="time-card-title">
+                                <h4>Ring duration</h4>
+                                <p>Tiempo máximo de timbre antes de colgar</p>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">
+                                Ring duration (ms)
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Timbre de espera:</strong><br><br>
+                                        En llamadas salientes, tiempo máximo que el sistema esperará a que el usuario conteste antes de colgar.<br><br>
+                                        <strong>Típico:</strong> 30000ms (30 segundos)
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="ringDuration" 
+                                       value="30000" 
+                                       min="10000" 
+                                       max="120000"
+                                       step="5000">
+                                <span class="unit-label">ms</span>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-telephone-outbound me-1"></i>
+                                <span id="ringDurationDisplay">30 segundos</span> de timbre máximo
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ALERT WARNING -->
+                    <div class="alert-warning" style="margin-top: 32px;">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <div>
+                            <strong>Nota importante:</strong> Los tiempos muy cortos pueden hacer que la experiencia sea abrupta. Los tiempos muy largos pueden causar llamadas innecesariamente largas. Usa los valores recomendados como referencia.
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso4-CONVERSACION.html'">
+                            <i class="bi bi-arrow-left"></i>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Siguiente
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos del wizard
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
+
+        // Toggle voicemail config
+        function toggleVoicemailConfig() {
+            const enabled = document.getElementById('enableVoicemailDetection').checked;
+            document.getElementById('voicemailConfig').style.display = enabled ? 'block' : 'none';
+        }
+
+        // Actualizar displays de tiempo en tiempo real
+        document.getElementById('maxCallDuration').addEventListener('input', function() {
+            const ms = parseInt(this.value);
+            const minutes = Math.round(ms / 60000);
+            document.getElementById('durationDisplay').textContent = `${minutes} minutos`;
+        });
+
+        document.getElementById('reminderTrigger').addEventListener('input', function() {
+            const ms = parseInt(this.value);
+            const seconds = Math.round(ms / 1000);
+            document.getElementById('reminderTriggerDisplay').textContent = `${seconds} segundos`;
+        });
+
+        document.getElementById('ringDuration').addEventListener('input', function() {
+            const ms = parseInt(this.value);
+            const seconds = Math.round(ms / 1000);
+            document.getElementById('ringDurationDisplay').textContent = `${seconds} segundos`;
+        });
+
+        // Siguiente paso
+        function nextStep() {
+            // Obtener valores
+            const beginMessageDelay = parseInt(document.getElementById('beginMessageDelay').value);
+            const endCallAfterSilence = parseInt(document.getElementById('endCallAfterSilence').value);
+            const maxCallDuration = parseInt(document.getElementById('maxCallDuration').value);
+            const reminderTrigger = parseInt(document.getElementById('reminderTrigger').value);
+            const reminderMaxCount = parseInt(document.getElementById('reminderMaxCount').value);
+            const enableVoicemailDetection = document.getElementById('enableVoicemailDetection').checked;
+            const voicemailTimeout = parseInt(document.getElementById('voicemailTimeout').value);
+            const voicemailMessage = document.getElementById('voicemailMessage').value.trim();
+            const ringDuration = parseInt(document.getElementById('ringDuration').value);
+
+            // Validaciones básicas
+            if (beginMessageDelay < 0 || beginMessageDelay > 10000) {
+                alert('⚠️ El delay del mensaje inicial debe estar entre 0 y 10000ms');
+                document.getElementById('beginMessageDelay').focus();
+                return;
+            }
+
+            if (endCallAfterSilence < 5000) {
+                alert('⚠️ El tiempo de silencio para colgar debe ser al menos 5000ms (5 segundos)');
+                document.getElementById('endCallAfterSilence').focus();
+                return;
+            }
+
+            if (maxCallDuration < 60000) {
+                alert('⚠️ La duración máxima debe ser al menos 60000ms (1 minuto)');
+                document.getElementById('maxCallDuration').focus();
+                return;
+            }
+
+            // Guardar datos
+            const paso5Data = {
+                begin_message_delay: beginMessageDelay,
+                end_call_after_silence: endCallAfterSilence,
+                max_call_duration: maxCallDuration,
+                reminder_trigger: reminderTrigger,
+                reminder_max_count: reminderMaxCount,
+                enable_voicemail_detection: enableVoicemailDetection,
+                voicemail_detection_timeout: voicemailTimeout,
+                voicemail_message: voicemailMessage || null,
+                ring_duration: ringDuration
+            };
+
+            const allData = { ...wizardData, ...paso5Data };
+            localStorage.setItem('wizardData', JSON.stringify(allData));
+
+            console.log('✅ Datos paso 5:', paso5Data);
+            console.log('📦 Todos los datos:', allData);
+
+            // Resumen de configuración
+            const summary = `✅ ¡Tiempos configurados!
+
+⏱️ Delay inicial: ${beginMessageDelay}ms
+🔇 Auto-colgar por silencio: ${endCallAfterSilence}ms (${Math.round(endCallAfterSilence/1000)}s)
+📞 Duración máxima: ${maxCallDuration}ms (${Math.round(maxCallDuration/60000)} min)
+🔔 Recordatorio cada: ${reminderTrigger}ms (${Math.round(reminderTrigger/1000)}s)
+🔢 Máximo de recordatorios: ${reminderMaxCount}
+📲 Ring duration: ${ringDuration}ms (${Math.round(ringDuration/1000)}s)
+📧 Voicemail: ${enableVoicemailDetection ? 'Activado' : 'Desactivado'}
+
+¡Paso 5 completado! En la versión completa avanzarías al Paso 6: Audio y STT.`;
+
+            alert(summary);
+        }
+
+        // Inicializar
+        console.log('🚀 Wizard Paso 5 cargado');
+        console.log('📋 Datos anteriores:', wizardData);
+    </script>
+</body>
+</html>
