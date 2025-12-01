@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear agente IA - Paso 8 | Netelip</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netelip-azul: #267ab0;
+            --netelip-azul-hover: #1e6291;
+            --gris-claro: #f5f6f8;
+            --gris-borde: #e5e7eb;
+            --gris-texto: #6c757d;
+            --oscuro: #1a2428;
+            --exito: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gris-borde);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: var(--gris-texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--netelip-azul);
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 16px 0 6px 0;
+        }
+
+        .wizard-subtitle {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .steps-container {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gris-texto);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .step-item:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .step-item.active {
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            border-left-color: var(--netelip-azul);
+        }
+
+        .step-item.completed {
+            color: var(--exito);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gris-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .step-item.active .step-number {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--exito);
+            color: white;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--gris-claro);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--gris-borde);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .progress-bar-container {
+            background: var(--gris-claro);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--exito);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 32px;
+        }
+
+        /* ALERT SUCCESS */
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-success i {
+            color: var(--exito);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        /* SUMMARY SECTION */
+        .summary-section {
+            background: var(--gris-claro);
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .summary-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-section h3 .icon {
+            font-size: 20px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .summary-item {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gris-texto);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--oscuro);
+        }
+
+        .summary-value.small {
+            font-size: 13px;
+        }
+
+        .summary-list {
+            margin-top: 12px;
+        }
+
+        .summary-list-item {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-list-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-list-icon {
+            font-size: 20px;
+        }
+
+        .summary-list-content {
+            flex: 1;
+        }
+
+        .summary-list-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 2px;
+        }
+
+        .summary-list-desc {
+            font-size: 12px;
+            color: var(--gris-texto);
+        }
+
+        /* SECTION DIVIDER */
+        .section-divider {
+            margin: 32px 0 24px 0;
+            border-top: 2px solid var(--gris-borde);
+            padding-top: 24px;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            border-color: var(--netelip-azul);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.1);
+        }
+
+        .action-btn-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .action-btn-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 4px;
+        }
+
+        .action-btn-desc {
+            font-size: 12px;
+            color: var(--gris-texto);
+        }
+
+        /* FINAL ACTIONS */
+        .final-actions {
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gris-borde);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--exito);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-large {
+            padding: 16px 32px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            .final-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver al dashboard
+            </a>
+            <h2 class="wizard-title">Crear agente IA</h2>
+            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+        </div>
+
+        <div class="steps-container">
+            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Información básica</span>
+                    <span class="step-desc">Nombre y sector</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Configuración LLM</span>
+                    <span class="step-desc">Modelo y prompt</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Selección de voz</span>
+                    <span class="step-desc">Voz y personalidad</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Conversación</span>
+                    <span class="step-desc">Idioma y respuestas</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso5-TIEMPOS.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Tiempos</span>
+                    <span class="step-desc">Duraciones y delays</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso6-AUDIO-STT.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Audio y STT</span>
+                    <span class="step-desc">Sonido ambiente</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso7-HERRAMIENTAS.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Herramientas</span>
+                    <span class="step-desc">Integraciones</span>
+                </div>
+            </a>
+
+            <a href="#" class="step-item active">
+                <div class="step-number">8</div>
+                <div class="step-info">
+                    <span class="step-name">Resumen</span>
+                    <span class="step-desc">Revisar y crear</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 100%;"></div>
+            </div>
+            <div class="progress-text">Paso 8 de 8 - ¡Todo listo para crear tu agente!</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-area">
+            <div class="form-card">
+                <h1 class="section-title">Resumen de configuración</h1>
+                <p class="section-subtitle">
+                    Revisa toda la configuración antes de crear tu agente IA.
+                </p>
+
+                <div class="alert-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <div>
+                        <strong>¡Configuración completa!</strong> Has completado todos los pasos del wizard. 
+                        Revisa el resumen y crea tu agente cuando estés listo.
+                    </div>
+                </div>
+
+                <!-- PASO 1: INFORMACIÓN BÁSICA -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">📋</span>
+                        Información básica
+                    </h3>
+                    <div class="summary-grid" id="summary-paso1">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PASO 2: CONFIGURACIÓN LLM -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">🤖</span>
+                        Configuración LLM
+                    </h3>
+                    <div class="summary-grid" id="summary-paso2">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PASO 3: VOZ -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">🎙️</span>
+                        Selección de voz
+                    </h3>
+                    <div class="summary-grid" id="summary-paso3">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PASO 4: CONVERSACIÓN -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">💬</span>
+                        Conversación
+                    </h3>
+                    <div class="summary-grid" id="summary-paso4">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PASO 5: TIEMPOS -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">⏱️</span>
+                        Tiempos
+                    </h3>
+                    <div class="summary-grid" id="summary-paso5">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PASO 6: AUDIO Y STT -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">🔊</span>
+                        Audio y STT
+                    </h3>
+                    <div class="summary-grid" id="summary-paso6">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PASO 7: HERRAMIENTAS -->
+                <div class="summary-section">
+                    <h3>
+                        <span class="icon">🔧</span>
+                        Herramientas
+                    </h3>
+                    <div id="summary-paso7">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- ACCIONES RÁPIDAS -->
+                <div class="section-divider">
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">
+                        Acciones disponibles
+                    </h3>
+                </div>
+
+                <div class="action-buttons">
+                    <div class="action-btn" onclick="exportJSON()">
+                        <div class="action-btn-icon">📥</div>
+                        <div class="action-btn-title">Exportar JSON</div>
+                        <div class="action-btn-desc">Descarga la configuración en formato JSON</div>
+                    </div>
+
+                    <div class="action-btn" onclick="viewRawData()">
+                        <div class="action-btn-icon">👁️</div>
+                        <div class="action-btn-title">Ver datos crudos</div>
+                        <div class="action-btn-desc">Inspecciona el objeto completo en consola</div>
+                    </div>
+
+                    <div class="action-btn" onclick="editStep(1)">
+                        <div class="action-btn-icon">✏️</div>
+                        <div class="action-btn-title">Editar configuración</div>
+                        <div class="action-btn-desc">Vuelve a cualquier paso para modificar</div>
+                    </div>
+
+                    <div class="action-btn" onclick="resetWizard()">
+                        <div class="action-btn-icon">🔄</div>
+                        <div class="action-btn-title">Empezar de nuevo</div>
+                        <div class="action-btn-desc">Borra todo y comienza desde cero</div>
+                    </div>
+                </div>
+
+                <!-- BOTONES FINALES -->
+                <div class="final-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso7-HERRAMIENTAS.html'">
+                        <i class="bi bi-arrow-left"></i>
+                        Anterior
+                    </button>
+                    <button type="button" class="btn btn-primary btn-large" onclick="createAgent()">
+                        <i class="bi bi-rocket-takeoff-fill"></i>
+                        ¡Crear Agente IA!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar datos
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
+
+        // Renderizar resumen
+        function renderSummary() {
+            // PASO 1
+            const paso1 = document.getElementById('summary-paso1');
+            paso1.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Nombre del agente</div>
+                    <div class="summary-value">${wizardData.agent_name || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Empresa</div>
+                    <div class="summary-value">${wizardData.company_name || 'No definida'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Sector</div>
+                    <div class="summary-value">${wizardData.sector || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Nicho</div>
+                    <div class="summary-value">${wizardData.niche || 'No definido'}</div>
+                </div>
+            `;
+
+            // PASO 2
+            const paso2 = document.getElementById('summary-paso2');
+            paso2.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Tipo de agente</div>
+                    <div class="summary-value">${wizardData.agent_type || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Modelo LLM</div>
+                    <div class="summary-value">${wizardData.llm_model || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Temperature</div>
+                    <div class="summary-value">${wizardData.temperature || '0.7'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Max Tokens</div>
+                    <div class="summary-value">${wizardData.max_tokens || '1000'}</div>
+                </div>
+            `;
+
+            // PASO 3
+            const paso3 = document.getElementById('summary-paso3');
+            paso3.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Proveedor</div>
+                    <div class="summary-value">${wizardData.voice_provider || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Voz</div>
+                    <div class="summary-value">${wizardData.voice_name || 'No definida'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Voice Speed</div>
+                    <div class="summary-value">${wizardData.voice_speed || '1.0'}x</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Voice Temperature</div>
+                    <div class="summary-value">${wizardData.voice_temperature || '0.5'}</div>
+                </div>
+            `;
+
+            // PASO 4
+            const paso4 = document.getElementById('summary-paso4');
+            paso4.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Idioma</div>
+                    <div class="summary-value">${wizardData.language || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Backchannel</div>
+                    <div class="summary-value">${wizardData.enable_backchannel ? 'Activado' : 'Desactivado'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Interruption Sensitivity</div>
+                    <div class="summary-value">${wizardData.interruption_sensitivity || '0.5'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Responsiveness</div>
+                    <div class="summary-value">${wizardData.responsiveness || '0.8'}</div>
+                </div>
+            `;
+
+            // PASO 5
+            const paso5 = document.getElementById('summary-paso5');
+            const maxDurationMin = wizardData.max_call_duration ? Math.round(wizardData.max_call_duration / 60000) : 30;
+            paso5.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Begin Message Delay</div>
+                    <div class="summary-value">${wizardData.begin_message_delay || '1500'}ms</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">End Call After Silence</div>
+                    <div class="summary-value">${wizardData.end_call_after_silence || '30000'}ms</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Max Call Duration</div>
+                    <div class="summary-value">${maxDurationMin} minutos</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Reminder Max Count</div>
+                    <div class="summary-value">${wizardData.reminder_max_count || '2'}</div>
+                </div>
+            `;
+
+            // PASO 6
+            const paso6 = document.getElementById('summary-paso6');
+            paso6.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Volumen</div>
+                    <div class="summary-value">${wizardData.volume || '1.0'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Sonido Ambiente</div>
+                    <div class="summary-value">${wizardData.ambient_sound || 'Desactivado'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">STT Mode</div>
+                    <div class="summary-value">${wizardData.stt_mode || 'fast'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Post-Call Analysis</div>
+                    <div class="summary-value">${wizardData.enable_post_call_analysis ? 'Activado' : 'Desactivado'}</div>
+                </div>
+            `;
+
+            // PASO 7
+            const paso7 = document.getElementById('summary-paso7');
+            const tools = wizardData.general_tools || [];
+            
+            if (tools.length === 0) {
+                paso7.innerHTML = `
+                    <div class="summary-item" style="grid-column: 1/-1;">
+                        <div class="summary-value small">Sin herramientas configuradas</div>
+                    </div>
+                `;
+            } else {
+                const toolIcons = {
+                    end_call: '📞',
+                    transfer_call: '📲',
+                    press_digit: '🔢',
+                    custom: '🔗'
+                };
+                
+                paso7.innerHTML = `
+                    <div class="summary-list">
+                        ${tools.map(tool => `
+                            <div class="summary-list-item">
+                                <div class="summary-list-icon">${toolIcons[tool.type] || '🔧'}</div>
+                                <div class="summary-list-content">
+                                    <div class="summary-list-title">${tool.name}</div>
+                                    <div class="summary-list-desc">${tool.description}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Exportar JSON
+        function exportJSON() {
+            const dataStr = JSON.stringify(wizardData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `agente-ia-${wizardData.agent_name || 'config'}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Configuración exportada como JSON');
+        }
+
+        // Ver datos crudos
+        function viewRawData() {
+            console.log('📦 Configuración completa del agente:', wizardData);
+            alert('✅ Datos mostrados en la consola del navegador\n\nAbre DevTools (F12) y ve a la pestaña Console');
+        }
+
+        // Editar paso
+        function editStep(stepNumber) {
+            const steps = [
+                '',
+                'wizard-paso1-DEFINITIVO.html',
+                'wizard-paso2-MEJORADO.html',
+                'wizard-paso3-SELECCION-VOZ.html',
+                'wizard-paso4-CONVERSACION.html',
+                'wizard-paso5-TIEMPOS.html',
+                'wizard-paso6-AUDIO-STT.html',
+                'wizard-paso7-HERRAMIENTAS.html'
+            ];
+            
+            if (confirm(`¿Quieres volver al paso ${stepNumber} para editar la configuración?`)) {
+                window.location.href = steps[stepNumber];
+            }
+        }
+
+        // Reset wizard
+        function resetWizard() {
+            if (confirm('⚠️ ¿Estás seguro de que quieres borrar toda la configuración y empezar de nuevo?\n\nEsta acción no se puede deshacer.')) {
+                localStorage.removeItem('wizardData');
+                alert('✅ Configuración borrada. Redirigiendo al paso 1...');
+                window.location.href = 'wizard-paso1-DEFINITIVO.html';
+            }
+        }
+
+        // Crear agente
+        function createAgent() {
+            // Validación final
+            const requiredFields = ['agent_name', 'company_name', 'sector', 'agent_type', 'llm_model', 'language'];
+            const missing = requiredFields.filter(field => !wizardData[field]);
+            
+            if (missing.length > 0) {
+                alert(`⚠️ Faltan campos obligatorios:\n\n${missing.join(', ')}\n\nPor favor, completa todos los pasos antes de crear el agente.`);
+                return;
+            }
+
+            // Simulación de creación
+            const agentId = 'agent_' + Date.now();
+            
+            // En producción, aquí iría la llamada a la API
+            console.log('🚀 Creando agente en Retell AI...');
+            console.log('📦 Configuración:', wizardData);
+            
+            // Guardar ID del agente
+            wizardData.agent_id = agentId;
+            wizardData.created_at = new Date().toISOString();
+            localStorage.setItem('wizardData', JSON.stringify(wizardData));
+            
+            // Alert de éxito
+            alert(`🎉 ¡AGENTE CREADO CON ÉXITO!
+
+📋 Nombre: ${wizardData.agent_name}
+🏢 Empresa: ${wizardData.company_name}
+🆔 ID: ${agentId}
+
+En la versión de producción, Antonio integrará:
+✅ Llamada a API de Retell AI
+✅ Guardado en Supabase
+✅ Webhook N8N para notificaciones
+✅ Redirección al dashboard
+
+¡Configuración completa y lista para producción! 🚀`);
+            
+            // Mostrar en consola
+            console.log('✅ Agente creado:', {
+                agent_id: agentId,
+                configuration: wizardData
+            });
+        }
+
+        // Inicializar
+        renderSummary();
+        console.log('🚀 Wizard Paso 8 (FINAL) cargado');
+        console.log('📦 Configuración completa:', wizardData);
+    </script>
+</body>
+</html>
