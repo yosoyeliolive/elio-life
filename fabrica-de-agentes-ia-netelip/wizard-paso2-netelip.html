@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear agente IA - Paso 2 | netelip</title>
+    <title>Crear agente IA - Paso 2 | Netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -358,7 +358,7 @@
             gap: 24px;
         }
 
-        /* RADIO BUTTONS PERSONALIZADOS */
+        /* RADIO BUTTONS */
         .radio-group {
             display: flex;
             gap: 12px;
@@ -402,7 +402,7 @@
             cursor: pointer;
         }
 
-        /* CHECKBOXES PERSONALIZADOS */
+        /* CHECKBOXES */
         .checkbox-group {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -449,7 +449,7 @@
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 12px 20px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 14px;
@@ -466,7 +466,19 @@
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        /* ALERT INFO */
+        /* BADGE MODELO */
+        .modelo-badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+
+        /* ALERT */
         .alert-info {
             background: #eff6ff;
             border: 1px solid #bfdbfe;
@@ -569,7 +581,7 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <a href="/dashboard.html" class="back-link">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
                 <i class="bi bi-arrow-left"></i>
                 Volver al dashboard
             </a>
@@ -666,18 +678,45 @@
             <div class="form-card">
                 <h1 class="section-title">Configuración del modelo LLM</h1>
                 <p class="section-subtitle">
-                    Selecciona el modelo de inteligencia artificial y define cómo tu agente responderá.
+                    Selecciona el modelo de tu agente y define cómo responderá.
                 </p>
 
                 <div class="alert-info">
                     <i class="bi bi-lightbulb-fill"></i>
                     <div>
-                        <strong>Tip:</strong> El modelo GPT-4o ofrece el mejor balance entre calidad y velocidad. 
-                        Usa temperature bajo (0.3-0.5) para respuestas consistentes.
+                        <strong>Tip:</strong> El modelo GPT-4o ofrece el mejor balance. 
+                        Las plantillas están optimizadas para cada sector.
                     </div>
                 </div>
 
                 <form id="wizardForm">
+                    <!-- MODELO DE AGENTE -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Modelo de agente
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>¿Qué tipo de agente necesitas?</strong><br><br>
+                                    <strong>Agendamiento de citas:</strong> Gestiona reservas, confirma disponibilidad y agenda llamadas automáticamente.<br><br>
+                                    <em>Más modelos próximamente: Ventas, Soporte, Encuestas...</em>
+                                </span>
+                            </span>
+                        </label>
+                        <select class="form-select" id="modeloAgente" required>
+                            <option value="">Selecciona el tipo de agente...</option>
+                            <option value="agendamiento" selected>🗓️ Agendamiento de citas</option>
+                            <option value="ventas" disabled>💼 Ventas y cualificación (Próximamente)</option>
+                            <option value="soporte" disabled>🛠️ Soporte técnico (Próximamente)</option>
+                            <option value="encuestas" disabled>📊 Encuestas y feedback (Próximamente)</option>
+                        </select>
+                        <div class="form-text">
+                            <i class="bi bi-robot me-1"></i>
+                            Define el propósito principal de tu agente IA
+                        </div>
+                    </div>
+
                     <!-- MODELO LLM -->
                     <div class="form-group">
                         <label class="form-label">
@@ -708,7 +747,7 @@
                         </select>
                         <div class="form-text">
                             <i class="bi bi-cpu me-1"></i>
-                            El modelo determina la calidad y velocidad de las respuestas
+                            El motor de IA que procesará las conversaciones
                         </div>
                     </div>
 
@@ -786,11 +825,11 @@
                         </label>
                         <div class="radio-group">
                             <label class="radio-card">
-                                <input type="radio" name="whoFirst" value="agent" checked>
+                                <input type="radio" name="whoFirst" value="agent" checked onchange="toggleBeginMessage()">
                                 <div class="radio-label">Agente habla primero</div>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="whoFirst" value="user">
+                                <input type="radio" name="whoFirst" value="user" onchange="toggleBeginMessage()">
                                 <div class="radio-label">Usuario habla primero</div>
                             </label>
                         </div>
@@ -908,7 +947,7 @@
                                 <span class="tooltip-content">
                                     <strong>El cerebro de tu agente:</strong><br><br>
                                     Define su personalidad, conocimientos, reglas de comportamiento y objetivos.<br><br>
-                                    Usa el botón verde para cargar una plantilla profesional.
+                                    Usa el botón verde para cargar una plantilla profesional optimizada para tu sector.
                                 </span>
                             </span>
                         </label>
@@ -921,18 +960,18 @@
                         <div class="alert-success" id="templateLoaded">
                             <i class="bi bi-check-circle-fill"></i>
                             <div>
-                                <strong>¡Plantilla cargada!</strong> Puedes editarla según tus necesidades.
+                                <strong>¡Plantilla cargada!</strong> Optimizada para el modelo <span id="modeloText">Agendamiento</span> y sector <span id="sectorText"></span>. Puedes editarla según necesites.
                             </div>
                         </div>
 
                         <textarea class="form-control" 
                                   id="generalPrompt" 
-                                  rows="15" 
+                                  rows="18" 
                                   required
-                                  placeholder="Click en 'Cargar plantilla por sector' para obtener un prompt profesional basado en tu sector, o escribe el tuyo propio..."></textarea>
+                                  placeholder="Click en 'Cargar plantilla por sector' para obtener un prompt profesional optimizado para tu sector, o escribe el tuyo propio..."></textarea>
                         <div class="form-text">
                             <i class="bi bi-magic me-1"></i>
-                            Este es el prompt principal que define todo el comportamiento de tu agente (mínimo 100 caracteres)
+                            Este prompt define todo el comportamiento de tu agente (mínimo 100 caracteres)
                         </div>
                     </div>
 
@@ -980,264 +1019,285 @@
     </div>
 
     <script>
-        // PLANTILLAS DE PROMPTS POR SECTOR
-        const PLANTILLAS = {
-            atencion_cliente: `Eres [NOMBRE], asistente virtual de [EMPRESA] especializado en atención al cliente.
+        // PLANTILLAS DE AGENDAMIENTO POR SECTOR
+        const PLANTILLAS_AGENDAMIENTO = {
+            atencion_cliente: `# AGENTE IA - AGENDAMIENTO DE CITAS PARA SOPORTE
 
-## Identidad y contexto
-Trabajas para [EMPRESA], ayudando a resolver consultas de clientes de forma rápida y profesional.
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en agendar citas para soporte técnico.
 
-## Objetivo principal
-Resolver consultas frecuentes, proporcionar información precisa sobre productos/servicios, y escalar casos complejos al equipo humano cuando sea necesario.
+## Tu objetivo
+Agendar citas con asesores técnicos para resolver consultas y problemas de clientes.
+
+## Flujo de conversación
+1. Saludo y captura de nombre
+2. Identificar necesidad del cliente
+3. Proponer cita con asesor técnico
+4. Gestionar disponibilidad en calendario
+5. Capturar datos de contacto
+6. Confirmar y enviar recordatorio
 
 ## Personalidad
 - Profesional pero cercano
-- Empático y paciente
-- Proactivo en ofrecer soluciones
+- Empático con problemas técnicos
+- Eficiente en resolución
 
-## Reglas de comportamiento
-✅ SIEMPRE:
-- Escucha activa completa antes de responder
-- Confirma información importante
-- Ofrece alternativas cuando no hay solución inmediata
-- Agradece la paciencia del cliente
+## Reglas clave
+✅ SIEMPRE escuchar el problema completo antes de agendar
+✅ SIEMPRE confirmar fecha y hora explícitamente
+✅ SIEMPRE validar email deletreándolo
+❌ NUNCA prometer soluciones técnicas que no puedes dar
+❌ NUNCA agendar sin confirmar disponibilidad`,
 
-❌ NUNCA:
-- Inventar información que no conoces
-- Ser defensivo ante quejas
-- Interrumpir al cliente
-- Prometer lo que no puedes cumplir`,
+            gestion_citas: `# AGENTE IA - GESTIÓN DE CITAS
 
-            gestion_citas: `Eres [NOMBRE], asistente de [EMPRESA] especializado en gestión de citas.
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en gestión de citas médicas/servicios.
 
-## Identidad
-Ayudo a agendar, modificar y cancelar citas de forma eficiente.
-
-## Objetivo
-Maximizar la ocupación del calendario reduciendo no-shows y facilitando el proceso de reserva.
+## Tu objetivo
+Coordinar citas de manera eficiente y profesional para servicios de {{empresa}}.
 
 ## Flujo de conversación
-1. Saludo y presentación
-2. Tipo de servicio deseado
-3. Disponibilidad del cliente
-4. Confirmación de fecha y hora
-5. Datos de contacto
-6. Envío de confirmación
+1. Saludo y captura de nombre
+2. Tipo de servicio solicitado
+3. Verificar disponibilidad en calendario
+4. Confirmar fecha y hora
+5. Capturar datos de contacto
+6. Enviar confirmación
 
 ## Personalidad
-- Organizado y eficiente
-- Amable y servicial
-- Claro en las instrucciones
+- Eficiente y organizado
+- Empático y servicial
+- Claro en instrucciones
 
-## Reglas
-✅ SIEMPRE:
-- Confirmar fecha y hora explícitamente
-- Repetir la información para asegurar exactitud
-- Ofrecer opciones alternativas si no hay disponibilidad
-- Enviar recordatorio
+## Reglas clave
+✅ SIEMPRE preguntar tipo de servicio primero
+✅ SIEMPRE ofrecer alternativas si fecha no disponible
+✅ SIEMPRE confirmar número y email
+❌ NUNCA dar información médica o diagnósticos
+❌ NUNCA agendar sin verificar disponibilidad real`,
 
-❌ NUNCA:
-- Agendar sin confirmar disponibilidad
-- Olvidar recopilar datos de contacto
-- Sobrevender horarios`,
+            cualificacion_leads: `# AGENTE IA - CUALIFICACIÓN + AGENDAMIENTO COMERCIAL
 
-            cualificacion_leads: `Eres [NOMBRE], especialista en cualificación de [EMPRESA].
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en cualificar leads y agendar reuniones comerciales.
 
-## Objetivo
-Identificar leads de calidad mediante preguntas estratégicas siguiendo metodología BANT (Budget, Authority, Need, Timeline).
+## Tu objetivo
+Identificar clientes potenciales cualificados y agendar demos o reuniones con el equipo comercial.
 
-## Flujo de cualificación
-1. Presentación breve
-2. Identificar necesidad principal
-3. Presupuesto aproximado
-4. Autoridad de decisión
-5. Timeline de implementación
-6. Datos de contacto
-7. Agendar siguiente paso
+## Flujo de conversación
+1. Saludo y captura de nombre
+2. Entender necesidad del negocio
+3. Cualificar: presupuesto, urgencia, autoridad
+4. Proponer reunión comercial
+5. Gestionar calendario
+6. Confirmar datos
 
 ## Personalidad
-- Consultivo, no vendedor
+- Consultivo, no vendedor agresivo
 - Curioso y analítico
 - Profesional y directo
 
-## Preguntas clave
-- ¿Qué problema específico buscas resolver?
-- ¿Qué presupuesto tienes asignado para este proyecto?
-- ¿Eres quien toma la decisión final?
-- ¿Cuándo necesitas tener esto implementado?
+## Reglas clave
+✅ SIEMPRE hacer preguntas BANT (Budget, Authority, Need, Timeline)
+✅ SIEMPRE enfocarse en necesidad real del cliente
+✅ SIEMPRE agendar solo leads cualificados
+❌ NUNCA presionar para cerrar venta
+❌ NUNCA hacer promesas sobre pricing sin autorización`,
 
-## Reglas
-✅ SIEMPRE:
-- Escuchar más que hablar
-- Tomar notas detalladas
-- Clasificar el lead (caliente/tibio/frío)
-- Agendar seguimiento
+            turismo: `# AGENTE IA - TURISMO Y VIAJES
 
-❌ NUNCA:
-- Presionar para cerrar venta
-- Hacer pitch largo sin entender necesidad
-- Descalificar sin información completa`,
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en reservas turísticas.
 
-            turismo: `Eres [NOMBRE], asistente de viajes de [EMPRESA].
+## Tu objetivo
+Coordinar consultas y visitas para planificación de viajes, tours y experiencias.
 
-## Identidad
-Especialista en reservas de viajes, hoteles, vuelos y experiencias turísticas disponible 24/7.
-
-## Objetivo
-Facilitar reservas proporcionando información precisa sobre destinos, precios y disponibilidad.
-
-## Información a recabar
-1. Destino deseado
-2. Fechas de viaje
-3. Número de personas
-4. Tipo de alojamiento
-5. Presupuesto aproximado
-6. Preferencias especiales
+## Flujo de conversación
+1. Saludo y captura de nombre
+2. Destino y tipo de experiencia deseada
+3. Fechas aproximadas y número de personas
+4. Proponer consulta con asesor de viajes
+5. Agendar llamada
+6. Confirmar datos
 
 ## Personalidad
 - Entusiasta por los viajes
 - Informativo y detallista
 - Servicial y paciente
 
-## Reglas
-✅ SIEMPRE:
-- Ofrecer opciones en diferentes rangos de precio
-- Mencionar requisitos de viaje importantes
-- Confirmar todos los detalles antes de reservar
-- Sugerir experiencias según preferencias
+## Reglas clave
+✅ SIEMPRE capturar: destino, fechas, número de personas
+✅ SIEMPRE mencionar que asesor dará precios específicos
+✅ SIEMPRE mostrar entusiasmo por el viaje
+❌ NUNCA prometer disponibilidad sin verificar
+❌ NUNCA dar precios finales sin consultar`,
 
-❌ NUNCA:
-- Prometer disponibilidad sin verificar
-- Omitir costos adicionales o tasas
-- Recomendar sin conocer preferencias`,
+            inmobiliaria: `# AGENTE IA - INMOBILIARIA
 
-            inmobiliaria: `Eres [NOMBRE], agente inmobiliario virtual de [EMPRESA].
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en agendar visitas a propiedades.
 
-## Objetivo
-Agendar visitas a propiedades cualificando el interés y necesidades del cliente.
+## Tu objetivo
+Coordinar visitas presenciales a propiedades con clientes interesados.
 
-## Información a obtener
-1. Tipo de propiedad buscada (casa, apartamento, local)
-2. Zona o ubicación preferida
-3. Presupuesto disponible
-4. Forma de pago (contado/hipoteca)
-5. Timeline de compra
-6. Disponibilidad para visita
+## Flujo de conversación
+1. Saludo y captura de nombre
+2. Tipo de propiedad buscada
+3. Zona y presupuesto aproximado
+4. Proponer visita a propiedad
+5. Agendar fecha y hora
+6. Confirmar ubicación y datos
 
 ## Personalidad
 - Profesional y confiable
 - Conocedor del mercado
 - Orientado a resultados
 
-## Reglas
-✅ SIEMPRE:
-- Confirmar presupuesto realista
-- Agendar visita presencial
-- Enviar fotos e información de la propiedad
-- Mencionar características destacadas
+## Reglas clave
+✅ SIEMPRE confirmar tipo de propiedad y zona
+✅ SIEMPRE mencionar que en visita verá detalles
+✅ SIEMPRE enviar ubicación exacta por email
+❌ NUNCA prometer características sin verificar
+❌ NUNCA presionar para decisión inmediata`,
 
-❌ NUNCA:
-- Mostrar propiedades muy fuera del presupuesto
-- Presionar para decisión inmediata
-- Omitir defectos importantes`,
+            servicios_profesionales: `# AGENTE IA - SERVICIOS PROFESIONALES
 
-            servicios_profesionales: `Eres [NOMBRE], asistente de [EMPRESA] especializado en servicios profesionales.
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en coordinar consultas profesionales.
 
-## Identidad
-Ayudo en la primera consulta para conectar clientes con el especialista adecuado.
+## Tu objetivo
+Agendar primeras consultas con especialistas (abogados, contadores, consultores).
 
-## Objetivo
-Cualificar la consulta y agendar primera cita con el profesional correspondiente.
-
-## Flujo
-1. Tipo de consulta o servicio necesario
-2. Urgencia del caso
-3. Información básica del caso
-4. Experiencia previa con servicios similares
-5. Disponibilidad para consulta
-6. Agendar con especialista
+## Flujo de conversación
+1. Saludo y captura de nombre
+2. Tipo de consulta necesaria
+3. Urgencia del caso
+4. Proponer consulta con especialista
+5. Agendar llamada
+6. Confirmar confidencialidad
 
 ## Personalidad
 - Profesional y discreto
 - Empático con situaciones delicadas
-- Claro en explicar el proceso
+- Claro en el proceso
 
-## Reglas
-✅ SIEMPRE:
-- Mantener confidencialidad absoluta
-- Explicar el proceso claramente
-- Conectar con especialista humano
-- Tomar notas detalladas
+## Reglas clave
+✅ SIEMPRE mantener confidencialidad absoluta
+✅ SIEMPRE conectar con especialista humano
+✅ SIEMPRE ser empático con situaciones sensibles
+❌ NUNCA dar asesoría legal/profesional
+❌ NUNCA prometer resultados específicos`,
 
-❌ NUNCA:
-- Dar asesoría profesional especializada
-- Prometer resultados específicos
-- Minimizar la importancia de la consulta`,
+            encuestas: `# AGENTE IA - ENCUESTAS Y FEEDBACK
 
-            encuestas: `Eres [NOMBRE], encuestador virtual de [EMPRESA].
+Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en recopilar feedback.
 
-## Objetivo
-Recopilar feedback estructurado de clientes sobre productos, servicios o experiencias.
+## Tu objetivo
+Coordinar llamadas breves para encuestas de satisfacción y recopilación de opiniones.
 
-## Flujo
-1. Presentación y tiempo estimado de la encuesta
-2. Confirmar disponibilidad del cliente
-3. Hacer preguntas de manera clara y neutral
-4. Registrar respuestas textualmente
-5. Agradecer la participación
-6. Mencionar incentivo si aplica
+## Flujo de conversación
+1. Saludo y captura de nombre
+2. Explicar propósito de encuesta
+3. Mencionar duración (5-10 minutos)
+4. Preguntar disponibilidad inmediata o agendar
+5. Si agenda: gestionar calendario
+6. Agradecer participación
 
 ## Personalidad
 - Neutral y objetivo
-- Paciente y respetuoso
+- Respetuoso del tiempo
 - Agradecido
 
-## Reglas
-✅ SIEMPRE:
-- Respetar si no quieren participar
-- Ser breve y directo (máximo 5 minutos)
-- Registrar respuestas sin interpretación
-- Agradecer sinceramente
-
-❌ NUNCA:
-- Influenciar las respuestas
-- Hacer encuestas muy largas
-- Presionar para completar
-- Discutir o defender respuestas negativas`
+## Reglas clave
+✅ SIEMPRE mencionar duración estimada
+✅ SIEMPRE respetar si no quiere participar
+✅ SIEMPRE agradecer sinceramente
+❌ NUNCA influenciar respuestas
+❌ NUNCA hacer encuestas muy largas
+❌ NUNCA presionar para participar`
         };
 
-        // Recuperar datos del paso anterior
+        // Recuperar datos del Paso 1
         const datosP1 = JSON.parse(localStorage.getItem('wizardData') || '{}');
+        console.log('📋 Datos del Paso 1:', datosP1);
 
+        // Función para mostrar/ocultar Begin Message
+        function toggleBeginMessage() {
+            const whoFirst = document.querySelector('input[name="whoFirst"]:checked').value;
+            const beginMessageGroup = document.getElementById('beginMessageGroup');
+            const beginMessage = document.getElementById('beginMessage');
+            
+            if (whoFirst === 'agent') {
+                beginMessageGroup.style.display = 'block';
+                beginMessage.required = true;
+            } else {
+                beginMessageGroup.style.display = 'none';
+                beginMessage.required = false;
+            }
+        }
+
+        // Función para cargar plantilla
         function cargarPlantilla() {
+            const modeloAgente = document.getElementById('modeloAgente').value;
             const sector = datosP1.sector;
-            const nombreAgente = datosP1.agent_name || '[NOMBRE]';
-            const nombreEmpresa = datosP1.empresa || '[EMPRESA]';
+            const nombreAgente = datosP1.agent_name || '[NOMBRE DEL AGENTE]';
+            const nombreEmpresa = datosP1.empresa || '[NOMBRE DE LA EMPRESA]';
+
+            // Validaciones
+            if (!modeloAgente) {
+                alert('⚠️ Primero selecciona el modelo de agente (Agendamiento, Ventas, etc.)');
+                document.getElementById('modeloAgente').focus();
+                return;
+            }
 
             if (!sector) {
                 alert('⚠️ No se detectó un sector del Paso 1. Por favor, completa el Paso 1 primero.');
+                window.location.href = 'wizard-paso1-DEFINITIVO.html';
                 return;
             }
 
-            const plantilla = PLANTILLAS[sector];
+            // Obtener plantilla según modelo y sector
+            let plantilla = null;
             
+            if (modeloAgente === 'agendamiento') {
+                plantilla = PLANTILLAS_AGENDAMIENTO[sector];
+            }
+            // Aquí agregarás más modelos en el futuro:
+            // else if (modeloAgente === 'ventas') {
+            //     plantilla = PLANTILLAS_VENTAS[sector];
+            // }
+
             if (!plantilla) {
-                alert('⚠️ No hay plantilla disponible para este sector.');
+                alert(`⚠️ No hay plantilla disponible para:\nModelo: ${modeloAgente}\nSector: ${sector}\n\nPróximamente estará disponible.`);
                 return;
             }
 
-            // Reemplazar placeholders
+            // Reemplazar variables
             let promptFinal = plantilla
-                .replace(/\[NOMBRE\]/g, nombreAgente)
-                .replace(/\[EMPRESA\]/g, nombreEmpresa);
+                .replace(/\{\{nombre_agente\}\}/g, nombreAgente)
+                .replace(/\{\{empresa\}\}/g, nombreEmpresa);
 
+            // Insertar en textarea
             document.getElementById('generalPrompt').value = promptFinal;
+            
+            // Mostrar alert de éxito
             document.getElementById('templateLoaded').style.display = 'flex';
+            
+            // Actualizar textos del alert
+            const sectorNames = {
+                'atencion_cliente': 'Atención al cliente',
+                'gestion_citas': 'Gestión de citas',
+                'cualificacion_leads': 'Cualificación de leads',
+                'turismo': 'Turismo y viajes',
+                'inmobiliaria': 'Inmobiliaria',
+                'servicios_profesionales': 'Servicios profesionales',
+                'encuestas': 'Encuestas y feedback'
+            };
+            
+            document.getElementById('modeloText').textContent = modeloAgente === 'agendamiento' ? 'Agendamiento' : modeloAgente;
+            document.getElementById('sectorText').textContent = sectorNames[sector] || sector;
 
-            console.log('✅ Plantilla cargada:', sector);
+            console.log('✅ Plantilla cargada:', {modelo: modeloAgente, sector: sector});
         }
 
+        // Función siguiente paso
         function nextStep() {
+            const modeloAgente = document.getElementById('modeloAgente').value;
             const modelo = document.getElementById('modelo').value;
             const temperature = parseFloat(document.getElementById('temperature').value);
             const maxTokens = parseInt(document.getElementById('maxTokens').value);
@@ -1252,6 +1312,12 @@ Recopilar feedback estructurado de clientes sobre productos, servicios o experie
                 .map(cb => cb.value);
 
             // Validaciones
+            if (!modeloAgente) {
+                alert('⚠️ Por favor, selecciona el modelo de agente');
+                document.getElementById('modeloAgente').focus();
+                return;
+            }
+
             if (!modelo) {
                 alert('⚠️ Por favor, selecciona un modelo de IA');
                 document.getElementById('modelo').focus();
@@ -1275,19 +1341,20 @@ Recopilar feedback estructurado de clientes sobre productos, servicios o experie
             }
 
             if (!generalPrompt) {
-                alert('⚠️ Por favor, escribe el prompt del agente');
+                alert('⚠️ Por favor, escribe o carga el prompt del agente');
                 document.getElementById('generalPrompt').focus();
                 return;
             }
 
             if (generalPrompt.length < 100) {
-                alert('⚠️ El prompt es muy corto. Escribe al menos 100 caracteres para definir bien el comportamiento.');
+                alert('⚠️ El prompt es muy corto. Escribe al menos 100 caracteres para definir bien el comportamiento del agente.');
                 document.getElementById('generalPrompt').focus();
                 return;
             }
 
             // Guardar datos
             const paso2Data = {
+                modelo_agente: modeloAgente,
                 modelo,
                 temperature,
                 max_tokens: maxTokens,
@@ -1305,11 +1372,12 @@ Recopilar feedback estructurado de clientes sobre productos, servicios o experie
             console.log('✅ Datos paso 2:', paso2Data);
             console.log('📦 Todos los datos:', allData);
             
-            alert(`✅ ¡Configuración guardada!\n\nModelo: ${modelo}\nTemperature: ${temperature}\nTono: ${tono}\nPersonalidad: ${personalidad.join(', ')}\n\n¡Paso 2 completado! En la versión completa avanzarías al Paso 3.`);
+            alert(`✅ ¡Configuración guardada!\n\n🤖 Modelo: ${modeloAgente}\n💻 IA: ${modelo}\n🌡️ Temperature: ${temperature}\n🎭 Tono: ${tono}\n✨ Personalidad: ${personalidad.join(', ')}\n\n¡Paso 2 completado! En la versión completa avanzarías al Paso 3: Selección de Voz.`);
         }
 
-        console.log('🚀 Wizard paso 2 COMPLETO cargado');
-        console.log('📋 Datos del paso 1:', datosP1);
+        // Inicializar
+        toggleBeginMessage();
+        console.log('🚀 Wizard Paso 2 MEJORADO cargado');
     </script>
 </body>
 </html>
