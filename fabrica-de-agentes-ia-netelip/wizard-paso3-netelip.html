@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear agente IA - Paso 3 | Netelip</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netelip-azul: #267ab0;
+            --netelip-azul-hover: #1e6291;
+            --gris-claro: #f5f6f8;
+            --gris-borde: #e5e7eb;
+            --gris-texto: #6c757d;
+            --oscuro: #1a2428;
+            --exito: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gris-borde);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: var(--gris-texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--netelip-azul);
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 16px 0 6px 0;
+        }
+
+        .wizard-subtitle {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .steps-container {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gris-texto);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .step-item:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .step-item.active {
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            border-left-color: var(--netelip-azul);
+        }
+
+        .step-item.completed {
+            color: var(--exito);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gris-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .step-item.active .step-number {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--exito);
+            color: white;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--gris-claro);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--gris-borde);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .progress-bar-container {
+            background: var(--gris-claro);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--netelip-azul);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 1200px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .tooltip-icon {
+            margin-left: 6px;
+            color: var(--netelip-azul);
+            cursor: help;
+            font-size: 16px;
+        }
+
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 340px;
+            background: var(--oscuro);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 14px 16px;
+            position: absolute;
+            z-index: 2000;
+            bottom: 130%;
+            left: 50%;
+            margin-left: -170px;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 13px;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--oscuro) transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--netelip-azul);
+            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1);
+            outline: none;
+        }
+
+        .form-text {
+            color: var(--gris-texto);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* PROVEEDOR TABS */
+        .provider-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--gris-borde);
+            padding-bottom: 0;
+        }
+
+        .provider-tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--gris-texto);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: -2px;
+        }
+
+        .provider-tab:hover {
+            color: var(--netelip-azul);
+        }
+
+        .provider-tab.active {
+            color: var(--netelip-azul);
+            border-bottom-color: var(--netelip-azul);
+        }
+
+        /* FILTROS */
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+            padding: 20px;
+            background: var(--gris-claro);
+            border-radius: 8px;
+        }
+
+        /* GALERÍA DE VOCES */
+        .voices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .voice-card {
+            background: white;
+            border: 2px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .voice-card:hover {
+            border-color: var(--netelip-azul);
+            box-shadow: 0 4px 12px rgba(38, 122, 176, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .voice-card.selected {
+            border-color: var(--netelip-azul);
+            background: #eff6ff;
+        }
+
+        .voice-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .voice-card.selected .voice-icon {
+            background: linear-gradient(135deg, var(--netelip-azul), #1e6291);
+            color: white;
+        }
+
+        .voice-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 4px;
+        }
+
+        .voice-meta {
+            font-size: 12px;
+            color: var(--gris-texto);
+            margin-bottom: 12px;
+        }
+
+        .voice-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .voice-tag {
+            font-size: 11px;
+            padding: 4px 8px;
+            background: var(--gris-claro);
+            border-radius: 4px;
+            color: var(--gris-texto);
+        }
+
+        .btn-play {
+            background: var(--netelip-azul);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-play:hover {
+            background: var(--netelip-azul-hover);
+            transform: scale(1.05);
+        }
+
+        /* SLIDERS */
+        .slider-container {
+            margin: 16px 0;
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: var(--netelip-azul);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--gris-claro);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--netelip-azul);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(38, 122, 176, 0.2);
+        }
+
+        /* ALERT */
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info i {
+            color: var(--netelip-azul);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-top: 12px;
+            display: none;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-warning i {
+            color: #f59e0b;
+            font-size: 18px;
+        }
+
+        /* GRID 2 COLUMNAS */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* BOTONES */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gris-borde);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--netelip-azul-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* NO RESULTS */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gris-texto);
+        }
+
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-grid-2, .filters-row {
+                grid-template-columns: 1fr;
+            }
+            .voices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver al dashboard
+            </a>
+            <h2 class="wizard-title">Crear agente IA</h2>
+            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+        </div>
+
+        <div class="steps-container">
+            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Información básica</span>
+                    <span class="step-desc">Nombre y sector</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Configuración LLM</span>
+                    <span class="step-desc">Modelo y prompt</span>
+                </div>
+            </a>
+
+            <a href="#" class="step-item active">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                    <span class="step-name">Selección de voz</span>
+                    <span class="step-desc">Voz y personalidad</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-info">
+                    <span class="step-name">Conversación</span>
+                    <span class="step-desc">Idioma y respuestas</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-info">
+                    <span class="step-name">Tiempos</span>
+                    <span class="step-desc">Duraciones y delays</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-info">
+                    <span class="step-name">Audio y STT</span>
+                    <span class="step-desc">Sonido ambiente</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">7</div>
+                <div class="step-info">
+                    <span class="step-name">Herramientas</span>
+                    <span class="step-desc">Integraciones</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">8</div>
+                <div class="step-info">
+                    <span class="step-name">Resumen</span>
+                    <span class="step-desc">Revisar y crear</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 37.5%;"></div>
+            </div>
+            <div class="progress-text">Paso 3 de 8 - Selección de voz</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-area">
+            <div class="form-card">
+                <h1 class="section-title">Selección de voz del agente</h1>
+                <p class="section-subtitle">
+                    Elige la voz que mejor represente la personalidad de tu agente.
+                </p>
+
+                <div class="alert-info">
+                    <i class="bi bi-lightbulb-fill"></i>
+                    <div>
+                        <strong>Tip:</strong> Escucha varias voces antes de decidir. La voz transmite la personalidad de tu marca. 
+                        Puedes ajustar la velocidad y temperatura después.
+                    </div>
+                </div>
+
+                <form id="wizardForm">
+                    <!-- PROVEEDOR DE VOZ -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Proveedor de voz
+                            <span class="required">*</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Retell AI:</strong> Voces nativas de Retell, optimizadas para baja latencia.<br><br>
+                                    <strong>ElevenLabs:</strong> Voces ultra-realistas con gran expresividad.<br><br>
+                                    <strong>Cartesia:</strong> Voces naturales con excelente calidad.
+                                </span>
+                            </span>
+                        </label>
+
+                        <div class="provider-tabs">
+                            <button type="button" class="provider-tab active" data-provider="retell" onclick="changeProvider('retell')">
+                                🎙️ Retell AI
+                            </button>
+                            <button type="button" class="provider-tab" data-provider="elevenlabs" onclick="changeProvider('elevenlabs')">
+                                🎵 ElevenLabs
+                            </button>
+                            <button type="button" class="provider-tab" data-provider="cartesia" onclick="changeProvider('cartesia')">
+                                🔊 Cartesia
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FILTROS -->
+                    <div class="filters-row">
+                        <div>
+                            <label class="form-label" style="margin-bottom: 8px;">Idioma</label>
+                            <select class="form-select" id="filterLanguage" onchange="filterVoices()">
+                                <option value="">Todos los idiomas</option>
+                                <option value="es" selected>Español</option>
+                                <option value="en">Inglés</option>
+                                <option value="pt">Portugués</option>
+                                <option value="fr">Francés</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label" style="margin-bottom: 8px;">Género</label>
+                            <select class="form-select" id="filterGender" onchange="filterVoices()">
+                                <option value="">Todos</option>
+                                <option value="female">Femenino</option>
+                                <option value="male">Masculino</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label" style="margin-bottom: 8px;">Acento</label>
+                            <select class="form-select" id="filterAccent" onchange="filterVoices()">
+                                <option value="">Todos los acentos</option>
+                                <option value="spain">España</option>
+                                <option value="latam">Latinoamérica</option>
+                                <option value="usa">Estados Unidos</option>
+                                <option value="uk">Reino Unido</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- GALERÍA DE VOCES -->
+                    <div class="voices-grid" id="voicesGrid">
+                        <!-- Se llena dinámicamente con JavaScript -->
+                    </div>
+
+                    <!-- NO RESULTS -->
+                    <div class="no-results" id="noResults" style="display: none;">
+                        <i class="bi bi-search"></i>
+                        <p><strong>No se encontraron voces</strong></p>
+                        <p>Intenta ajustar los filtros</p>
+                    </div>
+
+                    <!-- CONFIGURACIÓN DE VOZ -->
+                    <div class="form-group" id="voiceConfig" style="display: none;">
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; margin-top: 32px;">
+                            Configuración de voz seleccionada: <span id="selectedVoiceName" style="color: var(--netelip-azul);"></span>
+                        </h3>
+
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Voice speed
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Velocidad de habla:</strong><br><br>
+                                            <strong>0.5-0.8:</strong> Lento, muy claro<br>
+                                            <strong>0.9-1.1:</strong> Normal (recomendado)<br>
+                                            <strong>1.2-2.0:</strong> Rápido, dinámico
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="slider-container">
+                                    <div class="slider-value" id="speedValue">1.0x</div>
+                                    <input type="range" 
+                                           id="voiceSpeed" 
+                                           min="0.5" 
+                                           max="2" 
+                                           step="0.1" 
+                                           value="1.0"
+                                           oninput="document.getElementById('speedValue').textContent = this.value + 'x'">
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-speedometer2 me-1"></i>
+                                    Velocidad de reproducción de la voz
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Voice temperature
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Variabilidad emocional:</strong><br><br>
+                                            <strong>0.0-0.3:</strong> Muy consistente<br>
+                                            <strong>0.4-0.6:</strong> Natural (recomendado)<br>
+                                            <strong>0.7-1.0:</strong> Muy expresiva
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="slider-container">
+                                    <div class="slider-value" id="voiceTempValue">0.5</div>
+                                    <input type="range" 
+                                           id="voiceTemperature" 
+                                           min="0" 
+                                           max="1" 
+                                           step="0.1" 
+                                           value="0.5"
+                                           oninput="document.getElementById('voiceTempValue').textContent = this.value">
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-thermometer-half me-1"></i>
+                                    Expresividad y variación emocional
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-warning" id="apiWarning">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <div>
+                                <strong>Modo demostración:</strong> Los botones de "Escuchar muestra" están disponibles. 
+                                El audio real se cargará cuando Antonio integre las APIs de los proveedores de voz.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso2-MEJORADO.html'">
+                            <i class="bi bi-arrow-left"></i>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Siguiente
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATOS DE EJEMPLO - Voces hardcodeadas para la demo
+        const VOICES_DATA = {
+            retell: [
+                { id: 'retell_sofia_es', name: 'Sofia', language: 'es', gender: 'female', accent: 'spain', description: 'Voz profesional española' },
+                { id: 'retell_carlos_es', name: 'Carlos', language: 'es', gender: 'male', accent: 'spain', description: 'Voz masculina profesional' },
+                { id: 'retell_maria_latam', name: 'María', language: 'es', gender: 'female', accent: 'latam', description: 'Voz cálida latinoamericana' },
+                { id: 'retell_diego_latam', name: 'Diego', language: 'es', gender: 'male', accent: 'latam', description: 'Voz enérgica latinoamericana' },
+                { id: 'retell_rachel_en', name: 'Rachel', language: 'en', gender: 'female', accent: 'usa', description: 'Professional American voice' },
+                { id: 'retell_james_en', name: 'James', language: 'en', gender: 'male', accent: 'uk', description: 'British professional voice' },
+            ],
+            elevenlabs: [
+                { id: 'eleven_aurora_es', name: 'Aurora', language: 'es', gender: 'female', accent: 'spain', description: 'Ultra-realista española' },
+                { id: 'eleven_miguel_es', name: 'Miguel', language: 'es', gender: 'male', accent: 'spain', description: 'Voz profunda y clara' },
+                { id: 'eleven_lucia_latam', name: 'Lucía', language: 'es', gender: 'female', accent: 'latam', description: 'Expresiva mexicana' },
+                { id: 'eleven_alex_en', name: 'Alex', language: 'en', gender: 'male', accent: 'usa', description: 'Natural American voice' },
+                { id: 'eleven_emma_en', name: 'Emma', language: 'en', gender: 'female', accent: 'uk', description: 'Elegant British voice' },
+                { id: 'eleven_ana_pt', name: 'Ana', language: 'pt', gender: 'female', accent: 'brazil', description: 'Brasileira natural' },
+            ],
+            cartesia: [
+                { id: 'cart_isabel_es', name: 'Isabel', language: 'es', gender: 'female', accent: 'spain', description: 'Natural y cercana' },
+                { id: 'cart_pablo_es', name: 'Pablo', language: 'es', gender: 'male', accent: 'spain', description: 'Profesional español' },
+                { id: 'cart_valentina_latam', name: 'Valentina', language: 'es', gender: 'female', accent: 'latam', description: 'Amigable colombiana' },
+                { id: 'cart_oliver_en', name: 'Oliver', language: 'en', gender: 'male', accent: 'usa', description: 'Friendly American voice' },
+                { id: 'cart_sophie_en', name: 'Sophie', language: 'en', gender: 'female', accent: 'uk', description: 'Warm British voice' },
+            ]
+        };
+
+        // Variables globales
+        let currentProvider = 'retell';
+        let selectedVoice = null;
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
+
+        // Cambiar proveedor
+        function changeProvider(provider) {
+            currentProvider = provider;
+            
+            // Actualizar tabs
+            document.querySelectorAll('.provider-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-provider="${provider}"]`).classList.add('active');
+            
+            // Resetear filtros
+            document.getElementById('filterLanguage').value = 'es';
+            document.getElementById('filterGender').value = '';
+            document.getElementById('filterAccent').value = '';
+            
+            // Mostrar voces
+            filterVoices();
+        }
+
+        // Filtrar voces
+        function filterVoices() {
+            const language = document.getElementById('filterLanguage').value;
+            const gender = document.getElementById('filterGender').value;
+            const accent = document.getElementById('filterAccent').value;
+            
+            const voices = VOICES_DATA[currentProvider];
+            const filtered = voices.filter(voice => {
+                return (!language || voice.language === language) &&
+                       (!gender || voice.gender === gender) &&
+                       (!accent || voice.accent === accent);
+            });
+            
+            renderVoices(filtered);
+        }
+
+        // Renderizar voces
+        function renderVoices(voices) {
+            const grid = document.getElementById('voicesGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (voices.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            grid.innerHTML = voices.map(voice => {
+                const icon = voice.gender === 'female' ? '👩' : '👨';
+                const isSelected = selectedVoice && selectedVoice.id === voice.id;
+                
+                return `
+                    <div class="voice-card ${isSelected ? 'selected' : ''}" onclick="selectVoice('${voice.id}')">
+                        <div class="voice-icon">${icon}</div>
+                        <div class="voice-name">${voice.name}</div>
+                        <div class="voice-meta">${voice.description}</div>
+                        <div class="voice-tags">
+                            <span class="voice-tag">${getLanguageName(voice.language)}</span>
+                            <span class="voice-tag">${getGenderName(voice.gender)}</span>
+                            <span class="voice-tag">${getAccentName(voice.accent)}</span>
+                        </div>
+                        <button type="button" class="btn-play" onclick="event.stopPropagation(); playPreview('${voice.id}')">
+                            <i class="bi bi-play-circle"></i>
+                            Escuchar
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Seleccionar voz
+        function selectVoice(voiceId) {
+            const voice = VOICES_DATA[currentProvider].find(v => v.id === voiceId);
+            if (!voice) return;
+            
+            selectedVoice = voice;
+            selectedVoice.provider = currentProvider;
+            
+            // Actualizar UI
+            renderVoices(VOICES_DATA[currentProvider].filter(v => {
+                const language = document.getElementById('filterLanguage').value;
+                const gender = document.getElementById('filterGender').value;
+                const accent = document.getElementById('filterAccent').value;
+                return (!language || v.language === language) &&
+                       (!gender || v.gender === gender) &&
+                       (!accent || v.accent === accent);
+            }));
+            
+            // Mostrar configuración
+            document.getElementById('voiceConfig').style.display = 'block';
+            document.getElementById('selectedVoiceName').textContent = voice.name;
+            document.getElementById('apiWarning').style.display = 'flex';
+            
+            console.log('✅ Voz seleccionada:', selectedVoice);
+        }
+
+        // Preview de voz
+        function playPreview(voiceId) {
+            const voice = VOICES_DATA[currentProvider].find(v => v.id === voiceId);
+            alert(`🎵 Reproduciendo muestra de: ${voice.name}\n\nEn producción, aquí se reproduciría el audio de preview desde la API de ${currentProvider.toUpperCase()}.\n\nAntonio integrará:\n- Retell AI API\n- ElevenLabs API\n- Cartesia API`);
+        }
+
+        // Helpers
+        function getLanguageName(lang) {
+            const names = { es: 'Español', en: 'English', pt: 'Português', fr: 'Français' };
+            return names[lang] || lang;
+        }
+
+        function getGenderName(gender) {
+            return gender === 'female' ? 'Femenino' : 'Masculino';
+        }
+
+        function getAccentName(accent) {
+            const names = { 
+                spain: 'España', 
+                latam: 'Latam', 
+                usa: 'USA', 
+                uk: 'UK', 
+                brazil: 'Brasil' 
+            };
+            return names[accent] || accent;
+        }
+
+        // Siguiente paso
+        function nextStep() {
+            if (!selectedVoice) {
+                alert('⚠️ Por favor, selecciona una voz para tu agente');
+                return;
+            }
+            
+            const voiceSpeed = parseFloat(document.getElementById('voiceSpeed').value);
+            const voiceTemperature = parseFloat(document.getElementById('voiceTemperature').value);
+            
+            // Guardar datos
+            const paso3Data = {
+                voice_provider: currentProvider,
+                voice_id: selectedVoice.id,
+                voice_name: selectedVoice.name,
+                voice_language: selectedVoice.language,
+                voice_gender: selectedVoice.gender,
+                voice_accent: selectedVoice.accent,
+                voice_speed: voiceSpeed,
+                voice_temperature: voiceTemperature
+            };
+            
+            const allData = { ...wizardData, ...paso3Data };
+            localStorage.setItem('wizardData', JSON.stringify(allData));
+            
+            console.log('✅ Datos paso 3:', paso3Data);
+            console.log('📦 Todos los datos:', allData);
+            
+            alert(`✅ ¡Voz configurada!\n\n🎙️ Proveedor: ${currentProvider.toUpperCase()}\n🎵 Voz: ${selectedVoice.name}\n⚡ Velocidad: ${voiceSpeed}x\n🌡️ Temperature: ${voiceTemperature}\n\n¡Paso 3 completado! En la versión completa avanzarías al Paso 4: Conversación.`);
+        }
+
+        // Inicializar
+        filterVoices();
+        console.log('🚀 Wizard Paso 3 cargado');
+        console.log('📋 Datos anteriores:', wizardData);
+    </script>
+</body>
+</html>
