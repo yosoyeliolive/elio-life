@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear agente IA - Paso 7 | Netelip</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netelip-azul: #267ab0;
+            --netelip-azul-hover: #1e6291;
+            --gris-claro: #f5f6f8;
+            --gris-borde: #e5e7eb;
+            --gris-texto: #6c757d;
+            --oscuro: #1a2428;
+            --exito: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gris-borde);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: var(--gris-texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--netelip-azul);
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 16px 0 6px 0;
+        }
+
+        .wizard-subtitle {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .steps-container {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gris-texto);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .step-item:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .step-item.active {
+            background: #eff6ff;
+            color: var(--netelip-azul);
+            border-left-color: var(--netelip-azul);
+        }
+
+        .step-item.completed {
+            color: var(--exito);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gris-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .step-item.active .step-number {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--exito);
+            color: white;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--gris-claro);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--gris-borde);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .progress-bar-container {
+            background: var(--gris-claro);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--netelip-azul);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .tooltip-icon {
+            margin-left: 6px;
+            color: var(--netelip-azul);
+            cursor: help;
+            font-size: 16px;
+        }
+
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            width: 340px;
+            background: var(--oscuro);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 14px 16px;
+            position: absolute;
+            z-index: 2000;
+            bottom: 130%;
+            left: 50%;
+            margin-left: -170px;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 13px;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--oscuro) transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--netelip-azul);
+            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1);
+            outline: none;
+        }
+
+        .form-text {
+            color: var(--gris-texto);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* ALERT */
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info i {
+            color: var(--netelip-azul);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-warning i {
+            color: var(--warning);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        /* SECTION DIVIDER */
+        .section-divider {
+            margin: 40px 0 32px 0;
+            border-top: 2px solid var(--gris-borde);
+            padding-top: 32px;
+        }
+
+        .section-divider h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .section-divider p {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 24px;
+        }
+
+        /* TOOL CARD */
+        .tool-card {
+            background: var(--gris-claro);
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .tool-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .tool-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .tool-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tool-details h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 0 0 4px 0;
+        }
+
+        .tool-details p {
+            font-size: 13px;
+            color: var(--gris-texto);
+            margin: 0;
+        }
+
+        .btn-remove-tool {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-remove-tool:hover {
+            background: #dc2626;
+        }
+
+        .tool-config {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .tool-config .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ADD TOOL BUTTON */
+        .add-tool-section {
+            margin-top: 24px;
+        }
+
+        .tool-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .tool-option {
+            background: white;
+            border: 2px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .tool-option:hover {
+            border-color: var(--netelip-azul);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.1);
+        }
+
+        .tool-option-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .tool-option-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 4px;
+        }
+
+        .tool-option-desc {
+            font-size: 12px;
+            color: var(--gris-texto);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--gris-claro);
+            border: 2px dashed var(--gris-borde);
+            border-radius: 10px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            color: var(--gris-texto);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 0;
+        }
+
+        /* BOTONES */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gris-borde);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--netelip-azul);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--netelip-azul-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .tool-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver al dashboard
+            </a>
+            <h2 class="wizard-title">Crear agente IA</h2>
+            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+        </div>
+
+        <div class="steps-container">
+            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Información básica</span>
+                    <span class="step-desc">Nombre y sector</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Configuración LLM</span>
+                    <span class="step-desc">Modelo y prompt</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Selección de voz</span>
+                    <span class="step-desc">Voz y personalidad</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Conversación</span>
+                    <span class="step-desc">Idioma y respuestas</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso5-TIEMPOS.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Tiempos</span>
+                    <span class="step-desc">Duraciones y delays</span>
+                </div>
+            </a>
+
+            <a href="wizard-paso6-AUDIO-STT.html" class="step-item completed">
+                <div class="step-number">✓</div>
+                <div class="step-info">
+                    <span class="step-name">Audio y STT</span>
+                    <span class="step-desc">Sonido ambiente</span>
+                </div>
+            </a>
+
+            <a href="#" class="step-item active">
+                <div class="step-number">7</div>
+                <div class="step-info">
+                    <span class="step-name">Herramientas</span>
+                    <span class="step-desc">Integraciones</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+
+            <a href="#" class="step-item">
+                <div class="step-number">8</div>
+                <div class="step-info">
+                    <span class="step-name">Resumen</span>
+                    <span class="step-desc">Revisar y crear</span>
+                </div>
+                <i class="bi bi-chevron-right step-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 87.5%;"></div>
+            </div>
+            <div class="progress-text">Paso 7 de 8 - Herramientas e integraciones</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-area">
+            <div class="form-card">
+                <h1 class="section-title">Herramientas e integraciones</h1>
+                <p class="section-subtitle">
+                    Configura las acciones que tu agente puede ejecutar durante las llamadas.
+                </p>
+
+                <div class="alert-info">
+                    <i class="bi bi-lightbulb-fill"></i>
+                    <div>
+                        <strong>Tip:</strong> Las herramientas permiten que tu agente realice acciones como transferir llamadas, colgar, marcar dígitos o ejecutar webhooks personalizados. Añade solo las que necesites.
+                    </div>
+                </div>
+
+                <form id="wizardForm">
+                    <!-- LISTA DE HERRAMIENTAS -->
+                    <div id="toolsList">
+                        <!-- Las herramientas se renderizan aquí -->
+                    </div>
+
+                    <!-- SELECTOR DE HERRAMIENTAS -->
+                    <div class="add-tool-section">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">
+                            Añadir herramienta
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Herramientas disponibles:</strong><br><br>
+                                    Selecciona qué acciones puede ejecutar tu agente durante las llamadas. Puedes añadir múltiples herramientas.
+                                </span>
+                            </span>
+                        </h3>
+                        
+                        <div class="tool-selector">
+                            <div class="tool-option" onclick="addTool('end_call')">
+                                <div class="tool-option-icon">📞</div>
+                                <div class="tool-option-name">Finalizar llamada</div>
+                                <div class="tool-option-desc">Colgar la llamada</div>
+                            </div>
+
+                            <div class="tool-option" onclick="addTool('transfer_call')">
+                                <div class="tool-option-icon">📲</div>
+                                <div class="tool-option-name">Transferir llamada</div>
+                                <div class="tool-option-desc">A otro número</div>
+                            </div>
+
+                            <div class="tool-option" onclick="addTool('press_digit')">
+                                <div class="tool-option-icon">🔢</div>
+                                <div class="tool-option-name">Marcar dígito</div>
+                                <div class="tool-option-desc">DTMF en IVR</div>
+                            </div>
+
+                            <div class="tool-option" onclick="addTool('custom')">
+                                <div class="tool-option-icon">🔗</div>
+                                <div class="tool-option-name">Webhook custom</div>
+                                <div class="tool-option-desc">Integración HTTP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ALERT WARNING -->
+                    <div class="alert-warning" style="margin-top: 32px;">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <div>
+                            <strong>Nota:</strong> Las herramientas personalizadas (custom webhook) requieren que tengas un endpoint configurado para recibir las peticiones HTTP.
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso6-AUDIO-STT.html'">
+                            <i class="bi bi-arrow-left"></i>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Siguiente
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos del wizard
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
+
+        // Array de herramientas
+        let tools = [];
+        let toolCounter = 0;
+
+        // Añadir herramienta
+        function addTool(type) {
+            const id = `tool_${toolCounter++}`;
+            
+            const tool = {
+                id,
+                type,
+                name: '',
+                description: '',
+                // Campos específicos según tipo
+                ...(type === 'transfer_call' && { number: '', transfer_mode: 'number' }),
+                ...(type === 'press_digit' && { digit: '' }),
+                ...(type === 'custom' && { url: '', speak_during_execution: false, speak_after_execution: true })
+            };
+            
+            tools.push(tool);
+            renderTools();
+        }
+
+        // Eliminar herramienta
+        function removeTool(id) {
+            tools = tools.filter(t => t.id !== id);
+            renderTools();
+        }
+
+        // Actualizar campo de herramienta
+        function updateTool(id, field, value) {
+            const tool = tools.find(t => t.id === id);
+            if (tool) {
+                tool[field] = value;
+            }
+        }
+
+        // Renderizar herramientas
+        function renderTools() {
+            const container = document.getElementById('toolsList');
+            
+            if (tools.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔧</div>
+                        <h4>No hay herramientas añadidas</h4>
+                        <p>Añade herramientas para que tu agente pueda ejecutar acciones durante las llamadas</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = tools.map(tool => {
+                const icons = {
+                    end_call: '📞',
+                    transfer_call: '📲',
+                    press_digit: '🔢',
+                    custom: '🔗'
+                };
+                
+                const names = {
+                    end_call: 'Finalizar llamada',
+                    transfer_call: 'Transferir llamada',
+                    press_digit: 'Marcar dígito',
+                    custom: 'Webhook custom'
+                };
+                
+                let configHTML = '';
+                
+                if (tool.type === 'end_call') {
+                    configHTML = `
+                        <div class="tool-config">
+                            <div class="form-group">
+                                <label class="form-label">Nombre de la herramienta</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Finalizar llamada"
+                                       value="${tool.name}"
+                                       onchange="updateTool('${tool.id}', 'name', this.value)">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Terminar la llamada de forma educada"
+                                       value="${tool.description}"
+                                       onchange="updateTool('${tool.id}', 'description', this.value)">
+                            </div>
+                        </div>
+                    `;
+                } else if (tool.type === 'transfer_call') {
+                    configHTML = `
+                        <div class="tool-config">
+                            <div class="form-group">
+                                <label class="form-label">Nombre de la herramienta</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Transferir a comercial"
+                                       value="${tool.name}"
+                                       onchange="updateTool('${tool.id}', 'name', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Transferir al departamento comercial"
+                                       value="${tool.description}"
+                                       onchange="updateTool('${tool.id}', 'description', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Modo de transferencia</label>
+                                <select class="form-select" 
+                                        onchange="updateTool('${tool.id}', 'transfer_mode', this.value)">
+                                    <option value="number" ${tool.transfer_mode === 'number' ? 'selected' : ''}>Número fijo</option>
+                                    <option value="inferred" ${tool.transfer_mode === 'inferred' ? 'selected' : ''}>Inferido por IA</option>
+                                </select>
+                            </div>
+                            ${tool.transfer_mode === 'number' ? `
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Número de destino</label>
+                                    <input type="tel" 
+                                           class="form-control" 
+                                           placeholder="+34900123456"
+                                           value="${tool.number || ''}"
+                                           onchange="updateTool('${tool.id}', 'number', this.value)">
+                                    <div class="form-text">
+                                        <i class="bi bi-telephone me-1"></i>
+                                        Incluye código de país (+34 para España)
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Prompt para IA</label>
+                                    <textarea class="form-control" 
+                                              rows="2"
+                                              placeholder="Ej: Transferir al departamento que el usuario mencione"
+                                              onchange="updateTool('${tool.id}', 'prompt', this.value)">${tool.prompt || ''}</textarea>
+                                    <div class="form-text">
+                                        <i class="bi bi-robot me-1"></i>
+                                        La IA determinará el número basándose en este prompt
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    `;
+                } else if (tool.type === 'press_digit') {
+                    configHTML = `
+                        <div class="tool-config">
+                            <div class="form-group">
+                                <label class="form-label">Nombre de la herramienta</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Marcar opción 1"
+                                       value="${tool.name}"
+                                       onchange="updateTool('${tool.id}', 'name', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Marcar 1 en el IVR"
+                                       value="${tool.description}"
+                                       onchange="updateTool('${tool.id}', 'description', this.value)">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="form-label">Dígito a marcar</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="0-9, *, #"
+                                       maxlength="1"
+                                       value="${tool.digit || ''}"
+                                       onchange="updateTool('${tool.id}', 'digit', this.value)">
+                                <div class="form-text">
+                                    <i class="bi bi-hash me-1"></i>
+                                    Solo un dígito: 0-9, * o #
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (tool.type === 'custom') {
+                    configHTML = `
+                        <div class="tool-config">
+                            <div class="form-group">
+                                <label class="form-label">Nombre de la herramienta</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Crear ticket en CRM"
+                                       value="${tool.name}"
+                                       onchange="updateTool('${tool.id}', 'name', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Ej: Crear un ticket de soporte en el CRM"
+                                       value="${tool.description}"
+                                       onchange="updateTool('${tool.id}', 'description', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">URL del webhook</label>
+                                <input type="url" 
+                                       class="form-control" 
+                                       placeholder="https://tu-servidor.com/webhook"
+                                       value="${tool.url || ''}"
+                                       onchange="updateTool('${tool.id}', 'url', this.value)">
+                                <div class="form-text">
+                                    <i class="bi bi-link-45deg me-1"></i>
+                                    Endpoint que recibirá la petición HTTP POST
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="speak_during_${tool.id}"
+                                           ${tool.speak_during_execution ? 'checked' : ''}
+                                           onchange="updateTool('${tool.id}', 'speak_during_execution', this.checked)">
+                                    <label class="form-check-label" for="speak_during_${tool.id}">
+                                        Hablar durante la ejecución
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="speak_after_${tool.id}"
+                                           ${tool.speak_after_execution ? 'checked' : ''}
+                                           onchange="updateTool('${tool.id}', 'speak_after_execution', this.checked)">
+                                    <label class="form-check-label" for="speak_after_${tool.id}">
+                                        Hablar después de la ejecución
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="tool-card">
+                        <div class="tool-card-header">
+                            <div class="tool-info">
+                                <div class="tool-icon">${icons[tool.type]}</div>
+                                <div class="tool-details">
+                                    <h4>${names[tool.type]}</h4>
+                                    <p>Tipo: ${tool.type}</p>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-remove-tool" onclick="removeTool('${tool.id}')">
+                                <i class="bi bi-trash"></i>
+                                Eliminar
+                            </button>
+                        </div>
+                        ${configHTML}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Siguiente paso
+        function nextStep() {
+            // Validar herramientas
+            for (const tool of tools) {
+                if (!tool.name || !tool.description) {
+                    alert(`⚠️ La herramienta "${tool.type}" necesita nombre y descripción`);
+                    return;
+                }
+                
+                if (tool.type === 'transfer_call' && tool.transfer_mode === 'number' && !tool.number) {
+                    alert(`⚠️ La herramienta de transferencia necesita un número de destino`);
+                    return;
+                }
+                
+                if (tool.type === 'press_digit' && !tool.digit) {
+                    alert(`⚠️ La herramienta de marcar dígito necesita especificar qué dígito marcar`);
+                    return;
+                }
+                
+                if (tool.type === 'custom' && !tool.url) {
+                    alert(`⚠️ La herramienta custom necesita una URL de webhook`);
+                    return;
+                }
+            }
+
+            // Preparar tools para guardar (formato Retell AI)
+            const formattedTools = tools.map(tool => {
+                const base = {
+                    type: tool.type,
+                    name: tool.name,
+                    description: tool.description
+                };
+                
+                if (tool.type === 'transfer_call') {
+                    if (tool.transfer_mode === 'number') {
+                        return {
+                            ...base,
+                            transfer_destination: {
+                                type: 'number',
+                                number: tool.number
+                            }
+                        };
+                    } else {
+                        return {
+                            ...base,
+                            transfer_destination: {
+                                type: 'inferred',
+                                prompt: tool.prompt
+                            }
+                        };
+                    }
+                } else if (tool.type === 'press_digit') {
+                    return {
+                        ...base,
+                        digit: tool.digit
+                    };
+                } else if (tool.type === 'custom') {
+                    return {
+                        ...base,
+                        url: tool.url,
+                        speak_during_execution: tool.speak_during_execution,
+                        speak_after_execution: tool.speak_after_execution
+                    };
+                }
+                
+                return base;
+            });
+
+            // Guardar datos
+            const paso7Data = {
+                general_tools: formattedTools
+            };
+
+            const allData = { ...wizardData, ...paso7Data };
+            localStorage.setItem('wizardData', JSON.stringify(allData));
+
+            console.log('✅ Datos paso 7:', paso7Data);
+            console.log('📦 Todos los datos:', allData);
+
+            // Resumen
+            const toolsSummary = formattedTools.map(t => `  • ${t.name} (${t.type})`).join('\n');
+            
+            alert(`✅ ¡Herramientas configuradas!
+
+${formattedTools.length > 0 ? `🔧 Herramientas añadidas:\n${toolsSummary}` : '🔧 Sin herramientas configuradas'}
+
+¡Paso 7 completado! En la versión completa avanzarías al Paso 8: Resumen final.`);
+        }
+
+        // Inicializar
+        renderTools();
+        console.log('🚀 Wizard Paso 7 cargado');
+        console.log('📋 Datos anteriores:', wizardData);
+    </script>
+</body>
+</html>
