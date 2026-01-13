@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Fábrica de agentes IA | netelip</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <title>Dashboard - Fábrica de Agentes IA | Netelip</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -16,263 +13,199 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --netelip-azul: #267ab0;
-            --netelip-azul-hover: #1e6291;
-            --gris-bg: #f8f9fa;
-            --gris-claro: #f5f6f8;
-            --gris-borde: #e5e7eb;
-            --gris-texto: #6c757d;
-            --oscuro: #1a2428;
-            --exito: #10b981;
-            --advertencia: #f59e0b;
-            --peligro: #ef4444;
-            --info: #3b82f6;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--gris-claro);
-            color: var(--oscuro);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
         }
 
-        /* ===== SIDEBAR ===== */
+        /* ========== SIDEBAR ========== */
         .sidebar {
             position: fixed;
-            top: 0;
             left: 0;
+            top: 0;
             bottom: 0;
             width: 260px;
-            background: white;
-            border-right: 1px solid var(--gris-borde);
-            z-index: 1000;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            z-index: 100;
             display: flex;
             flex-direction: column;
         }
 
-        .sidebar-header {
+        .logo-container {
             padding: 24px 20px;
-            border-bottom: 1px solid var(--gris-borde);
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .sidebar-logo {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--oscuro);
-            text-decoration: none;
+        .logo {
+            width: 140px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* Mobile sidebar overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .sidebar.mobile-open {
+                box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
             display: flex;
             align-items: center;
+            padding: 12px 20px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
         }
 
-        .sidebar-logo .logo-circle {
-            width: 32px;
-            height: 32px;
-            background: var(--netelip-azul);
+        .nav-item:hover {
+            background: #f9fafb;
+            color: #267ab0;
+        }
+
+        .nav-item.active {
+            background: #eff6fb;
+            color: #267ab0;
+            border-right: 3px solid #267ab0;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== TOPBAR ========== */
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-left h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f9fafb;
             border-radius: 8px;
-            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .balance-amount {
+            color: #267ab0;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 16px;
+            border-radius: 8px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .sidebar-user {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--gris-borde);
-            display: flex;
-            align-items: center;
+        .notification-bell:hover {
+            background: #e5e7eb;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--gris-claro);
+            background: linear-gradient(135deg, #267ab0 0%, #1e5a87 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
-            color: var(--gris-texto);
-            font-size: 16px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
         }
 
-        .user-info {
+        /* ========== CONTENT AREA ========== */
+        .content {
             flex: 1;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--oscuro);
-        }
-
-        .user-role {
-            font-size: 12px;
-            color: var(--gris-texto);
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 20px 0;
-            overflow-y: auto;
-        }
-
-        .nav-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gris-texto);
-            font-weight: 600;
-            padding: 0 20px;
-            margin-bottom: 8px;
-        }
-
-        .nav-item {
-            padding: 10px 20px;
-            color: var(--gris-texto);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .nav-item:hover {
-            background: var(--gris-claro);
-            color: var(--oscuro);
-        }
-
-        .nav-item.active {
-            background: var(--gris-claro);
-            color: var(--netelip-azul);
-            border-left: 3px solid var(--netelip-azul);
-            padding-left: 17px;
-        }
-
-        .nav-item i {
-            margin-right: 10px;
-            font-size: 18px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .nav-badge {
-            margin-left: auto;
-            background: var(--netelip-azul);
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        /* BOTÓN CREAR AGENTE EN SIDEBAR */
-        .btn-crear-agente {
-            margin: 12px 20px;
-            background: var(--netelip-azul);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-crear-agente:hover {
-            background: var(--netelip-azul-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            margin-left: 260px;
-            min-height: 100vh;
-        }
-
-        .topbar {
-            background: white;
-            padding: 16px 32px;
-            border-bottom: 1px solid var(--gris-borde);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
-
-        .topbar-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin: 0;
-        }
-
-        .topbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .topbar-balance {
-            background: var(--exito);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .topbar-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--gris-claro);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--gris-texto);
-        }
-
-        .topbar-icon:hover {
-            background: var(--gris-borde);
-            color: var(--oscuro);
-        }
-
-        /* ===== CONTENT AREA ===== */
-        .content-area {
             padding: 32px;
         }
 
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--oscuro);
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            font-size: 15px;
-            color: var(--gris-texto);
-        }
-
-        /* ===== STATS CARDS ===== */
+        /* ========== STATS CARDS ========== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -281,487 +214,1155 @@
         }
 
         .stat-card {
-            background: white;
-            border: 1px solid var(--gris-borde);
+            background: #ffffff;
             border-radius: 12px;
             padding: 24px;
-            transition: all 0.2s;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
+            cursor: pointer;
         }
 
         .stat-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            margin-bottom: 16px;
         }
 
-        .stat-icon.primary { background: #eff6ff; color: var(--info); }
-        .stat-icon.success { background: #f0fdf4; color: var(--exito); }
-        .stat-icon.warning { background: #fffbeb; color: var(--advertencia); }
-        .stat-icon.danger { background: #fef2f2; color: var(--peligro); }
+        .stat-icon.blue { background: #eff6fb; }
+        .stat-icon.green { background: #f0fdf4; }
+        .stat-icon.purple { background: #faf5ff; }
+        .stat-icon.orange { background: #fff7ed; }
 
         .stat-value {
             font-size: 32px;
-            font-weight: 800;
-            color: var(--oscuro);
-            line-height: 1;
-            margin-bottom: 6px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
         }
 
-        .stat-label {
-            font-size: 14px;
-            color: var(--gris-texto);
-            font-weight: 500;
+        .stat-footer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
         }
 
         .stat-trend {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 10px;
+            gap: 4px;
             padding: 4px 8px;
             border-radius: 6px;
+            font-weight: 600;
         }
 
         .stat-trend.up {
-            background: #f0fdf4;
-            color: var(--exito);
+            background: #dcfce7;
+            color: #16a34a;
         }
 
         .stat-trend.down {
-            background: #fef2f2;
-            color: var(--peligro);
+            background: #fee2e2;
+            color: #dc2626;
         }
 
-        /* ===== AGENTS TABLE ===== */
-        .agents-section {
-            background: white;
-            border: 1px solid var(--gris-borde);
-            border-radius: 12px;
-            overflow: hidden;
+        .stat-period {
+            color: #9ca3af;
+        }
+
+        /* ========== CHARTS SECTION ========== */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
             margin-bottom: 32px;
         }
 
-        .section-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gris-borde);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .chart-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
         }
 
-        .section-title {
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
             font-size: 18px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin: 0;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #267ab0;
+            color: #267ab0;
+        }
+
+        .filter-btn.active {
+            background: #267ab0;
+            border-color: #267ab0;
+            color: #ffffff;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* ========== TABLE SECTION ========== */
+        .table-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #267ab0;
+            color: #267ab0;
         }
 
         .btn-primary {
-            background: var(--netelip-azul);
-            color: white;
+            padding: 12px 24px;
+            background: #267ab0;
+            color: #ffffff;
             border: none;
-            padding: 10px 20px;
             border-radius: 8px;
-            font-weight: 600;
             font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.2s;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 8px;
-            cursor: pointer;
         }
 
         .btn-primary:hover {
-            background: var(--netelip-azul-hover);
+            background: #1e5a87;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+            box-shadow: 0 4px 12px rgba(38, 122, 176, 0.3);
         }
 
-        .agents-table {
+        /* ========== TABLE ========== */
+        .calls-table {
             width: 100%;
+            border-collapse: collapse;
         }
 
-        .agents-table thead {
-            background: var(--gris-claro);
+        .calls-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .agents-table th {
-            padding: 14px 24px;
+        .calls-table th {
+            padding: 12px 16px;
             text-align: left;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--gris-texto);
+            color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .agents-table td {
-            padding: 16px 24px;
-            border-top: 1px solid var(--gris-borde);
+        .calls-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f3f4f6;
             font-size: 14px;
+            color: #1a1a1a;
+        }
+
+        .calls-table tbody tr {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .calls-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .agent-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #267ab0 0%, #1e5a87 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .agent-details {
+            display: flex;
+            flex-direction: column;
         }
 
         .agent-name {
             font-weight: 600;
-            color: var(--oscuro);
+            color: #1a1a1a;
         }
 
-        .agent-sector {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            background: var(--gris-claro);
-            color: var(--gris-texto);
-            gap: 6px;
+        .agent-id {
+            font-size: 12px;
+            color: #9ca3af;
         }
 
-        .sector-icon-small {
-            width: 18px;
-            height: 18px;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 5px 12px;
-            border-radius: 20px;
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
             font-size: 12px;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .status-badge.active {
-            background: #f0fdf4;
-            color: var(--exito);
+        .badge.success {
+            background: #dcfce7;
+            color: #16a34a;
         }
 
-        .status-badge.paused {
-            background: #fffbeb;
-            color: var(--advertencia);
+        .badge.error {
+            background: #fee2e2;
+            color: #dc2626;
         }
 
-        .agent-actions {
+        .badge.positive {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .badge.neutral {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .badge.negative {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .action-btns {
             display: flex;
             gap: 8px;
         }
 
-        .btn-icon {
+        .action-btn {
             width: 32px;
             height: 32px;
-            border: 1px solid var(--gris-borde);
             border-radius: 6px;
-            background: white;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
-            color: var(--gris-texto);
         }
 
-        .btn-icon:hover {
-            background: var(--gris-claro);
-            color: var(--oscuro);
+        .action-btn:hover {
+            background: #f9fafb;
+            border-color: #267ab0;
+        }
+
+        /* ========== LOADING ========== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #267ab0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
+                transition: transform 0.3s;
             }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
             .main-content {
                 margin-left: 0;
             }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+
+            .topbar-left h1 {
+                font-size: 18px;
+            }
+
+            .balance {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
             }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .charts-section {
+                gap: 16px;
+            }
+
+            .chart-card {
+                padding: 16px;
+            }
+
+            .chart-title {
+                font-size: 16px;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            /* Tabla responsive */
+            .table-card {
+                padding: 16px;
+                overflow-x: auto;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .table-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn-secondary, .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .calls-table {
+                font-size: 12px;
+                min-width: 800px;
+            }
+
+            .calls-table th,
+            .calls-table td {
+                padding: 10px 8px;
+            }
+
+            .agent-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+
+            .action-btn {
+                width: 28px;
+                height: 28px;
+            }
+
+            .action-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            /* Mobile menu button */
+            .mobile-menu-btn {
+                display: block;
+                width: 40px;
+                height: 40px;
+                background: #f9fafb;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-right: 12px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Overflow scroll horizontal en tabla */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
 <body>
+
     <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <a href="#" class="sidebar-logo">
-                <div class="logo-circle">
-                    <i class="bi bi-circle-fill"></i>
-                </div>
-                netelip
-            </a>
+    <aside class="sidebar">
+        <div class="logo-container">
+            <svg class="logo" onclick="window.location.href='dashboard-retell-ai-completo.html'" viewBox="0 0 120 30" style="cursor: pointer;">
+                <text x="5" y="22" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#267ab0">netelip</text>
+            </svg>
         </div>
-
-        <div class="sidebar-user">
-            <div class="user-avatar">
-                <i class="bi bi-person-fill"></i>
-            </div>
-            <div class="user-info">
-                <div class="user-name">mili.perez</div>
-                <div class="user-role">Administrador</div>
-            </div>
-        </div>
-
-        <!-- BOTÓN CREAR NUEVO AGENTE -->
-        <button class="btn-crear-agente" onclick="window.location.href='wizard-paso1-netelip.html'">
-            <i class="bi bi-plus-lg"></i>
-            Crear nuevo agente
-        </button>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section-title">Principal</div>
-            <a href="#" class="nav-item active">
-                <i class="bi bi-grid"></i>
+        <nav class="nav-menu">
+            <a href="dashboard-retell-ai-completo.html" class="nav-item active">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                </svg>
                 Dashboard
             </a>
             <a href="#" class="nav-item">
-                <i class="bi bi-robot"></i>
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                </svg>
                 Mis agentes IA
-                <span class="nav-badge">3</span>
             </a>
             <a href="#" class="nav-item">
-                <i class="bi bi-book"></i>
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                </svg>
+                Mis números
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+                </svg>
                 Biblioteca de plantillas
             </a>
-            
-            <div class="nav-section-title mt-4">Cuenta</div>
             <a href="#" class="nav-item">
-                <i class="bi bi-gear"></i>
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                </svg>
                 Configuración
             </a>
             <a href="#" class="nav-item">
-                <i class="bi bi-question-circle"></i>
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                </svg>
                 Ayuda y soporte
             </a>
         </nav>
-    </div>
+    </aside>
+
+    <!-- Overlay para menú móvil -->
+    <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
     <!-- MAIN CONTENT -->
-    <div class="main-content">
+    <main class="main-content">
         <!-- TOPBAR -->
-        <div class="topbar">
-            <h1 class="topbar-title">Dashboard</h1>
-            <div class="topbar-actions">
-                <div class="topbar-balance">
-                    <i class="bi bi-piggy-bank me-1"></i>
-                    1.571,33 €
-                </div>
-                <div class="topbar-icon">
-                    <i class="bi bi-bell"></i>
-                </div>
-                <div class="topbar-icon">
-                    <i class="bi bi-person-circle"></i>
-                </div>
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <h1>Dashboard principal</h1>
             </div>
-        </div>
+            <div class="topbar-right">
+                <div class="balance">
+                    <span>Balance:</span>
+                    <span class="balance-amount" id="balance">€0.00</span>
+                </div>
+                <div class="notification-bell">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                    </svg>
+                    <span class="notification-badge"></span>
+                </div>
+                <div class="user-avatar">M</div>
+            </div>
+        </header>
 
         <!-- CONTENT -->
-        <div class="content-area">
-            <!-- PAGE HEADER -->
-            <div class="page-header">
-                <h2 class="page-title">Bienvenido, Mili 👋</h2>
-                <p class="page-subtitle">Gestiona tus agentes de IA y visualiza el rendimiento en tiempo real</p>
+        <div class="content">
+            <!-- LOADING STATE -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Cargando métricas de Retell AI...</p>
             </div>
 
-            <!-- STATS -->
-            <div class="stats-grid">
+            <!-- STATS CARDS -->
+            <div id="statsSection" class="stats-grid" style="display: none;">
                 <div class="stat-card">
-                    <div class="stat-icon primary">
-                        <i class="bi bi-robot"></i>
+                    <div class="stat-header">
+                        <span class="stat-title">Total de llamadas</span>
+                        <div class="stat-icon blue">
+                            <svg width="20" height="20" fill="#267ab0" viewBox="0 0 20 20">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Agentes activos</div>
-                    <div class="stat-trend up">
-                        <i class="bi bi-arrow-up me-1"></i>
-                        +2 este mes
+                    <div class="stat-value" id="totalCalls">0</div>
+                    <div class="stat-footer">
+                        <span class="stat-trend up" id="callsTrend">
+                            <span>↑</span>
+                            <span id="callsChange">0%</span>
+                        </span>
+                        <span class="stat-period">vs. semana anterior</span>
                     </div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon success">
-                        <i class="bi bi-telephone"></i>
+                    <div class="stat-header">
+                        <span class="stat-title">Tasa de éxito</span>
+                        <div class="stat-icon green">
+                            <svg width="20" height="20" fill="#16a34a" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="stat-value">1,247</div>
-                    <div class="stat-label">Llamadas procesadas</div>
-                    <div class="stat-trend up">
-                        <i class="bi bi-arrow-up me-1"></i>
-                        +18% vs semana
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon warning">
-                        <i class="bi bi-star-fill"></i>
-                    </div>
-                    <div class="stat-value">94%</div>
-                    <div class="stat-label">Satisfacción del cliente</div>
-                    <div class="stat-trend up">
-                        <i class="bi bi-arrow-up me-1"></i>
-                        +4% este mes
+                    <div class="stat-value" id="successRate">0%</div>
+                    <div class="stat-footer">
+                        <span class="stat-trend up" id="successTrend">
+                            <span>↑</span>
+                            <span id="successChange">0%</span>
+                        </span>
+                        <span class="stat-period">vs. semana anterior</span>
                     </div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon danger">
-                        <i class="bi bi-clock"></i>
+                    <div class="stat-header">
+                        <span class="stat-title">Duración promedio</span>
+                        <div class="stat-icon purple">
+                            <svg width="20" height="20" fill="#9333ea" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="stat-value">2.4 min</div>
-                    <div class="stat-label">Duración promedio</div>
-                    <div class="stat-trend down">
-                        <i class="bi bi-arrow-down me-1"></i>
-                        -12% optimizado
+                    <div class="stat-value" id="avgDuration">0:00</div>
+                    <div class="stat-footer">
+                        <span class="stat-trend up" id="durationTrend">
+                            <span>↑</span>
+                            <span id="durationChange">0s</span>
+                        </span>
+                        <span class="stat-period">vs. semana anterior</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Costo total</span>
+                        <div class="stat-icon orange">
+                            <svg width="20" height="20" fill="#ea580c" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="totalCost">€0.00</div>
+                    <div class="stat-footer">
+                        <span class="stat-trend up" id="costTrend">
+                            <span>↑</span>
+                            <span id="costChange">€0.00</span>
+                        </span>
+                        <span class="stat-period">vs. semana anterior</span>
                     </div>
                 </div>
             </div>
 
-            <!-- AGENTS TABLE -->
-            <div class="agents-section">
-                <div class="section-header">
-                    <h3 class="section-title">Tus agentes IA</h3>
-                    <button class="btn-primary" onclick="window.location.href='wizard-paso1-netelip.html'">
-                        <i class="bi bi-plus-lg"></i>
-                        Crear nuevo agente
-                    </button>
+            <!-- CHARTS SECTION -->
+            <div id="chartsSection" class="charts-section" style="display: none;">
+                <!-- CALLS TIMELINE CHART -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Llamadas en el tiempo</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="updateTimeFilter('7d')">7D</button>
+                            <button class="filter-btn" onclick="updateTimeFilter('30d')">30D</button>
+                            <button class="filter-btn" onclick="updateTimeFilter('90d')">90D</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="callsChart"></canvas>
+                    </div>
                 </div>
-                
-                <table class="agents-table">
+
+                <!-- SENTIMENT CHART -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Sentimiento de usuarios</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="sentimentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DISCONNECTION REASONS & AGENTS CHART -->
+            <div id="chartsSection2" class="charts-section" style="display: none;">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Motivos de desconexión</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="disconnectionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Llamadas por agente</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="agentsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT CALLS TABLE -->
+            <div id="tableSection" class="table-card" style="display: none;">
+                <div class="table-header">
+                    <h3 class="table-title">Llamadas recientes</h3>
+                    <div class="table-actions">
+                        <button class="btn-secondary">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Exportar
+                        </button>
+                        <button class="btn-primary" onclick="window.location.href='wizard-paso1-netelip.html'">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Crear nuevo agente
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="calls-table">
                     <thead>
                         <tr>
+                            <th>Fecha y Hora</th>
+                            <th>Usuario</th>
                             <th>Agente</th>
-                            <th>Sector</th>
-                            <th>Llamadas (7d)</th>
-                            <th>Éxito</th>
+                            <th>Duración</th>
+                            <th>Sentimiento</th>
                             <th>Estado</th>
+                            <th>Costo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="agent-name">Sofia - Atención cliente</div>
-                            </td>
-                            <td>
-                                <span class="agent-sector">
-                                    <svg class="sector-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M8 12H8.01M12 12H12.01M16 12H16.01" stroke="#267ab0" stroke-width="2" stroke-linecap="round"/>
-                                    </svg>
-                                    Atención al cliente
-                                </span>
-                            </td>
-                            <td>487</td>
-                            <td>96%</td>
-                            <td>
-                                <span class="status-badge active">
-                                    <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>
-                                    Activo
-                                </span>
-                            </td>
-                            <td>
-                                <div class="agent-actions">
-                                    <button class="btn-icon" title="Editar">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Estadísticas">
-                                        <i class="bi bi-bar-chart"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Configuración">
-                                        <i class="bi bi-gear"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="agent-name">Carlos - Gestión de citas</div>
-                            </td>
-                            <td>
-                                <span class="agent-sector">
-                                    <svg class="sector-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="3" y="6" width="18" height="15" rx="2" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M3 10H21" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M7 3V6M17 3V6" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round"/>
-                                        <circle cx="9" cy="15" r="1" fill="#267ab0"/>
-                                        <circle cx="15" cy="15" r="1" fill="#267ab0"/>
-                                    </svg>
-                                    Gestión de citas
-                                </span>
-                            </td>
-                            <td>312</td>
-                            <td>91%</td>
-                            <td>
-                                <span class="status-badge active">
-                                    <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>
-                                    Activo
-                                </span>
-                            </td>
-                            <td>
-                                <div class="agent-actions">
-                                    <button class="btn-icon" title="Editar">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Estadísticas">
-                                        <i class="bi bi-bar-chart"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Configuración">
-                                        <i class="bi bi-gear"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="agent-name">Laura - Cualificación</div>
-                            </td>
-                            <td>
-                                <span class="agent-sector">
-                                    <svg class="sector-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#267ab0" stroke-width="1.5" stroke-linejoin="round"/>
-                                    </svg>
-                                    Cualificación de leads
-                                </span>
-                            </td>
-                            <td>156</td>
-                            <td>88%</td>
-                            <td>
-                                <span class="status-badge paused">
-                                    <i class="bi bi-pause-fill me-1" style="font-size: 8px;"></i>
-                                    En prueba
-                                </span>
-                            </td>
-                            <td>
-                                <div class="agent-actions">
-                                    <button class="btn-icon" title="Editar">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Estadísticas">
-                                        <i class="bi bi-bar-chart"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Configuración">
-                                        <i class="bi bi-gear"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody id="callsTableBody">
+                        <!-- Populated by JavaScript -->
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        console.log('Dashboard netelip cargado - Versión definitiva para presentación');
+        // ==================== GLOBAL VARIABLES ====================
+        let allCalls = [];
+        let callsChart, sentimentChart, disconnectionChart, agentsChart;
+
+        // ==================== INITIALIZE ====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadRetellData();
+        });
+
+        // ==================== LOAD RETELL AI DATA ====================
+        async function loadRetellData() {
+            try {
+                // En producción, esto sería una llamada a tu backend que tiene la API key
+                // Por ahora usamos los datos que ya tienes del MCP
+                
+                // Simulamos carga
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Aquí cargarías los datos reales desde tu backend
+                // const response = await fetch('/api/retell/calls');
+                // allCalls = await response.json();
+                
+                // Por ahora usamos datos de ejemplo basados en tu estructura real
+                allCalls = generateSampleData();
+                
+                renderDashboard();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="spinner"></div>
+                    <p style="color: #ef4444;">Error al cargar datos. Por favor, recarga la página.</p>
+                `;
+            }
+        }
+
+        // ==================== GENERATE SAMPLE DATA ====================
+        function generateSampleData() {
+            // Datos de ejemplo basados en tu estructura real de Retell AI
+            const agents = [
+                { id: 'agent_f3c6f3d044226f6ac34b10670a', name: 'Elio - Netelip' },
+                { id: 'agent_bbd5593af187cf81cd204cf497', name: 'Elio - Sergio Morán' },
+                { id: 'agent_ee539ec13b6e080363b51c7fb3', name: 'Elio - Demo' }
+            ];
+            
+            const sentiments = ['Positive', 'Neutral', 'Negative'];
+            const disconnections = ['user_hangup', 'agent_hangup', 'call_transfer', 'inactivity', 'error_unknown'];
+            const names = ['Laura', 'Carlos', 'María', 'Javier', 'Ana', 'Miguel', 'Rosa', 'David'];
+            
+            const calls = [];
+            const now = Date.now();
+            
+            // Generar 50 llamadas de ejemplo
+            for (let i = 0; i < 50; i++) {
+                const daysAgo = Math.floor(Math.random() * 30);
+                const timestamp = now - (daysAgo * 24 * 60 * 60 * 1000) - (Math.random() * 24 * 60 * 60 * 1000);
+                const duration = Math.floor(Math.random() * 400) + 30;
+                const agent = agents[Math.floor(Math.random() * agents.length)];
+                const sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
+                const userName = names[Math.floor(Math.random() * names.length)];
+                const successful = Math.random() > 0.2;
+                const cost = (duration * 0.172 / 60).toFixed(2);
+                
+                calls.push({
+                    call_id: `call_${Math.random().toString(36).substr(2, 9)}`,
+                    agent_id: agent.id,
+                    agent_name: agent.name,
+                    start_timestamp: timestamp,
+                    end_timestamp: timestamp + (duration * 1000),
+                    call_analysis: {
+                        call_successful: successful,
+                        user_sentiment: sentiment,
+                        custom_analysis_data: {
+                            nombre: userName,
+                            email: `${userName.toLowerCase()}@example.com`,
+                            cita_reservada: Math.random() > 0.5
+                        }
+                    },
+                    disconnection_reason: disconnections[Math.floor(Math.random() * disconnections.length)],
+                    call_cost: {
+                        total_duration_seconds: duration,
+                        combined_cost: parseFloat(cost)
+                    }
+                });
+            }
+            
+            return calls.sort((a, b) => b.start_timestamp - a.start_timestamp);
+        }
+
+        // ==================== RENDER DASHBOARD ====================
+        function renderDashboard() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('statsSection').style.display = 'grid';
+            document.getElementById('chartsSection').style.display = 'grid';
+            document.getElementById('chartsSection2').style.display = 'grid';
+            document.getElementById('tableSection').style.display = 'block';
+            
+            calculateStats();
+            renderCharts();
+            renderTable();
+        }
+
+        // ==================== CALCULATE STATS ====================
+        function calculateStats() {
+            const totalCalls = allCalls.length;
+            const successfulCalls = allCalls.filter(c => c.call_analysis.call_successful).length;
+            const successRate = totalCalls > 0 ? ((successfulCalls / totalCalls) * 100).toFixed(1) : 0;
+            
+            const totalDuration = allCalls.reduce((sum, c) => sum + (c.call_cost?.total_duration_seconds || 0), 0);
+            const avgDuration = totalCalls > 0 ? Math.floor(totalDuration / totalCalls) : 0;
+            
+            const totalCost = allCalls.reduce((sum, c) => sum + (c.call_cost?.combined_cost || 0), 0) / 100;
+            
+            // Update DOM
+            document.getElementById('totalCalls').textContent = totalCalls;
+            document.getElementById('successRate').textContent = successRate + '%';
+            document.getElementById('avgDuration').textContent = formatDuration(avgDuration);
+            document.getElementById('totalCost').textContent = '€' + totalCost.toFixed(2);
+            document.getElementById('balance').textContent = '€' + (1000 - totalCost).toFixed(2);
+            
+            // Simulate trends (in real app, compare with previous period)
+            document.getElementById('callsChange').textContent = '+12%';
+            document.getElementById('successChange').textContent = '+5%';
+            document.getElementById('durationChange').textContent = '+15s';
+            document.getElementById('costChange').textContent = '+€2.50';
+        }
+
+        // ==================== RENDER CHARTS ====================
+        function renderCharts() {
+            renderCallsChart();
+            renderSentimentChart();
+            renderDisconnectionChart();
+            renderAgentsChart();
+        }
+
+        function renderCallsChart() {
+            const ctx = document.getElementById('callsChart');
+            
+            // Group by date
+            const callsByDate = {};
+            allCalls.forEach(call => {
+                const date = new Date(call.start_timestamp).toLocaleDateString('es-ES');
+                callsByDate[date] = (callsByDate[date] || 0) + 1;
+            });
+            
+            const dates = Object.keys(callsByDate).slice(0, 7).reverse();
+            const counts = dates.map(d => callsByDate[d]);
+            
+            if (callsChart) callsChart.destroy();
+            
+            callsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Llamadas',
+                        data: counts,
+                        borderColor: '#267ab0',
+                        backgroundColor: 'rgba(38, 122, 176, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderSentimentChart() {
+            const ctx = document.getElementById('sentimentChart');
+            
+            const sentimentCounts = {
+                'Positive': 0,
+                'Neutral': 0,
+                'Negative': 0
+            };
+            
+            allCalls.forEach(call => {
+                const sentiment = call.call_analysis?.user_sentiment || 'Neutral';
+                if (sentimentCounts[sentiment] !== undefined) {
+                    sentimentCounts[sentiment]++;
+                }
+            });
+            
+            if (sentimentChart) sentimentChart.destroy();
+            
+            sentimentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Positivo', 'Neutral', 'Negativo'],
+                    datasets: [{
+                        data: [sentimentCounts.Positive, sentimentCounts.Neutral, sentimentCounts.Negative],
+                        backgroundColor: ['#16a34a', '#6b7280', '#ea580c']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function renderDisconnectionChart() {
+            const ctx = document.getElementById('disconnectionChart');
+            
+            const reasons = {};
+            allCalls.forEach(call => {
+                const reason = call.disconnection_reason || 'unknown';
+                reasons[reason] = (reasons[reason] || 0) + 1;
+            });
+            
+            const labels = Object.keys(reasons).map(r => {
+                const map = {
+                    'user_hangup': 'Usuario colgó',
+                    'agent_hangup': 'Agente finalizó',
+                    'call_transfer': 'Transferencia',
+                    'inactivity': 'Inactividad',
+                    'error_unknown': 'Error'
+                };
+                return map[r] || r;
+            });
+            
+            if (disconnectionChart) disconnectionChart.destroy();
+            
+            disconnectionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Llamadas',
+                        data: Object.values(reasons),
+                        backgroundColor: '#267ab0'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderAgentsChart() {
+            const ctx = document.getElementById('agentsChart');
+            
+            const agentCounts = {};
+            allCalls.forEach(call => {
+                const name = call.agent_name || 'Desconocido';
+                agentCounts[name] = (agentCounts[name] || 0) + 1;
+            });
+            
+            if (agentsChart) agentsChart.destroy();
+            
+            agentsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(agentCounts),
+                    datasets: [{
+                        data: Object.values(agentCounts),
+                        backgroundColor: ['#267ab0', '#16a34a', '#9333ea']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // ==================== RENDER TABLE ====================
+        function renderTable() {
+            const tbody = document.getElementById('callsTableBody');
+            tbody.innerHTML = '';
+            
+            const recentCalls = allCalls.slice(0, 20);
+            
+            recentCalls.forEach(call => {
+                const row = document.createElement('tr');
+                
+                const date = new Date(call.start_timestamp);
+                const userName = call.call_analysis?.custom_analysis_data?.nombre || 'Anónimo';
+                const sentiment = call.call_analysis?.user_sentiment || 'Neutral';
+                const successful = call.call_analysis?.call_successful;
+                const duration = call.call_cost?.total_duration_seconds || 0;
+                const cost = (call.call_cost?.combined_cost || 0) / 100;
+                
+                const sentimentClass = sentiment === 'Positive' ? 'positive' : sentiment === 'Negative' ? 'negative' : 'neutral';
+                const statusClass = successful ? 'success' : 'error';
+                
+                row.innerHTML = `
+                    <td>${date.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
+                    <td><strong>${userName}</strong></td>
+                    <td>
+                        <div class="agent-info">
+                            <div class="agent-avatar">E</div>
+                            <div class="agent-details">
+                                <div class="agent-name">${call.agent_name || 'Elio'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${formatDuration(duration)}</td>
+                    <td><span class="badge ${sentimentClass}">${sentiment}</span></td>
+                    <td><span class="badge ${statusClass}">${successful ? '✓ Exitosa' : '✗ Fallida'}</span></td>
+                    <td>€${cost.toFixed(2)}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn" title="Ver transcripción">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                            <button class="action-btn" title="Escuchar audio">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function formatDuration(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimeFilter(period) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // In real app, filter data and re-render
+            console.log('Filter changed to:', period);
+        }
+
+        // ==================== MOBILE MENU ====================
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const sidebar = document.querySelector('.sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(e.target) && 
+                !menuBtn.contains(e.target) &&
+                sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+            }
+        });
     </script>
+
 </body>
 </html>
