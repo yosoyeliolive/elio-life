@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear agente IA - Paso 1 | netelip</title>
+    <title>Crear agente IA - Paso 1: Tipo de agente | Netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -114,6 +114,12 @@
             color: var(--exito);
         }
 
+        .step-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .step-number {
             width: 32px;
             height: 32px;
@@ -197,7 +203,7 @@
 
         .content-area {
             padding: 32px;
-            max-width: 900px;
+            max-width: 1000px;
         }
 
         .form-card {
@@ -208,41 +214,196 @@
         }
 
         .section-title {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: 700;
             color: var(--oscuro);
             margin-bottom: 8px;
         }
 
         .section-subtitle {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--gris-texto);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* ===== TIPO DE AGENTE CARDS ===== */
+        .agent-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
             margin-bottom: 32px;
         }
 
+        .agent-type-card {
+            border: 2px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 32px 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--netelip-azul);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .agent-type-card:hover {
+            border-color: var(--netelip-azul);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(38, 122, 176, 0.12);
+        }
+
+        .agent-type-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .agent-type-card.selected {
+            border-color: var(--netelip-azul);
+            background: #eff6ff;
+            box-shadow: 0 8px 24px rgba(38, 122, 176, 0.15);
+        }
+
+        .agent-type-card.selected::before {
+            transform: scaleX(1);
+        }
+
+        .agent-type-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            background: var(--netelip-azul);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .agent-type-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            background: var(--gris-claro);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .agent-type-card:hover .agent-type-icon {
+            background: var(--netelip-azul);
+        }
+
+        .agent-type-card:hover .agent-type-icon svg path {
+            stroke: white;
+        }
+
+        .agent-type-card:hover .agent-type-icon svg circle {
+            stroke: white;
+            fill: white;
+        }
+
+        .agent-type-card.selected .agent-type-icon {
+            background: var(--netelip-azul);
+        }
+
+        .agent-type-card.selected .agent-type-icon svg path {
+            stroke: white;
+        }
+
+        .agent-type-card.selected .agent-type-icon svg circle {
+            stroke: white;
+            fill: white;
+        }
+
+        .agent-type-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .agent-type-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .agent-type-desc {
+            font-size: 14px;
+            color: var(--gris-texto);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .agent-type-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .agent-type-features li {
+            font-size: 13px;
+            color: var(--gris-texto);
+            padding: 6px 0;
+            display: flex;
+            align-items: start;
+        }
+
+        .agent-type-features li::before {
+            content: '✓';
+            color: var(--netelip-azul);
+            font-weight: 700;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .agent-type-badge {
+            display: inline-block;
+            background: var(--netelip-azul);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 16px;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
         .form-group {
             margin-bottom: 28px;
         }
 
-        .form-label {
-            font-weight: 600;
-            color: var(--oscuro);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
+        .form-control:focus {
+            border-color: var(--netelip-azul) !important;
+            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1) !important;
+            outline: none;
         }
 
-        .required {
-            color: #ef4444;
-            margin-left: 4px;
-        }
-
+        /* ===== TOOLTIP ===== */
         .tooltip-icon {
             margin-left: 6px;
             color: var(--netelip-azul);
             cursor: help;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .custom-tooltip {
@@ -252,22 +413,22 @@
 
         .tooltip-content {
             visibility: hidden;
-            width: 300px;
+            width: 320px;
             background: var(--oscuro);
             color: white;
             text-align: left;
             border-radius: 8px;
-            padding: 14px 16px;
+            padding: 16px 18px;
             position: absolute;
             z-index: 2000;
-            bottom: 130%;
+            bottom: 140%;
             left: 50%;
-            margin-left: -150px;
+            margin-left: -160px;
             opacity: 0;
             transition: all 0.3s;
             font-size: 13px;
-            line-height: 1.5;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            line-height: 1.6;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .tooltip-content::after {
@@ -275,8 +436,8 @@
             position: absolute;
             top: 100%;
             left: 50%;
-            margin-left: -6px;
-            border-width: 6px;
+            margin-left: -8px;
+            border-width: 8px;
             border-style: solid;
             border-color: var(--oscuro) transparent transparent transparent;
         }
@@ -284,101 +445,6 @@
         .custom-tooltip:hover .tooltip-content {
             visibility: visible;
             opacity: 1;
-        }
-
-        .form-control {
-            border: 1px solid var(--gris-borde);
-            border-radius: 8px;
-            padding: 11px 14px;
-            font-size: 14px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .form-control:focus {
-            border-color: var(--netelip-azul);
-            box-shadow: 0 0 0 3px rgba(38, 122, 176, 0.1);
-            outline: none;
-        }
-
-        .form-text {
-            color: var(--gris-texto);
-            font-size: 13px;
-            margin-top: 6px;
-        }
-
-        /* ===== SECTOR CARDS CON ICONOS SVG ===== */
-        .sector-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-        }
-
-        .sector-card {
-            border: 2px solid var(--gris-borde);
-            border-radius: 10px;
-            padding: 24px 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-            position: relative;
-        }
-
-        .sector-card:hover {
-            border-color: var(--netelip-azul);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        }
-
-        .sector-card.selected {
-            border-color: var(--netelip-azul);
-            background: #eff6ff;
-        }
-
-        .sector-card.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            background: var(--netelip-azul);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
-        }
-
-        .sector-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 16px;
-        }
-
-        .sector-icon svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .sector-card:hover .sector-icon svg {
-            transform: scale(1.05);
-            transition: transform 0.2s;
-        }
-
-        .sector-name {
-            font-weight: 700;
-            color: var(--oscuro);
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-
-        .sector-desc {
-            font-size: 12px;
-            color: var(--gris-texto);
         }
 
         /* ===== BUTTONS ===== */
@@ -411,7 +477,7 @@
         .btn-primary:hover:not(:disabled) {
             background: var(--netelip-azul-hover);
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.2);
+            box-shadow: 0 4px 12px rgba(38, 122, 176, 0.25);
         }
 
         .btn-secondary {
@@ -430,15 +496,53 @@
             cursor: not-allowed;
         }
 
+        /* ===== INFO BANNER ===== */
+        .info-banner {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-top: 32px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .info-banner i {
+            color: var(--netelip-azul);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .info-banner-content {
+            flex: 1;
+        }
+
+        .info-banner-title {
+            font-weight: 700;
+            color: var(--oscuro);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info-banner-text {
+            font-size: 13px;
+            color: var(--gris-texto);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 968px) {
+            .agent-types-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
             .main-content {
                 margin-left: 0;
-            }
-            .sector-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -456,77 +560,77 @@
         </div>
 
         <div class="steps-container">
-            <a href="#" class="step-item active">
+            <div class="step-item active">
                 <div class="step-number">1</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
                     <span class="step-desc">Nombre y sector</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">2</div>
                 <div class="step-info">
                     <span class="step-name">Configuración LLM</span>
                     <span class="step-desc">Modelo y prompt</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">3</div>
                 <div class="step-info">
                     <span class="step-name">Selección de voz</span>
                     <span class="step-desc">Voz y personalidad</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">4</div>
                 <div class="step-info">
                     <span class="step-name">Conversación</span>
                     <span class="step-desc">Idioma y respuestas</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">5</div>
                 <div class="step-info">
                     <span class="step-name">Tiempos</span>
                     <span class="step-desc">Duraciones y delays</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">6</div>
                 <div class="step-info">
                     <span class="step-name">Audio y STT</span>
                     <span class="step-desc">Sonido ambiente</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">7</div>
                 <div class="step-info">
                     <span class="step-name">Herramientas</span>
                     <span class="step-desc">Integraciones</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
 
-            <a href="#" class="step-item">
+            <div class="step-item disabled">
                 <div class="step-number">8</div>
                 <div class="step-info">
                     <span class="step-name">Resumen</span>
                     <span class="step-desc">Revisar y crear</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
-            </a>
+            </div>
         </div>
     </div>
 
@@ -543,220 +647,180 @@
         <!-- CONTENT -->
         <div class="content-area">
             <div class="form-card">
-                <h1 class="section-title">Información básica del agente</h1>
-                <p class="section-subtitle">
-                    Empecemos con los datos fundamentales. Esta información personaliza todo el comportamiento de tu agente.
-                </p>
-
                 <form id="wizardForm">
-                    <!-- NOMBRE DEL AGENTE -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            ¿Cómo se llamará tu agente?
-                            <span class="required">*</span>
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    <strong>Nombre del agente</strong><br>
-                                    Este será el nombre con el que tu agente se presentará en todas las llamadas.
-                                    <br><br>
-                                    <strong>Ejemplo:</strong> "Hola, soy Sofia de Netelip"
-                                    <br><br>
-                                    <strong>Tips:</strong><br>
-                                    • Nombres cortos (2-3 sílabas)<br>
-                                    • Fáciles de pronunciar<br>
-                                    • Evita nombres técnicos
+                    
+                    <!-- SECCIÓN: INFORMACIÓN BÁSICA DEL AGENTE -->
+                    <div style="margin-bottom: 48px;">
+                        <h2 style="font-size: 20px; font-weight: 700; color: var(--oscuro); margin-bottom: 8px;">
+                            Información básica del agente
+                        </h2>
+                        <p style="font-size: 14px; color: var(--gris-texto); margin-bottom: 32px; line-height: 1.6;">
+                            Empecemos con los datos fundamentales. Esta información personaliza todo el comportamiento de tu agente.
+                        </p>
+
+                        <!-- NOMBRE DEL AGENTE -->
+                        <div class="form-group">
+                            <label class="form-label" style="display: flex; align-items: center; font-weight: 600; color: var(--oscuro); margin-bottom: 8px; font-size: 14px;">
+                                ¿Cómo se llamará tu agente?
+                                <span style="color: #ef4444; margin-left: 4px;">*</span>
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Nombre del agente</strong><br>
+                                        Este será el nombre con el que tu agente se presentará en todas las llamadas.
+                                        <br><br>
+                                        <strong>Ejemplo:</strong> "Hola, soy Sofia de Netelip"
+                                        <br><br>
+                                        <strong>Tips:</strong><br>
+                                        • Nombres cortos (2-3 sílabas)<br>
+                                        • Fáciles de pronunciar<br>
+                                        • Evita nombres técnicos
+                                    </span>
                                 </span>
-                            </span>
-                        </label>
-                        <input type="text" 
-                               class="form-control" 
-                               id="agentName" 
-                               placeholder="Ej: Sofia, Carlos, Laura..."
-                               required>
-                        <div class="form-text">
-                            <i class="bi bi-lightbulb me-1"></i>
-                            Este nombre aparecerá en todas las interacciones con clientes
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="agentName" 
+                                   placeholder="Ej: Sofia, Carlos, Laura..."
+                                   required
+                                   style="border: 1px solid var(--gris-borde); border-radius: 8px; padding: 11px 14px; font-size: 14px; transition: all 0.2s; font-weight: 500;">
+                            <div style="color: var(--gris-texto); font-size: 13px; margin-top: 6px;">
+                                <i class="bi bi-lightbulb me-1"></i>
+                                Este nombre aparecerá en todas las interacciones con clientes
+                            </div>
+                        </div>
+
+                        <!-- NOMBRE EMPRESA -->
+                        <div class="form-group">
+                            <label class="form-label" style="display: flex; align-items: center; font-weight: 600; color: var(--oscuro); margin-bottom: 8px; font-size: 14px;">
+                                Nombre de tu empresa
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        <strong>Nombre de la empresa</strong><br>
+                                        El agente usará este nombre para presentar tu empresa.
+                                        <br><br>
+                                        <strong>Ejemplo:</strong> "Hola, soy Sofia de Netelip"
+                                        <br><br>
+                                        Si lo dejas vacío, el agente no mencionará el nombre de la empresa.
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="companyName" 
+                                   placeholder="Ej: Netelip, Mi Empresa SL..."
+                                   style="border: 1px solid var(--gris-borde); border-radius: 8px; padding: 11px 14px; font-size: 14px; transition: all 0.2s; font-weight: 500;">
+                            <div style="color: var(--gris-texto); font-size: 13px; margin-top: 6px;">
+                                <i class="bi bi-building me-1"></i>
+                                Se usará en las presentaciones (opcional)
+                            </div>
                         </div>
                     </div>
 
-                    <!-- NOMBRE EMPRESA -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            Nombre de tu empresa
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    <strong>Nombre de la empresa</strong><br>
-                                    El agente usará este nombre para presentar tu empresa.
-                                    <br><br>
-                                    <strong>Ejemplo:</strong> "Hola, soy Sofia de Netelip"
-                                    <br><br>
-                                    Si lo dejas vacío, el agente no mencionará el nombre de la empresa.
-                                </span>
-                            </span>
-                        </label>
-                        <input type="text" 
-                               class="form-control" 
-                               id="empresa" 
-                               placeholder="Ej: Netelip, Mi Empresa SL...">
-                        <div class="form-text">
-                            <i class="bi bi-building me-1"></i>
-                            Se usará en las presentaciones (opcional)
+                    <!-- SEPARADOR -->
+                    <div style="border-top: 2px solid var(--gris-borde); margin: 48px 0; padding-top: 40px;">
+                        <h2 style="font-size: 20px; font-weight: 700; color: var(--oscuro); margin-bottom: 8px;">
+                            ¿Qué tipo de agente necesitas?
+                        </h2>
+                        <p style="font-size: 14px; color: var(--gris-texto); margin-bottom: 32px; line-height: 1.6;">
+                            Selecciona el tipo de agente según la función principal que necesites. Cada uno tiene capacidades optimizadas para su propósito.
+                        </p>
+                    </div>
+
+                    <div class="agent-types-grid">
+                        <!-- TRANSFERENCIA -->
+                        <div class="agent-type-card" onclick="selectAgentType(this, 'transferencia')">
+                            <div class="agent-type-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 3L16 5L14 7" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20 3L18 5L20 7" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="agent-type-name">Transferencia de llamadas</div>
+                            <div class="agent-type-desc">
+                                Deriva llamadas inteligentemente a personas o departamentos específicos según el contexto de la conversación.
+                            </div>
+                            <ul class="agent-type-features">
+                                <li>Transferencia caliente (con contexto)</li>
+                                <li>Transferencia fría (directa)</li>
+                                <li>Routing por horarios y disponibilidad</li>
+                                <li>Múltiples destinos configurables</li>
+                            </ul>
+                            <span class="agent-type-badge">Distribución inteligente</span>
+                        </div>
+
+                        <!-- AGENDAMIENTO -->
+                        <div class="agent-type-card" onclick="selectAgentType(this, 'agendamiento')">
+                            <div class="agent-type-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="6" width="18" height="15" rx="2" stroke="#267ab0" stroke-width="1.5"/>
+                                    <path d="M3 10H21" stroke="#267ab0" stroke-width="1.5"/>
+                                    <path d="M7 3V6M17 3V6" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="9" cy="14" r="1" fill="#267ab0"/>
+                                    <circle cx="15" cy="14" r="1" fill="#267ab0"/>
+                                    <circle cx="12" cy="17" r="1" fill="#267ab0"/>
+                                </svg>
+                            </div>
+                            <div class="agent-type-name">Agendamiento de citas</div>
+                            <div class="agent-type-desc">
+                                Gestiona automáticamente la reserva de citas verificando disponibilidad en tiempo real con Cal.com.
+                            </div>
+                            <ul class="agent-type-features">
+                                <li>Integración directa con Cal.com</li>
+                                <li>Verificación de disponibilidad real</li>
+                                <li>Confirmaciones automáticas</li>
+                                <li>Recordatorios de citas</li>
+                            </ul>
+                            <span class="agent-type-badge">Cal.com integrado</span>
+                        </div>
+
+                        <!-- CUALIFICACIÓN + ATENCIÓN -->
+                        <div class="agent-type-card" onclick="selectAgentType(this, 'cualificacion')">
+                            <div class="agent-type-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" stroke="#267ab0" stroke-width="1.5"/>
+                                    <path d="M12 11V12M12 15H12.01" stroke="#267ab0" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="12" cy="8" r="1.5" fill="#267ab0"/>
+                                </svg>
+                            </div>
+                            <div class="agent-type-name">Cualificación y atención</div>
+                            <div class="agent-type-desc">
+                                Cualifica leads con preguntas estratégicas y proporciona atención al cliente completa para consultas generales.
+                            </div>
+                            <ul class="agent-type-features">
+                                <li>Cualificación de leads inteligente</li>
+                                <li>Scoring automático de prospectos</li>
+                                <li>Resolución de consultas frecuentes</li>
+                                <li>Escalado selectivo a humanos</li>
+                            </ul>
+                            <span class="agent-type-badge">Dual: Ventas + Soporte</span>
                         </div>
                     </div>
 
-                    <!-- SECTOR -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            ¿Para qué sector es este agente?
-                            <span class="required">*</span>
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    <strong>Selección del sector</strong><br>
-                                    Cada sector tiene un prompt optimizado específico.
-                                    <br><br>
-                                    <strong>¿Por qué importa?</strong><br>
-                                    • El agente entiende tu industria<br>
-                                    • Usa vocabulario apropiado<br>
-                                    • Maneja objeciones típicas<br>
-                                    • Aplica mejores prácticas
-                                    <br><br>
-                                    Podrás personalizar el prompt después.
-                                </span>
-                            </span>
-                        </label>
-                        
-                        <div class="sector-grid">
-                            <!-- ATENCIÓN AL CLIENTE -->
-                            <div class="sector-card" onclick="selectSector(this, 'atencion_cliente')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M8 12H8.01M12 12H12.01M16 12H16.01" stroke="#267ab0" stroke-width="2" stroke-linecap="round"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Atención al cliente</div>
-                                <div class="sector-desc">80% consultas automatizadas</div>
-                            </div>
-
-                            <!-- GESTIÓN DE CITAS -->
-                            <div class="sector-card" onclick="selectSector(this, 'gestion_citas')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="3" y="6" width="18" height="15" rx="2" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M3 10H21" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M7 3V6M17 3V6" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round"/>
-                                        <circle cx="9" cy="15" r="1" fill="#267ab0"/>
-                                        <circle cx="15" cy="15" r="1" fill="#267ab0"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Gestión de citas</div>
-                                <div class="sector-desc">90% reducción no-shows</div>
-                            </div>
-
-                            <!-- CUALIFICACIÓN DE LEADS -->
-                            <div class="sector-card" onclick="selectSector(this, 'cualificacion_leads')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#267ab0" stroke-width="1.5" stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Cualificación de leads</div>
-                                <div class="sector-desc">Solo leads calificados</div>
-                            </div>
-
-                            <!-- TURISMO -->
-                            <div class="sector-card" onclick="selectSector(this, 'turismo')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 9.11111V20H21V9.11111M3 9.11111L12 3L21 9.11111M3 9.11111L12 15.2222M21 9.11111L12 15.2222" stroke="#267ab0" stroke-width="1.5" stroke-linejoin="round"/>
-                                        <circle cx="12" cy="13" r="2" stroke="#267ab0" stroke-width="1.5"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Turismo y viajes</div>
-                                <div class="sector-desc">Reservas 24/7</div>
-                            </div>
-
-                            <!-- INMOBILIARIA -->
-                            <div class="sector-card" onclick="selectSector(this, 'inmobiliaria')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 21H21M4 18V10L12 4L20 10V18M9 21V15H15V21" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <rect x="10.5" y="7" width="3" height="2" rx="0.5" fill="#267ab0"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Inmobiliaria</div>
-                                <div class="sector-desc">Visitas agendadas</div>
-                            </div>
-
-                            <!-- SERVICIOS PROFESIONALES -->
-                            <div class="sector-card" onclick="selectSector(this, 'servicios_profesionales')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="4" y="8" width="16" height="13" rx="2" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M8 8V6C8 4.89543 8.89543 4 10 4H14C15.1046 4 16 4.89543 16 6V8" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M12 12V16M10 14H14" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Servicios profesionales</div>
-                                <div class="sector-desc">Consulta cualificada</div>
-                            </div>
-
-                            <!-- ENCUESTAS -->
-                            <div class="sector-card" onclick="selectSector(this, 'encuestas')">
-                                <div class="sector-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="4" y="3" width="16" height="18" rx="2" stroke="#267ab0" stroke-width="1.5"/>
-                                        <path d="M8 8H16M8 12H16M8 16H12" stroke="#267ab0" stroke-width="1.5" stroke-linecap="round"/>
-                                        <circle cx="8" cy="8" r="0.5" fill="#267ab0"/>
-                                        <circle cx="8" cy="12" r="0.5" fill="#267ab0"/>
-                                        <circle cx="8" cy="16" r="0.5" fill="#267ab0"/>
-                                    </svg>
-                                </div>
-                                <div class="sector-name">Encuestas y feedback</div>
-                                <div class="sector-desc">Feedback estructurado</div>
+                    <!-- INFO BANNER -->
+                    <div class="info-banner">
+                        <i class="bi bi-lightbulb-fill"></i>
+                        <div class="info-banner-content">
+                            <div class="info-banner-title">¿No estás seguro cuál elegir?</div>
+                            <div class="info-banner-text">
+                                <strong>Transferencia:</strong> Si tu prioridad es distribuir llamadas entre tu equipo.<br>
+                                <strong>Agendamiento:</strong> Si necesitas automatizar reservas de consultas, visitas o reuniones.<br>
+                                <strong>Cualificación:</strong> Si buscas filtrar leads y dar soporte a clientes.
                             </div>
                         </div>
-                        <input type="hidden" id="selectedSector" required>
                     </div>
 
-                    <!-- NICHO -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            Nicho específico (opcional)
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    <strong>Nicho específico</strong><br>
-                                    Especialización de tu negocio.
-                                    <br><br>
-                                    <strong>Ejemplos:</strong><br>
-                                    • Software SaaS B2B<br>
-                                    • Agencia inmobiliaria de lujo<br>
-                                    • Restaurante mediterráneo<br>
-                                    • Despacho de abogados
-                                </span>
-                            </span>
-                        </label>
-                        <input type="text" 
-                               class="form-control" 
-                               id="nicho" 
-                               placeholder="Ej: Software SaaS, Agencia de lujo...">
-                        <div class="form-text">
-                            <i class="bi bi-funnel me-1"></i>
-                            Personaliza mejor el comportamiento del agente
-                        </div>
-                    </div>
+                    <input type="hidden" id="selectedAgentType" required>
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" disabled>
+                        <a href="dashboard.html" class="btn btn-secondary">
                             <i class="bi bi-arrow-left"></i>
-                            Anterior
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Cancelar
+                        </a>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()" disabled id="btnNext">
                             Siguiente
                             <i class="bi bi-arrow-right"></i>
                         </button>
@@ -768,25 +832,56 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const formData = {
+        // Inicializar o recuperar configuración del agente
+        let agentConfig = JSON.parse(sessionStorage.getItem('agentConfig')) || {
+            agent_type: '',
             agent_name: '',
-            empresa: '',
-            sector: '',
-            nicho: ''
+            company_name: '',
+            niche: '',
+            voice_id: '',
+            llm_config: {},
+            integrations: {},
+            advanced_config: {}
         };
 
-        function selectSector(element, sector) {
-            document.querySelectorAll('.sector-card').forEach(card => {
+        function selectAgentType(element, type) {
+            // Remover selección previa
+            document.querySelectorAll('.agent-type-card').forEach(card => {
                 card.classList.remove('selected');
             });
+            
+            // Seleccionar nueva opción
             element.classList.add('selected');
-            formData.sector = sector;
-            document.getElementById('selectedSector').value = sector;
+            agentConfig.agent_type = type;
+            document.getElementById('selectedAgentType').value = type;
+            
+            // Guardar en sessionStorage
+            sessionStorage.setItem('agentConfig', JSON.stringify(agentConfig));
+            
+            // Validar si se puede habilitar el botón siguiente
+            validateForm();
+            
+            console.log('✅ Tipo de agente seleccionado:', type);
         }
 
-        function nextStep() {
+        function validateForm() {
+            const agentType = document.getElementById('selectedAgentType').value;
             const agentName = document.getElementById('agentName').value.trim();
-            const sector = document.getElementById('selectedSector').value;
+            
+            // Habilitar botón solo si hay tipo de agente Y nombre de agente
+            if (agentType && agentName) {
+                document.getElementById('btnNext').disabled = false;
+            } else {
+                document.getElementById('btnNext').disabled = true;
+            }
+        }
+
+        // Validar en tiempo real
+        document.getElementById('agentName')?.addEventListener('input', validateForm);
+
+        function nextStep() {
+            const agentType = document.getElementById('selectedAgentType').value;
+            const agentName = document.getElementById('agentName').value.trim();
 
             if (!agentName) {
                 alert('⚠️ Por favor, introduce el nombre del agente');
@@ -794,20 +889,47 @@
                 return;
             }
 
-            if (!sector) {
-                alert('⚠️ Por favor, selecciona un sector');
+            if (!agentType) {
+                alert('⚠️ Por favor, selecciona un tipo de agente');
                 return;
             }
 
-            formData.agent_name = agentName;
-            formData.empresa = document.getElementById('empresa').value.trim();
-            formData.nicho = document.getElementById('nicho').value.trim();
+            // Guardar datos
+            agentConfig.agent_name = agentName;
+            agentConfig.company_name = document.getElementById('companyName').value.trim();
+            
+            sessionStorage.setItem('agentConfig', JSON.stringify(agentConfig));
 
-            console.log('✅ Datos paso 1:', formData);
-            alert(`✅ ¡Perfecto!\n\nDatos guardados:\n• Agente: ${agentName}\n• Sector: ${sector}\n\nEn la versión completa, aquí avanzarías al paso 2.`);
+            console.log('✅ Configuración guardada:', agentConfig);
+            
+            // Redirigir al paso 2
+            window.location.href = 'wizard-paso2-netelip.html';
         }
 
-        console.log('🚀 Wizard paso 1 cargado');
+        // Restaurar selección si existe
+        window.addEventListener('DOMContentLoaded', () => {
+            if (agentConfig.agent_type) {
+                const cards = document.querySelectorAll('.agent-type-card');
+                cards.forEach(card => {
+                    if (card.getAttribute('onclick').includes(agentConfig.agent_type)) {
+                        card.classList.add('selected');
+                    }
+                });
+            }
+            
+            if (agentConfig.agent_name) {
+                document.getElementById('agentName').value = agentConfig.agent_name;
+            }
+            
+            if (agentConfig.company_name) {
+                document.getElementById('companyName').value = agentConfig.company_name;
+            }
+            
+            validateForm();
+        });
+
+        console.log('🚀 Wizard Paso 1 (Información básica) - Cargado correctamente');
     </script>
 </body>
 </html>
+
