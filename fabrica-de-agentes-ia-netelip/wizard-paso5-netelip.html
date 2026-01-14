@@ -562,7 +562,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+            <a href="wizard-paso4-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Conversación</span>
@@ -638,7 +638,7 @@
                     <div class="time-card">
                         <div class="time-card-header">
                             <div class="time-icon">
-                                ⏱️
+                                <i class="bi bi-clock-history" style="font-size: 24px;"></i>
                             </div>
                             <div class="time-card-title">
                                 <h4>Delay del mensaje inicial</h4>
@@ -661,7 +661,7 @@
                                 <input type="number" 
                                        class="form-control" 
                                        id="beginMessageDelay" 
-                                       value="1500" 
+                                       value="200" 
                                        min="0" 
                                        max="10000"
                                        step="100">
@@ -669,7 +669,7 @@
                             </div>
                             <div class="form-text">
                                 <i class="bi bi-clock-history me-1"></i>
-                                Valor recomendado: 1500ms (1.5 segundos)
+                                Valor recomendado: 200ms
                             </div>
                         </div>
                     </div>
@@ -678,7 +678,7 @@
                     <div class="time-card">
                         <div class="time-card-header">
                             <div class="time-icon">
-                                🔇
+                                <i class="bi bi-volume-mute" style="font-size: 24px;"></i>
                             </div>
                             <div class="time-card-title">
                                 <h4>Finalizar por silencio</h4>
@@ -701,7 +701,7 @@
                                 <input type="number" 
                                        class="form-control" 
                                        id="endCallAfterSilence" 
-                                       value="30000" 
+                                       value="59000" 
                                        min="5000" 
                                        max="120000"
                                        step="1000">
@@ -718,7 +718,7 @@
                     <div class="time-card">
                         <div class="time-card-header">
                             <div class="time-icon">
-                                📞
+                                <i class="bi bi-telephone" style="font-size: 24px;"></i>
                             </div>
                             <div class="time-card-title">
                                 <h4>Duración máxima de llamada</h4>
@@ -741,7 +741,7 @@
                                 <input type="number" 
                                        class="form-control" 
                                        id="maxCallDuration" 
-                                       value="1800000" 
+                                       value="601000" 
                                        min="60000" 
                                        max="7200000"
                                        step="60000">
@@ -749,7 +749,7 @@
                             </div>
                             <div class="form-text">
                                 <i class="bi bi-hourglass-split me-1"></i>
-                                <span id="durationDisplay">30 minutos</span> - Previene llamadas infinitas
+                                <span id="durationDisplay">10 minutos</span> - Previene llamadas infinitas
                             </div>
                         </div>
                     </div>
@@ -764,7 +764,7 @@
                         <div class="time-card">
                             <div class="time-card-header">
                                 <div class="time-icon" style="font-size: 20px;">
-                                    🔔
+                                    <i class="bi bi-bell" style="font-size: 24px;"></i>
                                 </div>
                                 <div class="time-card-title">
                                     <h4>Trigger de recordatorio</h4>
@@ -787,7 +787,7 @@
                                     <input type="number" 
                                            class="form-control" 
                                            id="reminderTrigger" 
-                                           value="10000" 
+                                           value="30000" 
                                            min="3000" 
                                            max="60000"
                                            step="1000">
@@ -795,7 +795,7 @@
                                 </div>
                                 <div class="form-text">
                                     <i class="bi bi-bell me-1"></i>
-                                    <span id="reminderTriggerDisplay">10 segundos</span> de silencio
+                                    <span id="reminderTriggerDisplay">30 segundos</span> de silencio
                                 </div>
                             </div>
                         </div>
@@ -803,7 +803,7 @@
                         <div class="time-card">
                             <div class="time-card-header">
                                 <div class="time-icon" style="font-size: 20px;">
-                                    🔢
+                                    <i class="bi bi-arrow-repeat" style="font-size: 24px;"></i>
                                 </div>
                                 <div class="time-card-title">
                                     <h4>Máximo de recordatorios</h4>
@@ -825,7 +825,7 @@
                                 <input type="number" 
                                        class="form-control" 
                                        id="reminderMaxCount" 
-                                       value="2" 
+                                       value="1" 
                                        min="0" 
                                        max="10"
                                        step="1">
@@ -928,7 +928,7 @@
                     <div class="time-card">
                         <div class="time-card-header">
                             <div class="time-icon">
-                                📲
+                                <i class="bi bi-telephone-outbound" style="font-size: 24px;"></i>
                             </div>
                             <div class="time-card-title">
                                 <h4>Ring duration</h4>
@@ -1071,7 +1071,7 @@
             // Resumen de configuración
             const summary = `✅ ¡Tiempos configurados!
 
-⏱️ Delay inicial: ${beginMessageDelay}ms
+⏱ Delay inicial: ${beginMessageDelay}ms
 🔇 Auto-colgar por silencio: ${endCallAfterSilence}ms (${Math.round(endCallAfterSilence/1000)}s)
 📞 Duración máxima: ${maxCallDuration}ms (${Math.round(maxCallDuration/60000)} min)
 🔔 Recordatorio cada: ${reminderTrigger}ms (${Math.round(reminderTrigger/1000)}s)
