@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear agente IA - Paso 7 | Netelip</title>
+    <title>Crear agente IA - Paso 7: Configuración avanzada | Netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -25,6 +25,7 @@
             --oscuro: #1a2428;
             --exito: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         body {
@@ -194,7 +195,7 @@
 
         .content-area {
             padding: 32px;
-            max-width: 1100px;
+            max-width: 1200px;
         }
 
         .form-card {
@@ -228,6 +229,16 @@
             display: flex;
             align-items: center;
             font-size: 14px;
+        }
+
+        .badge-required {
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: 600;
         }
 
         .tooltip-icon {
@@ -297,6 +308,9 @@
             color: var(--gris-texto);
             font-size: 13px;
             margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* ALERT */
@@ -334,9 +348,26 @@
             margin-top: 2px;
         }
 
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-success i {
+            color: var(--exito);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
         /* SECTION DIVIDER */
         .section-divider {
-            margin: 40px 0 32px 0;
+            margin: 48px 0 32px 0;
             border-top: 2px solid var(--gris-borde);
             padding-top: 32px;
         }
@@ -354,27 +385,32 @@
             margin-bottom: 24px;
         }
 
-        /* TOOL CARD */
-        .tool-card {
+        /* TOOL CHECKBOX CARDS */
+        .tool-checkbox-card {
             background: var(--gris-claro);
-            border: 1px solid var(--gris-borde);
+            border: 2px solid var(--gris-borde);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 16px;
+            transition: all 0.2s;
         }
 
-        .tool-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
+        .tool-checkbox-card.active {
+            background: #eff6ff;
+            border-color: var(--netelip-azul);
         }
 
-        .tool-info {
+        .tool-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex: 1;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .tool-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
         }
 
         .tool-icon {
@@ -386,121 +422,124 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            flex-shrink: 0;
         }
 
-        .tool-details h4 {
+        .tool-info {
+            flex: 1;
+        }
+
+        .tool-info h4 {
             font-size: 16px;
             font-weight: 700;
             color: var(--oscuro);
             margin: 0 0 4px 0;
         }
 
-        .tool-details p {
+        .tool-info p {
             font-size: 13px;
             color: var(--gris-texto);
             margin: 0;
         }
 
-        .btn-remove-tool {
-            background: #ef4444;
+        .tool-config-area {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gris-borde);
+            display: none;
+        }
+
+        .tool-config-area.active {
+            display: block;
+        }
+
+        /* VARIABLES TABLE */
+        .variables-table {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .variables-table-header {
+            background: var(--gris-claro);
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--oscuro);
+            border-bottom: 1px solid var(--gris-borde);
+            display: grid;
+            grid-template-columns: 2fr 1fr 3fr 80px;
+            gap: 12px;
+        }
+
+        .variable-row {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gris-borde);
+            display: grid;
+            grid-template-columns: 2fr 1fr 3fr 80px;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .variable-row:last-child {
+            border-bottom: none;
+        }
+
+        .variable-row input,
+        .variable-row select {
+            font-size: 13px;
+            padding: 8px 10px;
+        }
+
+        .btn-remove-var {
+            background: var(--danger);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.2s;
         }
 
-        .btn-remove-tool:hover {
+        .btn-remove-var:hover {
             background: #dc2626;
         }
 
-        .tool-config {
-            background: white;
-            border: 1px solid var(--gris-borde);
+        .btn-add-variable {
+            background: var(--netelip-azul);
+            color: white;
+            border: none;
+            padding: 10px 16px;
             border-radius: 8px;
-            padding: 16px;
-        }
-
-        .tool-config .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        /* ADD TOOL BUTTON */
-        .add-tool-section {
-            margin-top: 24px;
-        }
-
-        .tool-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .tool-option {
-            background: white;
-            border: 2px solid var(--gris-borde);
-            border-radius: 10px;
-            padding: 16px;
             cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
             transition: all 0.2s;
-            text-align: center;
         }
 
-        .tool-option:hover {
-            border-color: var(--netelip-azul);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.1);
+        .btn-add-variable:hover {
+            background: var(--netelip-azul-hover);
         }
 
-        .tool-option-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
+        .use-template-section {
+            margin-bottom: 24px;
         }
 
-        .tool-option-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin-bottom: 4px;
-        }
-
-        .tool-option-desc {
-            font-size: 12px;
-            color: var(--gris-texto);
-        }
-
-        /* EMPTY STATE */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            background: var(--gris-claro);
-            border: 2px dashed var(--gris-borde);
-            border-radius: 10px;
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            color: var(--gris-texto);
-            margin-bottom: 16px;
-        }
-
-        .empty-state h4 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            color: var(--gris-texto);
-            margin-bottom: 0;
+        .template-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
         }
 
         /* BOTONES */
@@ -552,6 +591,68 @@
             cursor: not-allowed;
         }
 
+        /* MODEL SELECTOR CARDS */
+        .model-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .model-card {
+            background: var(--gris-claro);
+            border: 2px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .model-card:hover {
+            border-color: var(--netelip-azul);
+            transform: translateY(-2px);
+        }
+
+        .model-card.selected {
+            background: #eff6ff;
+            border-color: var(--netelip-azul);
+        }
+
+        .model-card input[type="radio"] {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .model-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 0 0 8px 0;
+        }
+
+        .model-card p {
+            font-size: 13px;
+            color: var(--gris-texto);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .model-badge {
+            display: inline-block;
+            background: var(--exito);
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -559,7 +660,12 @@
             .main-content {
                 margin-left: 0;
             }
-            .tool-selector {
+            .variables-table-header,
+            .variable-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .model-selector {
                 grid-template-columns: 1fr;
             }
         }
@@ -569,7 +675,7 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+            <a href="dashboard.html" class="back-link">
                 <i class="bi bi-arrow-left"></i>
                 Volver al dashboard
             </a>
@@ -578,7 +684,7 @@
         </div>
 
         <div class="steps-container">
-            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+            <a href="wizard-paso1-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
@@ -586,7 +692,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+            <a href="wizard-paso2-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Configuración LLM</span>
@@ -594,7 +700,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+            <a href="wizard-paso3-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Selección de voz</span>
@@ -602,7 +708,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+            <a href="wizard-paso4-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Conversación</span>
@@ -610,7 +716,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso5-TIEMPOS.html" class="step-item completed">
+            <a href="wizard-paso5-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Tiempos</span>
@@ -618,7 +724,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso6-AUDIO-STT.html" class="step-item completed">
+            <a href="wizard-paso6-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Audio y STT</span>
@@ -629,8 +735,8 @@
             <a href="#" class="step-item active">
                 <div class="step-number">7</div>
                 <div class="step-info">
-                    <span class="step-name">Herramientas</span>
-                    <span class="step-desc">Integraciones</span>
+                    <span class="step-name">Configuración avanzada</span>
+                    <span class="step-desc">Tools y webhooks</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
             </a>
@@ -653,81 +759,525 @@
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" style="width: 87.5%;"></div>
             </div>
-            <div class="progress-text">Paso 7 de 8 - Herramientas e integraciones</div>
+            <div class="progress-text">Paso 7 de 8 - Configuración avanzada</div>
         </div>
 
         <!-- CONTENT -->
         <div class="content-area">
             <div class="form-card">
-                <h1 class="section-title">Herramientas e integraciones</h1>
+                <h1 class="section-title">Configuración avanzada</h1>
                 <p class="section-subtitle">
-                    Configura las acciones que tu agente puede ejecutar durante las llamadas.
+                    Configura las herramientas, la extracción de datos post-llamada y los webhooks de tu agente.
                 </p>
 
                 <div class="alert-info">
                     <i class="bi bi-lightbulb-fill"></i>
                     <div>
-                        <strong>Tip:</strong> Las herramientas permiten que tu agente realice acciones como transferir llamadas, colgar, marcar dígitos o ejecutar webhooks personalizados. Añade solo las que necesites.
+                        <strong>Importante:</strong> Esta configuración es crítica para que tu agente funcione correctamente. Las herramientas permiten que el agente ejecute acciones específicas, y los webhooks son esenciales para la integración con tus sistemas.
                     </div>
                 </div>
 
                 <form id="wizardForm">
-                    <!-- LISTA DE HERRAMIENTAS -->
-                    <div id="toolsList">
-                        <!-- Las herramientas se renderizan aquí -->
-                    </div>
-
-                    <!-- SELECTOR DE HERRAMIENTAS -->
-                    <div class="add-tool-section">
-                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">
-                            Añadir herramienta
+                    <!-- ============================================================ -->
+                    <!-- SECCIÓN 1: HERRAMIENTAS DEL AGENTE (TOOLS) -->
+                    <!-- ============================================================ -->
+                    <div class="section-divider" style="margin-top: 0;">
+                        <h3>
+                            <i class="bi bi-tools me-2"></i>Herramientas del agente
                             <span class="custom-tooltip">
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
-                                    <strong>Herramientas disponibles:</strong><br><br>
-                                    Selecciona qué acciones puede ejecutar tu agente durante las llamadas. Puedes añadir múltiples herramientas.
+                                    Las herramientas (tools) son capacidades que le das a tu agente para ejecutar acciones específicas durante la llamada, como finalizar la conversación, agendar citas, transferir al usuario o consultar disponibilidad.
                                 </span>
                             </span>
                         </h3>
-                        
-                        <div class="tool-selector">
-                            <div class="tool-option" onclick="addTool('end_call')">
-                                <div class="tool-option-icon">📞</div>
-                                <div class="tool-option-name">Finalizar llamada</div>
-                                <div class="tool-option-desc">Colgar la llamada</div>
+                        <p>Selecciona las acciones que tu agente podrá ejecutar durante las llamadas.</p>
+                    </div>
+
+                    <!-- TOOL 1: END CALL -->
+                    <div class="tool-checkbox-card" id="tool-end-call">
+                        <div class="tool-header" onclick="toggleTool('end-call')">
+                            <input type="checkbox" class="tool-checkbox" id="check-end-call" onclick="event.stopPropagation(); toggleTool('end-call')">
+                            <div class="tool-icon"><i class="bi bi-telephone-x-fill" style="color: var(--danger);"></i></div>
+                            <div class="tool-info">
+                                <h4>Finalizar llamada</h4>
+                                <p>Permite al agente terminar la llamada cuando detecta que la conversación ha concluido</p>
+                            </div>
+                        </div>
+                        <div class="tool-config-area" id="config-end-call">
+                            <div class="alert-info" style="margin-bottom: 20px;">
+                                <i class="bi bi-info-circle-fill"></i>
+                                <div>
+                                    <strong>Formato de uso:</strong> Esta herramienta se invoca con <code>{{end_call}}</code> en el prompt del agente.
+                                </div>
                             </div>
 
-                            <div class="tool-option" onclick="addTool('transfer_call')">
-                                <div class="tool-option-icon">📲</div>
-                                <div class="tool-option-name">Transferir llamada</div>
-                                <div class="tool-option-desc">A otro número</div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Name
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Nombre identificador de la herramienta. Se usará como {{end_call}} en el prompt.
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="end-call-name" value="end_call" placeholder="end_call">
                             </div>
 
-                            <div class="tool-option" onclick="addTool('press_digit')">
-                                <div class="tool-option-icon">🔢</div>
-                                <div class="tool-option-name">Marcar dígito</div>
-                                <div class="tool-option-desc">DTMF en IVR</div>
-                            </div>
-
-                            <div class="tool-option" onclick="addTool('custom')">
-                                <div class="tool-option-icon">🔗</div>
-                                <div class="tool-option-name">Webhook custom</div>
-                                <div class="tool-option-desc">Integración HTTP</div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Description
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Instrucciones para el agente sobre cuándo y cómo usar esta herramienta. Sé específico.
+                                        </span>
+                                    </span>
+                                </label>
+                                <textarea class="form-control" id="end-call-description" rows="4" placeholder="Ej: Finaliza la llamada de forma cordial después de confirmar que el usuario no necesita nada más...">Finaliza la llamada de forma cordial después de confirmar que el usuario no necesita nada más. Solo usar cuando el usuario confirme que ya tiene toda la información que necesitaba.</textarea>
+                                <div class="form-text">
+                                    <i class="bi bi-lightbulb"></i>
+                                    Cuanto más específica sea la descripción, mejor funcionará el agente
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ALERT WARNING -->
-                    <div class="alert-warning" style="margin-top: 32px;">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                        <div>
-                            <strong>Nota:</strong> Las herramientas personalizadas (custom webhook) requieren que tengas un endpoint configurado para recibir las peticiones HTTP.
+                    <!-- TOOL 2: RESERVAR CITA (CAL.COM) -->
+                    <div class="tool-checkbox-card" id="tool-booking">
+                        <div class="tool-header" onclick="toggleTool('booking')">
+                            <input type="checkbox" class="tool-checkbox" id="check-booking" onclick="event.stopPropagation(); toggleTool('booking')">
+                            <div class="tool-icon"><i class="bi bi-calendar-check-fill" style="color: var(--exito);"></i></div>
+                            <div class="tool-info">
+                                <h4>Reservar cita en el calendario (Cal.com)</h4>
+                                <p>Integración nativa con Cal.com para agendar citas automáticamente</p>
+                            </div>
+                        </div>
+                        <div class="tool-config-area" id="config-booking">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Name
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Nombre identificador de la herramienta de reserva.
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="booking-name" value="reservar_cal" placeholder="reservar_cal">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Description
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Instrucciones detalladas sobre cómo usar la herramienta de reserva. Incluye formato de fechas, zona horaria y parámetros requeridos.
+                                        </span>
+                                    </span>
+                                </label>
+                                <textarea class="form-control" id="booking-description" rows="6" placeholder="Ej: Cuando el usuario acuerde un horario disponible, resérvalo en el calendario...">Cuando el usuario acuerde un horario disponible, resérvalo en el calendario. El parámetro de tiempo debe ser una fecha absoluta completa, como "Jueves, 2025 Mayo 15/05/2025 10 AM" (incluso si el usuario pide una fecha relativa como "el próximo martes", conviértela a fecha absoluta). El tiempo siempre debe estar EN EL FUTURO, el tiempo ahora mismo es {{current_time_Europe/Madrid}} (Hora de Madrid). El parámetro de zona horaria siempre debe ser "Europe/Madrid". El parámetro de notas debe tener un resumen de una oración de la conversación. El parámetro de nombre debe ser {{user_name}}.</textarea>
+                                <div class="form-text">
+                                    <i class="bi bi-clock-history"></i>
+                                    Usa <code>{{current_time_Europe/Madrid}}</code> para tiempo actual y <code>{{user_name}}</code> para nombre del usuario
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Cal.com API Key
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Obtén tu API Key desde tu cuenta de Cal.com en Settings → Developer → API Keys
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="cal-api-key" placeholder="cal_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                                <div class="form-text">
+                                    <i class="bi bi-shield-lock"></i>
+                                    Esta API key se almacena de forma segura en el backend
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Event Type ID
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            ID del tipo de evento que deseas agendar. Lo encuentras en la URL de tu evento en Cal.com. <a href="https://cal.com/docs/api-reference" target="_blank" style="color: #fff; text-decoration: underline;">Más información</a>
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="number" class="form-control" id="cal-event-type" placeholder="Ej: 123456">
+                                <div class="form-text">
+                                    <i class="bi bi-calendar-event"></i>
+                                    Puedes encontrar el Event Type ID en la URL de tu cal.com
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Timezone (Zona horaria)
+                                    <span style="font-size: 12px; color: var(--gris-texto); font-weight: 400; margin-left: 8px;">(Opcional)</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Zona horaria por defecto para las citas. Si no se especifica, se usa Europe/Madrid.
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="cal-timezone" value="Europe/Madrid" placeholder="Europe/Madrid">
+                                <div class="form-text">
+                                    <i class="bi bi-globe"></i>
+                                    Formato: Europe/Madrid, America/New_York, etc.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TOOL 3: BÚSQUEDA DE DISPONIBILIDAD -->
+                    <div class="tool-checkbox-card" id="tool-availability">
+                        <div class="tool-header" onclick="toggleTool('availability')">
+                            <input type="checkbox" class="tool-checkbox" id="check-availability" onclick="event.stopPropagation(); toggleTool('availability')">
+                            <div class="tool-icon"><i class="bi bi-search" style="color: var(--netelip-azul);"></i></div>
+                            <div class="tool-info">
+                                <h4>Búsqueda de disponibilidad</h4>
+                                <p>Consulta disponibilidad de horarios antes de confirmar citas</p>
+                            </div>
+                        </div>
+                        <div class="tool-config-area" id="config-availability">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Tipo de integración
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Automatización N8N:</strong> Usa un webhook personalizado en N8N que devuelve disponibilidad.<br><br>
+                                            <strong>Integración nativa Cal.com:</strong> Usa la API de Cal.com para consultar disponibilidad directamente.
+                                        </span>
+                                    </span>
+                                </label>
+                                <select class="form-select" id="availability-type" onchange="toggleAvailabilityConfig()">
+                                    <option value="n8n">Automatización N8N (webhook)</option>
+                                    <option value="native">Integración nativa Cal.com</option>
+                                </select>
+                            </div>
+
+                            <!-- CONFIG N8N -->
+                            <div id="availability-n8n-config">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Name
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="availability-n8n-name" value="check_availability" placeholder="check_availability">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Description
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <textarea class="form-control" id="availability-n8n-description" rows="3" placeholder="Ej: Consulta los horarios disponibles antes de reservar una cita">Consulta los horarios disponibles en el calendario antes de confirmar una cita con el usuario.</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Webhook URL N8N
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                        <span class="custom-tooltip">
+                                            <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                            <span class="tooltip-content">
+                                                URL del webhook en N8N que devolverá los horarios disponibles. Debe responder con un JSON que contenga las franjas horarias.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="url" class="form-control" id="availability-webhook" placeholder="https://tu-instancia.app.n8n.cloud/webhook/check-availability">
+                                    <div class="form-text">
+                                        <i class="bi bi-link-45deg"></i>
+                                        Este webhook se ejecutará cuando el agente necesite consultar disponibilidad
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="availability-speak-during" checked>
+                                        <label class="form-check-label" for="availability-speak-during">
+                                            Hablar durante la ejecución del webhook
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="availability-speak-after" checked>
+                                        <label class="form-check-label" for="availability-speak-after">
+                                            Hablar después de ejecutar el webhook
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CONFIG NATIVE CAL.COM -->
+                            <div id="availability-native-config" style="display: none;">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Name
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="availability-native-name" value="check_availability_cal" placeholder="check_availability_cal">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Description
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <textarea class="form-control" id="availability-native-description" rows="3" placeholder="Ej: Consulta disponibilidad en Cal.com">Consulta los horarios disponibles en Cal.com antes de reservar una cita.</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Cal.com API Key
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="availability-cal-api-key" placeholder="cal_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Calendar URL
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <input type="url" class="form-control" id="availability-calendar-url" placeholder="https://cal.com/tu-usuario">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Event Type ID
+                                        <span class="badge-required">OBLIGATORIO</span>
+                                    </label>
+                                    <input type="number" class="form-control" id="availability-event-type" placeholder="123456">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TOOL 4: TRANSFERIR LLAMADA -->
+                    <div class="tool-checkbox-card" id="tool-transfer">
+                        <div class="tool-header" onclick="toggleTool('transfer')">
+                            <input type="checkbox" class="tool-checkbox" id="check-transfer" onclick="event.stopPropagation(); toggleTool('transfer')">
+                            <div class="tool-icon"><i class="bi bi-arrow-left-right" style="color: var(--warning);"></i></div>
+                            <div class="tool-info">
+                                <h4>Transferir llamada</h4>
+                                <p>Transfiere la llamada a un número específico o persona determinada</p>
+                            </div>
+                        </div>
+                        <div class="tool-config-area" id="config-transfer">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Name
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                </label>
+                                <input type="text" class="form-control" id="transfer-name" value="transfer_call" placeholder="transfer_call">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Description
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Instrucciones para el agente sobre cuándo debe transferir la llamada (Ej: "Cuando el usuario pida hablar con un humano" o "Si no puede resolver la consulta")
+                                        </span>
+                                    </span>
+                                </label>
+                                <textarea class="form-control" id="transfer-description" rows="3" placeholder="Ej: Transferir cuando el usuario pida hablar con un agente humano o cuando la consulta requiera atención personalizada">Transferir la llamada al departamento de soporte cuando el usuario lo solicite o cuando la consulta sea demasiado compleja para resolver automáticamente.</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Tipo de transferencia
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Transferencia caliente:</strong> El agente hace una introducción antes de transferir (más personal).<br><br>
+                                            <strong>Transferencia fría:</strong> Transferencia directa sin introducción (más rápida).
+                                        </span>
+                                    </span>
+                                </label>
+                                <select class="form-select" id="transfer-type">
+                                    <option value="warm">Transferencia caliente (con introducción)</option>
+                                    <option value="cold">Transferencia fría (directa)</option>
+                                </select>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i>
+                                    La transferencia caliente proporciona contexto al agente receptor
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Número de teléfono (formato internacional)
+                                    <span class="badge-required">OBLIGATORIO</span>
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            Número de teléfono al que se transferirá la llamada. Debe incluir código de país (Ej: +34 para España)
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="tel" class="form-control" id="transfer-number" placeholder="+34900123456">
+                                <div class="form-text">
+                                    <i class="bi bi-telephone"></i>
+                                    Formato: +[código país][número] (Ej: +34612345678)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÓN AÑADIR HERRAMIENTA PERSONALIZADA -->
+                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gris-borde);">
+                        <button type="button" class="btn-add-variable" onclick="addCustomTool()">
+                            <i class="bi bi-plus-circle"></i>
+                            Añadir herramienta personalizada
+                        </button>
+                        <p style="font-size: 13px; color: var(--gris-texto); margin: 8px 0 0 0;">
+                            Añade webhooks personalizados o herramientas adicionales según tus necesidades
+                        </p>
+                    </div>
+
+                    <!-- CONTENEDOR DE HERRAMIENTAS PERSONALIZADAS -->
+                    <div id="custom-tools-container"></div>
+
+                    <!-- ============================================================ -->
+                    <!-- SECCIÓN 2: POST CALL DATA RETRIEVAL -->
+                    <!-- ============================================================ -->
+                    <div class="section-divider">
+                        <h3>
+                            <i class="bi bi-database me-2"></i>Extracción de información post-llamada
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    Define qué información debe extraer el agente de cada llamada. Esta información se enviará al webhook post-llamada para que puedas integrarla con tu CRM, base de datos u otros sistemas.
+                                </span>
+                            </span>
+                        </h3>
+                        <p>Define qué información necesitas extraer de cada conversación para integrarla con tus sistemas.</p>
+                    </div>
+
+                    <!-- SELECTOR DE MODELO -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Modelo de análisis post-llamada
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>GPT-4.1:</strong> Modelo estándar, rápido y preciso para la mayoría de casos.<br><br>
+                                    <strong>GPT-4.0:</strong> Máxima precisión para extraer emails correctamente. Usa este si necesitas capturar emails con alta fidelidad.
+                                </span>
+                            </span>
+                        </label>
+                        <div class="model-selector">
+                            <label class="model-card selected" for="model-gpt41">
+                                <input type="radio" name="post-call-model" id="model-gpt41" value="gpt-4.1" checked>
+                                <h4>GPT-4.1</h4>
+                                <p>Modelo estándar, balanceado entre velocidad y precisión. Recomendado para la mayoría de casos.</p>
+                                <span class="model-badge">Recomendado</span>
+                            </label>
+
+                            <label class="model-card" for="model-gpt40">
+                                <input type="radio" name="post-call-model" id="model-gpt40" value="gpt-4.0">
+                                <h4>GPT-4.0</h4>
+                                <p>Máxima precisión para capturar emails correctamente. Usa este si necesitas extraer emails con alta fidelidad.</p>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- USAR PLANTILLA DE VARIABLES -->
+                    <div class="use-template-section">
+                        <div class="alert-info">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <input type="checkbox" class="template-checkbox" id="use-template" onchange="loadTemplateVariables(this.checked)">
+                                    <label for="use-template" style="margin: 0; cursor: pointer; font-weight: 600;">
+                                        Usar variables recomendadas
+                                    </label>
+                                </div>
+                                <p style="margin: 0; font-size: 13px;">
+                                    Carga automáticamente las variables más comunes: Call Summary, Call Successful, nombre, email, cita reservada y número de teléfono.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLA DE VARIABLES -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Variables a extraer
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    Define las variables que el agente debe extraer de cada llamada. Cada variable debe tener:<br><br>
+                                    <strong>• Nombre:</strong> Identificador único<br>
+                                    <strong>• Tipo:</strong> string, boolean o number<br>
+                                    <strong>• Descripción:</strong> Instrucciones claras para el LLM sobre qué extraer y cómo
+                                </span>
+                            </span>
+                        </label>
+
+                        <div class="variables-table">
+                            <div class="variables-table-header">
+                                <div>Nombre de variable</div>
+                                <div>Tipo</div>
+                                <div>Descripción para el LLM</div>
+                                <div>Acción</div>
+                            </div>
+                            <div id="variables-list">
+                                <!-- Las variables se cargan aquí -->
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-add-variable" onclick="addVariable()">
+                            <i class="bi bi-plus-circle"></i>
+                            Añadir variable personalizada
+                        </button>
+                    </div>
+
+                    <!-- WEBHOOK POST-CALL -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Webhook post-llamada
+                            <span class="badge-required">OBLIGATORIO</span>
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    URL donde se enviará toda la información extraída tras finalizar cada llamada. Recibirás un JSON con todas las variables definidas más metadatos de la llamada (duración, timestamp, etc).
+                                </span>
+                            </span>
+                        </label>
+                        <input type="url" class="form-control" id="post-call-webhook" placeholder="https://tu-sistema.com/webhook/post-call-data" required>
+                        <div class="form-text">
+                            <i class="bi bi-send"></i>
+                            Este webhook recibirá un POST con toda la información extraída en formato JSON
                         </div>
                     </div>
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso6-AUDIO-STT.html'">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso6-netelip.html'">
                             <i class="bi bi-arrow-left"></i>
                             Anterior
                         </button>
@@ -742,361 +1292,535 @@
     </div>
 
     <script>
-        // Datos del wizard
+        // =====================================================
+        // DATOS DEL WIZARD
+        // =====================================================
         const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
 
-        // Array de herramientas
-        let tools = [];
-        let toolCounter = 0;
+        // =====================================================
+        // VARIABLES PARA POST-CALL DATA
+        // =====================================================
+        let variables = [];
+        let varCounter = 0;
 
-        // Añadir herramienta
-        function addTool(type) {
-            const id = `tool_${toolCounter++}`;
+        // Variables recomendadas (plantilla)
+        const templateVariables = [
+            {
+                name: 'call_summary',
+                type: 'string',
+                description: 'Resumen completo de la llamada incluyendo tema principal, puntos clave discutidos y resultado final de la conversación',
+                examples: ['El usuario llamó para consultar precios del plan empresarial. Se explicaron las características y se acordó enviar propuesta por email.']
+            },
+            {
+                name: 'call_successful',
+                type: 'boolean',
+                description: '¿La llamada cumplió su objetivo principal? True si se resolvió la consulta o se completó la acción deseada, False si quedó pendiente o el usuario no obtuvo lo que buscaba',
+                examples: ['true', 'false']
+            },
+            {
+                name: 'user_name',
+                type: 'string',
+                description: 'Nombre completo del contacto capturado al inicio de la conversación. Se usa para personalizar toda la interacción y crear cercanía',
+                examples: ['Carlos Martínez', 'María García', 'Pedro Sánchez']
+            },
+            {
+                name: 'email',
+                type: 'string',
+                description: 'Dirección de email principal del usuario para envío de información y confirmación de cita. Capturar y validar email con el contacto sin deletrear. Convierte el deletreo a formato email: "punto" = . / "arroba" = @ / "guion" = - / "guion bajo" = _. Letras en minúsculas sin espacios',
+                examples: ['carlos.martinez@empresa.com', 'maria_garcia@hotmail.com', 'info@restaurante.es']
+            },
+            {
+                name: 'cita_reservada',
+                type: 'boolean',
+                description: '¿Se reservó una cita en el calendario durante esta llamada? True si se confirmó agendamiento, False si no se agendó o el usuario no estaba interesado',
+                examples: ['true', 'false']
+            },
+            {
+                name: 'numero_telefono',
+                type: 'number',
+                description: 'Número de teléfono del usuario confirmado durante la llamada. Debe ser validado antes de reservar una cita en el calendario. Formato numérico sin espacios ni guiones',
+                examples: ['34612345678', '34900123456']
+            }
+        ];
+
+        // =====================================================
+        // TOGGLE TOOLS (CHECKBOX CARDS)
+        // =====================================================
+        function toggleTool(toolId) {
+            const card = document.getElementById(`tool-${toolId}`);
+            const checkbox = document.getElementById(`check-${toolId}`);
+            const configArea = document.getElementById(`config-${toolId}`);
             
-            const tool = {
-                id,
-                type,
+            // Toggle checkbox
+            checkbox.checked = !checkbox.checked;
+            
+            // Toggle active states
+            if (checkbox.checked) {
+                card.classList.add('active');
+                configArea.classList.add('active');
+            } else {
+                card.classList.remove('active');
+                configArea.classList.remove('active');
+            }
+        }
+
+        // =====================================================
+        // TOGGLE AVAILABILITY CONFIG (N8N vs NATIVE)
+        // =====================================================
+        function toggleAvailabilityConfig() {
+            const type = document.getElementById('availability-type').value;
+            const n8nConfig = document.getElementById('availability-n8n-config');
+            const nativeConfig = document.getElementById('availability-native-config');
+            
+            if (type === 'n8n') {
+                n8nConfig.style.display = 'block';
+                nativeConfig.style.display = 'none';
+            } else {
+                n8nConfig.style.display = 'none';
+                nativeConfig.style.display = 'block';
+            }
+        }
+
+        // =====================================================
+        // CUSTOM TOOLS
+        // =====================================================
+        let customToolsCounter = 0;
+        let customTools = [];
+
+        function addCustomTool() {
+            const toolId = `custom_tool_${customToolsCounter++}`;
+            
+            customTools.push({
+                id: toolId,
                 name: '',
                 description: '',
-                // Campos específicos según tipo
-                ...(type === 'transfer_call' && { number: '', transfer_mode: 'number' }),
-                ...(type === 'press_digit' && { digit: '' }),
-                ...(type === 'custom' && { url: '', speak_during_execution: false, speak_after_execution: true })
-            };
+                url: '',
+                speak_during: false,
+                speak_after: true
+            });
             
-            tools.push(tool);
-            renderTools();
+            renderCustomTools();
         }
 
-        // Eliminar herramienta
-        function removeTool(id) {
-            tools = tools.filter(t => t.id !== id);
-            renderTools();
+        function removeCustomTool(toolId) {
+            customTools = customTools.filter(t => t.id !== toolId);
+            renderCustomTools();
         }
 
-        // Actualizar campo de herramienta
-        function updateTool(id, field, value) {
-            const tool = tools.find(t => t.id === id);
+        function updateCustomTool(toolId, field, value) {
+            const tool = customTools.find(t => t.id === toolId);
             if (tool) {
                 tool[field] = value;
             }
         }
 
-        // Renderizar herramientas
-        function renderTools() {
-            const container = document.getElementById('toolsList');
+        function renderCustomTools() {
+            const container = document.getElementById('custom-tools-container');
             
-            if (tools.length === 0) {
+            if (customTools.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = customTools.map(tool => `
+                <div class="tool-checkbox-card active" style="margin-top: 16px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="tool-icon"><i class="bi bi-link-45deg" style="color: var(--gris-texto);"></i></div>
+                            <h4 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--oscuro);">
+                                Herramienta personalizada
+                            </h4>
+                        </div>
+                        <button type="button" class="btn-remove-var" onclick="removeCustomTool('${tool.id}')" style="padding: 8px 16px;">
+                            <i class="bi bi-trash"></i>
+                            Eliminar
+                        </button>
+                    </div>
+                    
+                    <div class="tool-config-area active">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Name
+                                <span class="badge-required">OBLIGATORIO</span>
+                            </label>
+                            <input type="text" class="form-control" placeholder="Ej: crear_ticket_crm" value="${tool.name}" onchange="updateCustomTool('${tool.id}', 'name', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Description
+                                <span class="badge-required">OBLIGATORIO</span>
+                            </label>
+                            <textarea class="form-control" rows="3" placeholder="Ej: Crea un ticket de soporte en el CRM con la información del usuario" onchange="updateCustomTool('${tool.id}', 'description', this.value)">${tool.description}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Webhook URL
+                                <span class="badge-required">OBLIGATORIO</span>
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        URL del endpoint que recibirá la petición HTTP POST con los datos de la herramienta
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="url" class="form-control" placeholder="https://tu-servidor.com/webhook/custom-action" value="${tool.url}" onchange="updateCustomTool('${tool.id}', 'url', this.value)">
+                            <div class="form-text">
+                                <i class="bi bi-link-45deg"></i>
+                                Endpoint que procesará la acción personalizada
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="speak-during-${tool.id}" ${tool.speak_during ? 'checked' : ''} onchange="updateCustomTool('${tool.id}', 'speak_during', this.checked)">
+                                <label class="form-check-label" for="speak-during-${tool.id}">
+                                    Hablar durante la ejecución del webhook
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="speak-after-${tool.id}" ${tool.speak_after ? 'checked' : ''} onchange="updateCustomTool('${tool.id}', 'speak_after', this.checked)">
+                                <label class="form-check-label" for="speak-after-${tool.id}">
+                                    Hablar después de ejecutar el webhook
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // =====================================================
+        // MODEL SELECTOR
+        // =====================================================
+        document.querySelectorAll('.model-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // =====================================================
+        // VARIABLES - CARGAR PLANTILLA
+        // =====================================================
+        function loadTemplateVariables(useTemplate) {
+            if (useTemplate) {
+                variables = templateVariables.map((v, i) => ({
+                    id: `var_${varCounter++}`,
+                    name: v.name,
+                    type: v.type,
+                    description: v.description,
+                    examples: v.examples
+                }));
+            } else {
+                variables = [];
+            }
+            renderVariables();
+        }
+
+        // =====================================================
+        // VARIABLES - AÑADIR
+        // =====================================================
+        function addVariable() {
+            const id = `var_${varCounter++}`;
+            variables.push({
+                id,
+                name: '',
+                type: 'string',
+                description: '',
+                examples: []
+            });
+            renderVariables();
+        }
+
+        // =====================================================
+        // VARIABLES - ELIMINAR
+        // =====================================================
+        function removeVariable(id) {
+            variables = variables.filter(v => v.id !== id);
+            renderVariables();
+        }
+
+        // =====================================================
+        // VARIABLES - ACTUALIZAR
+        // =====================================================
+        function updateVariable(id, field, value) {
+            const variable = variables.find(v => v.id === id);
+            if (variable) {
+                variable[field] = value;
+            }
+        }
+
+        // =====================================================
+        // VARIABLES - RENDERIZAR
+        // =====================================================
+        function renderVariables() {
+            const container = document.getElementById('variables-list');
+            
+            if (variables.length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🔧</div>
-                        <h4>No hay herramientas añadidas</h4>
-                        <p>Añade herramientas para que tu agente pueda ejecutar acciones durante las llamadas</p>
+                    <div style="padding: 32px; text-align: center; color: var(--gris-texto);">
+                        <i class="bi bi-inbox" style="font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5;"></i>
+                        <p style="margin: 0; font-size: 14px;">No hay variables configuradas</p>
+                        <p style="margin: 4px 0 0 0; font-size: 13px;">Marca "Usar variables recomendadas" o añade variables personalizadas</p>
                     </div>
                 `;
                 return;
             }
             
-            container.innerHTML = tools.map(tool => {
-                const icons = {
-                    end_call: '📞',
-                    transfer_call: '📲',
-                    press_digit: '🔢',
-                    custom: '🔗'
-                };
-                
-                const names = {
-                    end_call: 'Finalizar llamada',
-                    transfer_call: 'Transferir llamada',
-                    press_digit: 'Marcar dígito',
-                    custom: 'Webhook custom'
-                };
-                
-                let configHTML = '';
-                
-                if (tool.type === 'end_call') {
-                    configHTML = `
-                        <div class="tool-config">
-                            <div class="form-group">
-                                <label class="form-label">Nombre de la herramienta</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Finalizar llamada"
-                                       value="${tool.name}"
-                                       onchange="updateTool('${tool.id}', 'name', this.value)">
-                            </div>
-                            <div class="form-group mb-0">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Terminar la llamada de forma educada"
-                                       value="${tool.description}"
-                                       onchange="updateTool('${tool.id}', 'description', this.value)">
-                            </div>
-                        </div>
-                    `;
-                } else if (tool.type === 'transfer_call') {
-                    configHTML = `
-                        <div class="tool-config">
-                            <div class="form-group">
-                                <label class="form-label">Nombre de la herramienta</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Transferir a comercial"
-                                       value="${tool.name}"
-                                       onchange="updateTool('${tool.id}', 'name', this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Transferir al departamento comercial"
-                                       value="${tool.description}"
-                                       onchange="updateTool('${tool.id}', 'description', this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Modo de transferencia</label>
-                                <select class="form-select" 
-                                        onchange="updateTool('${tool.id}', 'transfer_mode', this.value)">
-                                    <option value="number" ${tool.transfer_mode === 'number' ? 'selected' : ''}>Número fijo</option>
-                                    <option value="inferred" ${tool.transfer_mode === 'inferred' ? 'selected' : ''}>Inferido por IA</option>
-                                </select>
-                            </div>
-                            ${tool.transfer_mode === 'number' ? `
-                                <div class="form-group mb-0">
-                                    <label class="form-label">Número de destino</label>
-                                    <input type="tel" 
-                                           class="form-control" 
-                                           placeholder="+34900123456"
-                                           value="${tool.number || ''}"
-                                           onchange="updateTool('${tool.id}', 'number', this.value)">
-                                    <div class="form-text">
-                                        <i class="bi bi-telephone me-1"></i>
-                                        Incluye código de país (+34 para España)
-                                    </div>
-                                </div>
-                            ` : `
-                                <div class="form-group mb-0">
-                                    <label class="form-label">Prompt para IA</label>
-                                    <textarea class="form-control" 
-                                              rows="2"
-                                              placeholder="Ej: Transferir al departamento que el usuario mencione"
-                                              onchange="updateTool('${tool.id}', 'prompt', this.value)">${tool.prompt || ''}</textarea>
-                                    <div class="form-text">
-                                        <i class="bi bi-robot me-1"></i>
-                                        La IA determinará el número basándose en este prompt
-                                    </div>
-                                </div>
-                            `}
-                        </div>
-                    `;
-                } else if (tool.type === 'press_digit') {
-                    configHTML = `
-                        <div class="tool-config">
-                            <div class="form-group">
-                                <label class="form-label">Nombre de la herramienta</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Marcar opción 1"
-                                       value="${tool.name}"
-                                       onchange="updateTool('${tool.id}', 'name', this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Marcar 1 en el IVR"
-                                       value="${tool.description}"
-                                       onchange="updateTool('${tool.id}', 'description', this.value)">
-                            </div>
-                            <div class="form-group mb-0">
-                                <label class="form-label">Dígito a marcar</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="0-9, *, #"
-                                       maxlength="1"
-                                       value="${tool.digit || ''}"
-                                       onchange="updateTool('${tool.id}', 'digit', this.value)">
-                                <div class="form-text">
-                                    <i class="bi bi-hash me-1"></i>
-                                    Solo un dígito: 0-9, * o #
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else if (tool.type === 'custom') {
-                    configHTML = `
-                        <div class="tool-config">
-                            <div class="form-group">
-                                <label class="form-label">Nombre de la herramienta</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Crear ticket en CRM"
-                                       value="${tool.name}"
-                                       onchange="updateTool('${tool.id}', 'name', this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       placeholder="Ej: Crear un ticket de soporte en el CRM"
-                                       value="${tool.description}"
-                                       onchange="updateTool('${tool.id}', 'description', this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">URL del webhook</label>
-                                <input type="url" 
-                                       class="form-control" 
-                                       placeholder="https://tu-servidor.com/webhook"
-                                       value="${tool.url || ''}"
-                                       onchange="updateTool('${tool.id}', 'url', this.value)">
-                                <div class="form-text">
-                                    <i class="bi bi-link-45deg me-1"></i>
-                                    Endpoint que recibirá la petición HTTP POST
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" 
-                                           type="checkbox" 
-                                           id="speak_during_${tool.id}"
-                                           ${tool.speak_during_execution ? 'checked' : ''}
-                                           onchange="updateTool('${tool.id}', 'speak_during_execution', this.checked)">
-                                    <label class="form-check-label" for="speak_during_${tool.id}">
-                                        Hablar durante la ejecución
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group mb-0">
-                                <div class="form-check">
-                                    <input class="form-check-input" 
-                                           type="checkbox" 
-                                           id="speak_after_${tool.id}"
-                                           ${tool.speak_after_execution ? 'checked' : ''}
-                                           onchange="updateTool('${tool.id}', 'speak_after_execution', this.checked)">
-                                    <label class="form-check-label" for="speak_after_${tool.id}">
-                                        Hablar después de la ejecución
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                return `
-                    <div class="tool-card">
-                        <div class="tool-card-header">
-                            <div class="tool-info">
-                                <div class="tool-icon">${icons[tool.type]}</div>
-                                <div class="tool-details">
-                                    <h4>${names[tool.type]}</h4>
-                                    <p>Tipo: ${tool.type}</p>
-                                </div>
-                            </div>
-                            <button type="button" class="btn-remove-tool" onclick="removeTool('${tool.id}')">
-                                <i class="bi bi-trash"></i>
-                                Eliminar
-                            </button>
-                        </div>
-                        ${configHTML}
-                    </div>
-                `;
-            }).join('');
+            container.innerHTML = variables.map(v => `
+                <div class="variable-row">
+                    <input type="text" 
+                           class="form-control" 
+                           placeholder="Ej: user_name"
+                           value="${v.name}"
+                           onchange="updateVariable('${v.id}', 'name', this.value)">
+                    
+                    <select class="form-select" onchange="updateVariable('${v.id}', 'type', this.value)">
+                        <option value="string" ${v.type === 'string' ? 'selected' : ''}>string</option>
+                        <option value="boolean" ${v.type === 'boolean' ? 'selected' : ''}>boolean</option>
+                        <option value="number" ${v.type === 'number' ? 'selected' : ''}>number</option>
+                    </select>
+                    
+                    <input type="text" 
+                           class="form-control" 
+                           placeholder="Ej: Nombre completo del usuario"
+                           value="${v.description}"
+                           onchange="updateVariable('${v.id}', 'description', this.value)">
+                    
+                    <button type="button" class="btn-remove-var" onclick="removeVariable('${v.id}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `).join('');
         }
 
-        // Siguiente paso
+        // =====================================================
+        // SIGUIENTE PASO - VALIDACIÓN Y GUARDADO
+        // =====================================================
         function nextStep() {
-            // Validar herramientas
-            for (const tool of tools) {
-                if (!tool.name || !tool.description) {
-                    alert(`⚠️ La herramienta "${tool.type}" necesita nombre y descripción`);
+            const paso7Data = {
+                tools: {},
+                post_call_data: {}
+            };
+
+            // ========== VALIDAR HERRAMIENTAS ==========
+            const tools = [];
+
+            // 1. END CALL
+            if (document.getElementById('check-end-call').checked) {
+                const name = document.getElementById('end-call-name').value.trim();
+                const description = document.getElementById('end-call-description').value.trim();
+
+                if (!name || !description) {
+                    alert('⚠️ La herramienta End Call requiere Name y Description');
+                    document.getElementById('end-call-name').focus();
                     return;
                 }
-                
-                if (tool.type === 'transfer_call' && tool.transfer_mode === 'number' && !tool.number) {
-                    alert(`⚠️ La herramienta de transferencia necesita un número de destino`);
+
+                tools.push({
+                    type: 'end_call',
+                    name: name,
+                    description: description
+                });
+            }
+
+            // 2. BOOKING CAL.COM
+            if (document.getElementById('check-booking').checked) {
+                const name = document.getElementById('booking-name').value.trim();
+                const description = document.getElementById('booking-description').value.trim();
+                const apiKey = document.getElementById('cal-api-key').value.trim();
+                const eventTypeId = document.getElementById('cal-event-type').value.trim();
+                const timezone = document.getElementById('cal-timezone').value.trim() || 'Europe/Madrid';
+
+                if (!name || !description) {
+                    alert('⚠️ La herramienta de reserva requiere Name y Description');
+                    document.getElementById('booking-name').focus();
                     return;
                 }
-                
-                if (tool.type === 'press_digit' && !tool.digit) {
-                    alert(`⚠️ La herramienta de marcar dígito necesita especificar qué dígito marcar`);
+
+                if (!apiKey || !eventTypeId) {
+                    alert('⚠️ Para usar la herramienta de reserva debes configurar la API Key y Event Type ID de Cal.com');
+                    document.getElementById('cal-api-key').focus();
                     return;
                 }
-                
-                if (tool.type === 'custom' && !tool.url) {
-                    alert(`⚠️ La herramienta custom necesita una URL de webhook`);
+
+                tools.push({
+                    type: 'book_appointment_cal',
+                    name: name,
+                    description: description,
+                    cal_api_key: apiKey,
+                    event_type_id: parseInt(eventTypeId),
+                    calendar_url: 'https://cal.com',
+                    timezone: timezone
+                });
+            }
+
+            // 3. AVAILABILITY CHECK
+            if (document.getElementById('check-availability').checked) {
+                const availType = document.getElementById('availability-type').value;
+
+                if (availType === 'n8n') {
+                    const name = document.getElementById('availability-n8n-name').value.trim();
+                    const description = document.getElementById('availability-n8n-description').value.trim();
+                    const webhookUrl = document.getElementById('availability-webhook').value.trim();
+                    const speakDuring = document.getElementById('availability-speak-during').checked;
+                    const speakAfter = document.getElementById('availability-speak-after').checked;
+
+                    if (!name || !description || !webhookUrl) {
+                        alert('⚠️ La búsqueda de disponibilidad (N8N) requiere Name, Description y Webhook URL');
+                        document.getElementById('availability-webhook').focus();
+                        return;
+                    }
+
+                    tools.push({
+                        type: 'custom',
+                        name: name,
+                        description: description,
+                        url: webhookUrl,
+                        speak_during_execution: speakDuring,
+                        speak_after_execution: speakAfter
+                    });
+                } else {
+                    // Native Cal.com
+                    const name = document.getElementById('availability-native-name').value.trim();
+                    const description = document.getElementById('availability-native-description').value.trim();
+                    const apiKey = document.getElementById('availability-cal-api-key').value.trim();
+                    const calendarUrl = document.getElementById('availability-calendar-url').value.trim();
+                    const eventTypeId = document.getElementById('availability-event-type').value.trim();
+
+                    if (!name || !description || !apiKey || !calendarUrl || !eventTypeId) {
+                        alert('⚠️ La búsqueda de disponibilidad (Cal.com nativa) requiere todos los campos');
+                        document.getElementById('availability-native-name').focus();
+                        return;
+                    }
+
+                    tools.push({
+                        type: 'check_availability_cal',
+                        name: name,
+                        description: description,
+                        cal_api_key: apiKey,
+                        calendar_url: calendarUrl,
+                        event_type_id: parseInt(eventTypeId)
+                    });
+                }
+            }
+
+            // 4. TRANSFER CALL
+            if (document.getElementById('check-transfer').checked) {
+                const name = document.getElementById('transfer-name').value.trim();
+                const description = document.getElementById('transfer-description').value.trim();
+                const transferType = document.getElementById('transfer-type').value;
+                const transferNumber = document.getElementById('transfer-number').value.trim();
+
+                if (!name || !description) {
+                    alert('⚠️ La herramienta de transferencia requiere Name y Description');
+                    document.getElementById('transfer-name').focus();
+                    return;
+                }
+
+                if (!transferNumber) {
+                    alert('⚠️ Debes configurar el número de teléfono de destino para la transferencia');
+                    document.getElementById('transfer-number').focus();
+                    return;
+                }
+
+                tools.push({
+                    type: 'transfer_call',
+                    name: name,
+                    description: description,
+                    transfer_type: transferType, // warm o cold
+                    transfer_destination: {
+                        type: 'predefined',
+                        value: 'operator',
+                        number: transferNumber
+                    }
+                });
+            }
+
+            // 5. CUSTOM TOOLS
+            for (const customTool of customTools) {
+                if (!customTool.name || !customTool.description || !customTool.url) {
+                    alert('⚠️ Todas las herramientas personalizadas deben tener Name, Description y Webhook URL');
+                    return;
+                }
+
+                tools.push({
+                    type: 'custom',
+                    name: customTool.name,
+                    description: customTool.description,
+                    url: customTool.url,
+                    speak_during_execution: customTool.speak_during,
+                    speak_after_execution: customTool.speak_after
+                });
+            }
+
+            paso7Data.tools.general_tools = tools;
+
+            // ========== VALIDAR POST-CALL DATA ==========
+            const postCallWebhook = document.getElementById('post-call-webhook').value.trim();
+            if (!postCallWebhook) {
+                alert('⚠️ El webhook post-llamada es obligatorio');
+                document.getElementById('post-call-webhook').focus();
+                return;
+            }
+
+            // Validar variables
+            for (const v of variables) {
+                if (!v.name || !v.description) {
+                    alert('⚠️ Todas las variables deben tener nombre y descripción');
                     return;
                 }
             }
 
-            // Preparar tools para guardar (formato Retell AI)
-            const formattedTools = tools.map(tool => {
-                const base = {
-                    type: tool.type,
-                    name: tool.name,
-                    description: tool.description
-                };
-                
-                if (tool.type === 'transfer_call') {
-                    if (tool.transfer_mode === 'number') {
-                        return {
-                            ...base,
-                            transfer_destination: {
-                                type: 'number',
-                                number: tool.number
-                            }
-                        };
-                    } else {
-                        return {
-                            ...base,
-                            transfer_destination: {
-                                type: 'inferred',
-                                prompt: tool.prompt
-                            }
-                        };
-                    }
-                } else if (tool.type === 'press_digit') {
-                    return {
-                        ...base,
-                        digit: tool.digit
-                    };
-                } else if (tool.type === 'custom') {
-                    return {
-                        ...base,
-                        url: tool.url,
-                        speak_during_execution: tool.speak_during_execution,
-                        speak_after_execution: tool.speak_after_execution
-                    };
-                }
-                
-                return base;
-            });
+            const selectedModel = document.querySelector('input[name="post-call-model"]:checked').value;
 
-            // Guardar datos
-            const paso7Data = {
-                general_tools: formattedTools
+            paso7Data.post_call_data = {
+                model: selectedModel,
+                variables: variables.map(v => ({
+                    name: v.name,
+                    type: v.type,
+                    description: v.description,
+                    examples: v.examples || []
+                })),
+                webhook: postCallWebhook
             };
 
+            // ========== GUARDAR DATOS ==========
             const allData = { ...wizardData, ...paso7Data };
             localStorage.setItem('wizardData', JSON.stringify(allData));
 
             console.log('✅ Datos paso 7:', paso7Data);
             console.log('📦 Todos los datos:', allData);
 
-            // Resumen
-            const toolsSummary = formattedTools.map(t => `  • ${t.name} (${t.type})`).join('\n');
+            // ========== RESUMEN ==========
+            const toolsCount = tools.length;
+            const varsCount = variables.length;
+            const customToolsCount = customTools.length;
+
+            alert(`✅ ¡Configuración avanzada completada!
+
+🔧 Herramientas activadas: ${toolsCount}${customToolsCount > 0 ? ` (${customToolsCount} personalizadas)` : ''}
+📊 Variables post-llamada: ${varsCount}
+
+Paso 7 completado. En la versión completa avanzarías al Paso 8: Resumen final.`);
             
-            alert(`✅ ¡Herramientas configuradas!
-
-${formattedTools.length > 0 ? `🔧 Herramientas añadidas:\n${toolsSummary}` : '🔧 Sin herramientas configuradas'}
-
-¡Paso 7 completado! En la versión completa avanzarías al Paso 8: Resumen final.`);
+            // window.location.href = 'wizard-paso8-netelip.html';
         }
 
-        // Inicializar
-        renderTools();
-        console.log('🚀 Wizard Paso 7 cargado');
-        console.log('📋 Datos anteriores:', wizardData);
+        // =====================================================
+        // INICIALIZACIÓN
+        // =====================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderVariables();
+            console.log('🚀 Wizard Paso 7 cargado');
+            console.log('📋 Datos anteriores:', wizardData);
+        });
     </script>
 </body>
 </html>
