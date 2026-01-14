@@ -603,7 +603,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+            <a href="wizard-paso3-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Selección de voz</span>
@@ -728,7 +728,6 @@
                             <input class="form-check-input" 
                                    type="checkbox" 
                                    id="enableBackchannel"
-                                   checked
                                    onchange="toggleBackchannel()">
                             <label class="form-check-label" for="enableBackchannel">
                                 <strong>Activar backchannel</strong>
@@ -747,7 +746,7 @@
                         </div>
                     </div>
 
-                    <div id="backchannelConfig" style="display: block;">
+                    <div id="backchannelConfig" style="display: none;">
                         <div class="form-grid-2">
                             <div class="form-group">
                                 <label class="form-label">
@@ -826,13 +825,13 @@
                                 </span>
                             </label>
                             <div class="slider-container">
-                                <div class="slider-value" id="interruptionValue">0.5</div>
+                                <div class="slider-value" id="interruptionValue">0.8</div>
                                 <input type="range" 
                                        id="interruptionSensitivity" 
                                        min="0" 
                                        max="1" 
                                        step="0.1" 
-                                       value="0.5"
+                                       value="0.8"
                                        oninput="document.getElementById('interruptionValue').textContent = this.value">
                             </div>
                             <div class="form-text">
@@ -855,13 +854,13 @@
                                 </span>
                             </label>
                             <div class="slider-container">
-                                <div class="slider-value" id="responsivenessValue">0.8</div>
+                                <div class="slider-value" id="responsivenessValue">0.98</div>
                                 <input type="range" 
                                        id="responsiveness" 
                                        min="0" 
                                        max="1" 
-                                       step="0.1" 
-                                       value="0.8"
+                                       step="0.01" 
+                                       value="0.98"
                                        oninput="document.getElementById('responsivenessValue').textContent = this.value">
                             </div>
                             <div class="form-text">
