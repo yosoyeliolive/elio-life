@@ -714,13 +714,13 @@
                                     </span>
                                 </label>
                                 <div class="slider-container">
-                                    <div class="slider-value" id="ambientVolumeValue">0.5</div>
+                                    <div class="slider-value" id="ambientVolumeValue">0.2</div>
                                     <input type="range" 
                                            id="ambientSoundVolume" 
                                            min="0" 
                                            max="1" 
                                            step="0.1" 
-                                           value="0.5"
+                                           value="0.2"
                                            oninput="document.getElementById('ambientVolumeValue').textContent = this.value">
                                 </div>
                                 <div class="form-text">
@@ -750,12 +750,12 @@
                             </span>
                         </label>
                         <select class="form-select" id="sttMode">
-                            <option value="fast" selected>Rápido (fast) - Recomendado</option>
-                            <option value="accurate">Preciso (accurate)</option>
+                            <option value="fast">Rápido (fast)</option>
+                            <option value="accurate" selected>Preciso (accurate) - Recomendado</option>
                         </select>
                         <div class="form-text">
                             <i class="bi bi-mic me-1"></i>
-                            "Fast" es recomendado para la mayoría de casos
+                            "Accurate" proporciona mejor precisión para información crítica
                         </div>
                     </div>
 
@@ -832,7 +832,8 @@
                                     </span>
                                 </label>
                                 <select class="form-select" id="postCallAnalysisModel">
-                                    <option value="gpt-4o-mini" selected>GPT-4o Mini (rápido)</option>
+                                    <option value="gpt-4.1" selected>GPT-4.1 (recomendado)</option>
+                                    <option value="gpt-4o-mini">GPT-4o Mini (rápido)</option>
                                     <option value="gpt-4o">GPT-4o (detallado)</option>
                                 </select>
                                 <div class="form-text">
@@ -845,7 +846,7 @@
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso5-TIEMPOS.html'">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso5-netelip.html'">
                             <i class="bi bi-arrow-left"></i>
                             Anterior
                         </button>
