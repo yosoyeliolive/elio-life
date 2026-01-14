@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear agente IA - Paso 8 | Netelip</title>
+    <title>Crear agente IA - Paso 8: Resumen final | Netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -25,6 +25,7 @@
             --oscuro: #1a2428;
             --exito: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         body {
@@ -194,7 +195,7 @@
 
         .content-area {
             padding: 32px;
-            max-width: 1100px;
+            max-width: 1400px;
         }
 
         .form-card {
@@ -220,196 +221,263 @@
         /* ALERT SUCCESS */
         .alert-success {
             background: #f0fdf4;
-            border: 1px solid #86efac;
+            border: 1px solid #bbf7d0;
             border-radius: 8px;
-            padding: 14px 16px;
-            margin-bottom: 24px;
+            padding: 20px;
+            margin-bottom: 32px;
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
+            align-items: center;
+            gap: 16px;
         }
 
         .alert-success i {
             color: var(--exito);
-            font-size: 18px;
-            margin-top: 2px;
+            font-size: 32px;
         }
 
-        /* SUMMARY SECTION */
-        .summary-section {
+        .alert-success-content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 0 0 6px 0;
+        }
+
+        .alert-success-content p {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin: 0;
+        }
+
+        /* SUMMARY CARDS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
             background: var(--gris-claro);
             border: 1px solid var(--gris-borde);
             border-radius: 10px;
             padding: 24px;
-            margin-bottom: 24px;
+            position: relative;
         }
 
-        .summary-section h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin-bottom: 16px;
+        .summary-card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        .summary-section h3 .icon {
+        .summary-card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .summary-card-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 20px;
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+        .summary-card-title h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin: 0;
+        }
+
+        .summary-card-edit {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            color: var(--gris-texto);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-card-edit:hover {
+            background: var(--gris-claro);
+            border-color: var(--netelip-azul);
+            color: var(--netelip-azul);
+        }
+
+        .summary-content {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
         }
 
         .summary-item {
-            background: white;
-            border: 1px solid var(--gris-borde);
-            border-radius: 8px;
-            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
         }
 
         .summary-label {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--gris-texto);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
         }
 
         .summary-value {
             font-size: 14px;
             font-weight: 600;
             color: var(--oscuro);
+            text-align: right;
+            max-width: 60%;
+            word-wrap: break-word;
         }
 
         .summary-value.small {
             font-size: 13px;
-        }
-
-        .summary-list {
-            margin-top: 12px;
-        }
-
-        .summary-list-item {
-            background: white;
-            border: 1px solid var(--gris-borde);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .summary-list-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .summary-list-icon {
-            font-size: 20px;
-        }
-
-        .summary-list-content {
-            flex: 1;
-        }
-
-        .summary-list-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin-bottom: 2px;
-        }
-
-        .summary-list-desc {
-            font-size: 12px;
+            font-weight: 500;
             color: var(--gris-texto);
         }
 
-        /* SECTION DIVIDER */
-        .section-divider {
-            margin: 32px 0 24px 0;
-            border-top: 2px solid var(--gris-borde);
-            padding-top: 24px;
+        /* TOOL BADGES */
+        .tool-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tool-badge {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--oscuro);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tool-badge i {
+            font-size: 14px;
+        }
+
+        /* VARIABLE BADGES */
+        .variable-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .variable-badge {
+            background: var(--netelip-azul);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
         }
 
         /* ACTION BUTTONS */
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
             margin-top: 32px;
+            padding-top: 32px;
+            border-top: 2px solid var(--gris-borde);
         }
 
-        .action-btn {
-            background: white;
-            border: 2px solid var(--gris-borde);
-            border-radius: 10px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .action-btn:hover {
-            border-color: var(--netelip-azul);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(38, 122, 176, 0.1);
-        }
-
-        .action-btn-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
-
-        .action-btn-title {
+        .btn-action {
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-weight: 600;
             font-size: 14px;
-            font-weight: 700;
-            color: var(--oscuro);
-            margin-bottom: 4px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
         }
 
-        .action-btn-desc {
-            font-size: 12px;
+        .btn-action i {
+            font-size: 18px;
+        }
+
+        .btn-primary-action {
+            background: var(--exito);
+            color: white;
+        }
+
+        .btn-primary-action:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary-action {
+            background: white;
             color: var(--gris-texto);
+            border: 1px solid var(--gris-borde);
         }
 
-        /* FINAL ACTIONS */
-        .final-actions {
+        .btn-secondary-action:hover {
+            background: var(--gris-claro);
+            color: var(--oscuro);
+        }
+
+        .btn-danger-action {
+            background: white;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger-action:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* WIZARD ACTIONS */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
             margin-top: 40px;
             padding-top: 28px;
             border-top: 1px solid var(--gris-borde);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
         }
 
         .btn {
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 8px;
-            font-weight: 700;
-            font-size: 15px;
+            font-weight: 600;
+            font-size: 14px;
             transition: all 0.2s;
             border: none;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--exito);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
         }
 
         .btn-secondary {
@@ -421,16 +489,6 @@
         .btn-secondary:hover:not(:disabled) {
             background: var(--gris-claro);
             color: var(--oscuro);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-large {
-            padding: 16px 32px;
-            font-size: 16px;
         }
 
         @media (max-width: 768px) {
@@ -446,9 +504,6 @@
             .action-buttons {
                 grid-template-columns: 1fr;
             }
-            .final-actions {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -456,16 +511,16 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+            <a href="dashboard.html" class="back-link">
                 <i class="bi bi-arrow-left"></i>
                 Volver al dashboard
             </a>
             <h2 class="wizard-title">Crear agente IA</h2>
-            <p class="wizard-subtitle">Sigue los 8 pasos para configurar tu agente</p>
+            <p class="wizard-subtitle">Resumen final de configuración</p>
         </div>
 
         <div class="steps-container">
-            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+            <a href="wizard-paso1-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
@@ -473,7 +528,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+            <a href="wizard-paso2-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Configuración LLM</span>
@@ -481,7 +536,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+            <a href="wizard-paso3-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Selección de voz</span>
@@ -489,7 +544,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+            <a href="wizard-paso4-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Conversación</span>
@@ -497,7 +552,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso5-TIEMPOS.html" class="step-item completed">
+            <a href="wizard-paso5-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Tiempos</span>
@@ -505,7 +560,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso6-AUDIO-STT.html" class="step-item completed">
+            <a href="wizard-paso6-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Audio y STT</span>
@@ -513,11 +568,11 @@
                 </div>
             </a>
 
-            <a href="wizard-paso7-HERRAMIENTAS.html" class="step-item completed">
+            <a href="wizard-paso7-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
-                    <span class="step-name">Herramientas</span>
-                    <span class="step-desc">Integraciones</span>
+                    <span class="step-name">Configuración avanzada</span>
+                    <span class="step-desc">Tools y webhooks</span>
                 </div>
             </a>
 
@@ -539,7 +594,7 @@
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" style="width: 100%;"></div>
             </div>
-            <div class="progress-text">Paso 8 de 8 - ¡Todo listo para crear tu agente!</div>
+            <div class="progress-text">Paso 8 de 8 - Resumen final y creación</div>
         </div>
 
         <!-- CONTENT -->
@@ -547,255 +602,444 @@
             <div class="form-card">
                 <h1 class="section-title">Resumen de configuración</h1>
                 <p class="section-subtitle">
-                    Revisa toda la configuración antes de crear tu agente IA.
+                    Revisa todos los detalles de tu agente antes de crearlo. Puedes editar cualquier paso si necesitas hacer cambios.
                 </p>
 
                 <div class="alert-success">
                     <i class="bi bi-check-circle-fill"></i>
-                    <div>
-                        <strong>¡Configuración completa!</strong> Has completado todos los pasos del wizard. 
-                        Revisa el resumen y crea tu agente cuando estés listo.
+                    <div class="alert-success-content">
+                        <h3>¡Configuración completada!</h3>
+                        <p>Has completado todos los pasos. Revisa el resumen y crea tu agente.</p>
                     </div>
                 </div>
 
-                <!-- PASO 1: INFORMACIÓN BÁSICA -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">📋</span>
-                        Información básica
-                    </h3>
-                    <div class="summary-grid" id="summary-paso1">
-                        <!-- Se llena dinámicamente -->
+                <!-- SUMMARY GRID -->
+                <div class="summary-grid">
+                    <!-- PASO 1: INFORMACIÓN BÁSICA -->
+                    <div class="summary-card">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-info-circle-fill" style="color: var(--netelip-azul);"></i>
+                                </div>
+                                <h3>Paso 1: Información básica</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(1)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso1">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- PASO 2: CONFIGURACIÓN LLM -->
+                    <div class="summary-card">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-robot" style="color: var(--netelip-azul);"></i>
+                                </div>
+                                <h3>Paso 2: Configuración LLM</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(2)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso2">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- PASO 3: SELECCIÓN DE VOZ -->
+                    <div class="summary-card">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-mic-fill" style="color: var(--exito);"></i>
+                                </div>
+                                <h3>Paso 3: Selección de voz</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(3)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso3">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- PASO 4: CONVERSACIÓN -->
+                    <div class="summary-card">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-chat-dots-fill" style="color: var(--netelip-azul);"></i>
+                                </div>
+                                <h3>Paso 4: Conversación</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(4)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso4">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- PASO 5: TIEMPOS -->
+                    <div class="summary-card">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-clock-fill" style="color: var(--warning);"></i>
+                                </div>
+                                <h3>Paso 5: Tiempos</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(5)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso5">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- PASO 6: AUDIO Y STT -->
+                    <div class="summary-card">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-music-note-beamed" style="color: var(--exito);"></i>
+                                </div>
+                                <h3>Paso 6: Audio y STT</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(6)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso6">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- PASO 7: CONFIGURACIÓN AVANZADA -->
+                    <div class="summary-card" style="grid-column: 1 / -1;">
+                        <div class="summary-card-header">
+                            <div class="summary-card-title">
+                                <div class="summary-card-icon">
+                                    <i class="bi bi-gear-fill" style="color: var(--netelip-azul);"></i>
+                                </div>
+                                <h3>Paso 7: Configuración avanzada</h3>
+                            </div>
+                            <button class="summary-card-edit" onclick="editStep(7)">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </button>
+                        </div>
+                        <div class="summary-content" id="summary-paso7">
+                            <!-- Rendered by JS -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- PASO 2: CONFIGURACIÓN LLM -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">🤖</span>
-                        Configuración LLM
-                    </h3>
-                    <div class="summary-grid" id="summary-paso2">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-
-                <!-- PASO 3: VOZ -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">🎙️</span>
-                        Selección de voz
-                    </h3>
-                    <div class="summary-grid" id="summary-paso3">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-
-                <!-- PASO 4: CONVERSACIÓN -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">💬</span>
-                        Conversación
-                    </h3>
-                    <div class="summary-grid" id="summary-paso4">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-
-                <!-- PASO 5: TIEMPOS -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">⏱️</span>
-                        Tiempos
-                    </h3>
-                    <div class="summary-grid" id="summary-paso5">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-
-                <!-- PASO 6: AUDIO Y STT -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">🔊</span>
-                        Audio y STT
-                    </h3>
-                    <div class="summary-grid" id="summary-paso6">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-
-                <!-- PASO 7: HERRAMIENTAS -->
-                <div class="summary-section">
-                    <h3>
-                        <span class="icon">🔧</span>
-                        Herramientas
-                    </h3>
-                    <div id="summary-paso7">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-
-                <!-- ACCIONES RÁPIDAS -->
-                <div class="section-divider">
-                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">
-                        Acciones disponibles
-                    </h3>
-                </div>
-
+                <!-- ACTION BUTTONS -->
                 <div class="action-buttons">
-                    <div class="action-btn" onclick="exportJSON()">
-                        <div class="action-btn-icon">📥</div>
-                        <div class="action-btn-title">Exportar JSON</div>
-                        <div class="action-btn-desc">Descarga la configuración en formato JSON</div>
-                    </div>
+                    <button class="btn-action btn-primary-action" onclick="createAgent()">
+                        <i class="bi bi-rocket-takeoff-fill"></i>
+                        Crear Agente IA
+                    </button>
 
-                    <div class="action-btn" onclick="viewRawData()">
-                        <div class="action-btn-icon">👁️</div>
-                        <div class="action-btn-title">Ver datos crudos</div>
-                        <div class="action-btn-desc">Inspecciona el objeto completo en consola</div>
-                    </div>
-
-                    <div class="action-btn" onclick="editStep(1)">
-                        <div class="action-btn-icon">✏️</div>
-                        <div class="action-btn-title">Editar configuración</div>
-                        <div class="action-btn-desc">Vuelve a cualquier paso para modificar</div>
-                    </div>
-
-                    <div class="action-btn" onclick="resetWizard()">
-                        <div class="action-btn-icon">🔄</div>
-                        <div class="action-btn-title">Empezar de nuevo</div>
-                        <div class="action-btn-desc">Borra todo y comienza desde cero</div>
-                    </div>
+                    <button class="btn-action btn-danger-action" onclick="resetWizard()">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Reiniciar Agente IA
+                    </button>
                 </div>
 
-                <!-- BOTONES FINALES -->
-                <div class="final-actions">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso7-HERRAMIENTAS.html'">
+                <!-- WIZARD ACTIONS -->
+                <div class="wizard-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso7-netelip.html'">
                         <i class="bi bi-arrow-left"></i>
                         Anterior
-                    </button>
-                    <button type="button" class="btn btn-primary btn-large" onclick="createAgent()">
-                        <i class="bi bi-rocket-takeoff-fill"></i>
-                        ¡Crear Agente IA!
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL: ÉXITO AL CREAR AGENTE -->
+    <div class="modal fade" id="modalSuccess" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: none; border-radius: 12px;">
+                <div class="modal-body" style="padding: 40px; text-align: center;">
+                    <div style="width: 80px; height: 80px; background: #f0fdf4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
+                        <i class="bi bi-check-circle-fill" style="font-size: 48px; color: var(--exito);"></i>
+                    </div>
+                    <h3 style="font-size: 22px; font-weight: 700; color: var(--oscuro); margin-bottom: 12px;">
+                        ¡Agente IA creado con éxito!
+                    </h3>
+                    <p style="font-size: 14px; color: var(--gris-texto); margin-bottom: 24px;" id="successMessage">
+                        Tu agente ha sido creado y está listo para usar.
+                    </p>
+                    <button type="button" class="btn-action btn-primary-action" onclick="goToDashboard()" style="width: 100%;">
+                        <i class="bi bi-grid-fill"></i>
+                        Ir al Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CONFIRMACIÓN REINICIAR -->
+    <div class="modal fade" id="modalReset" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: none; border-radius: 12px;">
+                <div class="modal-body" style="padding: 40px; text-align: center;">
+                    <div style="width: 80px; height: 80px; background: #fef2f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
+                        <i class="bi bi-exclamation-triangle-fill" style="font-size: 48px; color: var(--danger);"></i>
+                    </div>
+                    <h3 style="font-size: 22px; font-weight: 700; color: var(--oscuro); margin-bottom: 12px;">
+                        ¿Reiniciar configuración?
+                    </h3>
+                    <p style="font-size: 14px; color: var(--gris-texto); margin-bottom: 24px;">
+                        Se borrará toda la configuración actual y comenzarás desde cero. Esta acción no se puede deshacer.
+                    </p>
+                    <div style="display: flex; gap: 12px;">
+                        <button type="button" class="btn-action btn-secondary-action" data-bs-dismiss="modal" style="flex: 1;">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn-action btn-danger-action" onclick="confirmReset()" style="flex: 1;">
+                            <i class="bi bi-trash"></i>
+                            Sí, reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ERROR VALIDACIÓN -->
+    <div class="modal fade" id="modalError" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: none; border-radius: 12px;">
+                <div class="modal-body" style="padding: 40px; text-align: center;">
+                    <div style="width: 80px; height: 80px; background: #fffbeb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
+                        <i class="bi bi-exclamation-circle-fill" style="font-size: 48px; color: var(--warning);"></i>
+                    </div>
+                    <h3 style="font-size: 22px; font-weight: 700; color: var(--oscuro); margin-bottom: 12px;">
+                        Faltan campos obligatorios
+                    </h3>
+                    <p style="font-size: 14px; color: var(--gris-texto); margin-bottom: 24px;" id="errorMessage">
+                        Por favor, completa todos los campos requeridos antes de crear el agente.
+                    </p>
+                    <button type="button" class="btn-action btn-primary-action" data-bs-dismiss="modal" style="width: 100%;">
+                        Entendido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Cargar datos
+        // Datos del wizard
         const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
 
-        // Renderizar resumen
+        // =====================================================
+        // RENDERIZAR RESUMEN COMPLETO
+        // =====================================================
         function renderSummary() {
-            // PASO 1
+            // PASO 1: INFORMACIÓN BÁSICA
             const paso1 = document.getElementById('summary-paso1');
             paso1.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Tipo de agente</div>
+                    <div class="summary-value">${getAgentTypeName(wizardData.agent_type)}</div>
+                </div>
                 <div class="summary-item">
                     <div class="summary-label">Nombre del agente</div>
                     <div class="summary-value">${wizardData.agent_name || 'No definido'}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Empresa</div>
-                    <div class="summary-value">${wizardData.company_name || 'No definida'}</div>
-                </div>
-                <div class="summary-item">
-                    <div class="summary-label">Sector</div>
-                    <div class="summary-value">${wizardData.sector || 'No definido'}</div>
-                </div>
-                <div class="summary-item">
-                    <div class="summary-label">Nicho</div>
-                    <div class="summary-value">${wizardData.niche || 'No definido'}</div>
+                    <div class="summary-label">Nombre de la empresa</div>
+                    <div class="summary-value">${wizardData.company_name || 'No definido'}</div>
                 </div>
             `;
 
-            // PASO 2
+            // PASO 2: CONFIGURACIÓN LLM
             const paso2 = document.getElementById('summary-paso2');
+            const personalidades = Array.isArray(wizardData.personalidad) 
+                ? wizardData.personalidad.join(', ') 
+                : (wizardData.personalidad || 'No definido');
+            
             paso2.innerHTML = `
                 <div class="summary-item">
-                    <div class="summary-label">Tipo de agente</div>
-                    <div class="summary-value">${wizardData.agent_type || 'No definido'}</div>
+                    <div class="summary-label">Modelo agente</div>
+                    <div class="summary-value">${wizardData.modelo_agente || 'No definido'}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">Modelo LLM</div>
-                    <div class="summary-value">${wizardData.llm_model || 'No definido'}</div>
+                    <div class="summary-value">${wizardData.modelo || 'No definido'}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">Temperature</div>
                     <div class="summary-value">${wizardData.temperature || '0.7'}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Max Tokens</div>
+                    <div class="summary-label">Max tokens</div>
                     <div class="summary-value">${wizardData.max_tokens || '1000'}</div>
                 </div>
+                <div class="summary-item">
+                    <div class="summary-label">Quién habla primero</div>
+                    <div class="summary-value">${wizardData.who_speaks_first === 'agent' ? 'Agente' : 'Usuario'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Tono</div>
+                    <div class="summary-value">${wizardData.tono || 'No definido'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Personalidad</div>
+                    <div class="summary-value small">${personalidades}</div>
+                </div>
+                ${wizardData.high_priority ? `
+                <div class="summary-item">
+                    <div class="summary-label">Alta prioridad</div>
+                    <div class="summary-value">✓ Activado</div>
+                </div>
+                ` : ''}
             `;
 
-            // PASO 3
+            // PASO 3: SELECCIÓN DE VOZ
             const paso3 = document.getElementById('summary-paso3');
             paso3.innerHTML = `
                 <div class="summary-item">
                     <div class="summary-label">Proveedor</div>
-                    <div class="summary-value">${wizardData.voice_provider || 'No definido'}</div>
+                    <div class="summary-value">${wizardData.voice_provider ? wizardData.voice_provider.toUpperCase() : 'No definido'}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Voz</div>
+                    <div class="summary-label">Voz seleccionada</div>
                     <div class="summary-value">${wizardData.voice_name || 'No definida'}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Voice Speed</div>
+                    <div class="summary-label">Idioma</div>
+                    <div class="summary-value">${getLanguageName(wizardData.voice_language)}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Género</div>
+                    <div class="summary-value">${wizardData.voice_gender === 'female' ? 'Femenino' : 'Masculino'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Velocidad</div>
                     <div class="summary-value">${wizardData.voice_speed || '1.0'}x</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Voice Temperature</div>
+                    <div class="summary-label">Temperature</div>
                     <div class="summary-value">${wizardData.voice_temperature || '0.5'}</div>
                 </div>
             `;
 
-            // PASO 4
+            // PASO 4: CONVERSACIÓN
             const paso4 = document.getElementById('summary-paso4');
+            const backchannelWords = Array.isArray(wizardData.backchannel_words) && wizardData.backchannel_words.length > 0
+                ? wizardData.backchannel_words.slice(0, 5).join(', ') + (wizardData.backchannel_words.length > 5 ? '...' : '')
+                : 'Ninguna';
+            const boostedKeywords = Array.isArray(wizardData.boosted_keywords) && wizardData.boosted_keywords.length > 0
+                ? wizardData.boosted_keywords.join(', ')
+                : 'Ninguna';
+            const pronunciations = Array.isArray(wizardData.pronunciation_dictionary) ? wizardData.pronunciation_dictionary.length : 0;
+
             paso4.innerHTML = `
                 <div class="summary-item">
                     <div class="summary-label">Idioma</div>
-                    <div class="summary-value">${wizardData.language || 'No definido'}</div>
+                    <div class="summary-value">${getLanguageName(wizardData.language)}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">Backchannel</div>
                     <div class="summary-value">${wizardData.enable_backchannel ? 'Activado' : 'Desactivado'}</div>
                 </div>
+                ${wizardData.enable_backchannel ? `
                 <div class="summary-item">
-                    <div class="summary-label">Interruption Sensitivity</div>
+                    <div class="summary-label">Frecuencia backchannel</div>
+                    <div class="summary-value">${wizardData.backchannel_frequency || '0.5'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Palabras backchannel</div>
+                    <div class="summary-value small">${backchannelWords}</div>
+                </div>
+                ` : ''}
+                <div class="summary-item">
+                    <div class="summary-label">Interrupción sensitivity</div>
                     <div class="summary-value">${wizardData.interruption_sensitivity || '0.5'}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">Responsiveness</div>
                     <div class="summary-value">${wizardData.responsiveness || '0.8'}</div>
                 </div>
+                <div class="summary-item">
+                    <div class="summary-label">Palabras clave boosted</div>
+                    <div class="summary-value small">${boostedKeywords}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Normalizar para habla</div>
+                    <div class="summary-value">${wizardData.normalize_for_speech ? 'Activado' : 'Desactivado'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Pronunciaciones personalizadas</div>
+                    <div class="summary-value">${pronunciations} palabra${pronunciations !== 1 ? 's' : ''}</div>
+                </div>
             `;
 
-            // PASO 5
+            // PASO 5: TIEMPOS
             const paso5 = document.getElementById('summary-paso5');
             const maxDurationMin = wizardData.max_call_duration ? Math.round(wizardData.max_call_duration / 60000) : 30;
+            const endCallSec = wizardData.end_call_after_silence ? Math.round(wizardData.end_call_after_silence / 1000) : 30;
+            const reminderSec = wizardData.reminder_trigger ? Math.round(wizardData.reminder_trigger / 1000) : 30;
+            const ringSec = wizardData.ring_duration ? Math.round(wizardData.ring_duration / 1000) : 30;
+
             paso5.innerHTML = `
                 <div class="summary-item">
-                    <div class="summary-label">Begin Message Delay</div>
+                    <div class="summary-label">Delay mensaje inicial</div>
                     <div class="summary-value">${wizardData.begin_message_delay || '1500'}ms</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">End Call After Silence</div>
-                    <div class="summary-value">${wizardData.end_call_after_silence || '30000'}ms</div>
+                    <div class="summary-label">Colgar tras silencio</div>
+                    <div class="summary-value">${wizardData.end_call_after_silence || '30000'}ms (${endCallSec}s)</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Max Call Duration</div>
+                    <div class="summary-label">Duración máxima llamada</div>
                     <div class="summary-value">${maxDurationMin} minutos</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Reminder Max Count</div>
+                    <div class="summary-label">Recordatorio cada</div>
+                    <div class="summary-value">${wizardData.reminder_trigger || '30000'}ms (${reminderSec}s)</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Máx recordatorios</div>
                     <div class="summary-value">${wizardData.reminder_max_count || '2'}</div>
                 </div>
+                <div class="summary-item">
+                    <div class="summary-label">Ring duration</div>
+                    <div class="summary-value">${wizardData.ring_duration || '30000'}ms (${ringSec}s)</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Detección buzón voz</div>
+                    <div class="summary-value">${wizardData.enable_voicemail_detection ? 'Activado' : 'Desactivado'}</div>
+                </div>
+                ${wizardData.enable_voicemail_detection && wizardData.voicemail_message ? `
+                <div class="summary-item">
+                    <div class="summary-label">Mensaje buzón voz</div>
+                    <div class="summary-value small">${wizardData.voicemail_message.substring(0, 50)}${wizardData.voicemail_message.length > 50 ? '...' : ''}</div>
+                </div>
+                ` : ''}
             `;
 
-            // PASO 6
+            // PASO 6: AUDIO Y STT
             const paso6 = document.getElementById('summary-paso6');
             paso6.innerHTML = `
                 <div class="summary-item">
@@ -803,84 +1047,147 @@
                     <div class="summary-value">${wizardData.volume || '1.0'}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Sonido Ambiente</div>
+                    <div class="summary-label">Sonido ambiente</div>
                     <div class="summary-value">${wizardData.ambient_sound || 'Desactivado'}</div>
                 </div>
+                ${wizardData.ambient_sound ? `
                 <div class="summary-item">
-                    <div class="summary-label">STT Mode</div>
-                    <div class="summary-value">${wizardData.stt_mode || 'fast'}</div>
+                    <div class="summary-label">Volumen ambiente</div>
+                    <div class="summary-value">${wizardData.ambient_sound_volume || '0.5'}</div>
+                </div>
+                ` : ''}
+                <div class="summary-item">
+                    <div class="summary-label">Modo STT</div>
+                    <div class="summary-value">${wizardData.stt_mode === 'accurate' ? 'Preciso' : 'Rápido'}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Post-Call Analysis</div>
+                    <div class="summary-label">Formato transcripción</div>
+                    <div class="summary-value">${wizardData.enable_transcription_formatting ? 'Activado' : 'Desactivado'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Análisis post-llamada</div>
                     <div class="summary-value">${wizardData.enable_post_call_analysis ? 'Activado' : 'Desactivado'}</div>
                 </div>
+                ${wizardData.enable_post_call_analysis && wizardData.post_call_analysis_model ? `
+                <div class="summary-item">
+                    <div class="summary-label">Modelo análisis</div>
+                    <div class="summary-value">${wizardData.post_call_analysis_model}</div>
+                </div>
+                ` : ''}
             `;
 
-            // PASO 7
+            // PASO 7: CONFIGURACIÓN AVANZADA
             const paso7 = document.getElementById('summary-paso7');
-            const tools = wizardData.general_tools || [];
+            const tools = (wizardData.tools && wizardData.tools.general_tools) || [];
+            const postCallData = wizardData.post_call_data || {};
+            const variables = (postCallData.variables) || [];
+
+            let paso7HTML = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">';
+
+            // HERRAMIENTAS
+            paso7HTML += '<div>';
+            paso7HTML += '<h4 style="font-size: 14px; font-weight: 700; color: var(--oscuro); margin: 0 0 12px 0;">Herramientas configuradas</h4>';
             
             if (tools.length === 0) {
-                paso7.innerHTML = `
-                    <div class="summary-item" style="grid-column: 1/-1;">
-                        <div class="summary-value small">Sin herramientas configuradas</div>
-                    </div>
-                `;
+                paso7HTML += '<p style="font-size: 13px; color: var(--gris-texto); margin: 0;">Sin herramientas configuradas</p>';
             } else {
-                const toolIcons = {
-                    end_call: '📞',
-                    transfer_call: '📲',
-                    press_digit: '🔢',
-                    custom: '🔗'
-                };
-                
-                paso7.innerHTML = `
-                    <div class="summary-list">
-                        ${tools.map(tool => `
-                            <div class="summary-list-item">
-                                <div class="summary-list-icon">${toolIcons[tool.type] || '🔧'}</div>
-                                <div class="summary-list-content">
-                                    <div class="summary-list-title">${tool.name}</div>
-                                    <div class="summary-list-desc">${tool.description}</div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+                paso7HTML += '<div class="tool-badges">';
+                tools.forEach(tool => {
+                    const icon = getToolIcon(tool.type);
+                    paso7HTML += `
+                        <div class="tool-badge">
+                            <i class="bi ${icon}"></i>
+                            ${tool.name}
+                        </div>
+                    `;
+                });
+                paso7HTML += '</div>';
             }
-        }
+            paso7HTML += '</div>';
 
-        // Exportar JSON
-        function exportJSON() {
-            const dataStr = JSON.stringify(wizardData, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `agente-ia-${wizardData.agent_name || 'config'}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
+            // POST CALL DATA
+            paso7HTML += '<div>';
+            paso7HTML += '<h4 style="font-size: 14px; font-weight: 700; color: var(--oscuro); margin: 0 0 12px 0;">Post Call Data</h4>';
             
-            alert('✅ Configuración exportada como JSON');
+            if (variables.length === 0) {
+                paso7HTML += '<p style="font-size: 13px; color: var(--gris-texto); margin: 0;">Sin variables configuradas</p>';
+            } else {
+                paso7HTML += `
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 6px;">
+                            <strong>Modelo:</strong> ${postCallData.model || 'No definido'}
+                        </div>
+                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 6px;">
+                            <strong>Variables:</strong> ${variables.length}
+                        </div>
+                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 8px;">
+                            <strong>Webhook:</strong> ${postCallData.webhook ? '✓ Configurado' : '✗ No configurado'}
+                        </div>
+                    </div>
+                    <div class="variable-badges">
+                `;
+                variables.forEach(v => {
+                    paso7HTML += `<span class="variable-badge">${v.name}</span>`;
+                });
+                paso7HTML += '</div>';
+            }
+            paso7HTML += '</div>';
+
+            paso7HTML += '</div>';
+            paso7.innerHTML = paso7HTML;
         }
 
-        // Ver datos crudos
-        function viewRawData() {
-            console.log('📦 Configuración completa del agente:', wizardData);
-            alert('✅ Datos mostrados en la consola del navegador\n\nAbre DevTools (F12) y ve a la pestaña Console');
+        // =====================================================
+        // HELPERS
+        // =====================================================
+        function getAgentTypeName(type) {
+            const types = {
+                'inbound-spain': 'Llamada entrante España',
+                'inbound-latam': 'Llamada entrante Latam',
+                'outbound-cold': 'Llamada saliente en frío',
+                'outbound-warm': 'Llamada saliente templada',
+                'support': 'Soporte al cliente',
+                'sales': 'Ventas'
+            };
+            return types[type] || type || 'No definido';
         }
 
-        // Editar paso
+        function getLanguageName(lang) {
+            const names = {
+                'es-ES': 'Español (España)',
+                'es-419': 'Español (Latam)',
+                'en-US': 'Inglés (USA)',
+                'en-GB': 'Inglés (UK)',
+                'pt-BR': 'Portugués (Brasil)',
+                'fr-FR': 'Francés'
+            };
+            return names[lang] || lang || 'No definido';
+        }
+
+        function getToolIcon(type) {
+            const icons = {
+                'end_call': 'bi-telephone-x-fill',
+                'book_appointment_cal': 'bi-calendar-check-fill',
+                'check_availability_cal': 'bi-search',
+                'transfer_call': 'bi-arrow-left-right',
+                'custom': 'bi-link-45deg'
+            };
+            return icons[type] || 'bi-gear-fill';
+        }
+
+        // =====================================================
+        // ACCIONES
+        // =====================================================
         function editStep(stepNumber) {
             const steps = [
                 '',
-                'wizard-paso1-DEFINITIVO.html',
-                'wizard-paso2-MEJORADO.html',
-                'wizard-paso3-SELECCION-VOZ.html',
-                'wizard-paso4-CONVERSACION.html',
-                'wizard-paso5-TIEMPOS.html',
-                'wizard-paso6-AUDIO-STT.html',
-                'wizard-paso7-HERRAMIENTAS.html'
+                'wizard-paso1-netelip.html',
+                'wizard-paso2-netelip.html',
+                'wizard-paso3-netelip.html',
+                'wizard-paso4-netelip.html',
+                'wizard-paso5-netelip.html',
+                'wizard-paso6-netelip.html',
+                'wizard-paso7-netelip.html'
             ];
             
             if (confirm(`¿Quieres volver al paso ${stepNumber} para editar la configuración?`)) {
@@ -888,63 +1195,268 @@
             }
         }
 
-        // Reset wizard
+        // =====================================================
+        // ACCIONES CON MODALES PROFESIONALES
+        // =====================================================
+        
         function resetWizard() {
-            if (confirm('⚠️ ¿Estás seguro de que quieres borrar toda la configuración y empezar de nuevo?\n\nEsta acción no se puede deshacer.')) {
-                localStorage.removeItem('wizardData');
-                alert('✅ Configuración borrada. Redirigiendo al paso 1...');
-                window.location.href = 'wizard-paso1-DEFINITIVO.html';
-            }
+            // Mostrar modal de confirmación
+            const modalReset = new bootstrap.Modal(document.getElementById('modalReset'));
+            modalReset.show();
         }
 
-        // Crear agente
-        function createAgent() {
-            // Validación final
-            const requiredFields = ['agent_name', 'company_name', 'sector', 'agent_type', 'llm_model', 'language'];
-            const missing = requiredFields.filter(field => !wizardData[field]);
+        function confirmReset() {
+            // Cerrar modal
+            const modalReset = bootstrap.Modal.getInstance(document.getElementById('modalReset'));
+            modalReset.hide();
             
-            if (missing.length > 0) {
-                alert(`⚠️ Faltan campos obligatorios:\n\n${missing.join(', ')}\n\nPor favor, completa todos los pasos antes de crear el agente.`);
+            // Borrar datos
+            localStorage.removeItem('wizardData');
+            
+            // Esperar a que el modal se cierre completamente
+            setTimeout(() => {
+                window.location.href = 'wizard-paso1-netelip.html';
+            }, 300);
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function createAgent() {
+            // =====================================================
+            // VALIDACIONES PREVIAS
+            // =====================================================
+            
+            // Validar campos mínimos obligatorios
+            const requiredFields = {
+                'agent_name': 'Nombre del agente',
+                'agent_type': 'Tipo de agente',
+                'modelo': 'Modelo LLM',
+                'voice_id': 'Voz seleccionada',
+                'language': 'Idioma'
+            };
+            
+            const missingFields = [];
+            for (const [field, label] of Object.entries(requiredFields)) {
+                if (!wizardData[field]) {
+                    missingFields.push(label);
+                }
+            }
+            
+            // Si faltan campos, mostrar modal de error
+            if (missingFields.length > 0) {
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.innerHTML = `Por favor, completa estos campos obligatorios antes de crear el agente:<br><br><strong>${missingFields.join('<br>')}</strong>`;
+                
+                const modalError = new bootstrap.Modal(document.getElementById('modalError'));
+                modalError.show();
                 return;
             }
 
-            // Simulación de creación
+            // =====================================================
+            // PREPARAR DATOS PARA RETELL AI
+            // =====================================================
+            
+            // Generar ID temporal (será reemplazado por Retell AI)
             const agentId = 'agent_' + Date.now();
+            const timestamp = new Date().toISOString();
             
-            // En producción, aquí iría la llamada a la API
+            // Estructura de datos compatible con Retell AI API
+            const retellAgentData = {
+                // Información básica
+                agent_name: wizardData.agent_name,
+                agent_type: wizardData.agent_type,
+                
+                // LLM Configuration
+                response_engine: {
+                    type: wizardData.modelo_agente || 'retell-llm',
+                    llm_id: wizardData.llm_id || null, // Antonio: Aquí va el LLM ID de Retell
+                    version: wizardData.version || 1
+                },
+                
+                // Voice Configuration
+                voice_id: wizardData.voice_id,
+                voice_model: wizardData.voice_model || 'eleven_turbo_v2_5',
+                voice_speed: wizardData.voice_speed || 1.0,
+                voice_temperature: wizardData.voice_temperature || 0.5,
+                fallback_voice_ids: wizardData.fallback_voice_ids || [],
+                
+                // Language & Conversation
+                language: wizardData.language,
+                enable_backchannel: wizardData.enable_backchannel || false,
+                backchannel_frequency: wizardData.backchannel_frequency || 0.5,
+                backchannel_words: wizardData.backchannel_words || [],
+                interruption_sensitivity: wizardData.interruption_sensitivity || 0.5,
+                responsiveness: wizardData.responsiveness || 0.8,
+                normalize_for_speech: wizardData.normalize_for_speech || false,
+                
+                // Timing
+                begin_message_delay_ms: wizardData.begin_message_delay || 1500,
+                end_call_after_silence_ms: wizardData.end_call_after_silence || 30000,
+                max_call_duration_ms: wizardData.max_call_duration || 1800000,
+                reminder_trigger_ms: wizardData.reminder_trigger || 30000,
+                reminder_max_count: wizardData.reminder_max_count || 2,
+                ring_duration_ms: wizardData.ring_duration || 30000,
+                
+                // Audio & STT
+                volume: wizardData.volume || 1.0,
+                ambient_sound: wizardData.ambient_sound || null,
+                ambient_sound_volume: wizardData.ambient_sound_volume || 0.5,
+                stt_mode: wizardData.stt_mode || 'fast',
+                enable_transcription_formatting: wizardData.enable_transcription_formatting || false,
+                
+                // Advanced: Tools
+                general_tools: (wizardData.tools && wizardData.tools.general_tools) || [],
+                
+                // Advanced: Post Call Data
+                post_call_analysis_data: (wizardData.post_call_data && wizardData.post_call_data.variables) || [],
+                post_call_analysis_model: (wizardData.post_call_data && wizardData.post_call_data.model) || 'gpt-4.1',
+                webhook_url: (wizardData.post_call_data && wizardData.post_call_data.webhook) || null,
+                
+                // Keywords & Pronunciation
+                boosted_keywords: wizardData.boosted_keywords || [],
+                pronunciation_dictionary: wizardData.pronunciation_dictionary || [],
+                
+                // Voicemail
+                enable_voicemail_detection: wizardData.enable_voicemail_detection || false,
+                voicemail_detection_timeout_ms: wizardData.voicemail_detection_timeout || 5000,
+                voicemail_message: wizardData.voicemail_message || null,
+                
+                // Metadata
+                metadata: {
+                    company_name: wizardData.company_name || null,
+                    created_from: 'netelip_wizard',
+                    created_at: timestamp
+                }
+            };
+
+            // =====================================================
+            // ANTONIO: INTEGRACIÓN CON RETELL AI API
+            // =====================================================
+            /*
+            
+            PASOS PARA INTEGRACIÓN EN BACKEND (Node.js/Python):
+
+            1. CREAR AGENTE EN RETELL AI:
+               
+               POST https://api.retellai.com/v2/create-agent
+               Headers: {
+                   'Authorization': 'Bearer YOUR_RETELL_API_KEY',
+                   'Content-Type': 'application/json'
+               }
+               Body: retellAgentData
+               
+               Respuesta: { agent_id: 'agent_xxx...', ... }
+
+            2. GUARDAR EN SUPABASE:
+               
+               INSERT INTO agents (
+                   agent_id,
+                   user_id,
+                   agent_name,
+                   agent_type,
+                   configuration,
+                   created_at,
+                   status
+               ) VALUES (
+                   retellResponse.agent_id,
+                   currentUser.id,
+                   retellAgentData.agent_name,
+                   retellAgentData.agent_type,
+                   retellAgentData,
+                   timestamp,
+                   'active'
+               )
+
+            3. ASIGNAR NÚMERO DE TELÉFONO (opcional):
+               
+               Si el agente necesita número:
+               POST https://api.retellai.com/v2/create-phone-number
+               Body: {
+                   area_code: 900,
+                   inbound_agent_id: retellResponse.agent_id
+               }
+
+            4. WEBHOOK N8N NOTIFICACIÓN:
+               
+               POST https://tu-n8n.com/webhook/agent-created
+               Body: {
+                   agent_id: retellResponse.agent_id,
+                   agent_name: retellAgentData.agent_name,
+                   user_email: currentUser.email,
+                   created_at: timestamp
+               }
+
+            5. RESPUESTA AL FRONTEND:
+               
+               return {
+                   success: true,
+                   agent_id: retellResponse.agent_id,
+                   agent_name: retellAgentData.agent_name,
+                   phone_number: phoneNumber || null
+               }
+
+            MANEJO DE ERRORES:
+            - Si falla Retell API: return { success: false, error: 'retell_api_error' }
+            - Si falla Supabase: Rollback en Retell + return error
+            - Validar API Key y permisos antes de llamar
+            
+            */
+
+            // =====================================================
+            // SIMULACIÓN FRONTEND (REEMPLAZAR EN PRODUCCIÓN)
+            // =====================================================
+            
             console.log('🚀 Creando agente en Retell AI...');
-            console.log('📦 Configuración:', wizardData);
+            console.log('📦 Configuración completa:', retellAgentData);
             
-            // Guardar ID del agente
+            // Guardar datos localmente (temporal)
             wizardData.agent_id = agentId;
-            wizardData.created_at = new Date().toISOString();
+            wizardData.created_at = timestamp;
+            wizardData.status = 'active';
             localStorage.setItem('wizardData', JSON.stringify(wizardData));
             
-            // Alert de éxito
-            alert(`🎉 ¡AGENTE CREADO CON ÉXITO!
-
-📋 Nombre: ${wizardData.agent_name}
-🏢 Empresa: ${wizardData.company_name}
-🆔 ID: ${agentId}
-
-En la versión de producción, Antonio integrará:
-✅ Llamada a API de Retell AI
-✅ Guardado en Supabase
-✅ Webhook N8N para notificaciones
-✅ Redirección al dashboard
-
-¡Configuración completa y lista para producción! 🚀`);
-            
-            // Mostrar en consola
-            console.log('✅ Agente creado:', {
+            // Guardar en lista de agentes del dashboard
+            const agentsList = JSON.parse(localStorage.getItem('agents_list') || '[]');
+            agentsList.push({
                 agent_id: agentId,
-                configuration: wizardData
+                agent_name: wizardData.agent_name,
+                agent_type: wizardData.agent_type,
+                company_name: wizardData.company_name || null,
+                voice_name: wizardData.voice_name || null,
+                language: wizardData.language,
+                created_at: timestamp,
+                status: 'active'
+            });
+            localStorage.setItem('agents_list', JSON.stringify(agentsList));
+
+            // =====================================================
+            // MOSTRAR MODAL DE ÉXITO Y REDIRIGIR
+            // =====================================================
+            
+            const successMessage = document.getElementById('successMessage');
+            successMessage.innerHTML = `
+                <strong>${wizardData.agent_name}</strong> ha sido creado correctamente.
+                ${wizardData.company_name ? `<br><small>Empresa: ${wizardData.company_name}</small>` : ''}
+                <br><br>
+                <small style="color: var(--gris-texto);">ID: ${agentId}</small>
+            `;
+            
+            const modalSuccess = new bootstrap.Modal(document.getElementById('modalSuccess'));
+            modalSuccess.show();
+            
+            console.log('✅ Agente creado exitosamente:', {
+                agent_id: agentId,
+                configuration: retellAgentData
             });
         }
 
-        // Inicializar
+        // =====================================================
+        // INICIALIZAR
+        // =====================================================
         renderSummary();
-        console.log('🚀 Wizard Paso 8 (FINAL) cargado');
+        console.log('🚀 Wizard Paso 8 (Resumen Final) cargado');
         console.log('📦 Configuración completa:', wizardData);
     </script>
 </body>
