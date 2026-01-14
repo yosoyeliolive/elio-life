@@ -681,14 +681,6 @@
                     Selecciona el modelo de tu agente y define cómo responderá.
                 </p>
 
-                <div class="alert-info">
-                    <i class="bi bi-lightbulb-fill"></i>
-                    <div>
-                        <strong>Tip:</strong> El modelo GPT-4o ofrece el mejor balance. 
-                        Las plantillas están optimizadas para cada sector.
-                    </div>
-                </div>
-
                 <form id="wizardForm">
                     <!-- MODELO DE AGENTE -->
                     <div class="form-group">
@@ -698,22 +690,20 @@
                             <span class="custom-tooltip">
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
-                                    <strong>¿Qué tipo de agente necesitas?</strong><br><br>
-                                    <strong>Agendamiento de citas:</strong> Gestiona reservas, confirma disponibilidad y agenda llamadas automáticamente.<br><br>
-                                    <em>Más modelos próximamente: Ventas, Soporte, Encuestas...</em>
+                                    <strong>Tipo de agente seleccionado en el Paso 1</strong><br><br>
+                                    Este campo se completa automáticamente según el tipo de agente que elegiste anteriormente.
                                 </span>
                             </span>
                         </label>
                         <select class="form-select" id="modeloAgente" required>
-                            <option value="">Selecciona el tipo de agente...</option>
-                            <option value="agendamiento" selected>🗓️ Agendamiento de citas</option>
-                            <option value="ventas" disabled>💼 Ventas y cualificación (Próximamente)</option>
-                            <option value="soporte" disabled>🛠️ Soporte técnico (Próximamente)</option>
-                            <option value="encuestas" disabled>📊 Encuestas y feedback (Próximamente)</option>
+                            <option value="">Cargando desde Paso 1...</option>
+                            <option value="transferencia">Transferencia de llamadas</option>
+                            <option value="agendamiento">Agendamiento de citas</option>
+                            <option value="cualificacion">Cualificación y atención</option>
                         </select>
                         <div class="form-text">
                             <i class="bi bi-robot me-1"></i>
-                            Define el propósito principal de tu agente IA
+                            Tipo de agente seleccionado en el Paso 1
                         </div>
                     </div>
 
@@ -735,9 +725,10 @@
                         </label>
                         <select class="form-select" id="modelo" required>
                             <option value="">Selecciona un modelo...</option>
-                            <option value="gpt-4o" selected>GPT-4o (Recomendado)</option>
+                            <option value="gpt-4.1" selected>GPT-4.1 (Recomendado)</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gemini-3.0-flash">Gemini 3.0 Flash</option>
                             <option value="gpt-4o-mini">GPT-4o Mini</option>
-                            <option value="gpt-4.1">GPT-4.1</option>
                             <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
                             <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
                             <option value="claude-3.7-sonnet">Claude 3.7 Sonnet</option>
@@ -891,14 +882,6 @@
                             <label class="checkbox-card">
                                 <input type="checkbox" name="personalidad" value="proactivo">
                                 <div class="checkbox-label">Proactivo</div>
-                            </label>
-                            <label class="checkbox-card">
-                                <input type="checkbox" name="personalidad" value="paciente">
-                                <div class="checkbox-label">Paciente</div>
-                            </label>
-                            <label class="checkbox-card">
-                                <input type="checkbox" name="personalidad" value="cercano">
-                                <div class="checkbox-label">Cercano</div>
                             </label>
                         </div>
                         <div class="form-text">
@@ -1212,9 +1195,20 @@ Coordinar llamadas breves para encuestas de satisfacción y recopilación de opi
 ❌ NUNCA presionar para participar`
         };
 
-        // Recuperar datos del Paso 1
-        const datosP1 = JSON.parse(localStorage.getItem('wizardData') || '{}');
-        console.log('📋 Datos del Paso 1:', datosP1);
+        // Recuperar datos del Paso 1 desde sessionStorage
+        const datosP1 = JSON.parse(sessionStorage.getItem('agentConfig') || '{}');
+        console.log('Datos del Paso 1:', datosP1);
+
+        // Auto-cargar tipo de agente del Paso 1
+        document.addEventListener('DOMContentLoaded', () => {
+            const modeloAgente = document.getElementById('modeloAgente');
+            
+            // Si hay datos del Paso 1, seleccionar automáticamente
+            if (datosP1.agent_type) {
+                modeloAgente.value = datosP1.agent_type;
+                console.log('Tipo de agente cargado:', datosP1.agent_type);
+            }
+        });
 
         // Función para mostrar/ocultar Begin Message
         function toggleBeginMessage() {
