@@ -391,6 +391,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            user-select: none;
         }
 
         .compact-checkbox:hover {
@@ -402,11 +403,17 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .compact-checkbox.checked {
             border-color: var(--netelip-azul);
             background: #eff6ff;
+        }
+
+        .compact-checkbox.disabled {
+            pointer-events: none;
+            opacity: 0.7;
         }
 
         .compact-checkbox-content {
@@ -802,18 +809,43 @@
                         </p>
                     </div>
 
-                    <!-- TOOL 1: END CALL (Siempre activada) -->
-                    <div class="compact-checkbox checked" style="border-color: var(--exito); background: #f0fdf4; pointer-events: none;">
-                        <input type="checkbox" checked disabled style="opacity: 0.6;">
+                    <!-- TOOL 1: END CALL (Activada por defecto pero editable) -->
+                    <div class="compact-checkbox checked" id="tool-endcall-checkbox" onclick="toggleTool('endcall')">
+                        <input type="checkbox" id="tool-endcall" checked>
                         <div class="compact-checkbox-content">
-                            <h4>✓ Finalizar llamada (obligatoria)</h4>
+                            <h4>Finalizar llamada (recomendada)</h4>
                             <p>Permite al agente terminar la llamada cuando detecta que la conversación ha concluido</p>
+                        </div>
+                    </div>
+
+                    <div class="config-area show" id="config-endcall">
+                        <div class="alert-info">
+                            <i class="bi bi-info-circle-fill"></i>
+                            <div>
+                                <strong>Recomendación:</strong> Esta herramienta es fundamental para que el agente pueda finalizar llamadas de forma natural. Solo desactívala si tienes un control externo para terminar las llamadas.
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">
+                                Descripción del comportamiento
+                                <span class="custom-tooltip">
+                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                    <span class="tooltip-content">
+                                        Personaliza las instrucciones sobre cuándo y cómo el agente debe finalizar la llamada. Por ejemplo: "Solo después de confirmar que el usuario está satisfecho" o "Después de resumir los puntos acordados".
+                                    </span>
+                                </span>
+                            </label>
+                            <textarea class="form-control" 
+                                      id="endcall-description" 
+                                      rows="3"
+                                      placeholder="Ej: Finaliza la llamada de forma cordial después de confirmar que el usuario no necesita nada más y despedirte apropiadamente.">Finaliza la llamada de forma cordial después de confirmar que el usuario no necesita nada más.</textarea>
                         </div>
                     </div>
 
                     <!-- TOOL 2: BOOK APPOINTMENT (Cal.com) -->
                     <div class="compact-checkbox" id="tool-booking-checkbox" onclick="toggleTool('booking')">
-                        <input type="checkbox" id="tool-booking" onclick="event.stopPropagation(); toggleTool('booking')">
+                        <input type="checkbox" id="tool-booking">
                         <div class="compact-checkbox-content">
                             <h4>Reservar cita en el calendario (Cal.com)</h4>
                             <p>Integración nativa con Cal.com para agendar citas automáticamente</p>
@@ -863,7 +895,7 @@
 
                     <!-- TOOL 3: CHECK AVAILABILITY (Cal.com) -->
                     <div class="compact-checkbox" id="tool-availability-checkbox" onclick="toggleTool('availability')">
-                        <input type="checkbox" id="tool-availability" onclick="event.stopPropagation(); toggleTool('availability')">
+                        <input type="checkbox" id="tool-availability">
                         <div class="compact-checkbox-content">
                             <h4>Búsqueda de disponibilidad</h4>
                             <p>Consulta disponibilidad de horarios antes de confirmar citas</p>
@@ -892,7 +924,7 @@
 
                     <!-- TOOL 4: TRANSFER CALL -->
                     <div class="compact-checkbox" id="tool-transfer-checkbox" onclick="toggleTool('transfer')">
-                        <input type="checkbox" id="tool-transfer" onclick="event.stopPropagation(); toggleTool('transfer')">
+                        <input type="checkbox" id="tool-transfer">
                         <div class="compact-checkbox-content">
                             <h4>Transferir llamada</h4>
                             <p>Transfiere la llamada a un número específico o persona determinada</p>
@@ -912,7 +944,7 @@
 
                     <!-- TOOL 5: CUSTOM TOOLS -->
                     <div class="compact-checkbox" id="tool-custom-checkbox" onclick="toggleTool('custom')">
-                        <input type="checkbox" id="tool-custom" onclick="event.stopPropagation(); toggleTool('custom')">
+                        <input type="checkbox" id="tool-custom">
                         <div class="compact-checkbox-content">
                             <h4>Añadir herramienta personalizada</h4>
                             <p>Añade webhooks personalizados o herramientas adicionales según tus necesidades</p>
@@ -931,57 +963,7 @@
                     </div>
 
                     <!-- ============================================================ -->
-                    <!-- SECCIÓN 2: ANÁLISIS POST-LLAMADA -->
-                    <!-- ============================================================ -->
-                    <div class="section-divider">
-                        <h3>
-                            <i class="bi bi-bar-chart"></i>
-                            Análisis post-llamada
-                        </h3>
-                        <p>
-                            Genera análisis automático con IA de cada llamada completada para obtener insights valiosos.
-                        </p>
-                    </div>
-
-                    <div class="compact-checkbox" id="analysis-checkbox" onclick="toggleAnalysis()">
-                        <input type="checkbox" id="enableAnalysis" onclick="event.stopPropagation(); toggleAnalysis()">
-                        <div class="compact-checkbox-content">
-                            <h4>Activar análisis post-llamada</h4>
-                            <p>Genera automáticamente un resumen, análisis de sentimiento y puntos clave de cada conversación</p>
-                        </div>
-                    </div>
-
-                    <div class="config-area" id="analysis-config">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">
-                                Modelo de análisis
-                                <span class="custom-tooltip">
-                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                    <span class="tooltip-content">
-                                        <strong>GPT-4.1:</strong> Modelo estándar, rápido y preciso. Recomendado para la mayoría de casos.<br><br>
-                                        <strong>GPT-4o:</strong> Máxima precisión para análisis más detallados y complejos. Usa este modelo si necesitas análisis muy profundos.
-                                    </span>
-                                </span>
-                            </label>
-                            <div class="model-selector">
-                                <label class="model-card selected" for="analysis-model-gpt41" onclick="selectAnalysisModel('gpt-4.1')">
-                                    <input type="radio" name="analysis-model" id="analysis-model-gpt41" value="gpt-4.1" checked>
-                                    <h4>GPT-4.1</h4>
-                                    <p>Modelo estándar. Balance entre velocidad y precisión. Recomendado para la mayoría de casos.</p>
-                                    <span class="model-badge">Recomendado</span>
-                                </label>
-
-                                <label class="model-card" for="analysis-model-gpt4o" onclick="selectAnalysisModel('gpt-4o')">
-                                    <input type="radio" name="analysis-model" id="analysis-model-gpt4o" value="gpt-4o">
-                                    <h4>GPT-4o</h4>
-                                    <p>Máxima precisión para análisis detallados y complejos. Ideal para casos que requieren profundidad.</p>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ============================================================ -->
-                    <!-- SECCIÓN 3: EXTRACCIÓN DE DATOS -->
+                    <!-- SECCIÓN 2: EXTRACCIÓN DE DATOS -->
                     <!-- ============================================================ -->
                     <div class="section-divider">
                         <h3>
@@ -994,7 +976,7 @@
                     </div>
 
                     <div class="compact-checkbox" id="template-checkbox" onclick="toggleTemplate()">
-                        <input type="checkbox" id="useTemplate" onclick="event.stopPropagation(); toggleTemplate()">
+                        <input type="checkbox" id="useTemplate">
                         <div class="compact-checkbox-content">
                             <h4>Usar plantilla de variables recomendadas</h4>
                             <p>Carga automáticamente las variables más comunes: nombre, email, teléfono, Call Summary y Call Successful</p>
@@ -1034,91 +1016,139 @@
                     </div>
 
                     <!-- ============================================================ -->
-                    <!-- SECCIÓN 4: WEBHOOK POST-LLAMADA -->
+                    <!-- SECCIÓN 3: WEBHOOKS Y ANÁLISIS POST-LLAMADA -->
                     <!-- ============================================================ -->
                     <div class="section-divider">
                         <h3>
                             <i class="bi bi-send"></i>
-                            Webhook post-llamada
+                            Webhooks y análisis post-llamada
                         </h3>
                         <p>
-                            Envía automáticamente los datos extraídos y el análisis a tu sistema mediante webhook.
+                            Configura el análisis automático con IA y los webhooks para enviar información a tus sistemas.
                         </p>
                     </div>
 
-                    <div id="webhook-disabled-warning" class="alert-warning">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                        <div>
-                            <strong>Webhook no disponible:</strong> Debes activar al menos el Análisis post-llamada o configurar Variables de extracción para poder usar el webhook.
+                    <!-- A) ANÁLISIS POST-LLAMADA CON IA -->
+                    <div style="margin-bottom: 32px;">
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="bi bi-bar-chart" style="color: var(--netelip-azul);"></i>
+                            Análisis post-llamada con IA
+                        </h4>
+
+                        <div class="compact-checkbox" id="analysis-checkbox" onclick="toggleAnalysis()">
+                            <input type="checkbox" id="enableAnalysis">
+                            <div class="compact-checkbox-content">
+                                <h4>Activar análisis automático</h4>
+                                <p>Genera automáticamente un resumen, análisis de sentimiento y puntos clave de cada conversación</p>
+                            </div>
+                        </div>
+
+                        <div class="config-area" id="analysis-config">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">
+                                    Modelo de análisis
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>GPT-4.1:</strong> Modelo estándar, rápido y preciso. Recomendado para la mayoría de casos.<br><br>
+                                            <strong>GPT-4o:</strong> Máxima precisión para análisis más detallados y complejos. Usa este modelo si necesitas análisis muy profundos.
+                                        </span>
+                                    </span>
+                                </label>
+                                <div class="model-selector">
+                                    <label class="model-card selected" for="analysis-model-gpt41" onclick="selectAnalysisModel('gpt-4.1')">
+                                        <input type="radio" name="analysis-model" id="analysis-model-gpt41" value="gpt-4.1" checked>
+                                        <h4>GPT-4.1</h4>
+                                        <p>Modelo estándar. Balance entre velocidad y precisión. Recomendado para la mayoría de casos.</p>
+                                        <span class="model-badge">Recomendado</span>
+                                    </label>
+
+                                    <label class="model-card" for="analysis-model-gpt4o" onclick="selectAnalysisModel('gpt-4o')">
+                                        <input type="radio" name="analysis-model" id="analysis-model-gpt4o" value="gpt-4o">
+                                        <h4>GPT-4o</h4>
+                                        <p>Máxima precisión para análisis detallados y complejos. Ideal para casos que requieren profundidad.</p>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="webhook-config" style="display: none;">
-                        <div class="form-group">
+                    <!-- B) WEBHOOK POST-LLAMADA -->
+                    <div style="margin-bottom: 32px;">
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="bi bi-send-check" style="color: var(--netelip-azul);"></i>
+                            Webhook post-llamada
+                        </h4>
+
+                        <div id="webhook-disabled-warning" class="alert-warning">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <div>
+                                <strong>Webhook no disponible:</strong> Debes activar el Análisis post-llamada o configurar Variables de extracción para poder usar el webhook.
+                            </div>
+                        </div>
+
+                        <div id="webhook-config" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    URL del webhook
+                                    <span class="custom-tooltip">
+                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                        <span class="tooltip-content">
+                                            <strong>Endpoint de tu servidor:</strong><br><br>
+                                            Introduce la URL donde quieres recibir los datos. El sistema enviará un POST con JSON al finalizar cada llamada.
+                                        </span>
+                                    </span>
+                                </label>
+                                <input type="url" 
+                                       class="form-control" 
+                                       id="webhookUrl" 
+                                       placeholder="https://tu-servidor.com/webhook/post-call">
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    El webhook recibirá un POST con JSON conteniendo todos los datos extraídos
+                                </div>
+                            </div>
+
+                            <div class="alert-info">
+                                <i class="bi bi-info-circle-fill"></i>
+                                <div>
+                                    <strong>Datos que se enviarán:</strong>
+                                    <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+                                        <li id="webhook-data-analysis" style="display: none;">Análisis completo de la llamada generado con IA</li>
+                                        <li id="webhook-data-variables" style="display: none;">Variables extraídas: <span id="webhook-variables-list"></span></li>
+                                        <li>Metadatos de la llamada (duración, timestamp, call_id, etc.)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- C) WEBHOOK LLAMADAS ENTRANTES -->
+                    <div style="margin-bottom: 0;">
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="bi bi-telephone-inbound" style="color: var(--netelip-azul);"></i>
+                            Webhook para llamadas entrantes
+                        </h4>
+
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label">
-                                URL del webhook
+                                URL del webhook inbound
                                 <span class="custom-tooltip">
                                     <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                     <span class="tooltip-content">
-                                        <strong>Endpoint de tu servidor:</strong><br><br>
-                                        Introduce la URL donde quieres recibir los datos. El sistema enviará un POST con JSON al finalizar cada llamada.
+                                        <strong>Llamadas entrantes:</strong><br><br>
+                                        Este webhook se ejecuta cuando el agente recibe una llamada entrante. Útil para validar el número, cargar datos del contacto o registrar la llamada en tu CRM.
                                     </span>
                                 </span>
                             </label>
                             <input type="url" 
                                    class="form-control" 
-                                   id="webhookUrl" 
-                                   placeholder="https://tu-servidor.com/webhook/post-call">
+                                   id="webhookInbound" 
+                                   placeholder="https://tu-servidor.com/webhook/inbound">
                             <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                El webhook recibirá un POST con JSON conteniendo todos los datos extraídos
+                                <i class="bi bi-telephone-inbound me-1"></i>
+                                Opcional - Se ejecuta cuando el agente recibe una llamada entrante
                             </div>
-                        </div>
-
-                        <div class="alert-info">
-                            <i class="bi bi-info-circle-fill"></i>
-                            <div>
-                                <strong>Datos que se enviarán:</strong>
-                                <ul style="margin: 8px 0 0 0; padding-left: 20px;">
-                                    <li id="webhook-data-analysis" style="display: none;">Análisis completo de la llamada generado con IA</li>
-                                    <li id="webhook-data-variables" style="display: none;">Variables extraídas: <span id="webhook-variables-list"></span></li>
-                                    <li>Metadatos de la llamada (duración, timestamp, call_id, etc.)</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ============================================================ -->
-                    <!-- SECCIÓN 5: WEBHOOKS ADICIONALES -->
-                    <!-- ============================================================ -->
-                    <div class="section-divider">
-                        <h3>
-                            <i class="bi bi-link-45deg"></i>
-                            Webhooks adicionales
-                        </h3>
-                        <p>
-                            Configura webhooks para eventos adicionales como llamadas entrantes.
-                        </p>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            Webhook para llamadas entrantes (inbound)
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    <strong>Llamadas entrantes:</strong><br><br>
-                                    Este webhook se ejecuta cuando el agente recibe una llamada entrante. Útil para validar el número, cargar datos del contacto o registrar la llamada en tu CRM.
-                                </span>
-                            </span>
-                        </label>
-                        <input type="url" 
-                               class="form-control" 
-                               id="webhookInbound" 
-                               placeholder="https://tu-servidor.com/webhook/inbound">
-                        <div class="form-text">
-                            <i class="bi bi-telephone-inbound me-1"></i>
-                            Se ejecuta cuando el agente recibe una llamada entrante
                         </div>
                     </div>
 
@@ -1186,7 +1216,13 @@
             const configArea = document.getElementById(`config-${toolName}`);
             const checkboxCard = document.getElementById(`tool-${toolName}-checkbox`);
             
-            checkbox.checked = !checkbox.checked;
+            // Prevenir que se ejecute dos veces si se hace clic directamente en el checkbox
+            if (event.target.type === 'checkbox') {
+                // El checkbox ya cambió su estado, solo actualizamos la UI
+            } else {
+                // Se hizo clic en la tarjeta, cambiamos el checkbox manualmente
+                checkbox.checked = !checkbox.checked;
+            }
             
             if (checkbox.checked) {
                 configArea.classList.add('show');
@@ -1380,7 +1416,13 @@
             const configArea = document.getElementById('analysis-config');
             const checkboxCard = document.getElementById('analysis-checkbox');
             
-            checkbox.checked = !checkbox.checked;
+            // Prevenir que se ejecute dos veces si se hace clic directamente en el checkbox
+            if (event.target.type === 'checkbox') {
+                // El checkbox ya cambió su estado, solo actualizamos la UI
+            } else {
+                // Se hizo clic en la tarjeta, cambiamos el checkbox manualmente
+                checkbox.checked = !checkbox.checked;
+            }
             
             if (checkbox.checked) {
                 configArea.classList.add('show');
@@ -1400,8 +1442,15 @@
             const checkbox = document.getElementById('useTemplate');
             const checkboxCard = document.getElementById('template-checkbox');
             
-            checkbox.checked = !checkbox.checked;
-            checkboxCard.classList.toggle('checked');
+            // Prevenir que se ejecute dos veces si se hace clic directamente en el checkbox
+            if (event.target.type === 'checkbox') {
+                // El checkbox ya cambió su estado, solo actualizamos la UI
+            } else {
+                // Se hizo clic en la tarjeta, cambiamos el checkbox manualmente
+                checkbox.checked = !checkbox.checked;
+            }
+            
+            checkboxCard.classList.toggle('checked', checkbox.checked);
             
             if (checkbox.checked) {
                 loadTemplateVariables();
@@ -1549,6 +1598,7 @@
         // =====================================================
         function nextStep() {
             // Herramientas
+            const endCallEnabled = document.getElementById('tool-endcall').checked;
             const bookingEnabled = document.getElementById('tool-booking').checked;
             const availabilityEnabled = document.getElementById('tool-availability').checked;
             const transferEnabled = document.getElementById('tool-transfer').checked;
@@ -1637,13 +1687,16 @@
             
             // ===== CONSTRUIR OBJETO DE DATOS =====
             
-            const toolsConfig = {
-                end_call: {
+            const toolsConfig = {};
+            
+            // Añadir end_call si está activado
+            if (endCallEnabled) {
+                toolsConfig.end_call = {
                     type: 'end_call',
                     name: 'end_call',
-                    description: 'Finaliza la llamada de forma cordial después de confirmar que el usuario no necesita nada más.'
-                }
-            };
+                    description: document.getElementById('endcall-description').value.trim()
+                };
+            }
             
             // Añadir Cal.com booking si está activado
             if (bookingEnabled) {
@@ -1723,7 +1776,7 @@
             // Resumen
             let summary = '✅ ¡Configuración avanzada completada!\n\n';
             summary += '🔧 Herramientas activadas:\n';
-            summary += '  • end_call (obligatoria)\n';
+            if (endCallEnabled) summary += '  • Finalizar llamada\n';
             if (bookingEnabled) summary += '  • Reservar cita (Cal.com)\n';
             if (availabilityEnabled) summary += '  • Consultar disponibilidad\n';
             if (transferEnabled) summary += `  • Transferencias (${transferDestinations.length} destinos)\n`;
