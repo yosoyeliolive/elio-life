@@ -431,15 +431,6 @@
             margin-top: 16px;
         }
 
-        /* POST CALL ANALYSIS CONFIG */
-        .analysis-config {
-            background: var(--gris-claro);
-            border: 1px solid var(--gris-borde);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 16px;
-        }
-
         /* BOTONES */
         .wizard-actions {
             display: flex;
@@ -506,7 +497,7 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <a href="dashboard.html" class="back-link">
+            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
                 <i class="bi bi-arrow-left"></i>
                 Volver al dashboard
             </a>
@@ -739,23 +730,33 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            Modo STT
+                            Modo STT (Speech-to-Text)
                             <span class="custom-tooltip">
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
-                                    <strong>Velocidad vs precisión:</strong><br><br>
-                                    <strong>fast:</strong> Reconocimiento más rápido, menos preciso. Ideal para conversaciones fluidas.<br><br>
-                                    <strong>accurate:</strong> Reconocimiento más lento pero más preciso. Mejor para nombres técnicos o información crítica.
+                                    <strong>Equilibrio entre precisión y latencia:</strong><br><br>
+                                    
+                                    <strong>Optimizar para velocidad (fast):</strong><br>
+                                    • Latencia mínima<br>
+                                    • Ideal para conversaciones fluidas<br>
+                                    • Tasa de error similar al modo preciso<br><br>
+                                    
+                                    <strong>Optimizar para precisión (accurate):</strong><br>
+                                    • Latencia adicional de ~200ms<br>
+                                    • Mejor captura de números, fechas y entidades específicas<br>
+                                    • Recomendado si tu agente maneja información crítica (citas, datos numéricos, emails)<br><br>
+                                    
+                                    <strong>Nota:</strong> Este ajuste solo aplica a modelos en cascada, no a modelos de voz a voz.
                                 </span>
                             </span>
                         </label>
                         <select class="form-select" id="sttMode">
-                            <option value="fast">Rápido (fast)</option>
-                            <option value="accurate" selected>Preciso (accurate) - Recomendado</option>
+                            <option value="fast">Optimizar para velocidad (fast)</option>
+                            <option value="accurate" selected>Optimizar para precisión (accurate) - Recomendado</option>
                         </select>
                         <div class="form-text">
-                            <i class="bi bi-mic me-1"></i>
-                            "Accurate" proporciona mejor precisión para información crítica
+                            <i class="bi bi-info-circle me-1"></i>
+                            El modo "accurate" añade ~200ms de latencia pero mejora la captura de números, fechas y entidades
                         </div>
                     </div>
 
@@ -781,66 +782,6 @@
                         <div class="form-text ms-5">
                             <i class="bi bi-type me-1"></i>
                             Mejora la legibilidad de las transcripciones
-                        </div>
-                    </div>
-
-                    <!-- POST-CALL ANALYSIS -->
-                    <div class="section-divider">
-                        <h3>Análisis post-llamada</h3>
-                        <p>Genera análisis automático de las llamadas completadas.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" 
-                                   type="checkbox" 
-                                   id="enablePostCallAnalysis"
-                                   onchange="togglePostCallAnalysis()">
-                            <label class="form-check-label" for="enablePostCallAnalysis">
-                                <strong>Activar análisis post-llamada</strong>
-                                <span class="custom-tooltip">
-                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                    <span class="tooltip-content">
-                                        <strong>Análisis automático:</strong><br><br>
-                                        Al finalizar cada llamada, el sistema generará automáticamente un análisis con:<br>
-                                        - Resumen de la conversación<br>
-                                        - Sentimiento del cliente<br>
-                                        - Puntos clave mencionados<br>
-                                        - Acciones requeridas
-                                    </span>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="form-text ms-5">
-                            <i class="bi bi-bar-chart me-1"></i>
-                            Análisis con IA de cada llamada completada
-                        </div>
-                    </div>
-
-                    <div id="analysisConfig" style="display: none;">
-                        <div class="analysis-config">
-                            <div class="form-group mb-0">
-                                <label class="form-label">
-                                    Modelo de análisis
-                                    <span class="custom-tooltip">
-                                        <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                        <span class="tooltip-content">
-                                            <strong>Modelo para análisis:</strong><br><br>
-                                            <strong>gpt-4o-mini:</strong> Rápido y económico<br>
-                                            <strong>gpt-4o:</strong> Más completo y detallado
-                                        </span>
-                                    </span>
-                                </label>
-                                <select class="form-select" id="postCallAnalysisModel">
-                                    <option value="gpt-4.1" selected>GPT-4.1 (recomendado)</option>
-                                    <option value="gpt-4o-mini">GPT-4o Mini (rápido)</option>
-                                    <option value="gpt-4o">GPT-4o (detallado)</option>
-                                </select>
-                                <div class="form-text">
-                                    <i class="bi bi-cpu me-1"></i>
-                                    El análisis se genera automáticamente al finalizar la llamada
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -870,12 +811,6 @@
             document.getElementById('ambientConfig').style.display = enabled ? 'block' : 'none';
         }
 
-        // Toggle post call analysis
-        function togglePostCallAnalysis() {
-            const enabled = document.getElementById('enablePostCallAnalysis').checked;
-            document.getElementById('analysisConfig').style.display = enabled ? 'block' : 'none';
-        }
-
         // Siguiente paso
         function nextStep() {
             // Obtener valores
@@ -885,8 +820,6 @@
             const ambientSoundVolume = parseFloat(document.getElementById('ambientSoundVolume').value);
             const sttMode = document.getElementById('sttMode').value;
             const enableTranscriptionFormatting = document.getElementById('enableTranscriptionFormatting').checked;
-            const enablePostCallAnalysis = document.getElementById('enablePostCallAnalysis').checked;
-            const postCallAnalysisModel = document.getElementById('postCallAnalysisModel').value;
 
             // Validaciones básicas
             if (volume < 0.5 || volume > 1.5) {
@@ -907,9 +840,7 @@
                 ambient_sound: enableAmbientSound ? ambientSound : null,
                 ambient_sound_volume: enableAmbientSound ? ambientSoundVolume : null,
                 stt_mode: sttMode,
-                enable_transcription_formatting: enableTranscriptionFormatting,
-                enable_post_call_analysis: enablePostCallAnalysis,
-                post_call_analysis_model: enablePostCallAnalysis ? postCallAnalysisModel : null
+                enable_transcription_formatting: enableTranscriptionFormatting
             };
 
             const allData = { ...wizardData, ...paso6Data };
@@ -925,9 +856,8 @@
 ${enableAmbientSound ? `🎵 Sonido ambiente: ${ambientSound} (vol: ${ambientSoundVolume})` : '🔇 Sin sonido ambiente'}
 🎤 Modo STT: ${sttMode}
 📝 Formato transcripción: ${enableTranscriptionFormatting ? 'Activado' : 'Desactivado'}
-${enablePostCallAnalysis ? `📊 Análisis post-llamada: ${postCallAnalysisModel}` : '📊 Sin análisis post-llamada'}
 
-¡Paso 6 completado! En la versión completa avanzarías al Paso 7: Herramientas.`;
+¡Paso 6 completado! En la versión completa avanzarías al Paso 7: Configuración avanzada.`;
 
             alert(summary);
         }
