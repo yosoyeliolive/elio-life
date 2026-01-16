@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear agente IA - Paso 2 | Netelip</title>
+    <title>Crear agente IA - Paso 2: Configuración LLM | Netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -24,6 +24,8 @@
             --gris-texto: #6c757d;
             --oscuro: #1a2428;
             --exito: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         body {
@@ -216,6 +218,29 @@
             margin-bottom: 32px;
         }
 
+        /* DIVIDER */
+        .section-divider {
+            margin: 48px 0 32px 0;
+            border-top: 2px solid var(--gris-borde);
+            padding-top: 32px;
+        }
+
+        .section-divider h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-divider p {
+            font-size: 14px;
+            color: var(--gris-texto);
+            margin-bottom: 24px;
+        }
+
         .form-group {
             margin-bottom: 28px;
         }
@@ -232,6 +257,16 @@
         .required {
             color: #ef4444;
             margin-left: 4px;
+        }
+
+        .badge-required {
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: 600;
         }
 
         .tooltip-icon {
@@ -351,13 +386,6 @@
             line-height: 1.6;
         }
 
-        /* GRID 2 COLUMNAS */
-        .form-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
         /* RADIO BUTTONS */
         .radio-group {
             display: flex;
@@ -444,8 +472,8 @@
             cursor: pointer;
         }
 
-        /* BOTÓN CARGAR PLANTILLA */
-        .btn-load-template {
+        /* BOTÓN USAR GENERADOR */
+        .btn-generator {
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
@@ -459,23 +487,131 @@
             align-items: center;
             gap: 8px;
             margin-bottom: 12px;
+            text-decoration: none;
         }
 
-        .btn-load-template:hover {
+        .btn-generator:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            color: white;
         }
 
-        /* BADGE MODELO */
-        .modelo-badge {
-            display: inline-block;
+        /* KNOWLEDGE BASE - DRAG & DROP ZONE */
+        .kb-upload-zone {
+            border: 2px dashed var(--gris-borde);
+            border-radius: 12px;
+            padding: 40px 24px;
+            text-align: center;
+            background: var(--gris-claro);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .kb-upload-zone:hover,
+        .kb-upload-zone.dragover {
+            border-color: var(--netelip-azul);
             background: #eff6ff;
+        }
+
+        .kb-upload-zone i {
+            font-size: 48px;
             color: var(--netelip-azul);
+            margin-bottom: 16px;
+        }
+
+        .kb-upload-zone h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--oscuro);
+            margin-bottom: 8px;
+        }
+
+        .kb-upload-zone p {
+            font-size: 13px;
+            color: var(--gris-texto);
+            margin: 0;
+        }
+
+        /* TABLA DE DOCUMENTOS */
+        .kb-documents-table {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .kb-documents-table-header {
+            background: var(--gris-claro);
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--oscuro);
+            border-bottom: 1px solid var(--gris-borde);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 80px;
+            gap: 12px;
+        }
+
+        .kb-document-row {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gris-borde);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 80px;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .kb-document-row:last-child {
+            border-bottom: none;
+        }
+
+        .kb-doc-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--oscuro);
+            font-size: 14px;
+        }
+
+        .kb-doc-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: var(--netelip-azul);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .kb-doc-type {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .kb-doc-size {
+            font-size: 13px;
+            color: var(--gris-texto);
+        }
+
+        .btn-remove-doc {
+            background: var(--danger);
+            color: white;
+            border: none;
             padding: 6px 12px;
             border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-remove-doc:hover {
+            background: #dc2626;
         }
 
         /* ALERT */
@@ -496,20 +632,21 @@
             margin-top: 2px;
         }
 
-        .alert-success {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 8px;
-            padding: 14px 16px;
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 10px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: start;
+            gap: 16px;
             margin-bottom: 16px;
-            display: none;
-            align-items: flex-start;
-            gap: 10px;
         }
 
-        .alert-success i {
-            color: var(--exito);
-            font-size: 18px;
+        .alert-warning i {
+            color: var(--warning);
+            font-size: 22px;
+            margin-top: 2px;
         }
 
         /* BOTONES */
@@ -568,11 +705,13 @@
             .main-content {
                 margin-left: 0;
             }
-            .form-grid-2 {
-                grid-template-columns: 1fr;
-            }
             .checkbox-group {
                 grid-template-columns: 1fr;
+            }
+            .kb-documents-table-header,
+            .kb-document-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
             }
         }
     </style>
@@ -590,7 +729,7 @@
         </div>
 
         <div class="steps-container">
-            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+            <a href="wizard-paso1-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
@@ -646,8 +785,8 @@
             <a href="#" class="step-item">
                 <div class="step-number">7</div>
                 <div class="step-info">
-                    <span class="step-name">Herramientas</span>
-                    <span class="step-desc">Integraciones</span>
+                    <span class="step-name">Configuración avanzada</span>
+                    <span class="step-desc">Tools y webhooks</span>
                 </div>
                 <i class="bi bi-chevron-right step-icon"></i>
             </a>
@@ -670,44 +809,21 @@
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" style="width: 25%;"></div>
             </div>
-            <div class="progress-text">Paso 2 de 8 - Configuración del LLM</div>
+            <div class="progress-text">Paso 2 de 8 - Configuración LLM</div>
         </div>
 
         <!-- CONTENT -->
         <div class="content-area">
             <div class="form-card">
-                <h1 class="section-title">Configuración del modelo LLM</h1>
+                <h1 class="section-title">Configuración LLM</h1>
                 <p class="section-subtitle">
-                    Selecciona el modelo de tu agente y define cómo responderá.
+                    Configura el modelo de lenguaje, el prompt y la base de conocimientos de tu agente.
                 </p>
 
                 <form id="wizardForm">
-                    <!-- MODELO DE AGENTE -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            Modelo de agente
-                            <span class="required">*</span>
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    <strong>Tipo de agente seleccionado en el Paso 1</strong><br><br>
-                                    Este campo se completa automáticamente según el tipo de agente que elegiste anteriormente.
-                                </span>
-                            </span>
-                        </label>
-                        <select class="form-select" id="modeloAgente" required>
-                            <option value="">Cargando desde Paso 1...</option>
-                            <option value="transferencia">Transferencia de llamadas</option>
-                            <option value="agendamiento">Agendamiento de citas</option>
-                            <option value="cualificacion">Cualificación y atención</option>
-                        </select>
-                        <div class="form-text">
-                            <i class="bi bi-robot me-1"></i>
-                            Tipo de agente seleccionado en el Paso 1
-                        </div>
-                    </div>
-
-                    <!-- MODELO LLM -->
+                    <!-- ============================================================ -->
+                    <!-- SECCIÓN 1: MODELO DE IA -->
+                    <!-- ============================================================ -->
                     <div class="form-group">
                         <label class="form-label">
                             Modelo de IA
@@ -715,89 +831,73 @@
                             <span class="custom-tooltip">
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
-                                    <strong>Modelos disponibles:</strong><br><br>
-                                    <strong>GPT-4o:</strong> El más potente. Mejor comprensión contextual.<br><br>
-                                    <strong>GPT-4o Mini:</strong> Rápido y económico.<br><br>
-                                    <strong>Claude 3.7 Sonnet:</strong> Excelente para conversaciones naturales.<br><br>
-                                    <strong>Gemini 2.0:</strong> Gran capacidad multilingüe.
+                                    <strong>GPT-4.1:</strong> El modelo más avanzado de OpenAI. Ofrece la mejor comprensión contextual, razonamiento y generación de respuestas naturales. Ideal para agentes que requieren máxima calidad en interacciones complejas.
                                 </span>
                             </span>
                         </label>
-                        <select class="form-select" id="modelo" required>
-                            <option value="">Selecciona un modelo...</option>
+                        <select class="form-select" id="modelo" required disabled>
                             <option value="gpt-4.1" selected>GPT-4.1 (Recomendado)</option>
-                            <option value="gpt-4o">GPT-4o</option>
-                            <option value="gemini-3.0-flash">Gemini 3.0 Flash</option>
-                            <option value="gpt-4o-mini">GPT-4o Mini</option>
-                            <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
-                            <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
-                            <option value="claude-3.7-sonnet">Claude 3.7 Sonnet</option>
-                            <option value="claude-3.5-haiku">Claude 3.5 Haiku</option>
-                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                            <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
                         </select>
                         <div class="form-text">
                             <i class="bi bi-cpu me-1"></i>
-                            El motor de IA que procesará las conversaciones
+                            Modelo seleccionado por defecto para máxima calidad
                         </div>
                     </div>
 
-                    <!-- GRID: TEMPERATURE Y MAX TOKENS -->
-                    <div class="form-grid-2">
-                        <div class="form-group">
-                            <label class="form-label">
-                                Temperature
-                                <span class="custom-tooltip">
-                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                    <span class="tooltip-content">
-                                        <strong>Controla la creatividad:</strong><br><br>
-                                        <strong>0.0-0.3:</strong> Muy consistente. Ideal para soporte técnico.<br><br>
-                                        <strong>0.4-0.6:</strong> Balance (recomendado).<br><br>
-                                        <strong>0.7-1.0:</strong> Más creativo. Útil para ventas.
-                                    </span>
+                    <!-- TEMPERATURE -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Temperature
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Controla la creatividad del modelo:</strong><br><br>
+                                    <strong>0.0-0.3:</strong> Muy consistente y predecible. Ideal para soporte técnico.<br><br>
+                                    <strong>0.4-0.6:</strong> Balance entre creatividad y consistencia (recomendado).<br><br>
+                                    <strong>0.7-1.0:</strong> Más creativo y variado. Útil para ventas y marketing.
                                 </span>
-                            </label>
-                            <div class="slider-container">
-                                <div class="slider-value" id="tempValue">0.7</div>
-                                <input type="range" 
-                                       id="temperature" 
-                                       min="0" 
-                                       max="1" 
-                                       step="0.1" 
-                                       value="0.7"
-                                       oninput="document.getElementById('tempValue').textContent = this.value">
-                            </div>
-                            <div class="form-text">
-                                <i class="bi bi-thermometer-half me-1"></i>
-                                Mayor valor = respuestas más creativas
-                            </div>
+                            </span>
+                        </label>
+                        <div class="slider-container">
+                            <div class="slider-value" id="tempValue">0.7</div>
+                            <input type="range" 
+                                   id="temperature" 
+                                   min="0" 
+                                   max="1" 
+                                   step="0.1" 
+                                   value="0.7"
+                                   oninput="document.getElementById('tempValue').textContent = this.value">
                         </div>
+                        <div class="form-text">
+                            <i class="bi bi-thermometer-half me-1"></i>
+                            Mayor valor = respuestas más creativas y variadas
+                        </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label class="form-label">
-                                Max tokens
+                    <!-- MODEL HIGH PRIORITY -->
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   id="highPriority">
+                            <label class="form-check-label" for="highPriority">
+                                Activar modelo de alta prioridad
                                 <span class="custom-tooltip">
                                     <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                     <span class="tooltip-content">
-                                        <strong>Longitud máxima:</strong><br><br>
-                                        <strong>500-800:</strong> Cortas<br>
-                                        <strong>1000-1500:</strong> Completas (recomendado)<br>
-                                        <strong>2000+:</strong> Muy detalladas<br><br>
-                                        1 token ≈ 0.75 palabras
+                                        <strong>Pool de recursos dedicados:</strong><br><br>
+                                        Garantiza tiempos de respuesta más rápidos mediante el uso de recursos dedicados.<br><br>
+                                        <strong>Recomendado para:</strong><br>
+                                        • Alto volumen de llamadas<br>
+                                        • Servicios críticos<br>
+                                        • Horarios pico
                                     </span>
                                 </span>
                             </label>
-                            <input type="number" 
-                                   class="form-control" 
-                                   id="maxTokens" 
-                                   min="100" 
-                                   max="4000" 
-                                   value="1000"
-                                   placeholder="1000">
-                            <div class="form-text">
-                                <i class="bi bi-file-text me-1"></i>
-                                Recomendado: 1000 tokens (~750 palabras)
-                            </div>
+                        </div>
+                        <div class="form-text ms-4">
+                            <i class="bi bi-lightning-charge me-1"></i>
+                            Garantiza respuestas más rápidas en momentos de alto tráfico
                         </div>
                     </div>
 
@@ -810,7 +910,7 @@
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
                                     <strong>Agente habla primero:</strong> El agente inicia la conversación con un saludo.<br><br>
-                                    <strong>Usuario habla primero:</strong> El agente espera a que el usuario hable primero.
+                                    <strong>Usuario habla primero:</strong> El agente espera a que el usuario hable primero antes de responder.
                                 </span>
                             </span>
                         </label>
@@ -835,10 +935,10 @@
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
                                     <strong>Primera impresión:</strong><br><br>
-                                    La primera frase que dirá tu agente.<br><br>
+                                    La primera frase que dirá tu agente al contestar la llamada.<br><br>
                                     <strong>Tips:</strong><br>
                                     • Sé breve y claro<br>
-                                    • Presenta agente y empresa<br>
+                                    • Presenta al agente y empresa<br>
                                     • Pregunta cómo ayudar
                                 </span>
                             </span>
@@ -846,10 +946,11 @@
                         <textarea class="form-control" 
                                   id="beginMessage" 
                                   rows="3" 
+                                  style="min-height: 100px;"
                                   required
                                   placeholder="Ej: Hola, soy Elio, tu asistente de voz creado con inteligencia artificial de Netelip - ¿Con quién tengo el gusto de hablar?"></textarea>
-                        <div class="alert-warning" style="margin-top: 16px; margin-bottom: 16px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 10px; padding: 20px 24px; display: flex; align-items: start; gap: 16px;">
-                            <i class="bi bi-exclamation-triangle-fill" style="color: #f59e0b; font-size: 22px; margin-top: 2px;"></i>
+                        <div class="alert-warning">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
                             <div style="flex: 1;">
                                 <strong style="color: #92400e; font-size: 14px; display: block; margin-bottom: 10px;">Obligatorio por ley española (RGPD y LOPD):</strong>
                                 <p style="margin: 0 0 12px 0; font-size: 13px; color: #78350f; line-height: 1.6;">
@@ -875,7 +976,7 @@
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
                                     <strong>Selecciona los rasgos principales:</strong><br><br>
-                                    Define cómo se comportará tu agente. Puedes seleccionar múltiples rasgos.
+                                    Define cómo se comportará tu agente durante las conversaciones. Puedes seleccionar múltiples rasgos para crear una personalidad única.
                                 </span>
                             </span>
                         </label>
@@ -911,9 +1012,9 @@
                             <span class="custom-tooltip">
                                 <i class="bi bi-question-circle-fill tooltip-icon"></i>
                                 <span class="tooltip-content">
-                                    <strong>Formal:</strong> Lenguaje corporativo, uso de usted.<br><br>
-                                    <strong>Semiformal:</strong> Balance entre profesional y cercano.<br><br>
-                                    <strong>Casual:</strong> Lenguaje relajado, uso de tú.
+                                    <strong>Formal:</strong> Lenguaje corporativo, uso de usted, protocolar.<br><br>
+                                    <strong>Semiformal:</strong> Balance entre profesional y cercano. Recomendado para la mayoría de casos.<br><br>
+                                    <strong>Casual:</strong> Lenguaje relajado, uso de tú, conversacional.
                                 </span>
                             </span>
                         </label>
@@ -943,20 +1044,20 @@
                                 <span class="tooltip-content">
                                     <strong>El cerebro de tu agente:</strong><br><br>
                                     Define su personalidad, conocimientos, reglas de comportamiento y objetivos.<br><br>
-                                    Usa el botón verde para cargar una plantilla profesional optimizada para tu sector.
+                                    Usa el Generador de Prompts para crear un prompt profesional optimizado automáticamente.
                                 </span>
                             </span>
                         </label>
                         
-                        <button type="button" class="btn-load-template" onclick="cargarPlantilla()">
-                            <i class="bi bi-file-earmark-text"></i>
-                            Cargar plantilla por sector
-                        </button>
+                        <a href="generador-agentes-retell-miliperez.html" target="_blank" class="btn-generator">
+                            <i class="bi bi-magic"></i>
+                            Usar generador de prompts
+                        </a>
 
-                        <div class="alert-success" id="templateLoaded">
-                            <i class="bi bi-check-circle-fill"></i>
+                        <div class="alert-info">
+                            <i class="bi bi-lightbulb-fill"></i>
                             <div>
-                                <strong>¡Plantilla cargada!</strong> Optimizada para el modelo <span id="modeloText">Agendamiento</span> y sector <span id="sectorText"></span>. Puedes editarla según necesites.
+                                <strong>Recomendación:</strong> El Generador de Prompts te permite crear un prompt profesional optimizado paso a paso, con plantillas por sector y módulos de cualificación, transferencias y agendamiento. Una vez generado, puedes copiarlo aquí o editarlo según necesites.
                             </div>
                         </div>
 
@@ -964,43 +1065,113 @@
                                   id="generalPrompt" 
                                   rows="18" 
                                   required
-                                  placeholder="Click en 'Cargar plantilla por sector' para obtener un prompt profesional optimizado para tu sector, o escribe el tuyo propio..."></textarea>
+                                  placeholder="Usa el Generador de Prompts para crear un prompt profesional optimizado, o escribe el tuyo propio aquí..."></textarea>
                         <div class="form-text">
                             <i class="bi bi-magic me-1"></i>
                             Este prompt define todo el comportamiento de tu agente (mínimo 100 caracteres)
                         </div>
                     </div>
 
-                    <!-- MODEL HIGH PRIORITY -->
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" 
-                                   type="checkbox" 
-                                   id="highPriority">
-                            <label class="form-check-label" for="highPriority">
-                                Activar modelo de alta prioridad
-                                <span class="custom-tooltip">
-                                    <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                    <span class="tooltip-content">
-                                        <strong>Pool de recursos dedicados:</strong><br><br>
-                                        Garantiza tiempos de respuesta más rápidos.<br><br>
-                                        <strong>Recomendado para:</strong><br>
-                                        • Alto volumen de llamadas<br>
-                                        • Servicios críticos<br>
-                                        • Horarios pico
-                                    </span>
+                    <!-- ============================================================ -->
+                    <!-- SECCIÓN 2: BASE DE CONOCIMIENTOS -->
+                    <!-- ============================================================ -->
+                    <div class="section-divider">
+                        <h3>
+                            <i class="bi bi-book"></i>
+                            Base de conocimientos
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    La base de conocimientos permite que tu agente acceda a documentación específica sobre tus productos, servicios o procedimientos. El agente consultará estos documentos para responder preguntas con información precisa y actualizada.
                                 </span>
-                            </label>
+                            </span>
+                        </h3>
+                        <p>
+                            Sube documentos que tu agente podrá consultar para responder con información precisa. Recomendado: formato Markdown (.md) o texto plano (.txt).
+                        </p>
+                    </div>
+
+                    <!-- UPLOAD ZONE -->
+                    <div class="kb-upload-zone" id="kbUploadZone">
+                        <i class="bi bi-cloud-upload"></i>
+                        <h4>Arrastra archivos aquí o haz clic para seleccionar</h4>
+                        <p>Formatos soportados: .md, .txt, .pdf, .docx | Máximo 10 MB por archivo</p>
+                        <input type="file" 
+                               id="kbFileInput" 
+                               accept=".md,.txt,.pdf,.docx" 
+                               multiple 
+                               style="display: none;">
+                    </div>
+
+                    <!-- DOCUMENTOS SUBIDOS -->
+                    <div id="kbDocumentsContainer" style="display: none;">
+                        <div class="kb-documents-table">
+                            <div class="kb-documents-table-header">
+                                <div>Documento</div>
+                                <div>Tipo</div>
+                                <div>Tamaño</div>
+                                <div>Acción</div>
+                            </div>
+                            <div id="kbDocumentsList">
+                                <!-- Los documentos se insertarán aquí dinámicamente -->
+                            </div>
                         </div>
-                        <div class="form-text ms-4">
-                            <i class="bi bi-lightning-charge me-1"></i>
-                            Garantiza respuestas más rápidas en momentos de alto tráfico
+                    </div>
+
+                    <!-- CONFIGURACIÓN AVANZADA DE KB -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="bi bi-sliders"></i>
+                            Configuración avanzada de retrieval
+                            <span class="custom-tooltip">
+                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
+                                <span class="tooltip-content">
+                                    <strong>Retrieval Chunks:</strong> Número de fragmentos de texto que el agente recuperará de la base de conocimientos al responder.<br><br>
+                                    <strong>Similarity Threshold:</strong> Qué tan similar debe ser el contenido para ser considerado relevante (0.7 = 70% de similitud).
+                                </span>
+                            </span>
+                        </label>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px;">
+                            <div>
+                                <label style="font-size: 13px; font-weight: 600; color: var(--oscuro); display: block; margin-bottom: 8px;">
+                                    Retrieval chunks
+                                </label>
+                                <div class="slider-container">
+                                    <div class="slider-value" id="chunksValue">3</div>
+                                    <input type="range" 
+                                           id="retrievalChunks" 
+                                           min="1" 
+                                           max="10" 
+                                           step="1" 
+                                           value="3"
+                                           oninput="document.getElementById('chunksValue').textContent = this.value">
+                                </div>
+                                <small class="text-muted">Número de fragmentos a recuperar por consulta</small>
+                            </div>
+                            
+                            <div>
+                                <label style="font-size: 13px; font-weight: 600; color: var(--oscuro); display: block; margin-bottom: 8px;">
+                                    Similarity threshold
+                                </label>
+                                <div class="slider-container">
+                                    <div class="slider-value" id="similarityValue">0.7</div>
+                                    <input type="range" 
+                                           id="similarityThreshold" 
+                                           min="0.1" 
+                                           max="1.0" 
+                                           step="0.1" 
+                                           value="0.7"
+                                           oninput="document.getElementById('similarityValue').textContent = this.value">
+                                </div>
+                                <small class="text-muted">Umbral de similitud mínimo (0.1 - 1.0)</small>
+                            </div>
                         </div>
                     </div>
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso1-DEFINITIVO.html'">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso1-netelip.html'">
                             <i class="bi bi-arrow-left"></i>
                             Anterior
                         </button>
@@ -1015,215 +1186,132 @@
     </div>
 
     <script>
-        // PLANTILLAS DE AGENDAMIENTO POR SECTOR
-        const PLANTILLAS_AGENDAMIENTO = {
-            atencion_cliente: `# AGENTE IA - AGENDAMIENTO DE CITAS PARA SOPORTE
+        // =====================================================
+        // DATOS DEL WIZARD
+        // =====================================================
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
+        let kbDocuments = [];
 
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en agendar citas para soporte técnico.
+        // =====================================================
+        // KNOWLEDGE BASE - DRAG & DROP
+        // =====================================================
+        const uploadZone = document.getElementById('kbUploadZone');
+        const fileInput = document.getElementById('kbFileInput');
+        const documentsContainer = document.getElementById('kbDocumentsContainer');
+        const documentsList = document.getElementById('kbDocumentsList');
 
-## Tu objetivo
-Agendar citas con asesores técnicos para resolver consultas y problemas de clientes.
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Identificar necesidad del cliente
-3. Proponer cita con asesor técnico
-4. Gestionar disponibilidad en calendario
-5. Capturar datos de contacto
-6. Confirmar y enviar recordatorio
-
-## Personalidad
-- Profesional pero cercano
-- Empático con problemas técnicos
-- Eficiente en resolución
-
-## Reglas clave
-✅ SIEMPRE escuchar el problema completo antes de agendar
-✅ SIEMPRE confirmar fecha y hora explícitamente
-✅ SIEMPRE validar email deletreándolo
-❌ NUNCA prometer soluciones técnicas que no puedes dar
-❌ NUNCA agendar sin confirmar disponibilidad`,
-
-            gestion_citas: `# AGENTE IA - GESTIÓN DE CITAS
-
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en gestión de citas médicas/servicios.
-
-## Tu objetivo
-Coordinar citas de manera eficiente y profesional para servicios de {{empresa}}.
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Tipo de servicio solicitado
-3. Verificar disponibilidad en calendario
-4. Confirmar fecha y hora
-5. Capturar datos de contacto
-6. Enviar confirmación
-
-## Personalidad
-- Eficiente y organizado
-- Empático y servicial
-- Claro en instrucciones
-
-## Reglas clave
-✅ SIEMPRE preguntar tipo de servicio primero
-✅ SIEMPRE ofrecer alternativas si fecha no disponible
-✅ SIEMPRE confirmar número y email
-❌ NUNCA dar información médica o diagnósticos
-❌ NUNCA agendar sin verificar disponibilidad real`,
-
-            cualificacion_leads: `# AGENTE IA - CUALIFICACIÓN + AGENDAMIENTO COMERCIAL
-
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en cualificar leads y agendar reuniones comerciales.
-
-## Tu objetivo
-Identificar clientes potenciales cualificados y agendar demos o reuniones con el equipo comercial.
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Entender necesidad del negocio
-3. Cualificar: presupuesto, urgencia, autoridad
-4. Proponer reunión comercial
-5. Gestionar calendario
-6. Confirmar datos
-
-## Personalidad
-- Consultivo, no vendedor agresivo
-- Curioso y analítico
-- Profesional y directo
-
-## Reglas clave
-✅ SIEMPRE hacer preguntas BANT (Budget, Authority, Need, Timeline)
-✅ SIEMPRE enfocarse en necesidad real del cliente
-✅ SIEMPRE agendar solo leads cualificados
-❌ NUNCA presionar para cerrar venta
-❌ NUNCA hacer promesas sobre pricing sin autorización`,
-
-            turismo: `# AGENTE IA - TURISMO Y VIAJES
-
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en reservas turísticas.
-
-## Tu objetivo
-Coordinar consultas y visitas para planificación de viajes, tours y experiencias.
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Destino y tipo de experiencia deseada
-3. Fechas aproximadas y número de personas
-4. Proponer consulta con asesor de viajes
-5. Agendar llamada
-6. Confirmar datos
-
-## Personalidad
-- Entusiasta por los viajes
-- Informativo y detallista
-- Servicial y paciente
-
-## Reglas clave
-✅ SIEMPRE capturar: destino, fechas, número de personas
-✅ SIEMPRE mencionar que asesor dará precios específicos
-✅ SIEMPRE mostrar entusiasmo por el viaje
-❌ NUNCA prometer disponibilidad sin verificar
-❌ NUNCA dar precios finales sin consultar`,
-
-            inmobiliaria: `# AGENTE IA - INMOBILIARIA
-
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en agendar visitas a propiedades.
-
-## Tu objetivo
-Coordinar visitas presenciales a propiedades con clientes interesados.
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Tipo de propiedad buscada
-3. Zona y presupuesto aproximado
-4. Proponer visita a propiedad
-5. Agendar fecha y hora
-6. Confirmar ubicación y datos
-
-## Personalidad
-- Profesional y confiable
-- Conocedor del mercado
-- Orientado a resultados
-
-## Reglas clave
-✅ SIEMPRE confirmar tipo de propiedad y zona
-✅ SIEMPRE mencionar que en visita verá detalles
-✅ SIEMPRE enviar ubicación exacta por email
-❌ NUNCA prometer características sin verificar
-❌ NUNCA presionar para decisión inmediata`,
-
-            servicios_profesionales: `# AGENTE IA - SERVICIOS PROFESIONALES
-
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en coordinar consultas profesionales.
-
-## Tu objetivo
-Agendar primeras consultas con especialistas (abogados, contadores, consultores).
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Tipo de consulta necesaria
-3. Urgencia del caso
-4. Proponer consulta con especialista
-5. Agendar llamada
-6. Confirmar confidencialidad
-
-## Personalidad
-- Profesional y discreto
-- Empático con situaciones delicadas
-- Claro en el proceso
-
-## Reglas clave
-✅ SIEMPRE mantener confidencialidad absoluta
-✅ SIEMPRE conectar con especialista humano
-✅ SIEMPRE ser empático con situaciones sensibles
-❌ NUNCA dar asesoría legal/profesional
-❌ NUNCA prometer resultados específicos`,
-
-            encuestas: `# AGENTE IA - ENCUESTAS Y FEEDBACK
-
-Eres **{{nombre_agente}}**, copiloto digital de {{empresa}}, especializado en recopilar feedback.
-
-## Tu objetivo
-Coordinar llamadas breves para encuestas de satisfacción y recopilación de opiniones.
-
-## Flujo de conversación
-1. Saludo y captura de nombre
-2. Explicar propósito de encuesta
-3. Mencionar duración (5-10 minutos)
-4. Preguntar disponibilidad inmediata o agendar
-5. Si agenda: gestionar calendario
-6. Agradecer participación
-
-## Personalidad
-- Neutral y objetivo
-- Respetuoso del tiempo
-- Agradecido
-
-## Reglas clave
-✅ SIEMPRE mencionar duración estimada
-✅ SIEMPRE respetar si no quiere participar
-✅ SIEMPRE agradecer sinceramente
-❌ NUNCA influenciar respuestas
-❌ NUNCA hacer encuestas muy largas
-❌ NUNCA presionar para participar`
-        };
-
-        // Recuperar datos del Paso 1 desde sessionStorage
-        const datosP1 = JSON.parse(sessionStorage.getItem('agentConfig') || '{}');
-        console.log('Datos del Paso 1:', datosP1);
-
-        // Auto-cargar tipo de agente del Paso 1
-        document.addEventListener('DOMContentLoaded', () => {
-            const modeloAgente = document.getElementById('modeloAgente');
-            
-            // Si hay datos del Paso 1, seleccionar automáticamente
-            if (datosP1.agent_type) {
-                modeloAgente.value = datosP1.agent_type;
-                console.log('Tipo de agente cargado:', datosP1.agent_type);
-            }
+        // Click para abrir selector de archivos
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
         });
 
-        // Función para mostrar/ocultar Begin Message
+        // Drag & drop events
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // =====================================================
+        // MANEJO DE ARCHIVOS
+        // =====================================================
+        function handleFiles(files) {
+            for (const file of files) {
+                // Validar tamaño (10 MB máximo)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`⚠️ El archivo "${file.name}" excede el tamaño máximo de 10 MB`);
+                    continue;
+                }
+
+                // Validar tipo
+                const validTypes = ['.md', '.txt', '.pdf', '.docx'];
+                const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+                if (!validTypes.includes(fileExt)) {
+                    alert(`⚠️ El archivo "${file.name}" no es un tipo válido. Solo se permiten: ${validTypes.join(', ')}`);
+                    continue;
+                }
+
+                // Leer archivo como base64
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const doc = {
+                        id: 'kb_doc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        name: file.name,
+                        type: getFileType(fileExt),
+                        size: formatFileSize(file.size),
+                        content: e.target.result.split(',')[1], // base64 sin prefijo
+                        uploaded_at: new Date().toISOString()
+                    };
+
+                    kbDocuments.push(doc);
+                    renderDocuments();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function getFileType(ext) {
+            const types = {
+                '.md': 'Markdown',
+                '.txt': 'Texto',
+                '.pdf': 'PDF',
+                '.docx': 'Word'
+            };
+            return types[ext] || ext.toUpperCase();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function renderDocuments() {
+            if (kbDocuments.length === 0) {
+                documentsContainer.style.display = 'none';
+                return;
+            }
+
+            documentsContainer.style.display = 'block';
+            documentsList.innerHTML = kbDocuments.map(doc => `
+                <div class="kb-document-row">
+                    <div class="kb-doc-name">
+                        <div class="kb-doc-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <span>${doc.name}</span>
+                    </div>
+                    <div class="kb-doc-type">${doc.type}</div>
+                    <div class="kb-doc-size">${doc.size}</div>
+                    <button type="button" class="btn-remove-doc" onclick="removeDocument('${doc.id}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeDocument(docId) {
+            kbDocuments = kbDocuments.filter(doc => doc.id !== docId);
+            renderDocuments();
+        }
+
+        // =====================================================
+        // TOGGLE BEGIN MESSAGE
+        // =====================================================
         function toggleBeginMessage() {
             const whoFirst = document.querySelector('input[name="whoFirst"]:checked').value;
             const beginMessageGroup = document.getElementById('beginMessageGroup');
@@ -1238,76 +1326,12 @@ Coordinar llamadas breves para encuestas de satisfacción y recopilación de opi
             }
         }
 
-        // Función para cargar plantilla
-        function cargarPlantilla() {
-            const modeloAgente = document.getElementById('modeloAgente').value;
-            const sector = datosP1.sector;
-            const nombreAgente = datosP1.agent_name || '[NOMBRE DEL AGENTE]';
-            const nombreEmpresa = datosP1.empresa || '[NOMBRE DE LA EMPRESA]';
-
-            // Validaciones
-            if (!modeloAgente) {
-                alert('⚠️ Primero selecciona el modelo de agente (Agendamiento, Ventas, etc.)');
-                document.getElementById('modeloAgente').focus();
-                return;
-            }
-
-            if (!sector) {
-                alert('⚠️ No se detectó un sector del Paso 1. Por favor, completa el Paso 1 primero.');
-                window.location.href = 'wizard-paso1-DEFINITIVO.html';
-                return;
-            }
-
-            // Obtener plantilla según modelo y sector
-            let plantilla = null;
-            
-            if (modeloAgente === 'agendamiento') {
-                plantilla = PLANTILLAS_AGENDAMIENTO[sector];
-            }
-            // Aquí agregarás más modelos en el futuro:
-            // else if (modeloAgente === 'ventas') {
-            //     plantilla = PLANTILLAS_VENTAS[sector];
-            // }
-
-            if (!plantilla) {
-                alert(`⚠️ No hay plantilla disponible para:\nModelo: ${modeloAgente}\nSector: ${sector}\n\nPróximamente estará disponible.`);
-                return;
-            }
-
-            // Reemplazar variables
-            let promptFinal = plantilla
-                .replace(/\{\{nombre_agente\}\}/g, nombreAgente)
-                .replace(/\{\{empresa\}\}/g, nombreEmpresa);
-
-            // Insertar en textarea
-            document.getElementById('generalPrompt').value = promptFinal;
-            
-            // Mostrar alert de éxito
-            document.getElementById('templateLoaded').style.display = 'flex';
-            
-            // Actualizar textos del alert
-            const sectorNames = {
-                'atencion_cliente': 'Atención al cliente',
-                'gestion_citas': 'Gestión de citas',
-                'cualificacion_leads': 'Cualificación de leads',
-                'turismo': 'Turismo y viajes',
-                'inmobiliaria': 'Inmobiliaria',
-                'servicios_profesionales': 'Servicios profesionales',
-                'encuestas': 'Encuestas y feedback'
-            };
-            
-            document.getElementById('modeloText').textContent = modeloAgente === 'agendamiento' ? 'Agendamiento' : modeloAgente;
-            document.getElementById('sectorText').textContent = sectorNames[sector] || sector;
-
-            console.log('✅ Plantilla cargada:', {modelo: modeloAgente, sector: sector});
-        }
-
-        // Función siguiente paso
+        // =====================================================
+        // SIGUIENTE PASO - VALIDACIÓN Y GUARDADO
+        // =====================================================
         function nextStep() {
-            const modeloAgente = document.getElementById('modeloAgente').value;
             const modelo = document.getElementById('modelo').value;
             const temperature = parseFloat(document.getElementById('temperature').value);
-            const maxTokens = parseInt(document.getElementById('maxTokens').value);
             const whoFirst = document.querySelector('input[name="whoFirst"]:checked').value;
             const beginMessage = document.getElementById('beginMessage').value.trim();
             const generalPrompt = document.getElementById('generalPrompt').value.trim();
@@ -1318,13 +1342,11 @@ Coordinar llamadas breves para encuestas de satisfacción y recopilación de opi
             const personalidad = Array.from(document.querySelectorAll('input[name="personalidad"]:checked'))
                 .map(cb => cb.value);
 
-            // Validaciones
-            if (!modeloAgente) {
-                alert('⚠️ Por favor, selecciona el modelo de agente');
-                document.getElementById('modeloAgente').focus();
-                return;
-            }
+            // Knowledge Base
+            const retrievalChunks = parseInt(document.getElementById('retrievalChunks').value);
+            const similarityThreshold = parseFloat(document.getElementById('similarityThreshold').value);
 
+            // Validaciones
             if (!modelo) {
                 alert('⚠️ Por favor, selecciona un modelo de IA');
                 document.getElementById('modelo').focus();
@@ -1348,7 +1370,7 @@ Coordinar llamadas breves para encuestas de satisfacción y recopilación de opi
             }
 
             if (!generalPrompt) {
-                alert('⚠️ Por favor, escribe o carga el prompt del agente');
+                alert('⚠️ Por favor, escribe o genera el prompt del agente');
                 document.getElementById('generalPrompt').focus();
                 return;
             }
@@ -1361,30 +1383,114 @@ Coordinar llamadas breves para encuestas de satisfacción y recopilación de opi
 
             // Guardar datos
             const paso2Data = {
-                modelo_agente: modeloAgente,
                 modelo,
                 temperature,
-                max_tokens: maxTokens,
                 who_speaks_first: whoFirst,
                 begin_message: whoFirst === 'agent' ? beginMessage : null,
                 personalidad,
                 tono,
                 general_prompt: generalPrompt,
-                high_priority: highPriority
+                high_priority: highPriority,
+                knowledge_base: {
+                    documents: kbDocuments,
+                    retrieval_config: {
+                        chunks: retrievalChunks,
+                        similarity_threshold: similarityThreshold
+                    }
+                }
             };
 
-            const allData = { ...datosP1, ...paso2Data };
+            const allData = { ...wizardData, ...paso2Data };
             localStorage.setItem('wizardData', JSON.stringify(allData));
 
             console.log('✅ Datos paso 2:', paso2Data);
             console.log('📦 Todos los datos:', allData);
             
-            alert(`✅ ¡Configuración guardada!\n\n🤖 Modelo: ${modeloAgente}\n💻 IA: ${modelo}\n🌡️ Temperature: ${temperature}\n🎭 Tono: ${tono}\n✨ Personalidad: ${personalidad.join(', ')}\n\n¡Paso 2 completado! En la versión completa avanzarías al Paso 3: Selección de Voz.`);
+            // ========== COMENTARIOS PARA ANTONIO - BACKEND INTEGRATION ==========
+            /*
+            INTEGRACIÓN BACKEND - Knowledge Base:
+            
+            1. CREAR KNOWLEDGE BASE EN RETELL AI:
+               POST https://api.retellai.com/v2/knowledge-base
+               
+               Body:
+               {
+                 "name": "KB - [Nombre del agente]",
+                 "texts": [
+                   "Contenido completo del documento 1...",
+                   "Contenido completo del documento 2..."
+                 ]
+               }
+               
+               Headers:
+               {
+                 "Authorization": "Bearer [RETELL_API_KEY]",
+                 "Content-Type": "application/json"
+               }
+               
+               Response:
+               {
+                 "knowledge_base_id": "kb_xxxxxxxxxxxxx",
+                 "name": "KB - Elio Telefonía",
+                 "created_at": "2025-01-16T..."
+               }
+            
+            2. ASOCIAR KB AL CREAR EL AGENTE:
+               En el paso final, al crear el agente vía API, incluir:
+               
+               {
+                 "agent_name": "...",
+                 "response_engine": {
+                   "type": "retell-llm",
+                   "llm_id": "...",
+                   "knowledge_base_ids": ["kb_xxxxxxxxxxxxx"] // ← Array de KBs
+                 },
+                 ...
+               }
+            
+            3. PROCESAMIENTO DE DOCUMENTOS:
+               - Los documentos vienen en base64 en paso2Data.knowledge_base.documents
+               - Decodificar base64 y extraer texto según tipo:
+                 * .md / .txt: leer directamente
+                 * .pdf: usar librería como PyPDF2 o pdfplumber
+                 * .docx: usar python-docx
+               - Combinar todos los textos en el array "texts"
+            
+            4. CONFIGURACIÓN DE RETRIEVAL:
+               - retrieval_chunks: paso2Data.knowledge_base.retrieval_config.chunks
+               - similarity_threshold: paso2Data.knowledge_base.retrieval_config.similarity_threshold
+               - Estos parámetros se usan al configurar el LLM que consulta la KB
+            
+            5. ALMACENAMIENTO EN SUPABASE:
+               Tabla: agent_knowledge_bases
+               Columnas:
+               - id (uuid)
+               - agent_id (referencia al agente)
+               - kb_id (ID de Retell AI)
+               - documents (jsonb con metadata de documentos)
+               - retrieval_config (jsonb)
+               - created_at (timestamp)
+            */
+            
+            alert(`✅ ¡Configuración guardada!
+
+💻 Modelo: ${modelo}
+🌡️ Temperature: ${temperature}
+🎭 Tono: ${tono}
+✨ Personalidad: ${personalidad.join(', ')}
+📚 Documentos en KB: ${kbDocuments.length}
+
+¡Paso 2 completado! En la versión completa avanzarías al Paso 3: Selección de Voz.`);
         }
 
-        // Inicializar
-        toggleBeginMessage();
-        console.log('🚀 Wizard Paso 2 MEJORADO cargado');
+        // =====================================================
+        // INICIALIZACIÓN
+        // =====================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleBeginMessage();
+            console.log('🚀 Wizard Paso 2 CON KNOWLEDGE BASE cargado');
+            console.log('📋 Datos anteriores:', wizardData);
+        });
     </script>
 </body>
 </html>
