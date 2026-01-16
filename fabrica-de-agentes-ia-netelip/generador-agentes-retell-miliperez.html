@@ -3,1311 +3,1816 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Prompts Retell AI - Netelip Professional</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Generador de Prompts - Fábrica de Agentes IA | netelip</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <style>
-        .step-content { display: none; }
-        .step-content.active { display: block; }
-        .voice-card { transition: all 0.2s; }
-        .voice-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .selected-voice { border: 2px solid #10b981; background: #f0fdf4; }
+        :root {
+            --netelip-blue: #267ab0;
+            --netelip-light-gray: #f0f0ef;
+            --netelip-dark-blue: #222d32;
+            --netelip-success: #28a745;
+            --netelip-warning: #ffc107;
+            --netelip-danger: #dc3545;
+        }
+        
+        body {
+            background-color: var(--netelip-light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .wizard-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .wizard-header {
+            background: linear-gradient(135deg, var(--netelip-blue) 0%, var(--netelip-dark-blue) 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .wizard-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+        }
+        
+        .wizard-header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px;
+            background: white;
+            border-bottom: 2px solid var(--netelip-light-gray);
+        }
+        
+        .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        
+        .step-item.active:not(:last-child)::after {
+            background: var(--netelip-blue);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .step-item.active .step-number {
+            background: var(--netelip-blue);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-item.completed .step-number {
+            background: var(--netelip-success);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .step-item.active .step-label {
+            color: var(--netelip-blue);
+            font-weight: 600;
+        }
+        
+        .wizard-content {
+            padding: 40px;
+            min-height: 500px;
+        }
+        
+        .step-content {
+            display: none;
+        }
+        
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--netelip-blue);
+            box-shadow: 0 0 0 0.2rem rgba(38, 122, 176, 0.15);
+        }
+        
+        .module-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .module-card:hover {
+            border-color: var(--netelip-blue);
+            box-shadow: 0 4px 12px rgba(38, 122, 176, 0.1);
+        }
+        
+        .module-card.selected {
+            border-color: var(--netelip-blue);
+            background: rgba(38, 122, 176, 0.05);
+        }
+        
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .module-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: var(--netelip-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .module-info {
+            flex: 1;
+        }
+        
+        .module-title {
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            margin-bottom: 3px;
+            font-size: 16px;
+        }
+        
+        .module-description {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        .module-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px;
+            background: var(--netelip-light-gray);
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .btn-wizard {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-wizard-prev {
+            background: white;
+            color: var(--netelip-dark-blue);
+            border: 2px solid #e0e0e0;
+        }
+        
+        .btn-wizard-prev:hover {
+            border-color: var(--netelip-blue);
+            color: var(--netelip-blue);
+        }
+        
+        .btn-wizard-next {
+            background: var(--netelip-blue);
+            color: white;
+        }
+        
+        .btn-wizard-next:hover {
+            background: var(--netelip-dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(38, 122, 176, 0.3);
+        }
+        
+        .btn-wizard-create {
+            background: var(--netelip-success);
+            color: white;
+        }
+        
+        .btn-wizard-create:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
+        .info-tooltip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--netelip-blue);
+            color: white;
+            font-size: 12px;
+            margin-left: 5px;
+            cursor: help;
+        }
+        
+        .config-section {
+            background: var(--netelip-light-gray);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .config-section-title {
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .summary-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .summary-title {
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            font-size: 14px;
+        }
+        
+        .alert-custom {
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: none;
+        }
+        
+        .alert-info {
+            background: rgba(38, 122, 176, 0.1);
+            color: var(--netelip-blue);
+        }
+        
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--netelip-success);
+        }
+        
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: #856404;
+        }
+        
+        .prompt-preview {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .btn-preview {
+            background: var(--netelip-dark-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-preview:hover {
+            background: var(--netelip-blue);
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner-border {
+            color: var(--netelip-blue);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .personality-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .personality-option:hover {
+            border-color: var(--netelip-blue);
+        }
+        
+        .personality-option.selected {
+            border-color: var(--netelip-blue);
+            background: rgba(38, 122, 176, 0.05);
+        }
+        
+        .personality-option input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .personality-label {
+            font-weight: 600;
+            color: var(--netelip-dark-blue);
+            margin-bottom: 3px;
+        }
+        
+        .personality-desc {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
+<body>
+    <div class="wizard-container">
         <!-- Header -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900">Generador de Prompts Retell AI</h1>
-                    <p class="text-gray-600 mt-2">Crea agentes de voz profesionales con configuración completa para Retell AI API</p>
+        <div class="wizard-header">
+            <h1><i class="bi bi-gear-fill"></i> Generador de Prompts IA</h1>
+            <p>Crea prompts optimizados para ChatGPT 4.1 para tus agentes de voz en 8 pasos simples</p>
+        </div>
+        
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step-item active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Básico</div>
+            </div>
+            <div class="step-item" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Capacidades</div>
+            </div>
+            <div class="step-item" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Cualificación</div>
+            </div>
+            <div class="step-item" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Transferencias</div>
+            </div>
+            <div class="step-item" data-step="5">
+                <div class="step-number">5</div>
+                <div class="step-label">Agendamiento</div>
+            </div>
+            <div class="step-item" data-step="6">
+                <div class="step-number">6</div>
+                <div class="step-label">Personalidad</div>
+            </div>
+            <div class="step-item" data-step="7">
+                <div class="step-number">7</div>
+                <div class="step-label">Avanzado</div>
+            </div>
+            <div class="step-item" data-step="8">
+                <div class="step-number">8</div>
+                <div class="step-label">Resumen</div>
+            </div>
+        </div>
+        
+        <!-- Wizard Content -->
+        <div class="wizard-content">
+            <!-- PASO 1: Información Básica -->
+            <div class="step-content active" data-step="1">
+                <div class="section-title">
+                    <i class="bi bi-info-circle-fill"></i>
+                    Información básica del agente
                 </div>
-                <div class="text-right">
-                    <div class="text-sm text-gray-500">Progreso</div>
-                    <div class="text-2xl font-bold text-blue-600" id="progress">0%</div>
+                <div class="section-subtitle">
+                    Configura los datos fundamentales de tu agente de voz
+                </div>
+                
+                <div class="alert-custom alert-info">
+                    <i class="bi bi-lightbulb-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>Consejo:</strong> Elige un nombre memorable y cercano para tu agente. Este será el nombre que usará al presentarse con los contactos.
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">
+                        Nombre del agente
+                        <span class="info-tooltip" data-bs-toggle="tooltip" title="Nombre que usará el agente al presentarse (ej: Marta, Sofia, Carlos)">?</span>
+                    </label>
+                    <input type="text" class="form-control" id="agentName" placeholder="Ej: Marta" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">
+                        Nombre de la empresa/marca
+                        <span class="info-tooltip" data-bs-toggle="tooltip" title="Empresa a la que representa el agente">?</span>
+                    </label>
+                    <input type="text" class="form-control" id="companyName" placeholder="Ej: netelip" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">
+                        Sector o servicios principales
+                        <span class="info-tooltip" data-bs-toggle="tooltip" title="Describe brevemente el sector o servicios de tu empresa">?</span>
+                    </label>
+                    <textarea class="form-control" id="services" rows="3" placeholder="Ej: Centralitas virtuales, telefonía VoIP, soluciones de comunicación empresarial"></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">
+                        Objetivo principal del agente
+                        <span class="info-tooltip" data-bs-toggle="tooltip" title="¿Qué debe lograr principalmente tu agente?">?</span>
+                    </label>
+                    <textarea class="form-control" id="mainObjective" rows="3" placeholder="Ej: Cualificar contactos, agendar citas con asesores y conectar clientes con los departamentos adecuados"></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">
+                        Mensaje inicial del agente
+                        <span class="info-tooltip" data-bs-toggle="tooltip" title="Primera frase que dirá el agente al contestar">?</span>
+                    </label>
+                    <input type="text" class="form-control" id="beginMessage" placeholder="Ej: Hola, soy Marta, tu asistente de voz creado con inteligencia artificial de netelip">
                 </div>
             </div>
             
-            <!-- Progress Bar -->
-            <div class="mt-4 bg-gray-200 rounded-full h-2">
-                <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            <!-- PASO 2: Capacidades (Módulos) -->
+            <div class="step-content" data-step="2">
+                <div class="section-title">
+                    <i class="bi bi-toggles2"></i>
+                    Capacidades del agente
+                </div>
+                <div class="section-subtitle">
+                    Selecciona qué funcionalidades tendrá tu agente de voz
+                </div>
+                
+                <div class="alert-custom alert-info">
+                    <i class="bi bi-lightbulb-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>Tip:</strong> Puedes activar uno, dos o los tres módulos según las necesidades de tu negocio. Cada módulo es completamente independiente.
+                    </div>
+                </div>
+                
+                <!-- Módulo 1: Cualificación -->
+                <div class="module-card" data-module="cualificacion">
+                    <div class="module-header">
+                        <div class="module-icon">
+                            <i class="bi bi-patch-question-fill"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Cualificación de contactos</div>
+                            <p class="module-description">El agente hará preguntas para clasificar y entender qué necesita cada contacto</p>
+                        </div>
+                        <input type="checkbox" class="module-checkbox" id="moduleCualificacion">
+                    </div>
+                </div>
+                
+                <!-- Módulo 2: Transferencia -->
+                <div class="module-card" data-module="transferencia">
+                    <div class="module-header">
+                        <div class="module-icon">
+                            <i class="bi bi-telephone-forward-fill"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Transferencia de llamadas</div>
+                            <p class="module-description">Conecta al contacto con diferentes departamentos o personas según sus necesidades</p>
+                        </div>
+                        <input type="checkbox" class="module-checkbox" id="moduleTransferencia">
+                    </div>
+                </div>
+                
+                <!-- Módulo 3: Agendamiento -->
+                <div class="module-card" data-module="agendamiento">
+                    <div class="module-header">
+                        <div class="module-icon">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Agendamiento de citas</div>
+                            <p class="module-description">Reserva citas automáticamente en tu calendario Cal.com con los horarios disponibles</p>
+                        </div>
+                        <input type="checkbox" class="module-checkbox" id="moduleAgendamiento">
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Steps Navigation -->
-        <div class="bg-white rounded-lg shadow-lg p-4 mb-6">
-            <div class="flex justify-between items-center overflow-x-auto" id="stepsNav">
-                <!-- Steps will be generated here -->
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="bg-white rounded-lg shadow-lg p-8">
-            <div id="stepContainer">
-                <!-- Steps content will be generated here -->
-            </div>
-
-            <!-- Navigation Buttons -->
-            <div class="flex justify-between mt-8 pt-6 border-t">
-                <button id="btnPrevious" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                    ← Anterior
-                </button>
-                <button id="btnNext" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    Siguiente →
-                </button>
-            </div>
-        </div>
-
-        <!-- Preview Panel (visible from step 3 onwards) -->
-        <div id="previewPanel" class="bg-white rounded-lg shadow-lg p-6 mt-6" style="display: none;">
-            <h3 class="text-xl font-bold mb-4">📋 Vista Previa del Agente</h3>
-            <div id="previewContent" class="bg-gray-50 p-4 rounded-lg font-mono text-sm max-h-96 overflow-y-auto"></div>
             
-            <div class="mt-6 flex gap-4">
-                <button onclick="exportJSON()" class="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                    📥 Exportar JSON para Retell AI
-                </button>
-                <button onclick="copyToClipboard()" class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    📋 Copiar Configuración
-                </button>
+            <!-- PASO 3: Configuración Cualificación -->
+            <div class="step-content" data-step="3">
+                <div class="section-title">
+                    <i class="bi bi-patch-question-fill"></i>
+                    Configuración de cualificación
+                </div>
+                <div class="section-subtitle">
+                    Define las preguntas que hará tu agente para clasificar a los contactos
+                </div>
+                
+                <div class="alert-custom alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>Importante:</strong> Las preguntas deben ser claras y directas. El agente hará una pregunta a la vez y esperará respuesta.
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-1-circle-fill"></i>
+                        Pregunta Q1: Clasificación inicial
+                    </div>
+                    <input type="text" class="form-control mb-2" id="q1" placeholder="Ej: ¿Eres ya cliente de [empresa] o quieres información para empezar?">
+                    <small class="text-muted">Esta pregunta ayuda a identificar si es cliente actual o potencial</small>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-2-circle-fill"></i>
+                        Pregunta Q2: Motivo de contacto
+                    </div>
+                    <input type="text" class="form-control mb-2" id="q2" placeholder="Ej: ¿En qué puedo ayudarte?">
+                    <small class="text-muted">Pregunta abierta para conocer la necesidad específica</small>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-3-circle-fill"></i>
+                        Pregunta Q3: Propuesta de acción (solo para NO clientes)
+                    </div>
+                    <input type="text" class="form-control mb-2" id="q3" placeholder="Ej: ¿Te gustaría agendar una cita con un asesor para que te dé información detallada?">
+                    <small class="text-muted">Se usa solo cuando el contacto NO es cliente actual</small>
+                </div>
             </div>
+            
+            <!-- PASO 4: Configuración Transferencias -->
+            <div class="step-content" data-step="4">
+                <div class="section-title">
+                    <i class="bi bi-telephone-forward-fill"></i>
+                    Configuración de transferencias
+                </div>
+                <div class="section-subtitle">
+                    Define los destinos a donde puede transferir las llamadas tu agente
+                </div>
+                
+                <div class="alert-custom alert-info">
+                    <i class="bi bi-lightbulb-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>Consejo:</strong> Configura al menos 2 destinos diferentes (ej: atención al cliente y soporte técnico) para mejor clasificación.
+                    </div>
+                </div>
+                
+                <!-- Transferencia 1 -->
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-telephone-fill"></i>
+                        Destino de transferencia 1
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del destino</label>
+                        <input type="text" class="form-control" id="transfer1Name" placeholder="Ej: Atención al cliente">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Número de teléfono</label>
+                        <input type="text" class="form-control" id="transfer1Number" placeholder="Ej: +34912345678">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Criterio de transferencia</label>
+                        <textarea class="form-control" id="transfer1Criteria" rows="2" placeholder="Ej: Si el contacto ES cliente y necesita ayuda con consultas comerciales, documentación o información de cuenta"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje antes de transferir</label>
+                        <input type="text" class="form-control" id="transfer1Message" placeholder="Ej: Perfecto, te paso ahora mismo con nuestro equipo de atención al cliente">
+                    </div>
+                </div>
+                
+                <!-- Transferencia 2 -->
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-telephone-fill"></i>
+                        Destino de transferencia 2
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del destino</label>
+                        <input type="text" class="form-control" id="transfer2Name" placeholder="Ej: Soporte técnico">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Número de teléfono</label>
+                        <input type="text" class="form-control" id="transfer2Number" placeholder="Ej: +34912345679">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Criterio de transferencia</label>
+                        <textarea class="form-control" id="transfer2Criteria" rows="2" placeholder="Ej: Si el contacto ES cliente y necesita ayuda con configuración técnica, incidencias o problemas con el servicio"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje antes de transferir</label>
+                        <input type="text" class="form-control" id="transfer2Message" placeholder="Ej: Entiendo, te conecto ahora mismo con nuestro equipo de soporte técnico">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASO 5: Configuración Agendamiento -->
+            <div class="step-content" data-step="5">
+                <div class="section-title">
+                    <i class="bi bi-calendar-check-fill"></i>
+                    Configuración de agendamiento
+                </div>
+                <div class="section-subtitle">
+                    Conecta tu calendario Cal.com para reservas automáticas
+                </div>
+                
+                <div class="alert-custom alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>Requisito:</strong> Necesitas una cuenta en Cal.com y configurar un tipo de evento para que funcione la integración.
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-calendar2-week-fill"></i>
+                        Configuración de Cal.com
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            URL de tu calendario Cal.com
+                            <span class="info-tooltip" data-bs-toggle="tooltip" title="Tu URL personalizada de Cal.com (ej: cal.com/tunombre)">?</span>
+                        </label>
+                        <input type="text" class="form-control" id="calendarUrl" placeholder="Ej: cal.com/netelip-asesores">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Cal.com API Key
+                            <span class="info-tooltip" data-bs-toggle="tooltip" title="Obtén tu API Key en: cal.com/settings/developer">?</span>
+                        </label>
+                        <input type="password" class="form-control" id="calApiKey" placeholder="cal_live_xxxxxxxxxxxxxxxxxx">
+                        <small class="text-muted">La API Key es confidencial y se almacenará de forma segura</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Event Type ID
+                            <span class="info-tooltip" data-bs-toggle="tooltip" title="ID numérico del tipo de evento en Cal.com">?</span>
+                        </label>
+                        <input type="number" class="form-control" id="calEventTypeId" placeholder="Ej: 123456">
+                        <small class="text-muted">Encuentra este ID en la configuración de tu tipo de evento en Cal.com</small>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-chat-left-text-fill"></i>
+                        Mensajes para agendamiento
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje al consultar disponibilidad</label>
+                        <input type="text" class="form-control" id="checkAvailabilityMessage" placeholder="Ej: Excelente. Déjame consultar qué horarios tenemos disponibles...">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje de confirmación de cita</label>
+                        <input type="text" class="form-control" id="confirmationMessage" placeholder="Ej: Listo, {nombre}. Tu cita está confirmada para el {fecha_hora}. Recibirás un correo de confirmación.">
+                        <small class="text-muted">Puedes usar {nombre} y {fecha_hora} como variables</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASO 6: Tono y Personalidad -->
+            <div class="step-content" data-step="6">
+                <div class="section-title">
+                    <i class="bi bi-emoji-smile-fill"></i>
+                    Tono y personalidad
+                </div>
+                <div class="section-subtitle">
+                    Define cómo se comunicará tu agente con los contactos
+                </div>
+                
+                <div class="alert-custom alert-info">
+                    <i class="bi bi-lightbulb-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>Base sólida:</strong> Tu agente siempre será cercano, empático y profesional. Aquí puedes ajustar matices adicionales.
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Estilo de comunicación principal</label>
+                    
+                    <div class="personality-option" data-personality="standard">
+                        <label>
+                            <input type="radio" name="personality" value="standard" checked>
+                            <span class="personality-label">Estándar (Recomendado)</span>
+                        </label>
+                        <p class="personality-desc">Cercano, empático y amable. Va al grano siendo eficiente pero manteniendo un tono cálido y profesional.</p>
+                    </div>
+                    
+                    <div class="personality-option" data-personality="formal">
+                        <label>
+                            <input type="radio" name="personality" value="formal">
+                            <span class="personality-label">Más formal</span>
+                        </label>
+                        <p class="personality-desc">Mantiene cercanía pero con un tono más corporativo y protocolar. Ideal para sectores como banca, legal o consultoría.</p>
+                    </div>
+                    
+                    <div class="personality-option" data-personality="casual">
+                        <label>
+                            <input type="radio" name="personality" value="casual">
+                            <span class="personality-label">Más casual</span>
+                        </label>
+                        <p class="personality-desc">Conversación relajada y natural, como entre amigos. Perfecto para negocios jóvenes, startups o comercio informal.</p>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-sliders"></i>
+                        Ajustes adicionales de personalidad
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Variantes de respuestas entusiastas</label>
+                        <input type="text" class="form-control" id="enthusiasticWords" placeholder="Ej: Genial, Perfecto, Estupendo, Excelente, Fantástico" value="Genial, Perfecto, Estupendo, Excelente, Fantástico">
+                        <small class="text-muted">Separados por comas. El agente los usará de forma variada</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Palabras de relleno naturales (usar con moderación)</label>
+                        <input type="text" class="form-control" id="fillerWords" placeholder="Ej: umm, entonces, a ver, déjame ver" value="umm, entonces, a ver, déjame ver">
+                        <small class="text-muted">Máximo una cada 4 interacciones para naturalidad</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASO 7: Configuración Avanzada -->
+            <div class="step-content" data-step="7">
+                <div class="section-title">
+                    <i class="bi bi-cpu-fill"></i>
+                    Configuración técnica avanzada
+                </div>
+                <div class="section-subtitle">
+                    Parámetros técnicos del modelo de IA y comportamiento del agente
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-robot"></i>
+                        Modelo de IA
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Modelo de lenguaje
+                            <span class="info-tooltip" data-bs-toggle="tooltip" title="El modelo de IA que procesará las conversaciones">?</span>
+                        </label>
+                        <select class="form-select" id="modelSelect">
+                            <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash (Recomendado - Rápido y eficiente)</option>
+                            <option value="gpt-4.1">GPT-4.1 (Máxima calidad)</option>
+                            <option value="gpt-4.1-mini">GPT-4.1 Mini (Económico)</option>
+                            <option value="claude-3.7-sonnet">Claude 3.7 Sonnet (Versátil)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Temperatura del modelo (0-1)
+                            <span class="info-tooltip" data-bs-toggle="tooltip" title="0 = Más predecible, 1 = Más creativo. Recomendado: 0 para consistencia">?</span>
+                        </label>
+                        <input type="number" class="form-control" id="temperature" min="0" max="1" step="0.1" value="0">
+                        <small class="text-muted">Valor actual: <strong>0</strong> (máxima consistencia)</small>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-mic-fill"></i>
+                        Configuración de voz
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ID de voz (Voice ID)</label>
+                        <input type="text" class="form-control" id="voiceId" placeholder="Ej: custom_voice_a24ff2d6349ee726c14d64cb67">
+                        <small class="text-muted">ID de la voz configurada en Retell AI (puedes dejarlo vacío para usar la voz por defecto)</small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Velocidad de voz (0.5-2.0)</label>
+                            <input type="number" class="form-control" id="voiceSpeed" min="0.5" max="2" step="0.1" value="1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Temperatura de voz (0-1)</label>
+                            <input type="number" class="form-control" id="voiceTemperature" min="0" max="1" step="0.1" value="0.8">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-clock-fill"></i>
+                        Tiempos y sensibilidad
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Responsividad (0-1)
+                                <span class="info-tooltip" data-bs-toggle="tooltip" title="Qué tan rápido responde el agente. Recomendado: 0.98">?</span>
+                            </label>
+                            <input type="number" class="form-control" id="responsiveness" min="0" max="1" step="0.01" value="0.98">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Sensibilidad a interrupciones (0-1)
+                                <span class="info-tooltip" data-bs-toggle="tooltip" title="Facilidad para que el usuario interrumpa. Recomendado: 0.8">?</span>
+                            </label>
+                            <input type="number" class="form-control" id="interruptionSensitivity" min="0" max="1" step="0.1" value="0.8">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Duración máxima de llamada (segundos)</label>
+                            <input type="number" class="form-control" id="maxCallDuration" value="601">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Finalizar tras silencio (segundos)</label>
+                            <input type="number" class="form-control" id="endAfterSilence" value="59">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <div class="config-section-title">
+                        <i class="bi bi-link-45deg"></i>
+                        Webhook (Opcional)
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">URL del webhook para post-call data</label>
+                        <input type="url" class="form-control" id="webhookUrl" placeholder="https://tu-servidor.com/webhook/post-call">
+                        <small class="text-muted">Deja vacío si no necesitas recibir datos post-llamada</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASO 8: Resumen y Creación -->
+            <div class="step-content" data-step="8">
+                <div class="section-title">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Resumen y creación
+                </div>
+                <div class="section-subtitle">
+                    Revisa la configuración antes de crear tu agente en Retell AI
+                </div>
+                
+                <div class="alert-custom alert-success">
+                    <i class="bi bi-check-circle-fill" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>¡Todo listo!</strong> Tu configuración está completa. Revisa el resumen y crea tu agente.
+                    </div>
+                </div>
+                
+                <!-- Resumen de configuración -->
+                <div class="summary-card">
+                    <div class="summary-title">
+                        <i class="bi bi-info-circle-fill"></i>
+                        Información básica
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Nombre del agente:</span>
+                        <span class="summary-value" id="summaryAgentName">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Empresa:</span>
+                        <span class="summary-value" id="summaryCompanyName">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Mensaje inicial:</span>
+                        <span class="summary-value" id="summaryBeginMessage">-</span>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-title">
+                        <i class="bi bi-toggles2"></i>
+                        Módulos activados
+                    </div>
+                    <div id="summaryModules">
+                        <div class="summary-item">
+                            <span class="summary-label">No hay módulos seleccionados</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-title">
+                        <i class="bi bi-cpu-fill"></i>
+                        Configuración técnica
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Modelo de IA:</span>
+                        <span class="summary-value" id="summaryModel">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Velocidad de voz:</span>
+                        <span class="summary-value" id="summaryVoiceSpeed">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Responsividad:</span>
+                        <span class="summary-value" id="summaryResponsiveness">-</span>
+                    </div>
+                </div>
+                
+                <!-- Botón para ver prompt -->
+                <div class="text-center my-4">
+                    <button class="btn-preview" onclick="showPromptPreview()">
+                        <i class="bi bi-eye-fill"></i> Ver prompt generado
+                    </button>
+                </div>
+                
+                <!-- Preview del prompt (oculto inicialmente) -->
+                <div id="promptPreviewContainer" class="hidden">
+                    <h5 class="mt-4 mb-3"><i class="bi bi-code-slash"></i> Vista previa del prompt</h5>
+                    <div class="prompt-preview" id="promptPreview"></div>
+                </div>
+                
+                <!-- Loading spinner -->
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Creando agente...</span>
+                    </div>
+                    <p class="mt-3">Creando tu agente en Retell AI...</p>
+                </div>
+                
+                <!-- Resultado de creación -->
+                <div id="creationResult" class="hidden"></div>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="wizard-actions">
+            <button class="btn-wizard btn-wizard-prev" id="btnPrev" onclick="previousStep()">
+                <i class="bi bi-arrow-left"></i>
+                Anterior
+            </button>
+            <button class="btn-wizard btn-wizard-next" id="btnNext" onclick="nextStep()">
+                Siguiente
+                <i class="bi bi-arrow-right"></i>
+            </button>
+            <button class="btn-wizard btn-wizard-create hidden" id="btnCreate" onclick="createAgent()">
+                <i class="bi bi-rocket-takeoff-fill"></i>
+                Crear agente en Retell AI
+            </button>
         </div>
     </div>
-
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         // ============================================
-        // CONFIGURACIÓN Y DATOS
+        // CONFIGURACIÓN GLOBAL
         // ============================================
         
-        const TOTAL_STEPS = 8;
         let currentStep = 1;
-
-        // Form Data Storage
-        const formData = {
-            // Step 1: Basic Info
-            agent_name: '',
-            sector: '',
-            nicho: '',
-            
-            // Step 2: LLM Configuration
-            llm_model: 'gpt-4.1',
-            llm_temperature: 0.7,
-            llm_max_tokens: 1000,
-            general_prompt: '',
-            begin_message: '',
-            start_speaker: 'agent',
-            
-            // Step 3: Voice Settings
-            voice_id: '',
-            voice_model: 'eleven_turbo_v2_5',
-            voice_temperature: 1.0,
-            voice_speed: 1.0,
-            volume: 1.5,
-            fallback_voice_ids: [],
-            
-            // Step 4: Conversation Settings
-            language: 'es-ES',
-            responsiveness: 0.8,
-            interruption_sensitivity: 0.9,
-            enable_backchannel: true,
-            backchannel_frequency: 0.7,
-            backchannel_words: ['mmm...', 'déjame ver...', 'claro...', 'vale...', 'ajá...'],
-            
-            // Step 5: Timing & Reminders
-            reminder_trigger_ms: 25000,
-            reminder_max_count: 2,
-            end_call_after_silence_ms: 21000,
-            max_call_duration_ms: 600000,
-            begin_message_delay_ms: 200,
-            ring_duration_ms: 5000,
-            
-            // Step 6: Audio & Environment
-            ambient_sound: 'coffee-shop',
-            ambient_sound_volume: 0.3,
-            normalize_for_speech: true,
-            stt_mode: 'fast',
-            
-            // Step 7: Tools & Integrations
-            general_tools: [],
-            webhook_url: '',
-            boosted_keywords: [],
-            pronunciation_dictionary: [],
-            
-            // Step 8: Post-Call Analysis
-            post_call_analysis_model: 'gpt-4.1-mini',
-            post_call_analysis_data: []
-        };
-
-        // Voces disponibles (las más usadas en español)
-        const VOICES = [
-            { id: 'custom_voice_a24ff2d6349ee726c14d64cb67', name: 'Victor (Custom)', provider: 'elevenlabs', accent: 'Spanish', gender: 'male', recommended: true },
-            { id: '11labs-Santiago', name: 'Santiago', provider: 'elevenlabs', accent: 'Spanish', gender: 'male' },
-            { id: 'cartesia-Sofia', name: 'Sofia', provider: 'cartesia', accent: 'Mexican', gender: 'female' },
-            { id: 'cartesia-Miguel', name: 'Miguel', provider: 'cartesia', accent: 'Mexican', gender: 'male' },
-            { id: 'cartesia-Isabel', name: 'Isabel', provider: 'cartesia', accent: 'Spanish', gender: 'female' },
-            { id: 'cartesia-Manuel', name: 'Manuel', provider: 'cartesia', accent: 'Spanish', gender: 'male' },
-            { id: '11labs-Hailey-Latin-America-Spanish-localized', name: 'Hailey', provider: 'elevenlabs', accent: 'American', gender: 'female' },
-            { id: 'openai-Santiago', name: 'Santiago', provider: 'openai', accent: 'Spanish', gender: 'male' }
-        ];
-
-        // Sectores Netelip
-        const SECTORES = [
-            { value: 'atencion_cliente', label: '📞 Atención al Cliente', icon: '📞' },
-            { value: 'gestion_citas', label: '📅 Gestión de Citas', icon: '📅' },
-            { value: 'cualificacion_leads', label: '🎯 Cualificación de Leads', icon: '🎯' },
-            { value: 'turismo', label: '✈️ Turismo y Hostelería', icon: '✈️' },
-            { value: 'inmobiliaria', label: '🏠 Inmobiliaria', icon: '🏠' },
-            { value: 'servicios_profesionales', label: '⚖️ Servicios Profesionales', icon: '⚖️' },
-            { value: 'encuestas', label: '📊 Encuestas y Feedback', icon: '📊' }
-        ];
-
-        // Modelos LLM disponibles
-        const LLM_MODELS = [
-            { value: 'gpt-4.1', label: 'GPT-4.1 (Recomendado)', cost: '$$$', description: 'Máxima calidad y comprensión' },
-            { value: 'gpt-4.1-mini', label: 'GPT-4.1 Mini', cost: '$$', description: 'Equilibrio calidad-precio' },
-            { value: 'gpt-4.1-nano', label: 'GPT-4.1 Nano', cost: '$', description: 'Ultra rápido y económico' },
-            { value: 'claude-3.7-sonnet', label: 'Claude 3.7 Sonnet', cost: '$$$', description: 'Excelente en conversación' },
-            { value: 'claude-3.5-haiku', label: 'Claude 3.5 Haiku', cost: '$$', description: 'Rápido y preciso' }
-        ];
-
-        // Prompts base por sector
-        const PROMPTS_BASE = {
-            atencion_cliente: {
-                begin_message: "¡Hola! Soy el asistente virtual de {{nombre_empresa}}. ¿En qué puedo ayudarte hoy?",
-                general_prompt: `## 🎯 Identidad y Contexto
-
-Eres un agente de atención al cliente especializado en resolver consultas de manera rápida y eficiente para {{nombre_empresa}}.
-
-## 🎭 Personalidad y Estilo
-
-**Rasgos principales:**
-- 👔 **Profesional**: Conocimiento experto de productos y servicios
-- 😊 **Amigable**: Cercano y empático con cada cliente
-- ⚡ **Eficiente**: Resoluciones rápidas y efectivas
-
-**Tono:** Semi-formal, adaptable al cliente
-**Idioma:** {{idioma}}
-
-## 🗣️ Flujo de Conversación
-
-### 1. Saludo y Validación
-- Dar bienvenida cálida
-- Identificar nombre del cliente si es posible
-- Preguntar en qué puede ayudar
-
-### 2. Identificar Tipo de Consulta
-- **Facturación**: Problemas con pagos, facturas
-- **Envíos**: Seguimiento de pedidos, tiempos de entrega
-- **Productos**: Información, características, disponibilidad
-- **Devoluciones**: Política de devolución, proceso
-
-### 3. Proporcionar Solución
-- Dar respuesta clara y completa
-- Proporcionar pasos específicos si es necesario
-- Confirmar que se entendió la solución
-
-### 4. Confirmar Resolución
-- Preguntar si queda alguna duda
-- Ofrecer ayuda adicional
-- Despedida cordial
-
-## 🛡️ Reglas de Comportamiento
-
-### ✅ SIEMPRE hacer:
-1. Escuchar completamente antes de responder
-2. Confirmar información importante
-3. Ser específico con fechas y números
-4. Ofrecer soluciones alternativas cuando sea posible
-5. Agradecer la paciencia del cliente
-
-### ❌ NUNCA hacer:
-1. Inventar información que no tienes
-2. Prometer lo que no puedes cumplir
-3. Discutir o ponerte defensivo
-4. Transferir sin explicar el motivo
-5. Dejar al cliente sin respuesta
-
-## 🆘 Casos Especiales
-
-### Cliente Molesto
-- Mantén la calma absoluta
-- Reconoce su frustración: "Entiendo perfectamente tu molestia"
-- Ofrece solución inmediata
-- Si escala, transfiere a supervisor
-
-### No Puedes Resolver
-- Sé honesto: "No tengo esa información en este momento"
-- Ofrece alternativa: "Puedo conectarte con un especialista"
-- No dejes al cliente sin solución
-
-## 📋 Información Clave
-
-**Horarios de atención:** Lunes a Viernes 9:00-18:00
-**Tiempo de respuesta email:** 24-48 horas
-**Política de devolución:** 30 días desde compra
-
----
-
-**Recuerda:** Tu objetivo es dejar al cliente completamente satisfecho y resolver su consulta en la primera interacción.`
-            },
-            
-            gestion_citas: {
-                begin_message: "¡Hola! Soy el asistente de citas de {{nombre_empresa}}. ¿Te gustaría agendar una cita?",
-                general_prompt: `## 🎯 Identidad y Contexto
-
-Eres un asistente especializado en gestión de citas para {{nombre_empresa}}. Tu misión es agendar citas de forma eficiente y reducir los no-shows.
-
-## 🗣️ Flujo de Conversación
-
-### 1. Saludo Inicial
-"¡Hola! Soy el asistente de citas de {{nombre_empresa}}. ¿Te gustaría agendar una cita?"
-
-### 2. Consultar Disponibilidad
-- Preguntar preferencia de fecha/hora
-- Ofrecer opciones disponibles
-- Ser flexible con alternativas
-
-### 3. Recopilar Datos
-- Nombre completo
-- Teléfono de contacto
-- Email (opcional pero recomendado)
-- Motivo de la cita (si aplica)
-
-### 4. Confirmar Cita
-- Repetir fecha, hora y datos
-- Explicar política de cancelación
-- Ofrecer recordatorio automático
-
-### 5. Recordatorio Automático
-- Se enviará 24 horas antes
-- Por SMS y/o email
-- Opción de confirmar/cancelar
-
-## 🛡️ Reglas Críticas
-
-### ✅ SIEMPRE:
-1. Confirmar TODA la información antes de agendar
-2. Deletrear el email si lo proporcionan
-3. Dar número de confirmación de cita
-4. Explicar cómo cancelar/reprogramar
-5. Agradecer y despedirse cordialmente
-
-### ❌ NUNCA:
-1. Agendar sin confirmar disponibilidad real
-2. Olvidar pedir datos de contacto
-3. Dar por hecho el email sin verificar
-4. Terminar sin confirmar la cita completa
-
-## 📋 Herramientas Disponibles
-
-- **book_appointment_cal**: Crear cita en calendario
-- **check_availability_cal**: Verificar disponibilidad
-- **transfer_call**: Transferir a recepcionista si necesario
-
----
-
-**Objetivo:** Agenda eficiente con 0% no-shows gracias a recordatorios automáticos.`
-            },
-            
-            cualificacion_leads: {
-                begin_message: "¡Hola! Soy {{nombre_agente}} de {{nombre_empresa}}. Veo que estás interesado en nuestros servicios. ¿Te gustaría que conversemos sobre cómo podemos ayudarte?",
-                general_prompt: `## 🎯 Identidad y Contexto
-
-Eres {{nombre_agente}}, especialista en cualificación de leads para {{nombre_empresa}}.
-
-Tu objetivo es identificar oportunidades de negocio reales usando la metodología BANT.
-
-## 🗣️ Flujo de Conversación BANT
-
-### 1. Saludo y Contexto
-"¡Hola! Soy {{nombre_agente}} de {{nombre_empresa}}. Veo que estás interesado en nuestros servicios. ¿Te gustaría que conversemos sobre cómo podemos ayudarte?"
-
-### 2. Budget (Presupuesto)
-- ¿Tienes presupuesto asignado para este tipo de solución?
-- ¿Cuál es el rango de inversión que estás considerando?
-- ¿Es este año o más adelante?
-
-### 3. Authority (Autoridad de Decisión)
-- ¿Eres tú quien toma la decisión final?
-- ¿Quién más participa en la decisión?
-- ¿Necesitas consultar con alguien más?
-
-### 4. Need (Necesidad)
-- ¿Qué problema específico buscas resolver?
-- ¿Cómo lo están manejando actualmente?
-- ¿Qué pasaría si no lo resuelven?
-
-### 5. Timeline (Urgencia)
-- ¿Cuándo necesitas tener esto implementado?
-- ¿Hay alguna fecha límite específica?
-- ¿Qué tan urgente es para ti?
-
-### 6. Calificación y Cierre
-**Lead Calificado** (3-4 BANT positivos):
-- "Perfecto, veo que tienes un proyecto muy interesante. Me gustaría agendarte una demo personalizada con nuestro equipo comercial. ¿Te viene bien mañana a las 11h?"
-
-**Lead No Calificado** (0-2 BANT):
-- "Entiendo. Te voy a enviar información por email y te daremos seguimiento en el futuro. ¿Cuál es tu email?"
-
-## 🛡️ Reglas de Cualificación
-
-### ✅ SIEMPRE:
-1. Hacer TODAS las preguntas BANT
-2. Escuchar activamente las respuestas
-3. Tomar notas de información clave
-4. Ser consultivo, no vendedor agresivo
-5. Respetar si no están listos
-
-### ❌ NUNCA:
-1. Presionar para cerrar venta inmediata
-2. Saltarte preguntas de calificación
-3. Dar pricing sin cualificar
-4. Prometer descuentos sin autorización
-
-## 📊 Criterios de Calificación
-
-**ALTA PRIORIDAD** (4 BANT):
-- Presupuesto confirmado
-- Decisor directo
-- Necesidad urgente
-- Timeline < 30 días
-→ Agendar demo INMEDIATA
-
-**MEDIA PRIORIDAD** (3 BANT):
-- Al menos 1 falta menor
-→ Agendar demo esta semana
-
-**BAJA PRIORIDAD** (2 BANT o menos):
-- Falta información clave
-→ Nutrir con contenido
-
----
-
-**Objetivo:** Solo pasar leads REALMENTE calificados al equipo comercial.`
-            }
-        };
-
+        const totalSteps = 8;
+        
+        // IMPORTANTE: Reemplaza esto con tu API Key de Retell AI
+        const RETELL_API_KEY = 'key_4bb39d66481caf4b67b3e27d8a3f'; // 🔐 TU API KEY AQUÍ
+        
         // ============================================
-        // STEP DEFINITIONS
+        // NAVEGACIÓN ENTRE PASOS
         // ============================================
         
-        const STEPS = [
-            {
-                id: 1,
-                title: 'Info Básica',
-                icon: '📝',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">📝 Paso 1: Información Básica del Agente</h2>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre del Agente *</label>
-                            <input type="text" id="agent_name" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                                placeholder="Ej: Sofia, Carlos, María..."
-                                value="${formData.agent_name}">
-                            <p class="mt-1 text-sm text-gray-500">Este nombre se usará en la conversación</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Sector *</label>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                ${SECTORES.map(sector => `
-                                    <div class="cursor-pointer p-4 border-2 rounded-lg hover:border-blue-500 transition-colors ${formData.sector === sector.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}"
-                                        onclick="selectSector('${sector.value}')">
-                                        <div class="text-3xl mb-2">${sector.icon}</div>
-                                        <div class="text-sm font-medium">${sector.label.replace(sector.icon + ' ', '')}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nicho Específico</label>
-                            <input type="text" id="nicho" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                                placeholder="Ej: Software SaaS, Clínica dental, Agencia inmobiliaria..."
-                                value="${formData.nicho}">
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 2,
-                title: 'LLM Config',
-                icon: '🤖',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">🤖 Paso 2: Configuración del LLM</h2>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Modelo de Lenguaje *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                ${LLM_MODELS.map(model => `
-                                    <div class="cursor-pointer p-4 border-2 rounded-lg hover:border-blue-500 transition-colors ${formData.llm_model === model.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}"
-                                        onclick="selectModel('${model.value}')">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <span class="font-medium">${model.label}</span>
-                                            <span class="text-green-600 text-sm font-bold">${model.cost}</span>
-                                        </div>
-                                        <p class="text-sm text-gray-600">${model.description}</p>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Temperature (Creatividad)
-                                    <span class="text-blue-600 font-bold ml-2">${formData.llm_temperature}</span>
-                                </label>
-                                <input type="range" id="llm_temperature" min="0" max="1" step="0.1" 
-                                    value="${formData.llm_temperature}"
-                                    class="w-full"
-                                    oninput="updateValue('llm_temperature', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Determinista (0)</span>
-                                    <span>Creativo (1)</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Max Tokens</label>
-                                <input type="number" id="llm_max_tokens" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.llm_max_tokens}"
-                                    min="500" max="4000" step="100">
-                                <p class="mt-1 text-xs text-gray-500">Respuestas más largas = más tokens</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Mensaje Inicial (Begin Message)</label>
-                            <textarea id="begin_message" rows="3"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                                placeholder="Primer mensaje que dirá el agente. Deja vacío para esperar que el usuario hable primero.">${formData.begin_message}</textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">¿Quién habla primero?</label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="start_speaker" value="agent" 
-                                        ${formData.start_speaker === 'agent' ? 'checked' : ''}
-                                        class="mr-2">
-                                    <span>Agente habla primero</span>
-                                </label>
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="start_speaker" value="user"
-                                        ${formData.start_speaker === 'user' ? 'checked' : ''}
-                                        class="mr-2">
-                                    <span>Usuario habla primero</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Prompt General (General Prompt) *
-                                <button onclick="loadPromptTemplate()" class="ml-2 text-blue-600 text-sm hover:underline">
-                                    📄 Cargar plantilla por sector
-                                </button>
-                            </label>
-                            <textarea id="general_prompt" rows="15"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-                                placeholder="Escribe aquí el prompt completo del agente...">${formData.general_prompt}</textarea>
-                            <p class="mt-2 text-sm text-gray-600">
-                                💡 <strong>Tip:</strong> Click en "Cargar plantilla por sector" para obtener un prompt profesional basado en el sector que elegiste.
-                            </p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 3,
-                title: 'Voz',
-                icon: '🎤',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">🎤 Paso 3: Configuración de Voz</h2>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">Selecciona la Voz *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                ${VOICES.map(voice => `
-                                    <div class="voice-card cursor-pointer p-4 border-2 rounded-lg ${formData.voice_id === voice.id ? 'selected-voice' : 'border-gray-200'} ${voice.recommended ? 'border-blue-400' : ''}"
-                                        onclick="selectVoice('${voice.id}')">
-                                        <div class="flex justify-between items-start">
-                                            <div>
-                                                <div class="font-medium text-lg">${voice.name}</div>
-                                                <div class="text-sm text-gray-600">${voice.provider} • ${voice.accent}</div>
-                                                <div class="text-sm text-gray-500">${voice.gender === 'male' ? '👨' : '👩'} ${voice.gender === 'male' ? 'Masculino' : 'Femenino'}</div>
-                                            </div>
-                                            ${voice.recommended ? '<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Recomendado</span>' : ''}
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Modelo de Voz</label>
-                            <select id="voice_model" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-                                <option value="eleven_turbo_v2_5" ${formData.voice_model === 'eleven_turbo_v2_5' ? 'selected' : ''}>ElevenLabs Turbo v2.5 (Recomendado)</option>
-                                <option value="eleven_flash_v2_5" ${formData.voice_model === 'eleven_flash_v2_5' ? 'selected' : ''}>ElevenLabs Flash v2.5 (Más rápido)</option>
-                                <option value="eleven_multilingual_v2" ${formData.voice_model === 'eleven_multilingual_v2' ? 'selected' : ''}>ElevenLabs Multilingual v2</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Temperatura de Voz
-                                    <span class="text-blue-600 font-bold ml-2">${formData.voice_temperature}</span>
-                                </label>
-                                <input type="range" id="voice_temperature" min="0" max="2" step="0.1" 
-                                    value="${formData.voice_temperature}"
-                                    class="w-full"
-                                    oninput="updateValue('voice_temperature', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Estable</span>
-                                    <span>Expresivo</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Velocidad
-                                    <span class="text-blue-600 font-bold ml-2">${formData.voice_speed}x</span>
-                                </label>
-                                <input type="range" id="voice_speed" min="0.7" max="1.5" step="0.05" 
-                                    value="${formData.voice_speed}"
-                                    class="w-full"
-                                    oninput="updateValue('voice_speed', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Lento</span>
-                                    <span>Rápido</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Volumen
-                                    <span class="text-blue-600 font-bold ml-2">${formData.volume}</span>
-                                </label>
-                                <input type="range" id="volume" min="0.5" max="2" step="0.1" 
-                                    value="${formData.volume}"
-                                    class="w-full"
-                                    oninput="updateValue('volume', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Bajo</span>
-                                    <span>Alto</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 4,
-                title: 'Conversación',
-                icon: '💬',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">💬 Paso 4: Configuración de Conversación</h2>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Idioma Principal</label>
-                            <select id="language" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-                                <option value="es-ES" ${formData.language === 'es-ES' ? 'selected' : ''}>🇪🇸 Español (España)</option>
-                                <option value="es-MX" ${formData.language === 'es-MX' ? 'selected' : ''}>🇲🇽 Español (México)</option>
-                                <option value="es-AR" ${formData.language === 'es-AR' ? 'selected' : ''}>🇦🇷 Español (Argentina)</option>
-                                <option value="en-US" ${formData.language === 'en-US' ? 'selected' : ''}>🇺🇸 English (US)</option>
-                                <option value="en-GB" ${formData.language === 'en-GB' ? 'selected' : ''}>🇬🇧 English (UK)</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Responsiveness (Rapidez de respuesta)
-                                    <span class="text-blue-600 font-bold ml-2">${formData.responsiveness}</span>
-                                </label>
-                                <input type="range" id="responsiveness" min="0" max="1" step="0.05" 
-                                    value="${formData.responsiveness}"
-                                    class="w-full"
-                                    oninput="updateValue('responsiveness', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Pausado</span>
-                                    <span>Inmediato</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Interruption Sensitivity
-                                    <span class="text-blue-600 font-bold ml-2">${formData.interruption_sensitivity}</span>
-                                </label>
-                                <input type="range" id="interruption_sensitivity" min="0" max="1" step="0.05" 
-                                    value="${formData.interruption_sensitivity}"
-                                    class="w-full"
-                                    oninput="updateValue('interruption_sensitivity', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Difícil interrumpir</span>
-                                    <span>Fácil interrumpir</span>
-                                </div>
-                                <p class="text-xs text-gray-500 mt-1">Mayor valor = más fácil que el usuario interrumpa al agente</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <div class="flex items-center mb-2">
-                                <input type="checkbox" id="enable_backchannel" 
-                                    ${formData.enable_backchannel ? 'checked' : ''}
-                                    class="mr-2">
-                                <label for="enable_backchannel" class="font-medium">Enable Backchannel (Muletillas conversacionales)</label>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-3">El agente dirá cosas como "mmm...", "ya veo...", "claro..." mientras escucha</p>
-                            
-                            <div id="backchannel_config" ${formData.enable_backchannel ? '' : 'style="display:none"'}>
-                                <div class="mb-3">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Frecuencia de Backchannel
-                                        <span class="text-blue-600 font-bold ml-2">${formData.backchannel_frequency}</span>
-                                    </label>
-                                    <input type="range" id="backchannel_frequency" min="0" max="1" step="0.05" 
-                                        value="${formData.backchannel_frequency}"
-                                        class="w-full"
-                                        oninput="updateValue('backchannel_frequency', this.value)">
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Palabras de Backchannel</label>
-                                    <div id="backchannel_words_container" class="flex flex-wrap gap-2 mb-2">
-                                        ${formData.backchannel_words.map((word, idx) => `
-                                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center">
-                                                ${word}
-                                                <button onclick="removeBackchannelWord(${idx})" class="ml-2 text-blue-600 hover:text-blue-800">×</button>
-                                            </span>
-                                        `).join('')}
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <input type="text" id="new_backchannel_word" 
-                                            placeholder="Ej: entiendo..."
-                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                                        <button onclick="addBackchannelWord()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
-                                            + Agregar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 5,
-                title: 'Tiempos',
-                icon: '⏱️',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">⏱️ Paso 5: Configuración de Tiempos y Recordatorios</h2>
-                    
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tiempo para Recordatorio (ms)</label>
-                                <input type="number" id="reminder_trigger_ms" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.reminder_trigger_ms}"
-                                    step="1000">
-                                <p class="text-xs text-gray-500 mt-1">Si el usuario no responde después de este tiempo, el agente recordará</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Máximo de Recordatorios</label>
-                                <input type="number" id="reminder_max_count" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.reminder_max_count}"
-                                    min="0" max="5">
-                                <p class="text-xs text-gray-500 mt-1">Cuántas veces recordará antes de rendirse</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Finalizar después de Silencio (ms)</label>
-                                <input type="number" id="end_call_after_silence_ms" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.end_call_after_silence_ms}"
-                                    step="1000">
-                                <p class="text-xs text-gray-500 mt-1">Termina la llamada si hay silencio por este tiempo</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Duración Máxima de Llamada (ms)</label>
-                                <input type="number" id="max_call_duration_ms" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.max_call_duration_ms}"
-                                    step="10000">
-                                <p class="text-xs text-gray-500 mt-1">Tiempo máximo total de llamada</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Delay Mensaje Inicial (ms)</label>
-                                <input type="number" id="begin_message_delay_ms" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.begin_message_delay_ms}"
-                                    min="0" max="5000" step="100">
-                                <p class="text-xs text-gray-500 mt-1">Espera antes del primer mensaje del agente</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Duración del Timbre (ms)</label>
-                                <input type="number" id="ring_duration_ms" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                    value="${formData.ring_duration_ms}"
-                                    min="5000" max="90000" step="1000">
-                                <p class="text-xs text-gray-500 mt-1">Cuánto tiempo sonará antes de contestar</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <div class="font-medium text-yellow-800 mb-2">💡 Conversiones Útiles</div>
-                            <div class="text-sm text-gray-700 space-y-1">
-                                <div>• <strong>1 segundo</strong> = 1,000 ms</div>
-                                <div>• <strong>10 segundos</strong> = 10,000 ms</div>
-                                <div>• <strong>30 segundos</strong> = 30,000 ms</div>
-                                <div>• <strong>1 minuto</strong> = 60,000 ms</div>
-                                <div>• <strong>10 minutos</strong> = 600,000 ms</div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 6,
-                title: 'Audio',
-                icon: '🔊',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">🔊 Paso 6: Configuración de Audio y Ambiente</h2>
-                    
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Sonido Ambiente</label>
-                                <select id="ambient_sound" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-                                    <option value="" ${formData.ambient_sound === '' ? 'selected' : ''}>Sin sonido ambiente</option>
-                                    <option value="coffee-shop" ${formData.ambient_sound === 'coffee-shop' ? 'selected' : ''}>☕ Cafetería</option>
-                                    <option value="office" ${formData.ambient_sound === 'office' ? 'selected' : ''}>🏢 Oficina</option>
-                                    <option value="restaurant" ${formData.ambient_sound === 'restaurant' ? 'selected' : ''}>🍽️ Restaurante</option>
-                                </select>
-                                <p class="text-xs text-gray-500 mt-1">Sonido de fondo para hacer más realista la llamada</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Volumen Ambiente
-                                    <span class="text-blue-600 font-bold ml-2">${formData.ambient_sound_volume}</span>
-                                </label>
-                                <input type="range" id="ambient_sound_volume" min="0" max="1" step="0.05" 
-                                    value="${formData.ambient_sound_volume}"
-                                    class="w-full"
-                                    oninput="updateValue('ambient_sound_volume', this.value)">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Silencioso</span>
-                                    <span>Alto</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Modo de Transcripción (STT)</label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="stt_mode" value="fast" 
-                                        ${formData.stt_mode === 'fast' ? 'checked' : ''}
-                                        class="mr-2">
-                                    <span>⚡ Fast (Prioriza latencia)</span>
-                                </label>
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="stt_mode" value="accurate"
-                                        ${formData.stt_mode === 'accurate' ? 'checked' : ''}
-                                        class="mr-2">
-                                    <span>🎯 Accurate (Prioriza precisión)</span>
-                                </label>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Fast es recomendado para la mayoría de casos</p>
-                        </div>
-
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="normalize_for_speech" 
-                                    ${formData.normalize_for_speech ? 'checked' : ''}
-                                    class="mr-2">
-                                <label for="normalize_for_speech" class="font-medium">Normalizar para Voz</label>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-2">Convierte texto a formato más natural para hablar (ej: "10%" → "diez por ciento")</p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 7,
-                title: 'Herramientas',
-                icon: '🛠️',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">🛠️ Paso 7: Herramientas e Integraciones</h2>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">Herramientas Disponibles</label>
-                            <div class="space-y-3">
-                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                                    <input type="checkbox" class="mt-1 mr-3" value="end_call" onchange="toggleTool(this)">
-                                    <div>
-                                        <div class="font-medium">End Call</div>
-                                        <div class="text-sm text-gray-600">Permite al agente finalizar la llamada</div>
-                                    </div>
-                                </label>
-
-                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                                    <input type="checkbox" class="mt-1 mr-3" value="transfer_call" onchange="toggleTool(this)">
-                                    <div>
-                                        <div class="font-medium">Transfer Call</div>
-                                        <div class="text-sm text-gray-600">Transferir a otro departamento o número</div>
-                                        <input type="text" id="transfer_number" placeholder="Número de transferencia" 
-                                            class="mt-2 px-3 py-2 border rounded text-sm w-full" style="display:none">
-                                    </div>
-                                </label>
-
-                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                                    <input type="checkbox" class="mt-1 mr-3" value="book_appointment" onchange="toggleTool(this)">
-                                    <div>
-                                        <div class="font-medium">Book Appointment (Cal.com)</div>
-                                        <div class="text-sm text-gray-600">Agendar citas en calendario</div>
-                                    </div>
-                                </label>
-
-                                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                                    <input type="checkbox" class="mt-1 mr-3" value="custom_webhook" onchange="toggleTool(this)">
-                                    <div>
-                                        <div class="font-medium">Custom Webhook</div>
-                                        <div class="text-sm text-gray-600">Llamar a tu API personalizada</div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Webhook URL (Opcional)</label>
-                            <input type="url" id="webhook_url" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                                placeholder="https://tu-servidor.com/webhook"
-                                value="${formData.webhook_url}">
-                            <p class="text-xs text-gray-500 mt-1">URL para recibir eventos de la llamada en tiempo real</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Keywords Boosted (Palabras clave)</label>
-                            <div id="keywords_container" class="flex flex-wrap gap-2 mb-2">
-                                ${formData.boosted_keywords.map((kw, idx) => `
-                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm flex items-center">
-                                        ${kw}
-                                        <button onclick="removeKeyword(${idx})" class="ml-2 text-green-600 hover:text-green-800">×</button>
-                                    </span>
-                                `).join('')}
-                            </div>
-                            <div class="flex gap-2">
-                                <input type="text" id="new_keyword" 
-                                    placeholder="Ej: Netelip, VoIP, centralita virtual..."
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                                <button onclick="addKeyword()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
-                                    + Agregar
-                                </button>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Palabras que el sistema transcribirá con mayor precisión (marcas, nombres, términos técnicos)</p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 8,
-                title: 'Post-Call',
-                icon: '📊',
-                render: () => `
-                    <h2 class="text-2xl font-bold mb-6">📊 Paso 8: Análisis Post-Llamada</h2>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Modelo para Análisis Post-Llamada</label>
-                            <select id="post_call_analysis_model" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-                                <option value="gpt-4.1-mini" ${formData.post_call_analysis_model === 'gpt-4.1-mini' ? 'selected' : ''}>GPT-4.1 Mini (Recomendado - $)</option>
-                                <option value="gpt-4.1" ${formData.post_call_analysis_model === 'gpt-4.1' ? 'selected' : ''}>GPT-4.1 (Mayor precisión - $$)</option>
-                            </select>
-                            <p class="text-xs text-gray-500 mt-1">Modelo usado para analizar y extraer datos después de cada llamada</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">Datos a Capturar en Post-Call Analysis</label>
-                            
-                            <div class="space-y-4">
-                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <div class="font-medium mb-2">💡 Datos Básicos Recomendados</div>
-                                    <div class="space-y-2">
-                                        <label class="flex items-center">
-                                            <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('user_name', this.checked)">
-                                            <span class="text-sm">Nombre del usuario</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('user_number', this.checked)">
-                                            <span class="text-sm">Teléfono del usuario</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('motivo_llamada', this.checked)">
-                                            <span class="text-sm">Motivo de la llamada</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                ${formData.sector === 'gestion_citas' ? `
-                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                                        <div class="font-medium mb-2">📅 Específico para Gestión de Citas</div>
-                                        <div class="space-y-2">
-                                            <label class="flex items-center">
-                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('email', this.checked)">
-                                                <span class="text-sm">Email del usuario</span>
-                                            </label>
-                                            <label class="flex items-center">
-                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('fecha_confirmada', this.checked)">
-                                                <span class="text-sm">Fecha y hora confirmada</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                ` : ''}
-
-                                ${formData.sector === 'cualificacion_leads' ? `
-                                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                                        <div class="font-medium mb-2">🎯 Específico para Cualificación BANT</div>
-                                        <div class="space-y-2">
-                                            <label class="flex items-center">
-                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('presupuesto', this.checked)">
-                                                <span class="text-sm">Presupuesto disponible</span>
-                                            </label>
-                                            <label class="flex items-center">
-                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('decision_authority', this.checked)">
-                                                <span class="text-sm">Autoridad de decisión</span>
-                                            </label>
-                                            <label class="flex items-center">
-                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('timeline', this.checked)">
-                                                <span class="text-sm">Timeline de implementación</span>
-                                            </label>
-                                            <label class="flex items-center">
-                                                <input type="checkbox" checked class="mr-2" onchange="togglePostCallField('lead_score', this.checked)">
-                                                <span class="text-sm">Score de calificación (1-10)</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                ` : ''}
-                            </div>
-
-                            <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                                <div class="text-sm font-medium text-gray-700 mb-2">Vista Previa de Campos:</div>
-                                <pre class="text-xs bg-white p-2 rounded border overflow-x-auto" id="postCallPreview">user_name, user_number, motivo_llamada</pre>
-                            </div>
-                        </div>
-
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <div class="flex items-start">
-                                <span class="text-2xl mr-3">🎉</span>
-                                <div>
-                                    <div class="font-medium text-yellow-800 mb-1">¡Configuración Completa!</div>
-                                    <p class="text-sm text-gray-700">Ya tienes toda la configuración necesaria para crear tu agente en Retell AI.</p>
-                                    <p class="text-sm text-gray-700 mt-2">Haz click en "Siguiente" para ver la vista previa y exportar el JSON.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            }
-        ];
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        
-        function init() {
-            renderStepsNav();
-            renderStep();
-            updateProgress();
-        }
-
-        function renderStepsNav() {
-            const nav = document.getElementById('stepsNav');
-            nav.innerHTML = STEPS.map(step => `
-                <div class="flex flex-col items-center min-w-[80px] ${currentStep === step.id ? 'text-blue-600' : 'text-gray-400'}">
-                    <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center mb-1 ${
-                        currentStep === step.id ? 'border-blue-600 bg-blue-50' : 
-                        currentStep > step.id ? 'border-green-600 bg-green-50' : 'border-gray-300'
-                    }">
-                        ${currentStep > step.id ? '✓' : step.icon}
-                    </div>
-                    <div class="text-xs font-medium text-center">${step.title}</div>
-                </div>
-            `).join('');
-        }
-
-        function renderStep() {
-            const container = document.getElementById('stepContainer');
-            container.innerHTML = STEPS[currentStep - 1].render();
+        function updateStepUI() {
+            // Actualizar contenido visible
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
             
-            // Show preview from step 3 onwards
-            document.getElementById('previewPanel').style.display = currentStep >= 3 ? 'block' : 'none';
-            if (currentStep >= 3) {
-                updatePreview();
-            }
-
-            // Update button states
-            document.getElementById('btnPrevious').style.display = currentStep === 1 ? 'none' : 'block';
-            document.getElementById('btnNext').innerHTML = currentStep === TOTAL_STEPS ? 
-                '✅ Finalizar y Exportar' : 'Siguiente →';
-
-            // Attach event listeners
-            attachEventListeners();
-        }
-
-        function attachEventListeners() {
-            // Text inputs
-            const inputs = ['agent_name', 'nicho', 'llm_max_tokens', 'begin_message', 'general_prompt', 
-                           'webhook_url', 'reminder_trigger_ms', 'reminder_max_count', 'end_call_after_silence_ms',
-                           'max_call_duration_ms', 'begin_message_delay_ms', 'ring_duration_ms'];
-            inputs.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('input', (e) => saveFormValue(id, e.target.value));
-            });
-
-            // Selects
-            const selects = ['llm_model', 'voice_model', 'language', 'ambient_sound', 'post_call_analysis_model'];
-            selects.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('change', (e) => saveFormValue(id, e.target.value));
-            });
-
-            // Radios
-            const radios = document.querySelectorAll('input[name="start_speaker"]');
-            radios.forEach(radio => {
-                radio.addEventListener('change', (e) => saveFormValue('start_speaker', e.target.value));
-            });
-
-            const sttRadios = document.querySelectorAll('input[name="stt_mode"]');
-            sttRadios.forEach(radio => {
-                radio.addEventListener('change', (e) => saveFormValue('stt_mode', e.target.value));
-            });
-
-            // Checkboxes
-            const checkboxes = ['enable_backchannel', 'normalize_for_speech'];
-            checkboxes.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('change', (e) => {
-                        saveFormValue(id, e.target.checked);
-                        if (id === 'enable_backchannel') {
-                            document.getElementById('backchannel_config').style.display = e.target.checked ? 'block' : 'none';
-                        }
-                    });
+            // Actualizar indicadores de progreso
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    item.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    item.classList.add('active');
                 }
             });
+            
+            // Actualizar botones
+            document.getElementById('btnPrev').disabled = currentStep === 1;
+            
+            if (currentStep === totalSteps) {
+                document.getElementById('btnNext').classList.add('hidden');
+                document.getElementById('btnCreate').classList.remove('hidden');
+                updateSummary();
+            } else {
+                document.getElementById('btnNext').classList.remove('hidden');
+                document.getElementById('btnCreate').classList.add('hidden');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        function saveFormValue(field, value) {
-            formData[field] = value;
-            if (currentStep >= 3) updatePreview();
-        }
-
-        function updateValue(field, value) {
-            formData[field] = parseFloat(value);
-            document.querySelector(`label[for="${field}"] span`).textContent = value;
-            if (currentStep >= 3) updatePreview();
-        }
-
-        function selectSector(sector) {
-            formData.sector = sector;
-            renderStep();
-        }
-
-        function selectModel(model) {
-            formData.llm_model = model;
-            renderStep();
-        }
-
-        function selectVoice(voiceId) {
-            formData.voice_id = voiceId;
-            renderStep();
-        }
-
-        function loadPromptTemplate() {
-            if (!formData.sector) {
-                alert('⚠️ Primero selecciona un sector en el Paso 1');
+        
+        function nextStep() {
+            // Validar paso actual antes de avanzar
+            if (!validateCurrentStep()) {
                 return;
             }
             
-            const template = PROMPTS_BASE[formData.sector];
-            if (template) {
-                formData.general_prompt = template.general_prompt
-                    .replace(/\{\{nombre_empresa\}\}/g, formData.agent_name || 'tu empresa')
-                    .replace(/\{\{idioma\}\}/g, formData.language || 'es-ES');
+            // Saltar pasos de módulos no activados
+            let nextStepNum = currentStep + 1;
+            
+            // Si vamos al paso 3, 4 o 5, verificar si el módulo está activo
+            if (nextStepNum === 3 && !document.getElementById('moduleCualificacion').checked) {
+                nextStepNum = 4;
+            }
+            if (nextStepNum === 4 && !document.getElementById('moduleTransferencia').checked) {
+                nextStepNum = 5;
+            }
+            if (nextStepNum === 5 && !document.getElementById('moduleAgendamiento').checked) {
+                nextStepNum = 6;
+            }
+            
+            if (nextStepNum <= totalSteps) {
+                currentStep = nextStepNum;
+                updateStepUI();
+            }
+        }
+        
+        function previousStep() {
+            let prevStepNum = currentStep - 1;
+            
+            // Saltar pasos de módulos no activados al retroceder
+            if (prevStepNum === 5 && !document.getElementById('moduleAgendamiento').checked) {
+                prevStepNum = 4;
+            }
+            if (prevStepNum === 4 && !document.getElementById('moduleTransferencia').checked) {
+                prevStepNum = 3;
+            }
+            if (prevStepNum === 3 && !document.getElementById('moduleCualificacion').checked) {
+                prevStepNum = 2;
+            }
+            
+            if (prevStepNum >= 1) {
+                currentStep = prevStepNum;
+                updateStepUI();
+            }
+        }
+        
+        // ============================================
+        // VALIDACIÓN DE PASOS
+        // ============================================
+        
+        function validateCurrentStep() {
+            switch(currentStep) {
+                case 1:
+                    // Validar información básica
+                    const agentName = document.getElementById('agentName').value.trim();
+                    const companyName = document.getElementById('companyName').value.trim();
+                    
+                    if (!agentName) {
+                        alert('Por favor, ingresa el nombre del agente');
+                        return false;
+                    }
+                    if (!companyName) {
+                        alert('Por favor, ingresa el nombre de la empresa');
+                        return false;
+                    }
+                    return true;
+                    
+                case 2:
+                    // Validar que al menos un módulo esté seleccionado
+                    const anyModuleSelected = 
+                        document.getElementById('moduleCualificacion').checked ||
+                        document.getElementById('moduleTransferencia').checked ||
+                        document.getElementById('moduleAgendamiento').checked;
+                    
+                    if (!anyModuleSelected) {
+                        alert('Por favor, selecciona al menos una capacidad para tu agente');
+                        return false;
+                    }
+                    return true;
+                    
+                case 5:
+                    // Si el módulo de agendamiento está activo, validar Cal.com
+                    if (document.getElementById('moduleAgendamiento').checked) {
+                        const calApiKey = document.getElementById('calApiKey').value.trim();
+                        const calEventTypeId = document.getElementById('calEventTypeId').value.trim();
+                        
+                        if (!calApiKey) {
+                            alert('Por favor, ingresa tu Cal.com API Key');
+                            return false;
+                        }
+                        if (!calEventTypeId) {
+                            alert('Por favor, ingresa el Event Type ID de Cal.com');
+                            return false;
+                        }
+                    }
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+        
+        // ============================================
+        // INTERACCIONES DE MÓDULOS
+        // ============================================
+        
+        // Hacer que las tarjetas de módulos sean clickeables
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('.module-checkbox');
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+        
+        // Toggle visual de módulos
+        document.querySelectorAll('.module-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.module-card');
+                if (this.checked) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        });
+        
+        // Toggle visual de opciones de personalidad
+        document.querySelectorAll('.personality-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
                 
-                if (!formData.begin_message) {
-                    formData.begin_message = template.begin_message
-                        .replace(/\{\{nombre_empresa\}\}/g, formData.agent_name || 'tu empresa');
+                document.querySelectorAll('.personality-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+        
+        // ============================================
+        // ACTUALIZAR RESUMEN (PASO 8)
+        // ============================================
+        
+        function updateSummary() {
+            // Información básica
+            document.getElementById('summaryAgentName').textContent = 
+                document.getElementById('agentName').value || '-';
+            document.getElementById('summaryCompanyName').textContent = 
+                document.getElementById('companyName').value || '-';
+            document.getElementById('summaryBeginMessage').textContent = 
+                document.getElementById('beginMessage').value || '-';
+            
+            // Módulos activados
+            const modulesContainer = document.getElementById('summaryModules');
+            modulesContainer.innerHTML = '';
+            
+            const modules = [
+                { id: 'moduleCualificacion', name: 'Cualificación de contactos', icon: 'patch-question-fill' },
+                { id: 'moduleTransferencia', name: 'Transferencia de llamadas', icon: 'telephone-forward-fill' },
+                { id: 'moduleAgendamiento', name: 'Agendamiento de citas', icon: 'calendar-check-fill' }
+            ];
+            
+            let anyModuleActive = false;
+            modules.forEach(module => {
+                if (document.getElementById(module.id).checked) {
+                    anyModuleActive = true;
+                    const item = document.createElement('div');
+                    item.className = 'summary-item';
+                    item.innerHTML = `
+                        <span class="summary-label"><i class="bi bi-${module.icon}"></i> ${module.name}</span>
+                        <span class="summary-value" style="color: var(--netelip-success);">✓ Activado</span>
+                    `;
+                    modulesContainer.appendChild(item);
+                }
+            });
+            
+            if (!anyModuleActive) {
+                modulesContainer.innerHTML = '<div class="summary-item"><span class="summary-label">No hay módulos seleccionados</span></div>';
+            }
+            
+            // Configuración técnica
+            const modelSelect = document.getElementById('modelSelect');
+            document.getElementById('summaryModel').textContent = 
+                modelSelect.options[modelSelect.selectedIndex].text;
+            document.getElementById('summaryVoiceSpeed').textContent = 
+                document.getElementById('voiceSpeed').value + 'x';
+            document.getElementById('summaryResponsiveness').textContent = 
+                document.getElementById('responsiveness').value;
+        }
+        
+        // ============================================
+        // GENERACIÓN DEL PROMPT
+        // ============================================
+        
+        function generatePrompt() {
+            const agentName = document.getElementById('agentName').value;
+            const companyName = document.getElementById('companyName').value;
+            const services = document.getElementById('services').value;
+            const objective = document.getElementById('mainObjective').value;
+            
+            // Módulos activos
+            const cualificacionActive = document.getElementById('moduleCualificacion').checked;
+            const transferenciaActive = document.getElementById('moduleTransferencia').checked;
+            const agendamientoActive = document.getElementById('moduleAgendamiento').checked;
+            
+            // Construir el prompt basado en la plantilla de Elio
+            let prompt = `## Rol y Objetivo
+Eres ${agentName} y tu objetivo es ${objective} de ${companyName}.
+
+## Personalidad
+- Eres cercano, empático y amable. 
+- Vas al grano siendo eficiente, pero siempre manteniendo un tono cálido y profesional. 
+- Eres paciente y consistente, especialmente cuando el contacto no tiene claro qué necesita.
+
+## Contexto
+- Eres un asistente de IA, no un humano.
+- Evita SIEMPRE ofrecer asesoramiento técnico ni resolver configuraciones de servicios.`;
+
+            if (services) {
+                prompt += `\n- Tienes acceso a una knowledge base sobre servicios de ${companyName}: ${services}`;
+            }
+
+            prompt += `
+- Hora actual: {{current_time_Europe/Madrid}}
+- Teléfono del contacto: {{numero_telefono}}
+- Nombre del contacto: {{user_name}}
+- Email: {{email}}
+
+## Instrucciones
+### Estilos de comunicación
+- Haz solo una pregunta a la vez y espera respuesta (no digas "¿Cuál es tu nombre y en qué puedo ayudarte?"; en su lugar pregunta "¿Cuál es tu nombre?", espera la respuesta, y luego pregunta "¿En qué puedo ayudarte?")
+- Mantén las interacciones breves con oraciones cortas
+- Esta es una conversación de voz con potencial retraso (2 mensajes cortados seguidos) y errores de transcripción (palabras equivocadas), así que adáptate en consecuencia. Considera el contexto para aclarar información ambigua o mal transcrita
+- Si recibes un mensaje obviamente incompleto, responde: "uhm"
+- Escribe los símbolos como palabras: "tres euros" no "3€", "arroba" no "@"
+- Menciona la zona horaria (hora de Madrid) una vez al inicio si es relevante, no la repitas durante la llamada
+- Presta atención a la información que el contacto ya ha compartido - Si mencionan su nombre, empresa o motivo mientras responden otra pregunta, reconócelo y no vuelvas a preguntarlo
+- Al ofrecer opciones (ej. horarios de citas), limita las opciones a 2 máximo
+- Varía las respuestas entusiastas (${document.getElementById('enthusiasticWords').value}) - Evita repeticiones
+- Maneja preguntas sobre IA con humor y transparencia: si preguntan "¿Eres un robot?" o "¿Eres real?", responde "No soy un robot, soy un agente de voz creado con inteligencia artificial" y luego redirige al objetivo principal de la llamada`;
+
+            if (services) {
+                prompt += `\n- Considera la knowledge base proporcionada para aclarar cualquier información ambigua o confusa sobre los servicios de ${companyName} para contactos que NO son clientes.`;
+            }
+
+            const fillerWords = document.getElementById('fillerWords').value;
+            if (fillerWords) {
+                prompt += `\n- Usa palabras de relleno naturales (${fillerWords}) de forma muy limitada - máximo una cada 4 interacciones`;
+            }
+
+            prompt += `
+
+###  Reglas de comunicación
+- Máximo 30 segundos por respuesta
+- Usa el {{user_name}} frecuentemente una vez lo tengas capturado
+- Lee las fechas de forma natural y con palabras completas: "lunes quince de abril a las seis y media de la tarde" no "15/04 a las 18:30"
+
+### Herramientas`;
+
+            // MÓDULO TRANSFERENCIA
+            if (transferenciaActive) {
+                const transfer1Name = document.getElementById('transfer1Name').value;
+                const transfer1Criteria = document.getElementById('transfer1Criteria').value;
+                const transfer1Message = document.getElementById('transfer1Message').value;
+                
+                const transfer2Name = document.getElementById('transfer2Name').value;
+                const transfer2Criteria = document.getElementById('transfer2Criteria').value;
+                const transfer2Message = document.getElementById('transfer2Message').value;
+                
+                if (transfer1Name) {
+                    prompt += `
+**transfer_call_${transfer1Name.toLowerCase().replace(/\s+/g, '_')}**  
+- Si el contacto ${transfer1Criteria}, di: "${transfer1Message}" y luego ejecuta inmediatamente la función transfer_call_${transfer1Name.toLowerCase().replace(/\s+/g, '_')}`;
                 }
                 
-                renderStep();
-                alert('✅ Plantilla cargada con éxito basada en el sector ' + formData.sector);
+                if (transfer2Name) {
+                    prompt += `
+
+**transfer_call_${transfer2Name.toLowerCase().replace(/\s+/g, '_')}**  
+- Si el contacto ${transfer2Criteria}, di: "${transfer2Message}" y luego ejecuta inmediatamente la función transfer_call_${transfer2Name.toLowerCase().replace(/\s+/g, '_')}`;
+                }
             }
-        }
 
-        function addBackchannelWord() {
-            const input = document.getElementById('new_backchannel_word');
-            const word = input.value.trim();
-            if (word) {
-                formData.backchannel_words.push(word);
-                input.value = '';
-                renderStep();
+            // MÓDULO AGENDAMIENTO
+            if (agendamientoActive) {
+                const checkAvailMessage = document.getElementById('checkAvailabilityMessage').value;
+                const confirmMessage = document.getElementById('confirmationMessage').value;
+                
+                prompt += `
+
+**reservar_cal**  
+- Usa SOLO después de confirmar que el contacto NO es cliente de ${companyName} y después de acordar un horario específico disponible
+- Cuando el contacto acepta agendar una cita, di: "${checkAvailMessage || 'Excelente. Déjame consultar qué horarios tenemos disponibles...'}" y consulta la disponibilidad {{consultar_disponibilidad}}
+- El sistema te proporcionará automáticamente los 2 horarios más tempranos en la {{disponibilidad_mas_temprana}}
+- Ofrece las opciones diciendo: "Tenemos disponibilidad el {{disponibilidad_mas_temprana}}. ¿Cuál te viene mejor?"
+- Si el contacto pregunta por más opciones o ninguna de las 2 le funciona, consulta nuevamente {{consultar_disponibilidad}} para mostrar toda la disponibilidad de los próximos 6 días
+- Cuando el contacto acepta un horario específico, di: "Estupendo. Ahora necesito que me confirmes el número de teléfono al que quieres que te llamen."
+- Una vez captures el {{numero_telefono}}, confirma con el usuario su correo electrónico, di: "Genial y para terminar, ¿Puedes darme tu correo electrónico?"
+- SOLO después de que el contacto confirme que el email y su número de teléfono es correcto, di: "Perfecto, déjame confirmar tu cita, un momento por favor..." y ejecuta inmediatamente la función reservar_cal.
+- Después de ejecutar reservar_cal exitosamente, confirma: "${confirmMessage || 'Listo, {{user_name}}. Tu cita está confirmada para el [repite la fecha/hora que aceptó], hora de Madrid. Recibirás un correo de confirmación.'}"`;
             }
-        }
 
-        function removeBackchannelWord(index) {
-            formData.backchannel_words.splice(index, 1);
-            renderStep();
-        }
+            // END CALL (siempre incluido)
+            prompt += `
 
-        function addKeyword() {
-            const input = document.getElementById('new_keyword');
-            const keyword = input.value.trim();
-            if (keyword) {
-                formData.boosted_keywords.push(keyword);
-                input.value = '';
-                renderStep();
+**end_call**
+- Cuando el usuario dice adiós o la conversación llega al final del flujo, activa la función end_call para finalizar la llamada de forma cordial.`;
+
+            // MÓDULO CUALIFICACIÓN
+            if (cualificacionActive) {
+                const q1 = document.getElementById('q1').value;
+                const q2 = document.getElementById('q2').value;
+                const q3 = document.getElementById('q3').value;
+                
+                prompt += `
+
+### Preguntas de cualificación
+Haz las siguientes preguntas para determinar si el contacto es cliente de ${companyName} y hacia dónde dirigirlo. Haz una pregunta a la vez y adapta según lo que compartan:
+
+**Q1:** "${q1 || '¿Eres ya cliente de ' + companyName + ' o quieres información para empezar?'}"
+**Q2:** "${q2 || '¿En qué puedo ayudarte?'}"
+**Q3 (solo NO clientes):** "${q3 || '¿Te gustaría agendar una cita con un asesor para que te dé información más detallada?'}"
+
+**Criterios:**`;
+                
+                if (transferenciaActive) {
+                    const transfer1Name = document.getElementById('transfer1Name').value;
+                    const transfer2Name = document.getElementById('transfer2Name').value;
+                    prompt += `
+- Cliente + ${transfer1Name || 'Comercial'}: transfer_call_${(transfer1Name || 'comercial').toLowerCase().replace(/\s+/g, '_')}
+- Cliente + ${transfer2Name || 'Técnico'}: transfer_call_${(transfer2Name || 'tecnico').toLowerCase().replace(/\s+/g, '_')}`;
+                }
+                
+                if (agendamientoActive) {
+                    prompt += `
+- NO cliente: Responde con la KB + Ofrece agendar`;
+                }
             }
-        }
 
-        function removeKeyword(index) {
-            formData.boosted_keywords.splice(index, 1);
-            renderStep();
-        }
+            // ETAPAS
+            prompt += `
 
-        function toggleTool(checkbox) {
-            // Implementation for tool management
-            console.log('Tool toggled:', checkbox.value, checkbox.checked);
-        }
+## Etapas`;
 
-        function togglePostCallField(field, checked) {
-            // Implementation for post-call analysis fields
-            console.log('Post-call field:', field, checked);
-        }
+            let etapaNum = 1;
+            
+            // Etapa 1: Saludo (siempre incluida)
+            if (cualificacionActive) {
+                prompt += `
 
-        function updatePreview() {
-            const preview = document.getElementById('previewContent');
-            const config = generateRetellConfig();
-            preview.textContent = JSON.stringify(config, null, 2);
-        }
-
-        function generateRetellConfig() {
-            // Generate complete Retell AI compatible JSON
-            return {
-                agent_name: formData.agent_name || 'Sin nombre',
-                response_engine: {
-                    type: 'retell-llm',
-                    llm_id: 'TO_BE_CREATED', // Se creará primero el LLM
-                    general_prompt: formData.general_prompt,
-                    begin_message: formData.begin_message,
-                    model: formData.llm_model,
-                    temperature: formData.llm_temperature,
-                    max_tokens: formData.llm_max_tokens
-                },
-                voice_id: formData.voice_id,
-                voice_model: formData.voice_model,
-                voice_temperature: formData.voice_temperature,
-                voice_speed: formData.voice_speed,
-                volume: formData.volume,
-                fallback_voice_ids: formData.fallback_voice_ids,
-                language: formData.language,
-                responsiveness: formData.responsiveness,
-                interruption_sensitivity: formData.interruption_sensitivity,
-                enable_backchannel: formData.enable_backchannel,
-                backchannel_frequency: formData.backchannel_frequency,
-                backchannel_words: formData.backchannel_words,
-                reminder_trigger_ms: formData.reminder_trigger_ms,
-                reminder_max_count: formData.reminder_max_count,
-                ambient_sound: formData.ambient_sound,
-                ambient_sound_volume: formData.ambient_sound_volume,
-                normalize_for_speech: formData.normalize_for_speech,
-                end_call_after_silence_ms: formData.end_call_after_silence_ms,
-                max_call_duration_ms: formData.max_call_duration_ms,
-                begin_message_delay_ms: formData.begin_message_delay_ms,
-                ring_duration_ms: formData.ring_duration_ms,
-                stt_mode: formData.stt_mode,
-                webhook_url: formData.webhook_url,
-                boosted_keywords: formData.boosted_keywords,
-                pronunciation_dictionary: formData.pronunciation_dictionary,
-                post_call_analysis_model: formData.post_call_analysis_model,
-                post_call_analysis_data: formData.post_call_analysis_data
-            };
-        }
-
-        function updateProgress() {
-            const percent = Math.round((currentStep / TOTAL_STEPS) * 100);
-            document.getElementById('progress').textContent = percent + '%';
-            document.getElementById('progressBar').style.width = percent + '%';
-        }
-
-        function exportJSON() {
-            const config = generateRetellConfig();
-            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `retell-agent-${formData.agent_name || 'config'}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function copyToClipboard() {
-            const config = generateRetellConfig();
-            navigator.clipboard.writeText(JSON.stringify(config, null, 2))
-                .then(() => alert('✅ Configuración copiada al portapapeles'))
-                .catch(() => alert('❌ Error al copiar'));
-        }
-
-        // Navigation
-        document.getElementById('btnPrevious').addEventListener('click', () => {
-            if (currentStep > 1) {
-                currentStep--;
-                renderStepsNav();
-                renderStep();
-                updateProgress();
-                window.scrollTo(0, 0);
-            }
-        });
-
-        document.getElementById('btnNext').addEventListener('click', () => {
-            if (currentStep < TOTAL_STEPS) {
-                currentStep++;
-                renderStepsNav();
-                renderStep();
-                updateProgress();
-                window.scrollTo(0, 0);
+### ${etapaNum}. Saludo y Cualificación
+- Pregunta nombre al contacto y si es cliente o NO de ${companyName}.`;
+                etapaNum++;
             } else {
-                // Final step - show export options
-                alert('🎉 ¡Configuración completada! Usa los botones de exportar para descargar el JSON.');
-            }
-        });
+                prompt += `
 
-        // Initialize on load
-        init();
+### ${etapaNum}. Saludo
+- Saluda al contacto y pregunta su nombre.`;
+                etapaNum++;
+            }
+            
+            // Etapa Routing (solo si transferencia está activa)
+            if (transferenciaActive) {
+                const transfer1Name = document.getElementById('transfer1Name').value;
+                const transfer2Name = document.getElementById('transfer2Name').value;
+                
+                prompt += `
+
+### ${etapaNum}. Routing
+- Si ES cliente: pregunta motivo y transfiere (transfer_call_${(transfer1Name || 'atencion').toLowerCase().replace(/\s+/g, '_')} o transfer_call_${(transfer2Name || 'soporte').toLowerCase().replace(/\s+/g, '_')}).`;
+                
+                if (agendamientoActive) {
+                    prompt += `
+- Si NO es cliente: responde con knowledge base y ofrece agendar cita`;
+                }
+                etapaNum++;
+            }
+            
+            // Etapa Agendamiento
+            if (agendamientoActive) {
+                prompt += `
+
+### ${etapaNum}. Agendamiento
+- Ofrece {{disponibilidad_mas_temprana}}. 
+- Si acepta horario, solicita el {{numero_telefono}} y el email
+- Espera que el usuario lo deletree y captura en la variable {{email}}, pero no lo deletrees al contacto.
+- Ejecuta la función reservar_cal.`;
+                etapaNum++;
+            }
+            
+            // Etapa Cierre (siempre incluida)
+            prompt += `
+
+### ${etapaNum}. Cierre
+- Pregunta: "¿Hay algo más en lo que pueda ayudarte?"
+- Espera la respuesta del contacto
+- Si dice que no, despídete usando {{user_name}}`;
+            
+            if (agendamientoActive) {
+                prompt += `, menciona {{disponibilidad_mas_temprana}} si agendó cita`;
+            }
+            
+            prompt += `, y desea al contacto un gran día
+- Después de completar la despedida, ejecuta end_call`;
+
+            return prompt;
+        }
+        
+        function showPromptPreview() {
+            const prompt = generatePrompt();
+            document.getElementById('promptPreview').textContent = prompt;
+            document.getElementById('promptPreviewContainer').classList.remove('hidden');
+        }
+        
+        // ============================================
+        // CREAR AGENTE EN RETELL AI
+        // ============================================
+        
+        async function createAgent() {
+            // Validar que hay API key
+            if (!RETELL_API_KEY || RETELL_API_KEY === 'TU_API_KEY_AQUI') {
+                alert('⚠️ Por favor, configura tu API Key de Retell AI en la línea 1057 del código.');
+                return;
+            }
+            
+            // Mostrar loading
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('btnCreate').disabled = true;
+            
+            try {
+                // 1. CREAR EL RETELL LLM
+                const llmConfig = {
+                    general_prompt: generatePrompt(),
+                    begin_message: document.getElementById('beginMessage').value || 
+                        `Hola, soy ${document.getElementById('agentName').value}, tu asistente de voz creado con inteligencia artificial de ${document.getElementById('companyName').value}`,
+                    model: document.getElementById('modelSelect').value,
+                    model_temperature: parseFloat(document.getElementById('temperature').value),
+                    tool_call_strict_mode: true,
+                    default_dynamic_variables: {
+                        "user_name": "Captura el nombre del contacto cuando lo comparta",
+                        "email": "Captura el correo electrónico del contacto. Es OBLIGATORIO capturarlo antes de ejecutar reservar_cal",
+                        "numero_telefono": "Confirma el número de teléfono con el usuario"
+                    }
+                };
+                
+                // Agregar tools según módulos activos
+                llmConfig.general_tools = [];
+                
+                // Tool: end_call (siempre incluida)
+                llmConfig.general_tools.push({
+                    type: "end_call",
+                    name: "end_call",
+                    description: "Finaliza la llamada de forma cordial cuando el usuario dice adiós o la conversación llega a su fin"
+                });
+                
+                // Tools de transferencia
+                if (document.getElementById('moduleTransferencia').checked) {
+                    const transfer1Name = document.getElementById('transfer1Name').value;
+                    const transfer1Number = document.getElementById('transfer1Number').value;
+                    
+                    if (transfer1Name && transfer1Number) {
+                        llmConfig.general_tools.push({
+                            type: "transfer_call",
+                            name: `transfer_call_${transfer1Name.toLowerCase().replace(/\s+/g, '_')}`,
+                            description: `Transferir llamada a ${transfer1Name}`,
+                            transfer_destination: {
+                                type: "predefined",
+                                value: "operator",
+                                number: transfer1Number
+                            }
+                        });
+                    }
+                    
+                    const transfer2Name = document.getElementById('transfer2Name').value;
+                    const transfer2Number = document.getElementById('transfer2Number').value;
+                    
+                    if (transfer2Name && transfer2Number) {
+                        llmConfig.general_tools.push({
+                            type: "transfer_call",
+                            name: `transfer_call_${transfer2Name.toLowerCase().replace(/\s+/g, '_')}`,
+                            description: `Transferir llamada a ${transfer2Name}`,
+                            transfer_destination: {
+                                type: "predefined",
+                                value: "operator",
+                                number: transfer2Number
+                            }
+                        });
+                    }
+                }
+                
+                // Tool de agendamiento
+                if (document.getElementById('moduleAgendamiento').checked) {
+                    const calApiKey = document.getElementById('calApiKey').value;
+                    const calUrl = document.getElementById('calendarUrl').value;
+                    const calEventTypeId = parseInt(document.getElementById('calEventTypeId').value);
+                    
+                    if (calApiKey && calEventTypeId) {
+                        llmConfig.general_tools.push({
+                            type: "book_appointment_cal",
+                            name: "reservar_cal",
+                            description: "Reservar cita en el calendario Cal.com con el horario acordado",
+                            calendar_url: calUrl || "cal.com",
+                            cal_api_key: calApiKey,
+                            event_type_id: calEventTypeId
+                        });
+                        
+                        // Agregar variable de disponibilidad
+                        llmConfig.default_dynamic_variables.consultar_disponibilidad = "activa esta variable para consultar automáticamente la disponibilidad de los próximos 3 días ANTES de ofrecer horarios al contacto";
+                        llmConfig.default_dynamic_variables.disponibilidad_mas_temprana = "Proporciona los 2 primeros horarios disponibles en lenguaje natural español";
+                    }
+                }
+                
+                console.log('Creando LLM con config:', llmConfig);
+                
+                const llmResponse = await fetch('https://api.retellai.com/v2/create-retell-llm', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${RETELL_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(llmConfig)
+                });
+                
+                if (!llmResponse.ok) {
+                    const errorData = await llmResponse.json();
+                    throw new Error(`Error al crear LLM: ${errorData.message || llmResponse.statusText}`);
+                }
+                
+                const llmData = await llmResponse.json();
+                console.log('LLM creado:', llmData);
+                
+                // 2. CREAR EL AGENT
+                const agentConfig = {
+                    agent_name: `${document.getElementById('agentName').value} - ${document.getElementById('companyName').value}`,
+                    response_engine: {
+                        type: "retell-llm",
+                        llm_id: llmData.llm_id
+                    },
+                    voice_id: document.getElementById('voiceId').value || undefined,
+                    voice_speed: parseFloat(document.getElementById('voiceSpeed').value),
+                    voice_temperature: parseFloat(document.getElementById('voiceTemperature').value),
+                    responsiveness: parseFloat(document.getElementById('responsiveness').value),
+                    interruption_sensitivity: parseFloat(document.getElementById('interruptionSensitivity').value),
+                    language: "es-ES",
+                    max_call_duration_ms: parseInt(document.getElementById('maxCallDuration').value) * 1000,
+                    end_call_after_silence_ms: parseInt(document.getElementById('endAfterSilence').value) * 1000,
+                    webhook_url: document.getElementById('webhookUrl').value || undefined,
+                    enable_backchannel: false,
+                    normalize_for_speech: true
+                };
+                
+                console.log('Creando Agent con config:', agentConfig);
+                
+                const agentResponse = await fetch('https://api.retellai.com/v2/create-agent', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${RETELL_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(agentConfig)
+                });
+                
+                if (!agentResponse.ok) {
+                    const errorData = await agentResponse.json();
+                    throw new Error(`Error al crear Agent: ${errorData.message || agentResponse.statusText}`);
+                }
+                
+                const agentData = await agentResponse.json();
+                console.log('Agent creado:', agentData);
+                
+                // Mostrar resultado exitoso
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('creationResult').innerHTML = `
+                    <div class="alert-custom alert-success">
+                        <i class="bi bi-check-circle-fill" style="font-size: 24px;"></i>
+                        <div>
+                            <strong>¡Agente creado exitosamente!</strong>
+                            <br><br>
+                            <strong>Agent ID:</strong> <code>${agentData.agent_id}</code>
+                            <br>
+                            <strong>LLM ID:</strong> <code>${llmData.llm_id}</code>
+                            <br><br>
+                            Tu agente está listo para recibir llamadas. Puedes probarlo en el dashboard de Retell AI.
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="https://beta.retellai.com/dashboard" target="_blank" class="btn-wizard btn-wizard-next">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                            Ir al Dashboard de Retell AI
+                        </a>
+                    </div>
+                `;
+                document.getElementById('creationResult').classList.remove('hidden');
+                
+                // Guardar en localStorage para referencia
+                const agentInfo = {
+                    agent_id: agentData.agent_id,
+                    llm_id: llmData.llm_id,
+                    agent_name: agentConfig.agent_name,
+                    created_at: new Date().toISOString(),
+                    config: {
+                        agentName: document.getElementById('agentName').value,
+                        companyName: document.getElementById('companyName').value,
+                        modules: {
+                            cualificacion: document.getElementById('moduleCualificacion').checked,
+                            transferencia: document.getElementById('moduleTransferencia').checked,
+                            agendamiento: document.getElementById('moduleAgendamiento').checked
+                        }
+                    }
+                };
+                
+                // Guardar en array de agentes creados
+                let createdAgents = JSON.parse(localStorage.getItem('created_agents') || '[]');
+                createdAgents.push(agentInfo);
+                localStorage.setItem('created_agents', JSON.stringify(createdAgents));
+                
+            } catch (error) {
+                console.error('Error al crear agente:', error);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('creationResult').innerHTML = `
+                    <div class="alert-custom" style="background: rgba(220, 53, 69, 0.1); color: var(--netelip-danger);">
+                        <i class="bi bi-exclamation-triangle-fill" style="font-size: 24px;"></i>
+                        <div>
+                            <strong>Error al crear el agente</strong>
+                            <br><br>
+                            ${error.message}
+                            <br><br>
+                            <small>Verifica tu API Key y que todos los datos sean correctos. Revisa la consola del navegador para más detalles.</small>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('creationResult').classList.remove('hidden');
+                document.getElementById('btnCreate').disabled = false;
+            }
+        }
+        
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar tooltips de Bootstrap
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Marcar opción de personalidad por defecto como selected
+            document.querySelector('.personality-option[data-personality="standard"]').classList.add('selected');
+            
+            console.log('✅ Generador de Prompts Netelip inicializado correctamente');
+            console.log('🔑 Recuerda configurar tu RETELL_API_KEY en la línea 1057');
+        });
     </script>
 </body>
 </html>
