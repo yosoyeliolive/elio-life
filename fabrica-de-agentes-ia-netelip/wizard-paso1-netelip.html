@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear agente IA - Paso 1: Tipo de agente | Netelip</title>
+    <title>Crear agente IA - Paso 1: Tipo de agente | netelip</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
@@ -709,11 +709,11 @@
                             <input type="text" 
                                    class="form-control" 
                                    id="companyName" 
-                                   placeholder="Ej: netelip, Mi Empresa..."
+                                   placeholder="Ej: netelip, Garabato, UX-AI."
                                    style="border: 1px solid var(--gris-borde); border-radius: 8px; padding: 11px 14px; font-size: 14px; transition: all 0.2s; font-weight: 500;">
                             <div style="color: var(--gris-texto); font-size: 13px; margin-top: 6px;">
                                 <i class="bi bi-building me-1"></i>
-                                Se usará en las interacciones con el cliente en el prompt. Importante prestar atención a este campo.
+                                Se usará en las interacciones con el cliente en el prompt
                             </div>
                         </div>
                     </div>
@@ -856,17 +856,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Inicializar o recuperar configuración del agente
-        let agentConfig = JSON.parse(sessionStorage.getItem('agentConfig')) || {
-            agent_type: '',
-            agent_name: '',
-            company_name: '',
-            niche: '',
-            voice_id: '',
-            llm_config: {},
-            integrations: {},
-            advanced_config: {}
-        };
+        // =====================================================
+        // ✅ CORREGIDO: Usar localStorage con wizardData
+        // =====================================================
+        const wizardData = JSON.parse(localStorage.getItem('wizardData') || '{}');
 
         function selectAgentType(element, type) {
             // Remover selección previa
@@ -876,11 +869,11 @@
             
             // Seleccionar nueva opción
             element.classList.add('selected');
-            agentConfig.agent_type = type;
+            wizardData.agent_type = type;
             document.getElementById('selectedAgentType').value = type;
             
-            // Guardar en sessionStorage
-            sessionStorage.setItem('agentConfig', JSON.stringify(agentConfig));
+            // Guardar en localStorage
+            localStorage.setItem('wizardData', JSON.stringify(wizardData));
             
             // Validar si se puede habilitar el botón siguiente
             validateForm();
@@ -918,13 +911,13 @@
                 return;
             }
 
-            // Guardar datos
-            agentConfig.agent_name = agentName;
-            agentConfig.company_name = document.getElementById('companyName').value.trim();
+            // Guardar datos en el objeto wizardData
+            wizardData.agent_name = agentName;
+            wizardData.company_name = document.getElementById('companyName').value.trim();
             
-            sessionStorage.setItem('agentConfig', JSON.stringify(agentConfig));
+            localStorage.setItem('wizardData', JSON.stringify(wizardData));
 
-            console.log('✅ Configuración guardada:', agentConfig);
+            console.log('✅ Datos paso 1 guardados:', wizardData);
             
             // Redirigir al paso 2
             window.location.href = 'wizard-paso2-netelip.html';
@@ -932,28 +925,33 @@
 
         // Restaurar selección si existe
         window.addEventListener('DOMContentLoaded', () => {
-            if (agentConfig.agent_type) {
+            if (wizardData.agent_type) {
+                document.getElementById('selectedAgentType').value = wizardData.agent_type;
+                
                 const cards = document.querySelectorAll('.agent-type-card');
                 cards.forEach(card => {
-                    if (card.getAttribute('onclick').includes(agentConfig.agent_type)) {
+                    const onclickAttr = card.getAttribute('onclick');
+                    if (onclickAttr && onclickAttr.includes(wizardData.agent_type)) {
                         card.classList.add('selected');
                     }
                 });
             }
             
-            if (agentConfig.agent_name) {
-                document.getElementById('agentName').value = agentConfig.agent_name;
+            if (wizardData.agent_name) {
+                document.getElementById('agentName').value = wizardData.agent_name;
             }
             
-            if (agentConfig.company_name) {
-                document.getElementById('companyName').value = agentConfig.company_name;
+            if (wizardData.company_name) {
+                document.getElementById('companyName').value = wizardData.company_name;
             }
             
             validateForm();
+            
+            console.log('🚀 Wizard Paso 1 - Cargado correctamente');
+            console.log('📦 Datos actuales:', wizardData);
         });
-
-        console.log('🚀 Wizard Paso 1 (Información básica) - Cargado correctamente');
     </script>
 </body>
 </html>
+
 
