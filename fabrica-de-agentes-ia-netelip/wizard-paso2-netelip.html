@@ -822,8 +822,18 @@
 
                 <form id="wizardForm">
                     <!-- ============================================================ -->
-                    <!-- SECCIÓN 1: MODELO DE IA -->
+                    <!-- SECCIÓN 1: CONFIGURACIÓN DEL MODELO -->
                     <!-- ============================================================ -->
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="font-size: 18px; font-weight: 700; color: var(--oscuro); margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-cpu"></i>
+                            Configuración del modelo
+                        </h3>
+                        <p style="font-size: 14px; color: var(--gris-texto); margin-bottom: 24px;">
+                            Selecciona el modelo de IA y ajusta sus parámetros de funcionamiento.
+                        </p>
+                    </div>
+
                     <div class="form-group">
                         <label class="form-label">
                             Modelo de IA
@@ -875,7 +885,7 @@
                     </div>
 
                     <!-- MODEL HIGH PRIORITY -->
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 0;">
                         <div class="form-check">
                             <input class="form-check-input" 
                                    type="checkbox" 
@@ -899,6 +909,19 @@
                             <i class="bi bi-lightning-charge me-1"></i>
                             Garantiza respuestas más rápidas en momentos de alto tráfico
                         </div>
+                    </div>
+
+                    <!-- ============================================================ -->
+                    <!-- SECCIÓN 2: MENSAJE Y COMPORTAMIENTO -->
+                    <!-- ============================================================ -->
+                    <div class="section-divider">
+                        <h3>
+                            <i class="bi bi-chat-dots"></i>
+                            Mensaje y comportamiento
+                        </h3>
+                        <p>
+                            Define cómo tu agente iniciará las conversaciones y su estilo de comunicación.
+                        </p>
                     </div>
 
                     <!-- ¿QUIÉN HABLA PRIMERO? -->
@@ -949,19 +972,17 @@
                                   style="min-height: 100px;"
                                   required
                                   placeholder="Ej: Hola, soy Elio, tu asistente de voz creado con inteligencia artificial de Netelip - ¿Con quién tengo el gusto de hablar?"></textarea>
-                        <div class="alert-warning">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        
+                        <div class="alert-warning" style="margin-top: 16px; padding: 14px 18px;">
+                            <i class="bi bi-exclamation-triangle-fill" style="font-size: 18px;"></i>
                             <div style="flex: 1;">
-                                <strong style="color: #92400e; font-size: 14px; display: block; margin-bottom: 10px;">Obligatorio por ley española (RGPD y LOPD):</strong>
-                                <p style="margin: 0 0 12px 0; font-size: 13px; color: #78350f; line-height: 1.6;">
-                                    Debes informar que es un asistente de voz con IA y que la llamada está siendo grabada. Incluye siempre:
+                                <strong style="color: #92400e; font-size: 13px; display: block; margin-bottom: 6px;">Obligatorio por ley española (RGPD y LOPD):</strong>
+                                <p style="margin: 0; font-size: 12px; color: #78350f; line-height: 1.5;">
+                                    Debes informar que es un asistente de voz con IA y que la llamada está siendo grabada. Incluye siempre: <strong>"Asistente de voz creado con inteligencia artificial"</strong> y <strong>"Esta llamada está siendo grabada"</strong> (si aplica).
                                 </p>
-                                <div style="font-size: 13px; color: #78350f; line-height: 1.8;">
-                                    ✓ "Asistente de voz creado con inteligencia artificial"<br>
-                                    ✓ "Esta llamada está siendo grabada" (si aplica)
-                                </div>
                             </div>
                         </div>
+                        
                         <div class="form-text">
                             <i class="bi bi-chat-dots me-1"></i>
                             Primera frase que dirá el agente al contestar
@@ -1005,7 +1026,7 @@
                     </div>
 
                     <!-- TONO -->
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">
                             Tono de comunicación
                             <span class="required">*</span>
@@ -1034,8 +1055,21 @@
                         </div>
                     </div>
 
+                    <!-- ============================================================ -->
+                    <!-- SECCIÓN 3: PROMPT DEL AGENTE -->
+                    <!-- ============================================================ -->
+                    <div class="section-divider">
+                        <h3>
+                            <i class="bi bi-code-square"></i>
+                            Prompt del agente
+                        </h3>
+                        <p>
+                            El prompt es el cerebro de tu agente. Define su personalidad, conocimientos y reglas de comportamiento.
+                        </p>
+                    </div>
+
                     <!-- PROMPT GENERAL -->
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">
                             Prompt general
                             <span class="required">*</span>
@@ -1073,18 +1107,12 @@
                     </div>
 
                     <!-- ============================================================ -->
-                    <!-- SECCIÓN 2: BASE DE CONOCIMIENTOS -->
+                    <!-- SECCIÓN 4: BASE DE CONOCIMIENTOS -->
                     <!-- ============================================================ -->
                     <div class="section-divider">
                         <h3>
                             <i class="bi bi-book"></i>
                             Base de conocimientos
-                            <span class="custom-tooltip">
-                                <i class="bi bi-question-circle-fill tooltip-icon"></i>
-                                <span class="tooltip-content">
-                                    La base de conocimientos permite que tu agente acceda a documentación específica sobre tus productos, servicios o procedimientos. El agente consultará estos documentos para responder preguntas con información precisa y actualizada.
-                                </span>
-                            </span>
                         </h3>
                         <p>
                             Sube documentos que tu agente podrá consultar para responder con información precisa. Recomendado: formato Markdown (.md) o texto plano (.txt).
