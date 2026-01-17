@@ -1786,9 +1786,13 @@
             summary += variablesData.length > 0 ? `📋 Variables extraídas: ${variablesData.length}\n` : '';
             summary += webhookUrl ? `🔗 Webhook post-call: Configurado\n` : '';
             summary += webhookInbound ? `🔗 Webhook inbound: Configurado\n` : '';
-            summary += '\n¡Paso 7 completado! En la versión completa avanzarías al Paso 8: Resumen final.';
+            summary += '\n¡Paso 7 completado!';
             
-            alert(summary);
+            console.log('✅ Datos paso 7:', paso7Data);
+            console.log('📦 Todos los datos acumulados:', allData);
+            
+            // ✅ CORREGIDO: Ahora redirige al siguiente paso
+            window.location.href = 'wizard-paso8-netelip.html';
         }
 
         // =====================================================
@@ -1797,9 +1801,137 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderVariables();
             updateWebhookAvailability();
-            console.log('🚀 Wizard Paso 7 REORGANIZADO cargado');
-            console.log('📋 Datos anteriores:', wizardData);
+            console.log('🚀 Wizard Paso 7 cargado correctamente');
+            console.log('📋 Datos de pasos anteriores:', wizardData);
         });
+        
+        // =====================================================
+        // COMENTARIOS PARA ANTONIO - INTEGRACIÓN BACKEND
+        // =====================================================
+        /*
+        PASO 7: HERRAMIENTAS Y CONFIGURACIÓN AVANZADA
+        
+        Este es el paso MÁS COMPLEJO e IMPORTANTE del wizard.
+        Aquí se configuran todas las capacidades del agente.
+        
+        DATOS QUE SE GUARDAN:
+        
+        1. HERRAMIENTAS BÁSICAS:
+           - enable_end_call: true/false - Permitir colgar
+           - enable_cal_booking: true/false - Agendar citas con Cal.com
+           - enable_cal_availability: true/false - Consultar disponibilidad
+           - cal_config: { calendar_url, cal_api_key, event_type_id }
+        
+        2. TRANSFERENCIAS:
+           - enable_transfer: true/false
+           - transfer_destinations: Array de { name, type, number, description, prompt }
+             * type: "predefined" (voicemail/operator) o "inferred"
+        
+        3. HERRAMIENTAS PERSONALIZADAS:
+           - enable_custom_tools: true/false
+           - custom_tools: Array de { name, description, url, speak_during, speak_after }
+        
+        4. EXTRACCIÓN DE DATOS:
+           - extraction_variables: Array de { name, type, description, examples, choices }
+             * type: "string", "number", "boolean", "enum"
+        
+        5. ANÁLISIS POST-LLAMADA:
+           - enable_analysis: true/false
+           - analysis_model: "gpt-4o-mini" o "gpt-4o"
+           - analysis_data: Array igual que extraction_variables
+        
+        6. WEBHOOKS:
+           - webhook_url: URL para post-call data
+           - webhook_inbound: URL para inbound calls
+        
+        INTEGRACIÓN CON RETELL AI:
+        
+        Las herramientas se mapean al campo "tools" de la API:
+        
+        {
+          "tools": [
+            // End call
+            { "type": "end_call", "name": "end_call", "description": "..." },
+            
+            // Cal.com
+            {
+              "type": "book_appointment_cal",
+              "name": "book_appointment",
+              "description": "...",
+              "calendar_url": "...",
+              "cal_api_key": "...",
+              "event_type_id": 123
+            },
+            
+            // Transferencias
+            {
+              "type": "transfer_call",
+              "name": "...",
+              "description": "...",
+              "transfer_destination": {
+                "type": "predefined",
+                "value": "voicemail",
+                "number": "+34..."
+              }
+            },
+            
+            // Custom tools
+            {
+              "type": "custom",
+              "name": "...",
+              "description": "...",
+              "url": "https://...",
+              "speak_during_execution": true,
+              "speak_after_execution": false
+            }
+          ],
+          
+          // Extracción de datos
+          "post_call_analysis_data": paso7Data.extraction_variables,
+          
+          // Análisis
+          "enable_post_call_analysis": paso7Data.enable_analysis,
+          "post_call_analysis_model": paso7Data.analysis_model,
+          
+          // Webhooks
+          "webhook_url": paso7Data.webhook_url,
+          "inbound_webhook_url": paso7Data.webhook_inbound
+        }
+        
+        NOTAS IMPORTANTES PARA ANTONIO:
+        
+        1. CAL.COM:
+           - Requiere API key de Cal.com
+           - event_type_id es el ID del tipo de evento a agendar
+           - calendar_url debe ser la URL completa de Cal.com
+        
+        2. TRANSFERENCIAS:
+           - "predefined": Para voicemail u operator (valores fijos)
+           - "inferred": El agente decide dinámicamente basado en contexto
+           - Todas requieren número de teléfono válido
+        
+        3. CUSTOM TOOLS:
+           - speak_during: El agente habla MIENTRAS ejecuta (ej: "Consultando...")
+           - speak_after: El agente habla DESPUÉS con el resultado
+           - URL debe devolver JSON con el resultado
+        
+        4. EXTRACCIÓN DE DATOS:
+           - type "enum": Requiere campo "choices" con opciones válidas
+           - Ejemplos ayudan al modelo a entender qué extraer
+           - Se envían vía webhook después de la llamada
+        
+        5. WEBHOOKS:
+           - webhook_url: Recibe datos post-llamada (transcripción, análisis, etc)
+           - webhook_inbound: Se llama al recibir una llamada entrante
+           - Ambos deben ser HTTPS en producción
+        
+        FLUJO DE INTEGRACIÓN:
+        1. Frontend guarda todo en paso7Data
+        2. En Paso 8, se envía TODO el wizardData a API Netelip
+        3. Backend Netelip procesa y construye payload para Retell AI
+        4. Se crea el agente en Retell AI con todas las herramientas
+        5. Se guarda configuración en BBDD para futuras ediciones
+        */
     </script>
 </body>
 </html>
