@@ -538,7 +538,7 @@
         </div>
 
         <div class="steps-container">
-            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+            <a href="wizard-paso1-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
@@ -546,7 +546,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+            <a href="wizard-paso2-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Configuración LLM</span>
@@ -554,7 +554,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+            <a href="wizard-paso3-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Selección de voz</span>
@@ -974,7 +974,7 @@
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso4-CONVERSACION.html'">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso4-netelip.html'">
                             <i class="bi bi-arrow-left"></i>
                             Anterior
                         </button>
@@ -1079,14 +1079,61 @@
 📲 Ring duration: ${ringDuration}ms (${Math.round(ringDuration/1000)}s)
 📧 Voicemail: ${enableVoicemailDetection ? 'Activado' : 'Desactivado'}
 
-¡Paso 5 completado! En la versión completa avanzarías al Paso 6: Audio y STT.`;
+¡Paso 5 completado!`;
 
-            alert(summary);
+            console.log('✅ Datos paso 5:', paso5Data);
+            console.log('📦 Todos los datos acumulados:', allData);
+
+            // ✅ CORREGIDO: Ahora redirige al siguiente paso
+            window.location.href = 'wizard-paso6-netelip.html';
         }
 
         // Inicializar
-        console.log('🚀 Wizard Paso 5 cargado');
-        console.log('📋 Datos anteriores:', wizardData);
+        console.log('🚀 Wizard Paso 5 cargado correctamente');
+        console.log('📋 Datos de pasos anteriores:', wizardData);
+        
+        // =====================================================
+        // COMENTARIOS PARA ANTONIO - INTEGRACIÓN BACKEND
+        // =====================================================
+        /*
+        PASO 5: CONFIGURACIÓN DE TIEMPOS
+        
+        Este paso configura los tiempos y duraciones de las llamadas.
+        
+        DATOS QUE SE GUARDAN:
+        1. begin_message_delay: 0-10000ms - Delay antes del primer mensaje
+        2. end_call_after_silence: ms - Auto-colgar después de X ms de silencio
+        3. max_call_duration: ms - Duración máxima de la llamada
+        4. reminder_trigger: ms - Cada cuánto tiempo enviar recordatorio
+        5. reminder_max_count: número - Máximo de recordatorios
+        6. ring_duration: ms - Duración del ring antes de contestar
+        7. enable_voicemail_detection: true/false - Detectar buzón de voz
+        8. voicemail_detection_timeout: ms - Timeout para detectar voicemail
+        9. voicemail_message: string - Mensaje para buzón de voz
+        
+        INTEGRACIÓN CON RETELL AI:
+        Estos parámetros se mapean a la API de Retell:
+        
+        {
+          "begin_message_delay": paso5Data.begin_message_delay,
+          "end_call_after_silence_ms": paso5Data.end_call_after_silence,
+          "max_call_duration_ms": paso5Data.max_call_duration,
+          "reminder_trigger_ms": paso5Data.reminder_trigger,
+          "reminder_max_count": paso5Data.reminder_max_count,
+          "ring_duration_ms": paso5Data.ring_duration,
+          "enable_voicemail_detection": paso5Data.enable_voicemail_detection,
+          "voicemail_detection_timeout_ms": paso5Data.voicemail_detection_timeout,
+          "voicemail_message": paso5Data.voicemail_message
+        }
+        
+        NOTAS IMPORTANTES:
+        - begin_message_delay: Útil para dar tiempo al usuario a hablar primero
+        - end_call_after_silence: Recomendado 10000-30000ms (10-30 segundos)
+        - max_call_duration: Típicamente 300000-1800000ms (5-30 minutos)
+        - reminder_trigger: Para recordar al usuario si hay silencio prolongado
+        - voicemail_detection: Solo disponible para llamadas outbound
+        */
     </script>
 </body>
 </html>
+
