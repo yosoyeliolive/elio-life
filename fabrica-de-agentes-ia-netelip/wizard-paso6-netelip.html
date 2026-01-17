@@ -497,7 +497,7 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <a href="dashboard-FINAL-PRESENTACION.html" class="back-link">
+            <a href="dashboard.html" class="back-link">
                 <i class="bi bi-arrow-left"></i>
                 Volver al dashboard
             </a>
@@ -506,7 +506,7 @@
         </div>
 
         <div class="steps-container">
-            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+            <a href="wizard-paso1-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
@@ -514,7 +514,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+            <a href="wizard-paso2-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Configuración LLM</span>
@@ -522,7 +522,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso3-SELECCION-VOZ.html" class="step-item completed">
+            <a href="wizard-paso3-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Selección de voz</span>
@@ -530,7 +530,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso4-CONVERSACION.html" class="step-item completed">
+            <a href="wizard-paso4-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Conversación</span>
@@ -538,7 +538,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso5-TIEMPOS.html" class="step-item completed">
+            <a href="wizard-paso5-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Tiempos</span>
@@ -847,24 +847,51 @@
             localStorage.setItem('wizardData', JSON.stringify(allData));
 
             console.log('✅ Datos paso 6:', paso6Data);
-            console.log('📦 Todos los datos:', allData);
+            console.log('📦 Todos los datos acumulados:', allData);
 
-            // Resumen de configuración
-            const summary = `✅ ¡Audio y STT configurados!
-
-🔊 Volumen: ${volume}
-${enableAmbientSound ? `🎵 Sonido ambiente: ${ambientSound} (vol: ${ambientSoundVolume})` : '🔇 Sin sonido ambiente'}
-🎤 Modo STT: ${sttMode}
-📝 Formato transcripción: ${enableTranscriptionFormatting ? 'Activado' : 'Desactivado'}
-
-¡Paso 6 completado! En la versión completa avanzarías al Paso 7: Configuración avanzada.`;
-
-            alert(summary);
+            // ✅ CORREGIDO: Ahora redirige al siguiente paso
+            window.location.href = 'wizard-paso7-netelip.html';
         }
 
         // Inicializar
-        console.log('🚀 Wizard Paso 6 cargado');
-        console.log('📋 Datos anteriores:', wizardData);
+        console.log('🚀 Wizard Paso 6 cargado correctamente');
+        console.log('📋 Datos de pasos anteriores:', wizardData);
+        
+        // =====================================================
+        // COMENTARIOS PARA ANTONIO - INTEGRACIÓN BACKEND
+        // =====================================================
+        /*
+        PASO 6: AUDIO Y STT (Speech-to-Text)
+        
+        Este paso configura el audio y el reconocimiento de voz.
+        
+        DATOS QUE SE GUARDAN:
+        1. volume: 0.5-1.5 - Volumen general del agente
+        2. enable_ambient_sound: true/false - Activar sonido ambiente
+        3. ambient_sound: string - Tipo de sonido ("cafe", "office", "nature")
+        4. ambient_sound_volume: 0-1 - Volumen del sonido ambiente
+        5. stt_mode: "fast" o "accurate" - Modo de reconocimiento
+        6. enable_transcription_formatting: true/false - Formatear transcripciones
+        
+        INTEGRACIÓN CON RETELL AI:
+        Estos parámetros se mapean a la API de Retell:
+        
+        {
+          "volume": paso6Data.volume,
+          "ambient_sound": paso6Data.enable_ambient_sound ? paso6Data.ambient_sound : null,
+          "ambient_sound_volume": paso6Data.ambient_sound_volume,
+          "stt_mode": paso6Data.stt_mode,
+          "enable_transcription_formatting": paso6Data.enable_transcription_formatting
+        }
+        
+        NOTAS IMPORTANTES:
+        - volume: 1.0 es el valor por defecto, rango recomendado 0.8-1.2
+        - ambient_sound: Añade ruido de fondo realista para conversaciones más naturales
+        - stt_mode "fast": Menor latencia pero menos preciso
+        - stt_mode "accurate": Mayor precisión pero más latencia
+        - transcription_formatting: Formatea números, fechas, etc. en transcripciones
+        */
     </script>
 </body>
 </html>
+
