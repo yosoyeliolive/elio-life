@@ -859,7 +859,7 @@
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso2-MEJORADO.html'">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso2-netelip.html'">
                             <i class="bi bi-arrow-left"></i>
                             Anterior
                         </button>
@@ -874,7 +874,15 @@
     </div>
 
     <script>
-        // DATOS DE EJEMPLO - Voces hardcodeadas para la demo
+        // =====================================================
+        // DATOS DE EJEMPLO - VOCES HARDCODEADAS
+        // =====================================================
+        // ANTONIO: Estas voces están hardcodeadas para la demo.
+        // Debes reemplazar esto con llamadas a las APIs reales:
+        // - ElevenLabs: https://api.elevenlabs.io/v1/voices
+        // - Retell AI: Consultar documentación de Retell
+        // - Cartesia: Consultar documentación de Cartesia
+        
         const VOICES_DATA = {
             retell: [
                 { id: 'retell_sofia_es', name: 'Sofia', language: 'es', gender: 'female', accent: 'spain', description: 'Voz profesional española' },
@@ -1003,9 +1011,25 @@
             console.log('✅ Voz seleccionada:', selectedVoice);
         }
 
-        // Preview de voz
+        // =====================================================
+        // ANTONIO: Preview de voz - INTEGRAR CON API
+        // =====================================================
+        // Este es el método que debe reproducir el audio real
+        // Actualmente solo muestra un alert
         function playPreview(voiceId) {
             const voice = VOICES_DATA[currentProvider].find(v => v.id === voiceId);
+            
+            // ANTONIO: Aquí debes implementar la reproducción real
+            // Ejemplo con ElevenLabs:
+            /*
+            async function playElevenLabsPreview(voiceId) {
+                const response = await fetch(`/api/elevenlabs/preview/${voiceId}`);
+                const audioBlob = await response.blob();
+                const audio = new Audio(URL.createObjectURL(audioBlob));
+                audio.play();
+            }
+            */
+            
             alert(`🎵 Reproduciendo muestra de: ${voice.name}\n\nEn producción, aquí se reproduciría el audio de preview desde la API de ${currentProvider.toUpperCase()}.\n\nAntonio integrará:\n- Retell AI API\n- ElevenLabs API\n- Cartesia API`);
         }
 
@@ -1030,7 +1054,9 @@
             return names[accent] || accent;
         }
 
-        // Siguiente paso
+        // =====================================================
+        // SIGUIENTE PASO - GUARDAR Y AVANZAR
+        // =====================================================
         function nextStep() {
             if (!selectedVoice) {
                 alert('⚠️ Por favor, selecciona una voz para tu agente');
@@ -1056,15 +1082,54 @@
             localStorage.setItem('wizardData', JSON.stringify(allData));
             
             console.log('✅ Datos paso 3:', paso3Data);
-            console.log('📦 Todos los datos:', allData);
+            console.log('📦 Todos los datos acumulados:', allData);
             
-            alert(`✅ ¡Voz configurada!\n\n🎙️ Proveedor: ${currentProvider.toUpperCase()}\n🎵 Voz: ${selectedVoice.name}\n⚡ Velocidad: ${voiceSpeed}x\n🌡️ Temperature: ${voiceTemperature}\n\n¡Paso 3 completado! En la versión completa avanzarías al Paso 4: Conversación.`);
+            // ✅ CORREGIDO: Ahora sí redirige al siguiente paso
+            window.location.href = 'wizard-paso4-netelip.html';
         }
 
         // Inicializar
         filterVoices();
-        console.log('🚀 Wizard Paso 3 cargado');
-        console.log('📋 Datos anteriores:', wizardData);
+        console.log('🚀 Wizard Paso 3 cargado correctamente');
+        console.log('📋 Datos de pasos anteriores:', wizardData);
+        
+        // =====================================================
+        // COMENTARIOS PARA ANTONIO - INTEGRACIÓN BACKEND
+        // =====================================================
+        /*
+        INTEGRACIÓN DE APIs DE VOCES:
+        
+        1. ELEVENLABS API:
+           Endpoint: https://api.elevenlabs.io/v1/voices
+           Headers: { 'xi-api-key': 'YOUR_API_KEY' }
+           
+           Response format:
+           {
+             "voices": [
+               {
+                 "voice_id": "21m00Tcm4TlvDq8ikWAM",
+                 "name": "Rachel",
+                 "category": "generated",
+                 "labels": { "accent": "american", "age": "young" }
+               }
+             ]
+           }
+           
+        2. RETELL AI:
+           Consultar documentación de Retell para endpoint de voces
+           
+        3. CARTESIA:
+           Consultar documentación de Cartesia para endpoint de voces
+           
+        4. PREVIEW DE AUDIO:
+           Para ElevenLabs, puedes usar:
+           POST https://api.elevenlabs.io/v1/text-to-speech/{voice_id}
+           Body: { "text": "Muestra de voz", "model_id": "eleven_monolingual_v1" }
+           
+        5. AL CREAR EL AGENTE (Paso 8):
+           Los datos guardados aquí (voice_id, voice_provider, etc.) 
+           se usarán para configurar la voz del agente en Retell AI.
+        */
     </script>
 </body>
 </html>
