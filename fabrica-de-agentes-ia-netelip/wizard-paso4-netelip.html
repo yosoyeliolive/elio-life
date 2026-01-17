@@ -587,7 +587,7 @@
         </div>
 
         <div class="steps-container">
-            <a href="wizard-paso1-DEFINITIVO.html" class="step-item completed">
+            <a href="wizard-paso1-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Información básica</span>
@@ -595,7 +595,7 @@
                 </div>
             </a>
 
-            <a href="wizard-paso2-MEJORADO.html" class="step-item completed">
+            <a href="wizard-paso2-netelip.html" class="step-item completed">
                 <div class="step-number">✓</div>
                 <div class="step-info">
                     <span class="step-name">Configuración LLM</span>
@@ -962,7 +962,7 @@
 
                     <!-- BOTONES -->
                     <div class="wizard-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso3-SELECCION-VOZ.html'">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='wizard-paso3-netelip.html'">
                             <i class="bi bi-arrow-left"></i>
                             Anterior
                         </button>
@@ -1129,16 +1129,19 @@
             localStorage.setItem('wizardData', JSON.stringify(allData));
 
             console.log('✅ Datos paso 4:', paso4Data);
-            console.log('📦 Todos los datos:', allData);
+            console.log('📦 Todos los datos acumulados:', allData);
 
-            alert(`✅ ¡Conversación configurada!\n\n🌍 Idioma: ${language}\n💬 Backchannel: ${enableBackchannel ? 'Activado' : 'Desactivado'}\n⚡ Responsiveness: ${responsiveness}\n🔇 Interrupción: ${interruptionSensitivity}\n\n¡Paso 4 completado! En la versión completa avanzarías al Paso 5: Tiempos.`);
+            // ✅ CORREGIDO: Ahora redirige al siguiente paso
+            window.location.href = 'wizard-paso5-netelip.html';
         }
 
         // Inicializar
         renderBackchannelTags();
         renderKeywordTags();
-        console.log('🚀 Wizard Paso 4 cargado');
-        console.log('📋 Datos anteriores:', wizardData);
-    </script>
-</body>
-</html>
+        console.log('🚀 Wizard Paso 4 cargado correctamente');
+        console.log('📋 Datos de pasos anteriores:', wizardData);
+        
+        // =====================================================
+        // COMENTARIOS PARA ANTONIO - INTEGRACIÓN BACKEND
+        // =====================================================
+     
