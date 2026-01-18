@@ -878,6 +878,11 @@
                 ? wizardData.personalidad.join(', ') 
                 : (wizardData.personalidad || 'No definido');
             
+            // Knowledge Base
+            const kbDocuments = (wizardData.knowledge_base && wizardData.knowledge_base.documents) || [];
+            const kbChunks = (wizardData.knowledge_base && wizardData.knowledge_base.retrieval_config && wizardData.knowledge_base.retrieval_config.chunks) || 3;
+            const kbThreshold = (wizardData.knowledge_base && wizardData.knowledge_base.retrieval_config && wizardData.knowledge_base.retrieval_config.similarity_threshold) || 0.7;
+            
             paso2.innerHTML = `
                 <div class="summary-item">
                     <div class="summary-label">Modelo agente</div>
@@ -899,6 +904,12 @@
                     <div class="summary-label">Quién habla primero</div>
                     <div class="summary-value">${wizardData.who_speaks_first === 'agent' ? 'Agente' : 'Usuario'}</div>
                 </div>
+                ${wizardData.who_speaks_first === 'agent' && wizardData.begin_message ? `
+                <div class="summary-item" style="grid-column: 1 / -1;">
+                    <div class="summary-label">Mensaje inicial</div>
+                    <div class="summary-value small">${wizardData.begin_message}</div>
+                </div>
+                ` : ''}
                 <div class="summary-item">
                     <div class="summary-label">Tono</div>
                     <div class="summary-value">${wizardData.tono || 'No definido'}</div>
@@ -907,10 +918,41 @@
                     <div class="summary-label">Personalidad</div>
                     <div class="summary-value small">${personalidades}</div>
                 </div>
+                ${wizardData.general_prompt ? `
+                <div class="summary-item" style="grid-column: 1 / -1;">
+                    <div class="summary-label">Prompt general del agente</div>
+                    <div class="summary-value small" style="white-space: pre-wrap; max-height: 200px; overflow-y: auto; padding: 12px; background: var(--gris-claro); border-radius: 6px; font-family: monospace; font-size: 12px;">${wizardData.general_prompt}</div>
+                </div>
+                ` : ''}
                 ${wizardData.high_priority ? `
                 <div class="summary-item">
                     <div class="summary-label">Alta prioridad</div>
                     <div class="summary-value">✓ Activado</div>
+                </div>
+                ` : ''}
+                ${kbDocuments.length > 0 ? `
+                <div class="summary-item" style="grid-column: 1 / -1;">
+                    <div class="summary-label">Knowledge Base</div>
+                    <div class="summary-value">
+                        <div style="margin-bottom: 8px;">
+                            <strong>${kbDocuments.length} documento${kbDocuments.length !== 1 ? 's' : ''}</strong> configurado${kbDocuments.length !== 1 ? 's' : ''}
+                        </div>
+                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 4px;">
+                            <strong>Chunks por búsqueda:</strong> ${kbChunks}
+                        </div>
+                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 8px;">
+                            <strong>Similarity threshold:</strong> ${kbThreshold}
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                            ${kbDocuments.map(doc => `
+                                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: var(--netelip-azul);">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    ${doc.name || 'Documento'}
+                                    ${doc.size ? `<span style="color: var(--gris-texto); font-size: 11px;">(${Math.round(doc.size / 1024)}KB)</span>` : ''}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
                 </div>
                 ` : ''}
             `;
@@ -1078,57 +1120,173 @@
 
             // PASO 7: CONFIGURACIÓN AVANZADA
             const paso7 = document.getElementById('summary-paso7');
-            const tools = (wizardData.tools && wizardData.tools.general_tools) || [];
-            const postCallData = wizardData.post_call_data || {};
-            const variables = (postCallData.variables) || [];
+            
+            // Extraer datos con estructura correcta del Paso 7
+            const toolsConfig = wizardData.tools || {};
+            const postCallAnalysis = wizardData.post_call_analysis || {};
+            const dataExtraction = wizardData.data_extraction || {};
+            const webhooks = wizardData.webhooks || {};
+            
+            const tools = toolsConfig.general_tools || [];
+            const calConfig = toolsConfig.cal_config || {};
+            const transferDestinations = toolsConfig.transfer_destinations || [];
+            const customTools = toolsConfig.custom_tools || [];
+            
+            const variables = dataExtraction.variables || [];
+            const analysisEnabled = postCallAnalysis.enabled || false;
+            const analysisModel = postCallAnalysis.model || 'gpt-4o-mini';
+            
+            const webhookPostCall = webhooks.post_call || {};
+            const webhookInbound = webhooks.inbound || {};
 
-            let paso7HTML = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">';
+            let paso7HTML = '<div style="display: grid; gap: 24px;">';
 
-            // HERRAMIENTAS
-            paso7HTML += '<div>';
-            paso7HTML += '<h4 style="font-size: 14px; font-weight: 700; color: var(--oscuro); margin: 0 0 12px 0;">Herramientas configuradas</h4>';
+            // ==================== HERRAMIENTAS ====================
+            paso7HTML += '<div style="padding: 20px; background: var(--gris-claro); border-radius: 8px;">';
+            paso7HTML += '<h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin: 0 0 16px 0;"><i class="bi bi-tools me-2"></i>Herramientas configuradas</h4>';
             
             if (tools.length === 0) {
                 paso7HTML += '<p style="font-size: 13px; color: var(--gris-texto); margin: 0;">Sin herramientas configuradas</p>';
             } else {
-                paso7HTML += '<div class="tool-badges">';
+                paso7HTML += '<div style="display: grid; gap: 12px;">';
+                
                 tools.forEach(tool => {
                     const icon = getToolIcon(tool.type);
-                    paso7HTML += `
-                        <div class="tool-badge">
-                            <i class="bi ${icon}"></i>
-                            ${tool.name}
-                        </div>
-                    `;
+                    paso7HTML += `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid var(--gris-borde);">`;
+                    paso7HTML += `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">`;
+                    paso7HTML += `<i class="bi ${icon}" style="color: var(--netelip-azul); font-size: 16px;"></i>`;
+                    paso7HTML += `<strong style="font-size: 14px;">${tool.name}</strong>`;
+                    paso7HTML += `<span style="margin-left: auto; font-size: 11px; padding: 2px 8px; background: #eff6ff; color: var(--netelip-azul); border-radius: 4px;">${tool.type}</span>`;
+                    paso7HTML += `</div>`;
+                    
+                    if (tool.description) {
+                        paso7HTML += `<div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 4px;">${tool.description}</div>`;
+                    }
+                    
+                    // Detalles específicos según el tipo
+                    if (tool.type === 'book_appointment_cal' || tool.type === 'check_availability_cal') {
+                        paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gris-borde);">`;
+                        paso7HTML += `<div><strong>Calendar URL:</strong> ${tool.calendar_url || calConfig.calendar_url || 'No configurado'}</div>`;
+                        paso7HTML += `<div><strong>Event Type ID:</strong> ${tool.event_type_id || calConfig.event_type_id || 'No configurado'}</div>`;
+                        paso7HTML += `</div>`;
+                    }
+                    
+                    if (tool.type === 'transfer_call' && tool.transfer_destination) {
+                        paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gris-borde);">`;
+                        paso7HTML += `<div><strong>Tipo:</strong> ${tool.transfer_destination.type === 'predefined' ? 'Predefinido' : 'Inferido'}</div>`;
+                        paso7HTML += `<div><strong>Número:</strong> ${tool.transfer_destination.number || 'No configurado'}</div>`;
+                        if (tool.transfer_destination.value) {
+                            paso7HTML += `<div><strong>Destino:</strong> ${tool.transfer_destination.value}</div>`;
+                        }
+                        paso7HTML += `</div>`;
+                    }
+                    
+                    if (tool.type === 'custom') {
+                        paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gris-borde);">`;
+                        paso7HTML += `<div><strong>Webhook URL:</strong> ${tool.url || 'No configurado'}</div>`;
+                        paso7HTML += `<div><strong>Habla durante:</strong> ${tool.speak_during_execution ? 'Sí' : 'No'}</div>`;
+                        paso7HTML += `<div><strong>Habla después:</strong> ${tool.speak_after_execution ? 'Sí' : 'No'}</div>`;
+                        paso7HTML += `</div>`;
+                    }
+                    
+                    paso7HTML += `</div>`;
                 });
+                
                 paso7HTML += '</div>';
             }
             paso7HTML += '</div>';
 
-            // POST CALL DATA
-            paso7HTML += '<div>';
-            paso7HTML += '<h4 style="font-size: 14px; font-weight: 700; color: var(--oscuro); margin: 0 0 12px 0;">Post Call Data</h4>';
+            // ==================== EXTRACCIÓN DE DATOS ====================
+            paso7HTML += '<div style="padding: 20px; background: var(--gris-claro); border-radius: 8px;">';
+            paso7HTML += '<h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin: 0 0 16px 0;"><i class="bi bi-database me-2"></i>Extracción de datos</h4>';
             
             if (variables.length === 0) {
                 paso7HTML += '<p style="font-size: 13px; color: var(--gris-texto); margin: 0;">Sin variables configuradas</p>';
             } else {
-                paso7HTML += `
-                    <div style="margin-bottom: 12px;">
-                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 6px;">
-                            <strong>Modelo:</strong> ${postCallData.model || 'No definido'}
-                        </div>
-                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 6px;">
-                            <strong>Variables:</strong> ${variables.length}
-                        </div>
-                        <div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 8px;">
-                            <strong>Webhook:</strong> ${postCallData.webhook ? '✓ Configurado' : '✗ No configurado'}
-                        </div>
-                    </div>
-                    <div class="variable-badges">
-                `;
-                variables.forEach(v => {
-                    paso7HTML += `<span class="variable-badge">${v.name}</span>`;
+                paso7HTML += '<div style="display: grid; gap: 12px;">';
+                
+                variables.forEach(variable => {
+                    paso7HTML += `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid var(--gris-borde);">`;
+                    paso7HTML += `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">`;
+                    paso7HTML += `<strong style="font-size: 14px; color: var(--netelip-azul);">${variable.name}</strong>`;
+                    paso7HTML += `<span style="margin-left: auto; font-size: 11px; padding: 2px 8px; background: #fef3c7; color: #f59e0b; border-radius: 4px;">${variable.type}</span>`;
+                    paso7HTML += `</div>`;
+                    
+                    if (variable.description) {
+                        paso7HTML += `<div style="font-size: 12px; color: var(--gris-texto); margin-bottom: 8px;">${variable.description}</div>`;
+                    }
+                    
+                    if (variable.examples && variable.examples.length > 0) {
+                        paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gris-borde);">`;
+                        paso7HTML += `<strong>Ejemplos:</strong> ${variable.examples.join(', ')}`;
+                        paso7HTML += `</div>`;
+                    }
+                    
+                    if (variable.type === 'enum' && variable.choices && variable.choices.length > 0) {
+                        paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gris-borde);">`;
+                        paso7HTML += `<strong>Opciones:</strong> ${variable.choices.join(', ')}`;
+                        paso7HTML += `</div>`;
+                    }
+                    
+                    paso7HTML += `</div>`;
                 });
+                
+                paso7HTML += '</div>';
+            }
+            paso7HTML += '</div>';
+
+            // ==================== ANÁLISIS POST-LLAMADA ====================
+            paso7HTML += '<div style="padding: 20px; background: var(--gris-claro); border-radius: 8px;">';
+            paso7HTML += '<h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin: 0 0 16px 0;"><i class="bi bi-bar-chart me-2"></i>Análisis post-llamada</h4>';
+            
+            if (analysisEnabled) {
+                paso7HTML += `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid var(--gris-borde);">`;
+                paso7HTML += `<div style="display: flex; align-items: center; gap: 8px;">`;
+                paso7HTML += `<i class="bi bi-check-circle-fill" style="color: var(--exito);"></i>`;
+                paso7HTML += `<strong>Activado</strong>`;
+                paso7HTML += `</div>`;
+                paso7HTML += `<div style="font-size: 12px; color: var(--gris-texto); margin-top: 8px;">`;
+                paso7HTML += `<strong>Modelo:</strong> ${analysisModel}`;
+                paso7HTML += `</div>`;
+                paso7HTML += `</div>`;
+            } else {
+                paso7HTML += '<p style="font-size: 13px; color: var(--gris-texto); margin: 0;"><i class="bi bi-x-circle me-2"></i>Desactivado</p>';
+            }
+            paso7HTML += '</div>';
+
+            // ==================== WEBHOOKS ====================
+            paso7HTML += '<div style="padding: 20px; background: var(--gris-claro); border-radius: 8px;">';
+            paso7HTML += '<h4 style="font-size: 16px; font-weight: 700; color: var(--oscuro); margin: 0 0 16px 0;"><i class="bi bi-link-45deg me-2"></i>Webhooks</h4>';
+            
+            const hasWebhooks = (webhookPostCall.enabled && webhookPostCall.url) || (webhookInbound.enabled && webhookInbound.url);
+            
+            if (!hasWebhooks) {
+                paso7HTML += '<p style="font-size: 13px; color: var(--gris-texto); margin: 0;">Sin webhooks configurados</p>';
+            } else {
+                paso7HTML += '<div style="display: grid; gap: 12px;">';
+                
+                if (webhookPostCall.enabled && webhookPostCall.url) {
+                    paso7HTML += `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid var(--gris-borde);">`;
+                    paso7HTML += `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">`;
+                    paso7HTML += `<i class="bi bi-send-fill" style="color: var(--netelip-azul);"></i>`;
+                    paso7HTML += `<strong style="font-size: 14px;">Webhook Post-Call</strong>`;
+                    paso7HTML += `<i class="bi bi-check-circle-fill" style="margin-left: auto; color: var(--exito);"></i>`;
+                    paso7HTML += `</div>`;
+                    paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); word-break: break-all;">${webhookPostCall.url}</div>`;
+                    paso7HTML += `</div>`;
+                }
+                
+                if (webhookInbound.enabled && webhookInbound.url) {
+                    paso7HTML += `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid var(--gris-borde);">`;
+                    paso7HTML += `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">`;
+                    paso7HTML += `<i class="bi bi-telephone-inbound-fill" style="color: var(--netelip-azul);"></i>`;
+                    paso7HTML += `<strong style="font-size: 14px;">Webhook Inbound</strong>`;
+                    paso7HTML += `<i class="bi bi-check-circle-fill" style="margin-left: auto; color: var(--exito);"></i>`;
+                    paso7HTML += `</div>`;
+                    paso7HTML += `<div style="font-size: 11px; color: var(--gris-texto); word-break: break-all;">${webhookInbound.url}</div>`;
+                    paso7HTML += `</div>`;
+                }
+                
                 paso7HTML += '</div>';
             }
             paso7HTML += '</div>';
@@ -1336,71 +1494,166 @@
             // =====================================================
             /*
             
-            PASOS PARA INTEGRACIÓN EN BACKEND (Node.js/Python):
-
-            1. CREAR AGENTE EN RETELL AI:
+            INTEGRACIÓN COMPLETA - PASO 8: CREAR AGENTE
+            
+            Este es el paso FINAL donde se envía TODA la configuración a Retell AI.
+            El objeto retellAgentData contiene TODO lo configurado en los 7 pasos anteriores.
+            
+            ==================== FLUJO DE INTEGRACIÓN ====================
+            
+            1. FRONTEND RECOPILA DATOS:
+               - Paso 1: agent_name, agent_type, company_name
+               - Paso 2: modelo, temperature, prompt, knowledge_base
+               - Paso 3: voice_id, voice_model, voice_speed, voice_temperature
+               - Paso 4: language, backchannel, interruption_sensitivity, responsiveness
+               - Paso 5: begin_message_delay, end_call_after_silence, max_call_duration
+               - Paso 6: volume, ambient_sound, stt_mode
+               - Paso 7: tools, data_extraction, post_call_analysis, webhooks
+            
+            2. BACKEND RECIBE PAYLOAD COMPLETO:
+               POST /api/netelip/agents/create
+               Headers: { 'Authorization': 'Bearer USER_TOKEN' }
+               Body: retellAgentData (objeto completo)
+            
+            3. BACKEND PROCESA Y CREA EN RETELL AI:
                
+               A) PRIMERO: Crear Knowledge Base (si existe)
+               POST https://api.retellai.com/v2/knowledge-base
+               Body: {
+                 "name": "KB - [agent_name]",
+                 "texts": [documentos del knowledge_base]
+               }
+               Response: { knowledge_base_id: "kb_xxxxx" }
+               
+               B) SEGUNDO: Crear LLM (si usa retell-llm)
+               POST https://api.retellai.com/v2/create-retell-llm
+               Body: {
+                 "general_prompt": retellAgentData.general_prompt,
+                 "begin_message": retellAgentData.begin_message,
+                 "model": retellAgentData.modelo,
+                 "temperature": retellAgentData.temperature,
+                 "general_tools": retellAgentData.general_tools,
+                 "knowledge_base_ids": [knowledge_base_id],
+                 ...
+               }
+               Response: { llm_id: "llm_xxxxx" }
+               
+               C) TERCERO: Crear Agente
                POST https://api.retellai.com/v2/create-agent
-               Headers: {
-                   'Authorization': 'Bearer YOUR_RETELL_API_KEY',
-                   'Content-Type': 'application/json'
+               Body: {
+                 "agent_name": retellAgentData.agent_name,
+                 "response_engine": {
+                   "type": "retell-llm",
+                   "llm_id": llm_id
+                 },
+                 "voice_id": retellAgentData.voice_id,
+                 "voice_model": retellAgentData.voice_model,
+                 "language": retellAgentData.language,
+                 "enable_backchannel": retellAgentData.enable_backchannel,
+                 "interruption_sensitivity": retellAgentData.interruption_sensitivity,
+                 "responsiveness": retellAgentData.responsiveness,
+                 "begin_message_delay_ms": retellAgentData.begin_message_delay_ms,
+                 "end_call_after_silence_ms": retellAgentData.end_call_after_silence_ms,
+                 "max_call_duration_ms": retellAgentData.max_call_duration_ms,
+                 "volume": retellAgentData.volume,
+                 "ambient_sound": retellAgentData.ambient_sound,
+                 "stt_mode": retellAgentData.stt_mode,
+                 "post_call_analysis_data": retellAgentData.post_call_analysis_data,
+                 "webhook_url": retellAgentData.webhook_url,
+                 ...
                }
-               Body: retellAgentData
-               
-               Respuesta: { agent_id: 'agent_xxx...', ... }
-
-            2. GUARDAR EN SUPABASE:
-               
+               Response: { agent_id: "agent_xxxxx", ... }
+            
+            4. BACKEND GUARDA EN SUPABASE:
                INSERT INTO agents (
-                   agent_id,
-                   user_id,
-                   agent_name,
-                   agent_type,
-                   configuration,
-                   created_at,
-                   status
+                 agent_id,
+                 user_id,
+                 agent_name,
+                 agent_type,
+                 configuration,
+                 llm_id,
+                 knowledge_base_id,
+                 created_at,
+                 status
                ) VALUES (
-                   retellResponse.agent_id,
-                   currentUser.id,
-                   retellAgentData.agent_name,
-                   retellAgentData.agent_type,
-                   retellAgentData,
-                   timestamp,
-                   'active'
+                 'agent_xxxxx',
+                 currentUser.id,
+                 retellAgentData.agent_name,
+                 retellAgentData.agent_type,
+                 retellAgentData,  // Guardar configuración completa
+                 'llm_xxxxx',
+                 'kb_xxxxx',
+                 NOW(),
+                 'active'
                )
-
-            3. ASIGNAR NÚMERO DE TELÉFONO (opcional):
-               
-               Si el agente necesita número:
-               POST https://api.retellai.com/v2/create-phone-number
-               Body: {
-                   area_code: 900,
-                   inbound_agent_id: retellResponse.agent_id
+            
+            5. BACKEND RESPONDE AL FRONTEND:
+               {
+                 "success": true,
+                 "agent_id": "agent_xxxxx",
+                 "agent_name": "Elio Telefonía",
+                 "llm_id": "llm_xxxxx",
+                 "knowledge_base_id": "kb_xxxxx"
                }
-
-            4. WEBHOOK N8N NOTIFICACIÓN:
-               
-               POST https://tu-n8n.com/webhook/agent-created
-               Body: {
-                   agent_id: retellResponse.agent_id,
-                   agent_name: retellAgentData.agent_name,
-                   user_email: currentUser.email,
-                   created_at: timestamp
-               }
-
-            5. RESPUESTA AL FRONTEND:
-               
-               return {
-                   success: true,
-                   agent_id: retellResponse.agent_id,
-                   agent_name: retellAgentData.agent_name,
-                   phone_number: phoneNumber || null
-               }
-
-            MANEJO DE ERRORES:
-            - Si falla Retell API: return { success: false, error: 'retell_api_error' }
-            - Si falla Supabase: Rollback en Retell + return error
-            - Validar API Key y permisos antes de llamar
+            
+            6. FRONTEND REDIRIGE AL DASHBOARD:
+               window.location.href = 'dashboard.html'
+            
+            ==================== MAPEO DE DATOS CRÍTICO ====================
+            
+            PASO 7 - ESTRUCTURA DE HERRAMIENTAS:
+            wizardData.tools = {
+              general_tools: [
+                { type: "end_call", name: "...", description: "..." },
+                { type: "book_appointment_cal", name: "...", calendar_url: "...", cal_api_key: "...", event_type_id: 123 },
+                { type: "transfer_call", name: "...", transfer_destination: {...} },
+                { type: "custom", name: "...", url: "...", speak_during_execution: true }
+              ],
+              cal_config: { calendar_url, cal_api_key, event_type_id },
+              transfer_destinations: [...],
+              custom_tools: [...]
+            }
+            
+            PASO 7 - ESTRUCTURA DE EXTRACCIÓN:
+            wizardData.data_extraction = {
+              variables: [
+                { name: "nombre", type: "string", description: "...", examples: [...] },
+                { name: "interes", type: "enum", description: "...", choices: [...] }
+              ]
+            }
+            
+            PASO 7 - ESTRUCTURA DE WEBHOOKS:
+            wizardData.webhooks = {
+              post_call: { url: "https://...", enabled: true },
+              inbound: { url: "https://...", enabled: true }
+            }
+            
+            ==================== MANEJO DE ERRORES ====================
+            
+            ERRORES POSIBLES Y SOLUCIONES:
+            
+            1. Error en Knowledge Base:
+               - Rollback: No es necesario (KB se puede crear después)
+               - Continuar sin KB
+            
+            2. Error en LLM:
+               - Rollback: Eliminar Knowledge Base creado
+               - return { success: false, error: 'llm_creation_failed' }
+            
+            3. Error en Agent:
+               - Rollback: Eliminar LLM y KB creados
+               - return { success: false, error: 'agent_creation_failed' }
+            
+            4. Error en Supabase:
+               - Rollback: Eliminar Agent, LLM y KB de Retell
+               - return { success: false, error: 'database_error' }
+            
+            VALIDACIONES PREVIAS:
+            - API Key de Retell válida
+            - Usuario autenticado
+            - Campos obligatorios completos
+            - URLs de webhooks válidas (https://)
+            - Cal.com API key válida (si usa Cal.com)
             
             */
 
