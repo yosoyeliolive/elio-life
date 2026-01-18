@@ -1500,15 +1500,11 @@
                - created_at (timestamp)
             */
             
-            alert(`✅ ¡Configuración guardada!
-
-💻 Modelo: ${modelo}
-🌡️ Temperature: ${temperature}
-🎭 Tono: ${tono}
-✨ Personalidad: ${personalidad.join(', ')}
-📚 Documentos en KB: ${kbDocuments.length}
-
-¡Paso 2 completado! En la versión completa avanzarías al Paso 3: Selección de Voz.`);
+            console.log('✅ Datos paso 2:', paso2Data);
+            console.log('📦 Todos los datos acumulados:', allData);
+            
+            // ✅ CORREGIDO: Ahora redirige al siguiente paso
+            window.location.href = 'wizard-paso3-netelip.html';
         }
 
         // =====================================================
@@ -1516,8 +1512,8 @@
         // =====================================================
         document.addEventListener('DOMContentLoaded', function() {
             toggleBeginMessage();
-            console.log('🚀 Wizard Paso 2 CON KNOWLEDGE BASE cargado');
-            console.log('📋 Datos anteriores:', wizardData);
+            console.log('🚀 Wizard Paso 2 cargado correctamente');
+            console.log('📋 Datos de pasos anteriores:', wizardData);
         });
     </script>
 </body>
