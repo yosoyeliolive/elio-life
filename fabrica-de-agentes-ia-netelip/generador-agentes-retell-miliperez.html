@@ -462,6 +462,23 @@
             font-size: 13px;
             margin: 0;
         }
+    
+        .btn-copy {
+            background: var(--netelip-success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .btn-copy:hover {
+            background: #218838;
+        }
     </style>
 </head>
 <body>
@@ -816,8 +833,8 @@
                     
                     <div class="mb-3">
                         <label class="form-label">Mensaje de confirmación de cita</label>
-                        <input type="text" class="form-control" id="confirmationMessage" placeholder="Ej: Listo, {nombre}. Tu cita está confirmada para el {fecha_hora}. Recibirás un correo de confirmación.">
-                        <small class="text-muted">Puedes usar {nombre} y {fecha_hora} como variables</small>
+                        <input type="text" class="form-control" id="confirmationMessage" placeholder="Ej: Listo, {{user_name}}. Tu cita está confirmada para el {{fecha_hora}}. Recibirás un correo de confirmación.">
+                        <small class="text-muted">Usa {{user_name}} para el nombre y {{fecha_hora}} para la fecha/hora acordada</small>
                     </div>
                 </div>
             </div>
@@ -908,11 +925,12 @@
                             Modelo de lenguaje
                             <span class="info-tooltip" data-bs-toggle="tooltip" title="El modelo de IA que procesará las conversaciones">?</span>
                         </label>
-                        <select class="form-select" id="modelSelect">
-                            <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash (Recomendado - Rápido y eficiente)</option>
-                            <option value="gpt-4.1">GPT-4.1 (Máxima calidad)</option>
-                            <option value="gpt-4.1-mini">GPT-4.1 Mini (Económico)</option>
-                            <option value="claude-3.7-sonnet">Claude 3.7 Sonnet (Versátil)</option>
+                                                <select class="form-select" id="modelSelect">
+                            <option value="gpt-4o" selected>GPT-4o (Máxima calidad - Recomendado)</option>
+                            <option value="gpt-4o-mini">GPT-4o Mini (Rápido y económico)</option>
+                            <option value="claude-3-7-sonnet">Claude 3.7 Sonnet (Versátil)</option>
+                            <option value="claude-3-5-haiku">Claude 3.5 Haiku (Rápido)</option>
+                            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Eficiente)</option>
                         </select>
                     </div>
                     
@@ -1053,6 +1071,10 @@
                         <i class="bi bi-cpu-fill"></i>
                         Configuración técnica
                     </div>
+                                        <div class="summary-item">
+                        <span class="summary-label">Personalidad:</span>
+                        <span class="summary-value" id="summaryPersonality">-</span>
+                    </div>
                     <div class="summary-item">
                         <span class="summary-label">Modelo de IA:</span>
                         <span class="summary-value" id="summaryModel">-</span>
@@ -1070,6 +1092,11 @@
                 <!-- Botón para ver prompt -->
                 <div class="text-center my-4">
                     <button class="btn-preview" onclick="showPromptPreview()">
+                        <i class="bi bi-eye-fill"></i> Ver prompt generado
+                    </button>
+                    <button class="btn-copy" onclick="copyPromptToClipboard()">
+                        <i class="bi bi-clipboard-fill"></i> Copiar prompt
+                    </button>
                         <i class="bi bi-eye-fill"></i> Ver prompt generado
                     </button>
                 </div>
@@ -1213,50 +1240,155 @@
         // VALIDACIÓN DE PASOS
         // ============================================
         
-        function validateCurrentStep() {
+                function validateCurrentStep() {
             switch(currentStep) {
                 case 1:
-                    // Validar información básica
                     const agentName = document.getElementById('agentName').value.trim();
                     const companyName = document.getElementById('companyName').value.trim();
+                    const mainObjective = document.getElementById('mainObjective').value.trim();
                     
                     if (!agentName) {
-                        alert('Por favor, ingresa el nombre del agente');
+                        alert('⚠️ Por favor, ingresa el nombre del agente');
+                        document.getElementById('agentName').focus();
                         return false;
                     }
                     if (!companyName) {
-                        alert('Por favor, ingresa el nombre de la empresa');
+                        alert('⚠️ Por favor, ingresa el nombre de la empresa');
+                        document.getElementById('companyName').focus();
+                        return false;
+                    }
+                    if (!mainObjective) {
+                        alert('⚠️ Por favor, describe el objetivo principal del agente');
+                        document.getElementById('mainObjective').focus();
                         return false;
                     }
                     return true;
                     
                 case 2:
-                    // Validar que al menos un módulo esté seleccionado
                     const anyModuleSelected = 
                         document.getElementById('moduleCualificacion').checked ||
                         document.getElementById('moduleTransferencia').checked ||
                         document.getElementById('moduleAgendamiento').checked;
                     
                     if (!anyModuleSelected) {
-                        alert('Por favor, selecciona al menos una capacidad para tu agente');
+                        alert('⚠️ Por favor, selecciona al menos una capacidad para tu agente');
                         return false;
                     }
                     return true;
                     
+                case 3:
+                    if (document.getElementById('moduleCualificacion').checked) {
+                        const q1 = document.getElementById('q1').value.trim();
+                        const q2 = document.getElementById('q2').value.trim();
+                        const q3 = document.getElementById('q3').value.trim();
+                        
+                        if (!q1 || !q2 || !q3) {
+                            alert('⚠️ Por favor, completa las 3 preguntas de cualificación');
+                            return false;
+                        }
+                    }
+                    return true;
+                    
+                case 4:
+                    if (document.getElementById('moduleTransferencia').checked) {
+                        const t1Name = document.getElementById('transfer1Name').value.trim();
+                        const t1Number = document.getElementById('transfer1Number').value.trim();
+                        const t1Criteria = document.getElementById('transfer1Criteria').value.trim();
+                        const t1Message = document.getElementById('transfer1Message').value.trim();
+                        
+                        if (!t1Name || !t1Number || !t1Criteria || !t1Message) {
+                            alert('⚠️ Por favor, completa todos los campos de Transferencia 1');
+                            return false;
+                        }
+                        
+                        const phoneRegex = /^\+?[0-9]{9,15}$/;
+                        if (!phoneRegex.test(t1Number.replace(/\s/g, ''))) {
+                            alert('⚠️ El número de teléfono 1 debe tener formato válido (ej: +34912345678)');
+                            document.getElementById('transfer1Number').focus();
+                            return false;
+                        }
+                        
+                        const t2Name = document.getElementById('transfer2Name').value.trim();
+                        const t2Number = document.getElementById('transfer2Number').value.trim();
+                        const t2Criteria = document.getElementById('transfer2Criteria').value.trim();
+                        const t2Message = document.getElementById('transfer2Message').value.trim();
+                        
+                        if (t2Name || t2Number || t2Criteria || t2Message) {
+                            if (!t2Name || !t2Number || !t2Criteria || !t2Message) {
+                                alert('⚠️ Si configuras Transferencia 2, debes completar todos sus campos');
+                                return false;
+                            }
+                            
+                            if (!phoneRegex.test(t2Number.replace(/\s/g, ''))) {
+                                alert('⚠️ El número de teléfono 2 debe tener formato válido (ej: +34912345679)');
+                                document.getElementById('transfer2Number').focus();
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                    
                 case 5:
-                    // Si el módulo de agendamiento está activo, validar Cal.com
                     if (document.getElementById('moduleAgendamiento').checked) {
                         const calApiKey = document.getElementById('calApiKey').value.trim();
                         const calEventTypeId = document.getElementById('calEventTypeId').value.trim();
                         
                         if (!calApiKey) {
-                            alert('Por favor, ingresa tu Cal.com API Key');
+                            alert('⚠️ Por favor, ingresa tu Cal.com API Key');
+                            document.getElementById('calApiKey').focus();
                             return false;
                         }
                         if (!calEventTypeId) {
-                            alert('Por favor, ingresa el Event Type ID de Cal.com');
+                            alert('⚠️ Por favor, ingresa el Event Type ID de Cal.com');
+                            document.getElementById('calEventTypeId').focus();
                             return false;
                         }
+                    }
+                    return true;
+                
+                case 7:
+                    const temperature = parseFloat(document.getElementById('temperature').value);
+                    const voiceSpeed = parseFloat(document.getElementById('voiceSpeed').value);
+                    const voiceTemp = parseFloat(document.getElementById('voiceTemperature').value);
+                    const responsiveness = parseFloat(document.getElementById('responsiveness').value);
+                    const interruptSens = parseFloat(document.getElementById('interruptionSensitivity').value);
+                    const maxDuration = parseInt(document.getElementById('maxCallDuration').value);
+                    const endSilence = parseInt(document.getElementById('endAfterSilence').value);
+                    
+                    if (isNaN(temperature) || temperature < 0 || temperature > 1) {
+                        alert('⚠️ La temperatura del modelo debe estar entre 0 y 1');
+                        document.getElementById('temperature').focus();
+                        return false;
+                    }
+                    if (isNaN(voiceSpeed) || voiceSpeed < 0.5 || voiceSpeed > 2) {
+                        alert('⚠️ La velocidad de voz debe estar entre 0.5 y 2.0');
+                        document.getElementById('voiceSpeed').focus();
+                        return false;
+                    }
+                    if (isNaN(voiceTemp) || voiceTemp < 0 || voiceTemp > 1) {
+                        alert('⚠️ La temperatura de voz debe estar entre 0 y 1');
+                        document.getElementById('voiceTemperature').focus();
+                        return false;
+                    }
+                    if (isNaN(responsiveness) || responsiveness < 0 || responsiveness > 1) {
+                        alert('⚠️ La responsividad debe estar entre 0 y 1');
+                        document.getElementById('responsiveness').focus();
+                        return false;
+                    }
+                    if (isNaN(interruptSens) || interruptSens < 0 || interruptSens > 1) {
+                        alert('⚠️ La sensibilidad a interrupciones debe estar entre 0 y 1');
+                        document.getElementById('interruptionSensitivity').focus();
+                        return false;
+                    }
+                    if (isNaN(maxDuration) || maxDuration < 60 || maxDuration > 3600) {
+                        alert('⚠️ La duración máxima debe estar entre 60 y 3600 segundos');
+                        document.getElementById('maxCallDuration').focus();
+                        return false;
+                    }
+                    if (isNaN(endSilence) || endSilence < 10 || endSilence > 120) {
+                        alert('⚠️ El tiempo de silencio debe estar entre 10 y 120 segundos');
+                        document.getElementById('endAfterSilence').focus();
+                        return false;
                     }
                     return true;
                     
@@ -1309,7 +1441,7 @@
         // ACTUALIZAR RESUMEN (PASO 8)
         // ============================================
         
-        function updateSummary() {
+                function updateSummary() {
             // Información básica
             document.getElementById('summaryAgentName').textContent = 
                 document.getElementById('agentName').value || '-';
@@ -1350,6 +1482,16 @@
             const modelSelect = document.getElementById('modelSelect');
             document.getElementById('summaryModel').textContent = 
                 modelSelect.options[modelSelect.selectedIndex].text;
+            
+            // ✅ NUEVO: Personalidad
+            const personality = document.querySelector('input[name="personality"]:checked').value;
+            const personalityNames = {
+                'standard': 'Estándar',
+                'formal': 'Formal',
+                'casual': 'Casual'
+            };
+            document.getElementById('summaryPersonality').textContent = personalityNames[personality];
+            
             document.getElementById('summaryVoiceSpeed').textContent = 
                 document.getElementById('voiceSpeed').value + 'x';
             document.getElementById('summaryResponsiveness').textContent = 
@@ -1360,39 +1502,86 @@
         // GENERACIÓN DEL PROMPT
         // ============================================
         
-        function generatePrompt() {
+                function generatePrompt() {
             const agentName = document.getElementById('agentName').value;
             const companyName = document.getElementById('companyName').value;
             const services = document.getElementById('services').value;
             const objective = document.getElementById('mainObjective').value;
+            const personality = document.querySelector('input[name="personality"]:checked').value;
             
             // Módulos activos
             const cualificacionActive = document.getElementById('moduleCualificacion').checked;
             const transferenciaActive = document.getElementById('moduleTransferencia').checked;
             const agendamientoActive = document.getElementById('moduleAgendamiento').checked;
             
-            // Construir el prompt basado en la plantilla de Elio
+            // Construir el prompt MEJORADO
             let prompt = `## Rol y Objetivo
 Eres ${agentName} y tu objetivo es ${objective} de ${companyName}.
 
 ## Personalidad
 - Eres cercano, empático y amable. 
 - Vas al grano siendo eficiente, pero siempre manteniendo un tono cálido y profesional. 
-- Eres paciente y consistente, especialmente cuando el contacto no tiene claro qué necesita.
+- Eres paciente y consistente, especialmente cuando el contacto no tiene claro qué necesita.`;
+
+            // ✅ APLICAR PERSONALIDAD SELECCIONADA
+            if (personality === 'formal') {
+                prompt += `
+- Usa siempre "usted" y lenguaje corporativo
+- Evita contracciones (di "para qué" no "pa' qué")
+- Mantén protocolo formal en todo momento
+- Tu comunicación es protocolaria y refinada`;
+            } else if (personality === 'casual') {
+                prompt += `
+- Usa "tú" y lenguaje relajado
+- Puedes usar contracciones naturales
+- Mantén conversación como entre amigos cercanos
+- Tu comunicación es desenfadada pero respetuosa`;
+            }
+
+            prompt += `
 
 ## Contexto
 - Eres un asistente de IA, no un humano.
 - Evita SIEMPRE ofrecer asesoramiento técnico ni resolver configuraciones de servicios.`;
 
             if (services) {
-                prompt += `\n- Tienes acceso a una knowledge base sobre servicios de ${companyName}: ${services}`;
+                prompt += `
+- Tienes acceso a una knowledge base sobre servicios de ${companyName}: ${services}`;
+                
+                // ✅ ADAPTAR SEGÚN SECTOR
+                const servicesLower = services.toLowerCase();
+                if (servicesLower.includes('telecomunicaciones') || servicesLower.includes('telefonía') || servicesLower.includes('voip')) {
+                    prompt += `
+- Conoces términos técnicos de telefonía: VoIP, centralita, extensiones, IVR, líneas SIP`;
+                } else if (servicesLower.includes('salud') || servicesLower.includes('médico') || servicesLower.includes('clínica')) {
+                    prompt += `
+- Usa vocabulario médico apropiado y mantén confidencialidad LOPD en todo momento`;
+                } else if (servicesLower.includes('legal') || servicesLower.includes('abogado') || servicesLower.includes('jurídico')) {
+                    prompt += `
+- Usa terminología jurídica apropiada y mantén confidencialidad absoluta`;
+                } else if (servicesLower.includes('inmobiliaria') || servicesLower.includes('vivienda') || servicesLower.includes('piso')) {
+                    prompt += `
+- Conoces términos inmobiliarios: m2, ubicación, características, precio/m2`;
+                }
+            }
+
+            // ✅ VARIABLES DINÁMICAS EXPLICADAS
+            prompt += `
+
+## Variables dinámicas disponibles
+- {{user_name}}: Nombre del contacto (se captura durante la conversación)
+- {{numero_telefono}}: Teléfono del contacto (requerido para agendamiento)
+- {{email}}: Correo electrónico del contacto (requerido para agendamiento)
+- {{current_time_Europe/Madrid}}: Hora actual en Madrid, España`;
+
+            if (agendamientoActive) {
+                prompt += `
+- {{consultar_disponibilidad}}: Activa la consulta automática al calendario Cal.com
+- {{disponibilidad_mas_temprana}}: Los 2 primeros horarios disponibles en lenguaje natural
+- {{fecha_hora}}: Fecha y hora confirmada de la cita agendada`;
             }
 
             prompt += `
-- Hora actual: {{current_time_Europe/Madrid}}
-- Teléfono del contacto: {{numero_telefono}}
-- Nombre del contacto: {{user_name}}
-- Email: {{email}}
 
 ## Instrucciones
 ### Estilos de comunicación
@@ -1408,12 +1597,14 @@ Eres ${agentName} y tu objetivo es ${objective} de ${companyName}.
 - Maneja preguntas sobre IA con humor y transparencia: si preguntan "¿Eres un robot?" o "¿Eres real?", responde "No soy un robot, soy un agente de voz creado con inteligencia artificial" y luego redirige al objetivo principal de la llamada`;
 
             if (services) {
-                prompt += `\n- Considera la knowledge base proporcionada para aclarar cualquier información ambigua o confusa sobre los servicios de ${companyName} para contactos que NO son clientes.`;
+                prompt += `
+- Considera la knowledge base proporcionada para aclarar cualquier información ambigua o confusa sobre los servicios de ${companyName} para contactos que NO son clientes.`;
             }
 
             const fillerWords = document.getElementById('fillerWords').value;
             if (fillerWords) {
-                prompt += `\n- Usa palabras de relleno naturales (${fillerWords}) de forma muy limitada - máximo una cada 4 interacciones`;
+                prompt += `
+- Usa palabras de relleno naturales (${fillerWords}) de forma muy limitada - máximo una cada 4 interacciones`;
             }
 
             prompt += `
@@ -1437,6 +1628,7 @@ Eres ${agentName} y tu objetivo es ${objective} de ${companyName}.
                 
                 if (transfer1Name) {
                     prompt += `
+
 **transfer_call_${transfer1Name.toLowerCase().replace(/\s+/g, '_')}**  
 - Si el contacto ${transfer1Criteria}, di: "${transfer1Message}" y luego ejecuta inmediatamente la función transfer_call_${transfer1Name.toLowerCase().replace(/\s+/g, '_')}`;
                 }
@@ -1458,14 +1650,15 @@ Eres ${agentName} y tu objetivo es ${objective} de ${companyName}.
 
 **reservar_cal**  
 - Usa SOLO después de confirmar que el contacto NO es cliente de ${companyName} y después de acordar un horario específico disponible
-- Cuando el contacto acepta agendar una cita, di: "${checkAvailMessage || 'Excelente. Déjame consultar qué horarios tenemos disponibles...'}" y consulta la disponibilidad {{consultar_disponibilidad}}
-- El sistema te proporcionará automáticamente los 2 horarios más tempranos en la {{disponibilidad_mas_temprana}}
+- Cuando el contacto acepta agendar una cita, di: "${checkAvailMessage || 'Excelente. Déjame consultar qué horarios tenemos disponibles...'}" y consulta la disponibilidad mediante {{consultar_disponibilidad}}
+- El sistema te proporcionará automáticamente los 2 horarios más tempranos en la variable {{disponibilidad_mas_temprana}}
 - Ofrece las opciones diciendo: "Tenemos disponibilidad el {{disponibilidad_mas_temprana}}. ¿Cuál te viene mejor?"
 - Si el contacto pregunta por más opciones o ninguna de las 2 le funciona, consulta nuevamente {{consultar_disponibilidad}} para mostrar toda la disponibilidad de los próximos 6 días
 - Cuando el contacto acepta un horario específico, di: "Estupendo. Ahora necesito que me confirmes el número de teléfono al que quieres que te llamen."
 - Una vez captures el {{numero_telefono}}, confirma con el usuario su correo electrónico, di: "Genial y para terminar, ¿Puedes darme tu correo electrónico?"
-- SOLO después de que el contacto confirme que el email y su número de teléfono es correcto, di: "Perfecto, déjame confirmar tu cita, un momento por favor..." y ejecuta inmediatamente la función reservar_cal.
-- Después de ejecutar reservar_cal exitosamente, confirma: "${confirmMessage || 'Listo, {{user_name}}. Tu cita está confirmada para el [repite la fecha/hora que aceptó], hora de Madrid. Recibirás un correo de confirmación.'}"`;
+- Espera que el usuario deletree el email y captura en la variable {{email}}, pero no lo deletrees de vuelta al contacto
+- SOLO después de que el contacto confirme que el email y su número de teléfono son correctos, di: "Perfecto, déjame confirmar tu cita, un momento por favor..." y ejecuta inmediatamente la función reservar_cal
+- Después de ejecutar reservar_cal exitosamente, confirma: "${confirmMessage || 'Listo, {{user_name}}. Tu cita está confirmada para el {{fecha_hora}}, hora de Madrid. Recibirás un correo de confirmación.'}"`;
             }
 
             // END CALL (siempre incluido)
@@ -1489,89 +1682,116 @@ Haz las siguientes preguntas para determinar si el contacto es cliente de ${comp
 **Q2:** "${q2 || '¿En qué puedo ayudarte?'}"
 **Q3 (solo NO clientes):** "${q3 || '¿Te gustaría agendar una cita con un asesor para que te dé información más detallada?'}"
 
-**Criterios:**`;
+**Criterios de decisión:**`;
                 
                 if (transferenciaActive) {
                     const transfer1Name = document.getElementById('transfer1Name').value;
                     const transfer2Name = document.getElementById('transfer2Name').value;
                     prompt += `
-- Cliente + ${transfer1Name || 'Comercial'}: transfer_call_${(transfer1Name || 'comercial').toLowerCase().replace(/\s+/g, '_')}
-- Cliente + ${transfer2Name || 'Técnico'}: transfer_call_${(transfer2Name || 'tecnico').toLowerCase().replace(/\s+/g, '_')}`;
+- Si ES cliente + necesita ${transfer1Name}: ejecutar transfer_call_${(transfer1Name || 'comercial').toLowerCase().replace(/\s+/g, '_')}
+- Si ES cliente + necesita ${transfer2Name}: ejecutar transfer_call_${(transfer2Name || 'tecnico').toLowerCase().replace(/\s+/g, '_')}`;
                 }
                 
                 if (agendamientoActive) {
                     prompt += `
-- NO cliente: Responde con la KB + Ofrece agendar`;
+- Si NO es cliente: Responder con knowledge base + Ofrecer agendar cita`;
                 }
             }
 
-            // ETAPAS
+            // ✅ ETAPAS CON NOMBRES DESCRIPTIVOS
             prompt += `
 
-## Etapas`;
+## Flujo de conversación`;
 
-            let etapaNum = 1;
-            
-            // Etapa 1: Saludo (siempre incluida)
+            // Etapa: Saludo inicial
             if (cualificacionActive) {
                 prompt += `
 
-### ${etapaNum}. Saludo y Cualificación
-- Pregunta nombre al contacto y si es cliente o NO de ${companyName}.`;
-                etapaNum++;
+### Etapa: Saludo y Cualificación inicial
+- Pregunta el nombre al contacto
+- Determina si es cliente actual de ${companyName} o contacto nuevo`;
             } else {
                 prompt += `
 
-### ${etapaNum}. Saludo
-- Saluda al contacto y pregunta su nombre.`;
-                etapaNum++;
+### Etapa: Saludo inicial
+- Saluda cordialmente al contacto
+- Pregunta su nombre`;
             }
             
-            // Etapa Routing (solo si transferencia está activa)
+            // Etapa: Routing
             if (transferenciaActive) {
-                const transfer1Name = document.getElementById('transfer1Name').value;
-                const transfer2Name = document.getElementById('transfer2Name').value;
+                const transfer1Name = document.getElementById('transfer1Name').value || 'atención al cliente';
+                const transfer2Name = document.getElementById('transfer2Name').value || 'soporte técnico';
                 
                 prompt += `
 
-### ${etapaNum}. Routing
-- Si ES cliente: pregunta motivo y transfiere (transfer_call_${(transfer1Name || 'atencion').toLowerCase().replace(/\s+/g, '_')} o transfer_call_${(transfer2Name || 'soporte').toLowerCase().replace(/\s+/g, '_')}).`;
+### Etapa: Routing y direccionamiento
+- Si ES cliente: Pregunta el motivo de contacto
+- Según el motivo, transfiere a:
+  * ${transfer1Name}: transfer_call_${transfer1Name.toLowerCase().replace(/\s+/g, '_')}
+  * ${transfer2Name}: transfer_call_${transfer2Name.toLowerCase().replace(/\s+/g, '_')}`;
                 
                 if (agendamientoActive) {
                     prompt += `
-- Si NO es cliente: responde con knowledge base y ofrece agendar cita`;
+- Si NO es cliente: Responde con knowledge base y ofrece agendar cita de asesoramiento`;
                 }
-                etapaNum++;
             }
             
-            // Etapa Agendamiento
+            // Etapa: Agendamiento
             if (agendamientoActive) {
                 prompt += `
 
-### ${etapaNum}. Agendamiento
-- Ofrece {{disponibilidad_mas_temprana}}. 
-- Si acepta horario, solicita el {{numero_telefono}} y el email
-- Espera que el usuario lo deletree y captura en la variable {{email}}, pero no lo deletrees al contacto.
-- Ejecuta la función reservar_cal.`;
-                etapaNum++;
+### Etapa: Gestión de agendamiento
+- Consulta disponibilidad mediante {{consultar_disponibilidad}}
+- Ofrece los 2 primeros horarios de {{disponibilidad_mas_temprana}}
+- Si acepta un horario:
+  1. Solicita y confirma {{numero_telefono}}
+  2. Solicita y confirma {{email}}
+  3. Ejecuta la función reservar_cal
+  4. Confirma la cita con fecha/hora y despídete`;
             }
             
-            // Etapa Cierre (siempre incluida)
+            // Etapa: Cierre
             prompt += `
 
-### ${etapaNum}. Cierre
+### Etapa: Cierre de conversación
 - Pregunta: "¿Hay algo más en lo que pueda ayudarte?"
 - Espera la respuesta del contacto
-- Si dice que no, despídete usando {{user_name}}`;
+- Si dice que no, despídete cordialmente usando {{user_name}}`;
             
             if (agendamientoActive) {
-                prompt += `, menciona {{disponibilidad_mas_temprana}} si agendó cita`;
+                prompt += `
+- Recuerda mencionar la cita si se agendó: "Recuerda que tienes tu cita el {{fecha_hora}}"`;
             }
             
-            prompt += `, y desea al contacto un gran día
-- Después de completar la despedida, ejecuta end_call`;
+            prompt += `
+- Desea al contacto un gran día
+- Ejecuta la función end_call para finalizar`;
 
             return prompt;
+        }
+        
+        
+        
+        // ✅ NUEVA FUNCIÓN: COPIAR PROMPT AL PORTAPAPELES
+        function copyPromptToClipboard() {
+            const prompt = generatePrompt();
+            
+            navigator.clipboard.writeText(prompt).then(() => {
+                // Cambiar temporalmente el texto del botón
+                const btn = event.target.closest('.btn-copy');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> ¡Copiado!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('❌ Error al copiar el prompt. Por favor, usa el botón "Ver prompt" y copia manualmente.');
+                console.error('Error al copiar:', err);
+            });
         }
         
         function showPromptPreview() {
