@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Final: Agentes de voz IA + Rediseño completo - netelip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #3d4f5d 0%, #556b7f 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 35px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .icon-showcase {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .icon-showcase:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-color: #3498db;
+        }
+        
+        .icon-showcase h3 {
+            color: #2c3e50;
+            margin: 15px 0 10px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .icon-showcase p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .icon-states {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .icon-state {
+            text-align: center;
+        }
+        
+        .icon-state-label {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .recommendation-box {
+            background: linear-gradient(135deg, #3d4f5d 0%, #556b7f 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .recommendation-box h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        
+        .recommendation-box p {
+            font-size: 16px;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .info-box strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .info-box p {
+            color: #34495e;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, #3d4f5d 0%, #95a5a6 100%);
+            border-radius: 2px;
+            margin: 50px 0;
+        }
+        
+        .agent-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .agent-option-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .agent-option-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+        
+        .agent-option-card.recommended {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d5eef7 100%);
+            border-color: #3498db;
+        }
+        
+        .agent-option-card h4 {
+            color: #2c3e50;
+            margin: 15px 0 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .agent-option-card p {
+            color: #7f8c8d;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .badge.success {
+            background: #27ae60;
+        }
+        
+        .implementation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .implementation-example {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .implementation-example h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .service-preview {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .service-item:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .service-item.highlight {
+            background: #e8f4f8;
+            border-color: #3498db;
+        }
+        
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+        }
+        
+        .service-info h4 {
+            color: #2c3e50;
+            margin-bottom: 4px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .service-info p {
+            color: #5499c7;
+            font-size: 12px;
+            margin: 0;
+        }
+        
+        .final-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+        
+        .final-note h3 {
+            color: #856404;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+        
+        .final-note p {
+            color: #856404;
+            line-height: 1.7;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Propuesta: Agentes de voz IA + Rediseño completo</h1>
+            <p>Nuevo servicio de inteligencia artificial para el panel de netelip<br>+ Propuesta de actualización visual de todos los iconos existentes</p>
+        </div>
+        
+        <!-- SECCIÓN 1: LO QUE NOS HAN PEDIDO - AGENTES DE VOZ IA -->
+        <div class="section">
+            <div class="section-title">
+                <span>🤖</span> Lo que nos habéis pedido: Agentes de voz IA
+            </div>
+            <div class="section-subtitle">
+                Múltiples propuestas de diseño para el nuevo servicio de inteligencia artificial<br>
+                Todas las opciones incluyen versiones activado/desactivado con toques azules (#3498db)
+            </div>
+            
+            <h3 style="color: #2c3e50; margin: 25px 0 25px 0; font-size: 20px; font-weight: 600;">Opciones propuestas para Agentes de voz IA</h3>
+            
+            <div class="agent-options-grid">
+                <!-- Opción 1 -->
+                <div class="agent-option-card">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="50" y="35" width="20" height="35" rx="10" fill="#ecf0f1"/>
+                                <path d="M 42 65 Q 42 80, 60 80 Q 78 80, 78 65" stroke="#ecf0f1" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                <line x1="60" y1="80" x2="60" y2="90" stroke="#ecf0f1" stroke-width="6" stroke-linecap="round"/>
+                                <rect x="50" y="88" width="20" height="6" rx="3" fill="#ecf0f1"/>
+                                <path d="M 35 50 Q 30 55, 35 60" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                                <path d="M 28 45 Q 20 55, 28 65" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                                <path d="M 85 50 Q 90 55, 85 60" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                                <path d="M 92 45 Q 100 55, 92 65" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="50" y="35" width="20" height="35" rx="10" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 42 65 Q 42 80, 60 80 Q 78 80, 78 65" stroke="#ecf0f1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <line x1="60" y1="80" x2="60" y2="90" stroke="#ecf0f1" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+                                <rect x="50" y="88" width="20" height="6" rx="3" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 35 50 Q 30 55, 35 60" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 28 45 Q 20 55, 28 65" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 85 50 Q 90 55, 85 60" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 92 45 Q 100 55, 92 65" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h4>Opción 1: Micrófono + Ondas</h4>
+                    <p>Directa y profesional. Comunica "voz" de manera inmediata con ondas azules.</p>
+                </div>
+                
+                <!-- Opción 2: RECOMENDADA -->
+                <div class="agent-option-card recommended">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="35" y="35" width="50" height="50" rx="8" fill="#ecf0f1"/>
+                                <circle cx="50" cy="55" r="5" fill="#3d4f5d"/>
+                                <circle cx="70" cy="55" r="5" fill="#3d4f5d"/>
+                                <path d="M 45 70 Q 60 78, 75 70" stroke="#3d4f5d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <line x1="60" y1="35" x2="60" y2="25" stroke="#ecf0f1" stroke-width="4" stroke-linecap="round"/>
+                                <circle cx="60" cy="23" r="4" fill="#3498db"/>
+                                <path d="M 88 55 Q 93 60, 88 65" stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <path d="M 95 50 Q 102 60, 95 70" stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="35" y="35" width="50" height="50" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <circle cx="50" cy="55" r="5" fill="#95a5a6"/>
+                                <circle cx="70" cy="55" r="5" fill="#95a5a6"/>
+                                <path d="M 45 70 Q 60 78, 75 70" stroke="#95a5a6" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <line x1="60" y1="35" x2="60" y2="25" stroke="#ecf0f1" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+                                <circle cx="60" cy="23" r="4" fill="#7f8c8d"/>
+                                <path d="M 88 55 Q 93 60, 88 65" stroke="#7f8c8d" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 95 50 Q 102 60, 95 70" stroke="#7f8c8d" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h4>Opción 2: Robot conversacional</h4>
+                    <p>Amigable y directo. Agente que habla con antena IA azul y ondas de voz.</p>
+                    <span class="badge success">✓ RECOMENDADA</span>
+                </div>
+                
+                <!-- Opción 3 -->
+                <div class="agent-option-card">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <path d="M 30 50 Q 60 25, 90 50" fill="none" stroke="#ecf0f1" stroke-width="8" stroke-linecap="round"/>
+                                <rect x="22" y="48" width="16" height="32" rx="8" fill="#ecf0f1"/>
+                                <rect x="82" y="48" width="16" height="32" rx="8" fill="#ecf0f1"/>
+                                <circle cx="60" cy="63" r="14" fill="#3498db"/>
+                                <path d="M 52 58 L 56 62 L 68 52" stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <path d="M 30 50 Q 60 25, 90 50" fill="none" stroke="#ecf0f1" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+                                <rect x="22" y="48" width="16" height="32" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="82" y="48" width="16" height="32" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <circle cx="60" cy="63" r="14" fill="#7f8c8d"/>
+                                <path d="M 52 58 L 56 62 L 68 52" stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h4>Opción 3: Auriculares IA</h4>
+                    <p>Atención al cliente con chip azul central de inteligencia artificial.</p>
+                </div>
+                
+                <!-- Opción 4 -->
+                <div class="agent-option-card">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="30" y="35" width="60" height="45" rx="10" fill="#ecf0f1"/>
+                                <path d="M 45 80 L 40 90 L 55 80 Z" fill="#ecf0f1"/>
+                                <path d="M 40 52 L 45 48 L 50 60 L 55 45 L 60 58 L 65 50 L 70 55 L 75 52 L 80 57" 
+                                      stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="45" cy="67" r="2.5" fill="#3d4f5d"/>
+                                <circle cx="60" cy="67" r="2.5" fill="#3d4f5d"/>
+                                <circle cx="75" cy="67" r="2.5" fill="#3d4f5d"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="30" y="35" width="60" height="45" rx="10" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 45 80 L 40 90 L 55 80 Z" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 40 52 L 45 48 L 50 60 L 55 45 L 60 58 L 65 50 L 70 55 L 75 52 L 80 57" 
+                                      stroke="#7f8c8d" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                                <circle cx="45" cy="67" r="2.5" fill="#95a5a6"/>
+                                <circle cx="60" cy="67" r="2.5" fill="#95a5a6"/>
+                                <circle cx="75" cy="67" r="2.5" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h4>Opción 4: Conversación inteligente</h4>
+                    <p>Bocadillo con forma de onda azul, análisis de voz con IA.</p>
+                </div>
+                
+                <!-- Opción 5 -->
+                <div class="agent-option-card">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <circle cx="60" cy="60" r="32" fill="#ecf0f1"/>
+                                <ellipse cx="60" cy="68" rx="18" ry="12" fill="#3d4f5d"/>
+                                <ellipse cx="60" cy="65" rx="14" ry="8" fill="#2c3e50"/>
+                                <path d="M 95 52 Q 100 60, 95 68" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                                <path d="M 102 46 Q 110 60, 102 74" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                                <path d="M 25 52 Q 20 60, 25 68" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                                <path d="M 18 46 Q 10 60, 18 74" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <circle cx="60" cy="60" r="32" fill="#ecf0f1" opacity="0.5"/>
+                                <ellipse cx="60" cy="68" rx="18" ry="12" fill="#95a5a6"/>
+                                <ellipse cx="60" cy="65" rx="14" ry="8" fill="#7f8c8d"/>
+                                <path d="M 95 52 Q 100 60, 95 68" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 102 46 Q 110 60, 102 74" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 25 52 Q 20 60, 25 68" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M 18 46 Q 10 60, 18 74" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h4>Opción 5: Voz directa</h4>
+                    <p>Boca hablando con ondas de sonido azules a ambos lados.</p>
+                </div>
+                
+                <!-- Opción 6 -->
+                <div class="agent-option-card">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="35" y="25" width="50" height="70" rx="6" fill="#ecf0f1"/>
+                                <rect x="40" y="30" width="40" height="55" rx="3" fill="#3498db" opacity="0.3"/>
+                                <path d="M 45 52 L 48 48 L 51 60 L 54 45 L 57 58 L 60 50 L 63 55 L 66 52 L 69 48 L 72 52 L 75 57" 
+                                      stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <circle cx="60" cy="88" r="4" fill="#3d4f5d"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="35" y="25" width="50" height="70" rx="6" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="40" y="30" width="40" height="55" rx="3" fill="#7f8c8d" opacity="0.2"/>
+                                <path d="M 45 52 L 48 48 L 51 60 L 54 45 L 57 58 L 60 50 L 63 55 L 66 52 L 69 48 L 72 52 L 75 57" 
+                                      stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+                                <circle cx="60" cy="88" r="4" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h4>Opción 6: Llamada inteligente</h4>
+                    <p>Smartphone con pantalla azul y forma de onda en tiempo real.</p>
+                </div>
+            </div>
+            
+            <div class="recommendation-box" style="margin-top: 40px;">
+                <h3>💡 Recomendación del equipo</h3>
+                <p><strong>Opción 2: Robot conversacional</strong> es nuestra recomendación. Es amigable, moderna y diferenciada. La antena azul IA y las ondas de voz crean un icono único que comunica perfectamente "agente inteligente que habla". Los toques azules añaden dinamismo sin romper la sobriedad corporativa.</p>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <!-- SECCIÓN 2: NUESTRA PROPUESTA - REDISEÑO COMPLETO -->
+        <div class="section">
+            <div class="section-title">
+                <span>🔄</span> Nuestra propuesta: Rediseño completo de iconos
+            </div>
+            <div class="section-subtitle">
+                Ya que estamos con esta tarea, aprovechamos para actualizar TODOS los iconos del panel<br>
+                Sistema unificado con toques azules (#3498db) que dan dinamismo visual
+            </div>
+            
+            <div class="info-box">
+                <strong>📋 ¿Por qué este rediseño completo?</strong>
+                <p>Unificamos el estilo visual de todo el panel. Cada icono tendrá dos estados (activado/desactivado) con toques azules que añaden modernidad sin perder profesionalidad. Formas sólidas, minimalistas y consistentes. <strong>Revisamos toda la propuesta para que quede perfectamente orquestada.</strong></p>
+            </div>
+            
+            <h3 style="color: #2c3e50; margin: 35px 0 25px 0; font-size: 20px; font-weight: 600;">Telefonía IP</h3>
+            
+            <div class="icons-grid">
+                <!-- Línea SIP -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="35" y="30" width="50" height="60" rx="8" fill="#ecf0f1"/>
+                                <rect x="45" y="38" width="30" height="3" rx="1.5" fill="#3d4f5d"/>
+                                <rect x="45" y="45" width="30" height="3" rx="1.5" fill="#3d4f5d"/>
+                                <rect x="45" y="52" width="20" height="3" rx="1.5" fill="#3d4f5d"/>
+                                <circle cx="50" cy="63" r="3" fill="#3498db"/>
+                                <circle cx="60" cy="63" r="3" fill="#3d4f5d"/>
+                                <circle cx="70" cy="63" r="3" fill="#3d4f5d"/>
+                                <circle cx="50" cy="72" r="3" fill="#3d4f5d"/>
+                                <circle cx="60" cy="72" r="3" fill="#3498db"/>
+                                <circle cx="70" cy="72" r="3" fill="#3d4f5d"/>
+                                <circle cx="50" cy="81" r="3" fill="#3d4f5d"/>
+                                <circle cx="60" cy="81" r="3" fill="#3d4f5d"/>
+                                <circle cx="70" cy="81" r="3" fill="#3498db"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="35" y="30" width="50" height="60" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="45" y="38" width="30" height="3" rx="1.5" fill="#95a5a6"/>
+                                <rect x="45" y="45" width="30" height="3" rx="1.5" fill="#95a5a6"/>
+                                <rect x="45" y="52" width="20" height="3" rx="1.5" fill="#95a5a6"/>
+                                <circle cx="50" cy="63" r="3" fill="#95a5a6"/>
+                                <circle cx="60" cy="63" r="3" fill="#95a5a6"/>
+                                <circle cx="70" cy="63" r="3" fill="#95a5a6"/>
+                                <circle cx="50" cy="72" r="3" fill="#95a5a6"/>
+                                <circle cx="60" cy="72" r="3" fill="#95a5a6"/>
+                                <circle cx="70" cy="72" r="3" fill="#95a5a6"/>
+                                <circle cx="50" cy="81" r="3" fill="#95a5a6"/>
+                                <circle cx="60" cy="81" r="3" fill="#95a5a6"/>
+                                <circle cx="70" cy="81" r="3" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>Línea SIP</h3>
+                    <p>Teléfono con teclado - toques azules en botones</p>
+                </div>
+                
+                <!-- SIP Trunking -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="30" y="35" width="60" height="50" rx="6" fill="#ecf0f1"/>
+                                <rect x="40" y="45" width="15" height="30" rx="2" fill="#3d4f5d"/>
+                                <rect x="58" y="45" width="15" height="30" rx="2" fill="#3498db"/>
+                                <rect x="76" y="45" width="4" height="30" rx="2" fill="#3d4f5d"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="30" y="35" width="60" height="50" rx="6" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="40" y="45" width="15" height="30" rx="2" fill="#95a5a6"/>
+                                <rect x="58" y="45" width="15" height="30" rx="2" fill="#95a5a6"/>
+                                <rect x="76" y="45" width="4" height="30" rx="2" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>SIP Trunking</h3>
+                    <p>Servidor con tronco azul destacado</p>
+                </div>
+                
+                <!-- Numeración telefónica -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="30" y="30" width="60" height="60" rx="8" fill="#ecf0f1"/>
+                                <rect x="40" y="42" width="10" height="12" rx="2" fill="#3498db"/>
+                                <rect x="55" y="42" width="10" height="12" rx="2" fill="#3d4f5d"/>
+                                <rect x="70" y="42" width="10" height="12" rx="2" fill="#3d4f5d"/>
+                                <rect x="40" y="59" width="10" height="12" rx="2" fill="#3d4f5d"/>
+                                <rect x="55" y="59" width="10" height="12" rx="2" fill="#3498db"/>
+                                <rect x="70" y="59" width="10" height="12" rx="2" fill="#3d4f5d"/>
+                                <rect x="55" y="76" width="10" height="10" rx="2" fill="#3d4f5d"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="30" y="30" width="60" height="60" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="40" y="42" width="10" height="12" rx="2" fill="#95a5a6"/>
+                                <rect x="55" y="42" width="10" height="12" rx="2" fill="#95a5a6"/>
+                                <rect x="70" y="42" width="10" height="12" rx="2" fill="#95a5a6"/>
+                                <rect x="40" y="59" width="10" height="12" rx="2" fill="#95a5a6"/>
+                                <rect x="55" y="59" width="10" height="12" rx="2" fill="#95a5a6"/>
+                                <rect x="70" y="59" width="10" height="12" rx="2" fill="#95a5a6"/>
+                                <rect x="55" y="76" width="10" height="10" rx="2" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>Numeración telefónica</h3>
+                    <p>Teclado numérico con teclas azules</p>
+                </div>
+                
+                <!-- Click to Call -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <path d="M 35 45 L 60 25 L 60 37 L 85 37 L 85 53 L 60 53 L 60 65 Z" fill="#ecf0f1"/>
+                                <circle cx="75" cy="75" r="18" fill="#3498db"/>
+                                <path d="M 70 70 L 75 75 L 80 70" stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <path d="M 35 45 L 60 25 L 60 37 L 85 37 L 85 53 L 60 53 L 60 65 Z" fill="#ecf0f1" opacity="0.5"/>
+                                <circle cx="75" cy="75" r="18" fill="#7f8c8d"/>
+                                <path d="M 70 70 L 75 75 L 80 70" stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>Click to Call</h3>
+                    <p>Cursor apuntando con botón azul</p>
+                </div>
+                
+                <!-- vFax -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="30" y="35" width="60" height="50" rx="6" fill="#ecf0f1"/>
+                                <circle cx="60" cy="60" r="15" fill="#3498db"/>
+                                <path d="M 55 60 L 58 63 L 65 56" stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="30" y="35" width="60" height="50" rx="6" fill="#ecf0f1" opacity="0.5"/>
+                                <circle cx="60" cy="60" r="15" fill="#7f8c8d"/>
+                                <path d="M 55 60 L 58 63 L 65 56" stroke="#ecf0f1" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>vFax: Fax 2 Mail</h3>
+                    <p>Documento con check azul</p>
+                </div>
+            </div>
+            
+            <h3 style="color: #2c3e50; margin: 45px 0 25px 0; font-size: 20px; font-weight: 600;">Cloud Computing</h3>
+            
+            <div class="icons-grid">
+                <!-- vPBX -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <path d="M 30 50 Q 60 25, 90 50" fill="none" stroke="#ecf0f1" stroke-width="8" stroke-linecap="round"/>
+                                <rect x="22" y="48" width="16" height="32" rx="8" fill="#ecf0f1"/>
+                                <rect x="82" y="48" width="16" height="32" rx="8" fill="#ecf0f1"/>
+                                <rect x="52" y="55" width="16" height="5" rx="2.5" fill="#3498db"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <path d="M 30 50 Q 60 25, 90 50" fill="none" stroke="#ecf0f1" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+                                <rect x="22" y="48" width="16" height="32" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="82" y="48" width="16" height="32" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="52" y="55" width="16" height="5" rx="2.5" fill="#7f8c8d"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>vPBX: Centralita Virtual</h3>
+                    <p>Auriculares con micrófono azul</p>
+                </div>
+                
+                <!-- API Voice -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="35" y="30" width="50" height="35" rx="8" fill="#ecf0f1"/>
+                                <path d="M 45 75 L 35 90 L 50 85 Z" fill="#ecf0f1"/>
+                                <path d="M 50 45 L 55 50 L 60 40 L 65 48 L 70 45" stroke="#3498db" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="35" y="30" width="50" height="35" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 45 75 L 35 90 L 50 85 Z" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 50 45 L 55 50 L 60 40 L 65 48 L 70 45" stroke="#7f8c8d" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>API Voice</h3>
+                    <p>Bocadillo con forma de onda azul</p>
+                </div>
+                
+                <!-- vDrive -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="30" y="40" width="60" height="45" rx="6" fill="#ecf0f1"/>
+                                <rect x="40" y="50" width="40" height="4" rx="2" fill="#3498db"/>
+                                <rect x="40" y="60" width="40" height="4" rx="2" fill="#3d4f5d"/>
+                                <rect x="40" y="70" width="25" height="4" rx="2" fill="#3d4f5d"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="30" y="40" width="60" height="45" rx="6" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="40" y="50" width="40" height="4" rx="2" fill="#95a5a6"/>
+                                <rect x="40" y="60" width="40" height="4" rx="2" fill="#95a5a6"/>
+                                <rect x="40" y="70" width="25" height="4" rx="2" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>vDrive: Almacenamiento</h3>
+                    <p>Documento con línea azul destacada</p>
+                </div>
+                
+                <!-- vMail -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <rect x="30" y="40" width="60" height="40" rx="6" fill="#ecf0f1"/>
+                                <path d="M 30 40 L 60 65 L 90 40" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <rect x="30" y="40" width="60" height="40" rx="6" fill="#ecf0f1" opacity="0.5"/>
+                                <path d="M 30 40 L 60 65 L 90 40" stroke="#7f8c8d" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>vMail</h3>
+                    <p>Sobre con solapa azul</p>
+                </div>
+                
+                <!-- VPS -->
+                <div class="icon-showcase">
+                    <div class="icon-states">
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                <path d="M 45 35 Q 45 30, 50 30 L 70 30 Q 75 30, 75 35 L 75 50 L 45 50 Z" fill="#ecf0f1"/>
+                                <circle cx="60" cy="42" r="5" fill="#3498db"/>
+                                <rect x="35" y="50" width="50" height="45" rx="8" fill="#ecf0f1"/>
+                                <rect x="43" y="60" width="34" height="4" rx="2" fill="#3498db"/>
+                                <rect x="43" y="70" width="34" height="4" rx="2" fill="#3d4f5d"/>
+                                <rect x="43" y="80" width="20" height="4" rx="2" fill="#3d4f5d"/>
+                            </svg>
+                            <div class="icon-state-label">Activado</div>
+                        </div>
+                        <div class="icon-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                                <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                <path d="M 45 35 Q 45 30, 50 30 L 70 30 Q 75 30, 75 35 L 75 50 L 45 50 Z" fill="#ecf0f1" opacity="0.5"/>
+                                <circle cx="60" cy="42" r="5" fill="#7f8c8d"/>
+                                <rect x="35" y="50" width="50" height="45" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                <rect x="43" y="60" width="34" height="4" rx="2" fill="#95a5a6"/>
+                                <rect x="43" y="70" width="34" height="4" rx="2" fill="#95a5a6"/>
+                                <rect x="43" y="80" width="20" height="4" rx="2" fill="#95a5a6"/>
+                            </svg>
+                            <div class="icon-state-label">Desactivado</div>
+                        </div>
+                    </div>
+                    <h3>VPS: Máquina virtual</h3>
+                    <p>Servidor con indicador azul</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <!-- SECCIÓN 3: EJEMPLOS DE IMPLEMENTACIÓN -->
+        <div class="section">
+            <div class="section-title">
+                <span>📸</span> Ejemplos de integración en el panel
+            </div>
+            <div class="section-subtitle">
+                Visualización de cómo quedarían los iconos con toques azules en el contexto real
+            </div>
+            
+            <div class="implementation-grid">
+                <!-- Ejemplo con Opción 2 Recomendada -->
+                <div class="implementation-example">
+                    <h3>✅ Con la opción recomendada (Robot conversacional)</h3>
+                    <div class="service-preview">
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <path d="M 30 50 Q 60 25, 90 50" fill="none" stroke="#ecf0f1" stroke-width="8" stroke-linecap="round"/>
+                                    <rect x="22" y="48" width="16" height="32" rx="8" fill="#ecf0f1"/>
+                                    <rect x="82" y="48" width="16" height="32" rx="8" fill="#ecf0f1"/>
+                                    <rect x="52" y="55" width="16" height="5" rx="2.5" fill="#3498db"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>vPBX: Centralita Virtual</h4>
+                                <p>Unifica las comunicaciones de tu empresa</p>
+                            </div>
+                        </div>
+                        
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <rect x="35" y="30" width="50" height="35" rx="8" fill="#ecf0f1"/>
+                                    <path d="M 45 75 L 35 90 L 50 85 Z" fill="#ecf0f1"/>
+                                    <path d="M 50 45 L 55 50 L 60 40 L 65 48 L 70 45" stroke="#3498db" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>API Voice</h4>
+                                <p>Conecta tus aplicaciones a la telefonía</p>
+                            </div>
+                        </div>
+                        
+                        <div class="service-item highlight">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <rect x="35" y="35" width="50" height="50" rx="8" fill="#ecf0f1"/>
+                                    <circle cx="50" cy="55" r="5" fill="#3d4f5d"/>
+                                    <circle cx="70" cy="55" r="5" fill="#3d4f5d"/>
+                                    <path d="M 45 70 Q 60 78, 75 70" stroke="#3d4f5d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <line x1="60" y1="35" x2="60" y2="25" stroke="#ecf0f1" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="60" cy="23" r="4" fill="#3498db"/>
+                                    <path d="M 88 55 Q 93 60, 88 65" stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 95 50 Q 102 60, 95 70" stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>IA: Agentes de voz</h4>
+                                <p>Automatiza la atención al cliente con IA</p>
+                            </div>
+                        </div>
+                        
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#95a5a6"/>
+                                    <path d="M 45 35 Q 45 30, 50 30 L 70 30 Q 75 30, 75 35 L 75 50 L 45 50 Z" fill="#ecf0f1" opacity="0.5"/>
+                                    <circle cx="60" cy="42" r="5" fill="#7f8c8d"/>
+                                    <rect x="35" y="50" width="50" height="45" rx="8" fill="#ecf0f1" opacity="0.5"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4 style="color: #95a5a6;">VPS: Máquina virtual</h4>
+                                <p style="color: #95a5a6;">Servicio no contratado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ejemplo con más servicios -->
+                <div class="implementation-example">
+                    <h3>Vista completa con varios servicios</h3>
+                    <div class="service-preview">
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <rect x="35" y="30" width="50" height="60" rx="8" fill="#ecf0f1"/>
+                                    <circle cx="50" cy="63" r="3" fill="#3498db"/>
+                                    <circle cx="60" cy="63" r="3" fill="#3d4f5d"/>
+                                    <circle cx="70" cy="63" r="3" fill="#3d4f5d"/>
+                                    <circle cx="60" cy="72" r="3" fill="#3498db"/>
+                                    <circle cx="70" cy="81" r="3" fill="#3498db"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>Línea SIP</h4>
+                                <p>Reemplaza tu línea analógica</p>
+                            </div>
+                        </div>
+                        
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <rect x="30" y="40" width="60" height="45" rx="6" fill="#ecf0f1"/>
+                                    <rect x="40" y="50" width="40" height="4" rx="2" fill="#3498db"/>
+                                    <rect x="40" y="60" width="40" height="4" rx="2" fill="#3d4f5d"/>
+                                    <rect x="40" y="70" width="25" height="4" rx="2" fill="#3d4f5d"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>vDrive: Almacenamiento</h4>
+                                <p>Guarda y sincroniza en la nube</p>
+                            </div>
+                        </div>
+                        
+                        <div class="service-item highlight">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <rect x="35" y="35" width="50" height="50" rx="8" fill="#ecf0f1"/>
+                                    <circle cx="50" cy="55" r="5" fill="#3d4f5d"/>
+                                    <circle cx="70" cy="55" r="5" fill="#3d4f5d"/>
+                                    <path d="M 45 70 Q 60 78, 75 70" stroke="#3d4f5d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <line x1="60" y1="35" x2="60" y2="25" stroke="#ecf0f1" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="60" cy="23" r="4" fill="#3498db"/>
+                                    <path d="M 88 55 Q 93 60, 88 65" stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 95 50 Q 102 60, 95 70" stroke="#3498db" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>IA: Agentes de voz</h4>
+                                <p>Automatiza la atención con IA</p>
+                            </div>
+                        </div>
+                        
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="120" height="120" rx="12" fill="#3d4f5d"/>
+                                    <rect x="30" y="40" width="60" height="40" rx="6" fill="#ecf0f1"/>
+                                    <path d="M 30 40 L 60 65 L 90 40" stroke="#3498db" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="service-info">
+                                <h4>vMail</h4>
+                                <p>Correo profesional para tu empresa</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NOTA FINAL -->
+        <div class="final-note">
+            <h3>📦 Entregables listos para implementación</h3>
+            <p><strong>Todos los iconos están en formato SVG</strong>, listos para ser extraídos del código HTML y utilizados directamente por el equipo de desarrollo. Cada icono incluye:</p>
+            <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                <li>✓ Versión activada (colores completos con toques azules)</li>
+                <li>✓ Versión desactivada (grises con opacidad)</li>
+                <li>✓ Código limpio y optimizado</li>
+                <li>✓ Tamaño uniforme (120x120px viewBox)</li>
+                <li>✓ Colores de marca netelip: #3d4f5d, #95a5a6, #ecf0f1, #3498db</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Hemos revisado toda la propuesta para que quede perfectamente orquestada.</strong> El programador puede copiar directamente el código SVG de cada icono desde este HTML e implementarlo en el panel. Los toques azules (#3498db) añaden dinamismo y modernidad sin romper la identidad visual corporativa. <strong>Damos multitud de posibilidades para Agentes de voz IA. Utilizad el que queráis.</strong></p>
+        </div>
+    </div>
+</body>
+</html>
